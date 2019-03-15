@@ -36,7 +36,6 @@ public class RedissonManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        System.out.println("qwe");
         //可通过打印redisson.getConfig().toJSON().toString()来检测是否配置成功
         return redisson;
     }
