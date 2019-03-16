@@ -1,5 +1,12 @@
 package cn.realai.online.core.entity;
 
+import cn.realai.online.common.vo.Result;
+import cn.realai.online.core.vo.IdVO;
+import cn.realai.online.core.vo.PersonalInformationDetailVO;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 /**
  * 跑批记录
  * @author lyh
@@ -35,6 +42,11 @@ public class BatchRecord {
 	public static final int BATCH_TYPE_OFFLINE = 1; // 离线跑批
 	
 	public static final int BATCH_TYPE_DAILY = 2; //每日跑批
+
+	public static final int BATCH_TYPE_TRAIN = 3; //训练批次
+
+	//批次名称
+	private String batchName;
 
 	public long getServiceId() {
 		return serviceId;

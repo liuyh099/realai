@@ -18,7 +18,7 @@ public class RedissonManager {
 	@Autowired
     private RedisConfig redisConfig;
 	
-	@Bean
+	/*@Bean
     public RedissonClient getRedisson(){
     	String[] nodes = redisConfig.getClusterNodes().split(",");
         //redisson版本是3.5，集群的ip前面要加上“redis://”，不然会报错，3.2版本可不加
@@ -38,6 +38,6 @@ public class RedissonManager {
 		}
         //可通过打印redisson.getConfig().toJSON().toString()来检测是否配置成功
         return redisson;
-    }
+    }*/
 	
 }

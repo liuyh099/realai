@@ -11,6 +11,9 @@ public class ServiceDeployRecord {
 	
 	//服务id
 	private long serviceId;
+
+	//模型名称
+	private String modelName;
 	
 	//实验id
 	private long experimentId;

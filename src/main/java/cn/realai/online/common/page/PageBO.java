@@ -21,7 +21,7 @@ public class PageBO <T> {
 	private int pageNum;
 	
 	/** 数据总数 */
-	private int count;
+	private long count;
 	
 	/** 分页总数 */
 	private int totalPage;
@@ -31,14 +31,13 @@ public class PageBO <T> {
 	 */
 	public static final int PAGE_SIZE = 10;
 
-	public int getCount() {
+	public long getCount() {
 		return count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(long count) {
 		this.count = count;
 	}
-
 
 	public List<T> getPageContent() {
 		return pageContent;

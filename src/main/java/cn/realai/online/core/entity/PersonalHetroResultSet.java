@@ -18,12 +18,12 @@ public class PersonalHetroResultSet {
 	private long experimentId;
 	
 	//变量id
-	private String variableId;
+	private long variableId;
 	
 	//值
 	private String value;
 	
-	//权重
+	//权重(权重排序取绝对值)
 	private double weight;
 
 	public long getId() {
@@ -42,11 +42,11 @@ public class PersonalHetroResultSet {
 		this.personalId = personalId;
 	}
 
-	public String getVariableId() {
+	public long getVariableId() {
 		return variableId;
 	}
 
-	public void setVariableId(String variableId) {
+	public void setVariableId(long variableId) {
 		this.variableId = variableId;
 	}
 

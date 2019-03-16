@@ -1,7 +1,7 @@
 package cn.realai.online.core.entity;
 
 /**
- * 千人千面同质数据
+ * 千人千面同质数据（热力图数据来源）
  * @author lyh
  */
 public class PersonalHomoResultSet {
@@ -11,19 +11,19 @@ public class PersonalHomoResultSet {
 	//批次id
 	private long batchId;
 		
-	//用户消费流水序号（第几条流水）
+	//用户消费流水序号（第几条流水）(x轴)
 	private int k;
 	
 	//实验样本人员信息id（千人千面人员信息id）
 	private long personalId;
 	
-	//变量名
+	//变量名(y轴)
 	private String variableId;
 	
 	//值
 	private String value;
 	
-	//权重
+	//权重(显示值)
 	private double weight;
 
 	public long getId() {

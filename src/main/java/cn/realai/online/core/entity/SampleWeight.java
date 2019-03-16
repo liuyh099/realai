@@ -11,18 +11,21 @@ public class SampleWeight {
 	private long experimentId;
 	
 	private long groupId;
+
+	//变量ID
+	private long variableId;
 	
-	//变量名称
-	private String sampleName;
+	//变量来源
+	private String variableName;
 	
 	//变量备注
-	private String samplereMark;
+	private String variableRemark;
 	
 	//变量权重
-	private String sampleWeight;
+	private String variableWeight;
 	
 	//变量类型
-	private int sampleType;
+	private int variableType;
 	
 	//同质
 	public static final int SAMPLE_TYPE_HOMO = 1;
@@ -35,6 +38,15 @@ public class SampleWeight {
 	
 	//图片路径
 	private String imgUrl;
+
+
+	public long getVariableId() {
+		return variableId;
+	}
+
+	public void setVariableId(long variableId) {
+		this.variableId = variableId;
+	}
 
 	public long getId() {
 		return id;
@@ -52,45 +64,7 @@ public class SampleWeight {
 		this.groupId = groupId;
 	}
 
-	public String getSampleName() {
-		return sampleName;
-	}
 
-	public void setSampleName(String sampleName) {
-		this.sampleName = sampleName;
-	}
-
-	public long getExperimentId() {
-		return experimentId;
-	}
-
-	public void setExperimentId(long experimentId) {
-		this.experimentId = experimentId;
-	}
-
-	public String getSamplereMark() {
-		return samplereMark;
-	}
-
-	public void setSamplereMark(String samplereMark) {
-		this.samplereMark = samplereMark;
-	}
-
-	public String getSampleWeight() {
-		return sampleWeight;
-	}
-
-	public void setSampleWeight(String sampleWeight) {
-		this.sampleWeight = sampleWeight;
-	}
-
-	public int getSampleType() {
-		return sampleType;
-	}
-
-	public void setSampleType(int sampleType) {
-		this.sampleType = sampleType;
-	}
 
 	public String getBoxBeans() {
 		return boxBeans;
@@ -107,5 +81,44 @@ public class SampleWeight {
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
-	
+
+	public long getExperimentId() {
+		return experimentId;
+	}
+
+	public void setExperimentId(long experimentId) {
+		this.experimentId = experimentId;
+	}
+
+	public String getVariableName() {
+		return variableName;
+	}
+
+	public void setVariableName(String variableName) {
+		this.variableName = variableName;
+	}
+
+	public String getVariableRemark() {
+		return variableRemark;
+	}
+
+	public void setVariableRemark(String variableRemark) {
+		this.variableRemark = variableRemark;
+	}
+
+	public String getVariableWeight() {
+		return variableWeight;
+	}
+
+	public void setVariableWeight(String variableWeight) {
+		this.variableWeight = variableWeight;
+	}
+
+	public int getVariableType() {
+		return variableType;
+	}
+
+	public void setVariableType(int variableType) {
+		this.variableType = variableType;
+	}
 }

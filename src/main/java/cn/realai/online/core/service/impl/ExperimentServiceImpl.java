@@ -2,21 +2,24 @@ package cn.realai.online.core.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.common.RedisKeyPrefix;
-import cn.realai.online.core.controller.ExperimentController;
 import cn.realai.online.core.dao.ExperimentDao;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.tool.redis.RedisClientTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ExperimentServiceImpl implements ExperimentService {
 
-	private static Logger logger = LoggerFactory.getLogger(ExperimentController.class);
+	private static Logger logger = LoggerFactory.getLogger(ExperimentServiceImpl.class);
 
 	@Autowired
 	private ExperimentDao experimentDao;
@@ -45,5 +48,13 @@ public class ExperimentServiceImpl implements ExperimentService {
 		
 		return experimentBO;
 	}
-	
+
+	@Override
+	public List<ExperimentBO> findList(Experiment experiment) {
+		List<Experiment> list = experimentDao.findList(experiment);
+		List<ExperimentBO> result =new ArrayList<>();
+		BeanUtils.copyProperties(list,result);
+		return result;
+	}
+
 }

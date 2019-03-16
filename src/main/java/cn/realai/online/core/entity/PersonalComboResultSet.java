@@ -1,7 +1,7 @@
 package cn.realai.online.core.entity;
 
 /**
- * 千人千面组合和特征
+ * 千人千面组合和特征(异质最强组合特征)
  * @author lyh
  */
 public class PersonalComboResultSet {
@@ -17,36 +17,60 @@ public class PersonalComboResultSet {
 	//实验id
 	private long experimentId;
 	
-	//变量名1
-	private String variableName1;
-	
-	//变量含义1
-	private String variableMeaning1;
+	//变量id
+	private long variableId1;
 	
 	//值1
 	private String value1;
 	
-	//变量名2
-	private String variableName2;
-	
-	//变量含义2
-	private String variableMeaning2;
+	//变量id2
+	private String variableId2;
 	
 	//值2
 	private String value2;
 	
-	//变量名3
-	private String variableName3;
-	
-	//变量含义3
-	private String variableMeaning3;
-	
+	//变量id3
+	private String variableId3;
+
 	//值3
 	private String value3;
 	
 	//权重
 	private double weight;
-	
+
+
+	public long getVariableId1() {
+		return variableId1;
+	}
+
+	public void setVariableId1(long variableId1) {
+		this.variableId1 = variableId1;
+	}
+
+	public String getValue1() {
+		return value1;
+	}
+
+	public void setValue1(String value1) {
+		this.value1 = value1;
+	}
+
+	public String getVariableId2() {
+		return variableId2;
+	}
+
+	public void setVariableId2(String variableId2) {
+		this.variableId2 = variableId2;
+	}
+
+	public String getVariableId3() {
+		return variableId3;
+	}
+
+	public void setVariableId3(String variableId3) {
+		this.variableId3 = variableId3;
+	}
+
 	public long getExperimentId() {
 		return experimentId;
 	}
@@ -71,68 +95,12 @@ public class PersonalComboResultSet {
 		this.personalId = personalId;
 	}
 
-	public String getVariableName1() {
-		return variableName1;
-	}
-
-	public void setVariableName1(String variableName1) {
-		this.variableName1 = variableName1;
-	}
-
-	public String getVariableMeaning1() {
-		return variableMeaning1;
-	}
-
-	public void setVariableMeaning1(String variableMeaning1) {
-		this.variableMeaning1 = variableMeaning1;
-	}
-
-	public String getValue1() {
-		return value1;
-	}
-
-	public void setValue1(String value1) {
-		this.value1 = value1;
-	}
-
-	public String getVariableName2() {
-		return variableName2;
-	}
-
-	public void setVariableName2(String variableName2) {
-		this.variableName2 = variableName2;
-	}
-
-	public String getVariableMeaning2() {
-		return variableMeaning2;
-	}
-
-	public void setVariableMeaning2(String variableMeaning2) {
-		this.variableMeaning2 = variableMeaning2;
-	}
-
 	public String getValue2() {
 		return value2;
 	}
 
 	public void setValue2(String value2) {
 		this.value2 = value2;
-	}
-
-	public String getVariableName3() {
-		return variableName3;
-	}
-
-	public void setVariableName3(String variableName3) {
-		this.variableName3 = variableName3;
-	}
-
-	public String getVariableMeaning3() {
-		return variableMeaning3;
-	}
-
-	public void setVariableMeaning3(String variableMeaning3) {
-		this.variableMeaning3 = variableMeaning3;
 	}
 
 	public String getValue3() {

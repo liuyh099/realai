@@ -47,6 +47,18 @@ public class Service {
 	//上线实验
 	private long onlineExperiment;
 
+	//离线跑批次数
+	private long batchTimes;
+
+
+	public long getBatchTimes() {
+		return batchTimes;
+	}
+
+	public void setBatchTimes(long batchTimes) {
+		this.batchTimes = batchTimes;
+	}
+
 	public String getDeploymentType() {
 		return deploymentType;
 	}

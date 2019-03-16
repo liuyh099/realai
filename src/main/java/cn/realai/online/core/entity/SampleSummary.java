@@ -11,7 +11,7 @@ public class SampleSummary {
 	//实验id
 	private long experimentId;
 	
-	//实验类型
+	//数据集类型
 	private int dataSetType;
 	
 	//样本描述

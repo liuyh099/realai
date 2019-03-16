@@ -16,7 +16,7 @@ public class Experiment {
 	private String serviceId;
 	
 	//状态
-	private int status;
+	private Integer status;
 	
 	//选择文件
 	public static final int STATUS_FILE = 1;
@@ -37,7 +37,7 @@ public class Experiment {
 	private String algorithmType;
 	
 	//发布状态
-	private int releasStatus;
+	private Integer releasStatus;
 	
 	//未发布
 	public static final int RELEAS_NO = 1;
@@ -58,7 +58,7 @@ public class Experiment {
 	private String xtableMeaningDataSource;
 	
 	//是否选择验证集
-	private int verificationSet;
+	private Integer verificationSet;
 	
 	//未选择
 	public static final int SELECT_NO = 1;
@@ -67,23 +67,25 @@ public class Experiment {
 	public static final int SELECT_YES = 2;
 
 	//样本选择类型
-	private int sampleType;
+	private int sampleSplitType;
 	
 	//时间
-	public static final int SAMPLE_TYPE_TIME = 1;
+	public static final int SAMPLE_SPLIT_TYPE_TIME = 1;
 	
 	//随机
-	public static final int SAMPLE_TYPE_RANDOM = 2;
+	public static final int SAMPLE_SPLIT_TYPE_RANDOM = 2;
 	
 	//训练比例  trainRatio + trainTest + trainValid = 10
-	private int trainRatio;
+	private Integer trainRatio;
 	
 	//测试比例
-	private int testRatio;
+	private Integer testRatio;
 	
 	//验证比例
-	private int validRatio;
-	
+	private Integer validRatio;
+
+
+
 	public static final int DATA_SET_TRAIN = 1;
 	
 	public static final int DATA_SET_TEST = 2;
@@ -100,10 +102,10 @@ public class Experiment {
 	private long releaseTime;
 	
 	//调优次数
-	private int tuningConter;
+	private Integer tuningCount;
 	
 	//创建人
-	private int createUser;
+	private Integer createUserId;
 	
 	//备注
 	private String remark;
@@ -114,61 +116,36 @@ public class Experiment {
 	//模型路径
 	private String modelUrl;
 	
-	//分段统计图片地址
+	//分段统计图片地址（千人千面也是他）
 	private String segmentationStatisticsImageUrl;
 	
 	//badTop总数图片地址
 	private String badTopCountImageUrl;
 	
 	//roc图片地址
-	private String rocImageUrl;
+	private String rocTestImageUrl;
 
-	public String getSampleReview() {
-		return sampleReview;
+	private String rocTrainImageUrl;
+
+	private String rocValidateImageUrl;
+
+
+	//roc图片地址
+	private String ksTestImageUrl;
+
+	private String ksTrainImageUrl;
+
+	private String ksValidateImageUrl;
+
+
+	private Integer preFinish;
+
+	public Integer getPreFinish() {
+		return preFinish;
 	}
 
-	public void setSampleReview(String sampleReview) {
-		this.sampleReview = sampleReview;
-	}
-
-	public int getSampleType() {
-		return sampleType;
-	}
-
-	public void setSampleType(int sampleType) {
-		this.sampleType = sampleType;
-	}
-
-	public String getModelUrl() {
-		return modelUrl;
-	}
-
-	public void setModelUrl(String modelUrl) {
-		this.modelUrl = modelUrl;
-	}
-
-	public String getRemark() {
-		return remark;
-	}
-
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
-
-	public String getXtableMeaningDataSource() {
-		return xtableMeaningDataSource;
-	}
-
-	public void setXtableMeaningDataSource(String xtableMeaningDataSource) {
-		this.xtableMeaningDataSource = xtableMeaningDataSource;
-	}
-
-	public String getAlgorithmType() {
-		return algorithmType;
-	}
-
-	public void setAlgorithmType(String algorithmType) {
-		this.algorithmType = algorithmType;
+	public void setPreFinish(Integer preFinish) {
+		this.preFinish = preFinish;
 	}
 
 	public long getId() {
@@ -195,19 +172,27 @@ public class Experiment {
 		this.serviceId = serviceId;
 	}
 
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
-	public int getReleasStatus() {
+	public String getAlgorithmType() {
+		return algorithmType;
+	}
+
+	public void setAlgorithmType(String algorithmType) {
+		this.algorithmType = algorithmType;
+	}
+
+	public Integer getReleasStatus() {
 		return releasStatus;
 	}
 
-	public void setReleasStatus(int releasStatus) {
+	public void setReleasStatus(Integer releasStatus) {
 		this.releasStatus = releasStatus;
 	}
 
@@ -235,12 +220,52 @@ public class Experiment {
 		this.xtableHeterogeneousDataSource = xtableHeterogeneousDataSource;
 	}
 
-	public int getVerificationSet() {
+	public String getXtableMeaningDataSource() {
+		return xtableMeaningDataSource;
+	}
+
+	public void setXtableMeaningDataSource(String xtableMeaningDataSource) {
+		this.xtableMeaningDataSource = xtableMeaningDataSource;
+	}
+
+	public Integer getVerificationSet() {
 		return verificationSet;
 	}
 
-	public void setVerificationSet(int verificationSet) {
+	public void setVerificationSet(Integer verificationSet) {
 		this.verificationSet = verificationSet;
+	}
+
+	public int getSampleSplitType() {
+		return sampleSplitType;
+	}
+
+	public void setSampleSplitType(int sampleSplitType) {
+		this.sampleSplitType = sampleSplitType;
+	}
+
+	public Integer getTrainRatio() {
+		return trainRatio;
+	}
+
+	public void setTrainRatio(Integer trainRatio) {
+		this.trainRatio = trainRatio;
+	}
+
+	public Integer getTestRatio() {
+		return testRatio;
+	}
+
+	public void setTestRatio(Integer testRatio) {
+		this.testRatio = testRatio;
+	}
+
+	public Integer getValidRatio() {
+		return validRatio;
+	}
+
+	public void setValidRatio(Integer validRatio) {
+		this.validRatio = validRatio;
 	}
 
 	public long getCreateTime() {
@@ -267,44 +292,44 @@ public class Experiment {
 		this.releaseTime = releaseTime;
 	}
 
-	public int getTuningConter() {
-		return tuningConter;
+	public Integer getTuningCount() {
+		return tuningCount;
 	}
 
-	public void setTuningConter(int tuningConter) {
-		this.tuningConter = tuningConter;
+	public void setTuningCount(Integer tuningCount) {
+		this.tuningCount = tuningCount;
 	}
 
-	public int getCreateUser() {
-		return createUser;
+	public Integer getCreateUserId() {
+		return createUserId;
 	}
 
-	public void setCreateUser(int createUser) {
-		this.createUser = createUser;
+	public void setCreateUserId(Integer createUserId) {
+		this.createUserId = createUserId;
 	}
 
-	public int getTrainRatio() {
-		return trainRatio;
+	public String getRemark() {
+		return remark;
 	}
 
-	public void setTrainRatio(int trainRatio) {
-		this.trainRatio = trainRatio;
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
-	public int getTestRatio() {
-		return testRatio;
+	public String getSampleReview() {
+		return sampleReview;
 	}
 
-	public void setTestRatio(int testRatio) {
-		this.testRatio = testRatio;
+	public void setSampleReview(String sampleReview) {
+		this.sampleReview = sampleReview;
 	}
 
-	public int getValidRatio() {
-		return validRatio;
+	public String getModelUrl() {
+		return modelUrl;
 	}
 
-	public void setValidRatio(int validRatio) {
-		this.validRatio = validRatio;
+	public void setModelUrl(String modelUrl) {
+		this.modelUrl = modelUrl;
 	}
 
 	public String getSegmentationStatisticsImageUrl() {
@@ -323,12 +348,51 @@ public class Experiment {
 		this.badTopCountImageUrl = badTopCountImageUrl;
 	}
 
-	public String getRocImageUrl() {
-		return rocImageUrl;
+	public String getRocTestImageUrl() {
+		return rocTestImageUrl;
 	}
 
-	public void setRocImageUrl(String rocImageUrl) {
-		this.rocImageUrl = rocImageUrl;
+	public void setRocTestImageUrl(String rocTestImageUrl) {
+		this.rocTestImageUrl = rocTestImageUrl;
 	}
 
+	public String getRocTrainImageUrl() {
+		return rocTrainImageUrl;
+	}
+
+	public void setRocTrainImageUrl(String rocTrainImageUrl) {
+		this.rocTrainImageUrl = rocTrainImageUrl;
+	}
+
+	public String getRocValidateImageUrl() {
+		return rocValidateImageUrl;
+	}
+
+	public void setRocValidateImageUrl(String rocValidateImageUrl) {
+		this.rocValidateImageUrl = rocValidateImageUrl;
+	}
+
+	public String getKsTestImageUrl() {
+		return ksTestImageUrl;
+	}
+
+	public void setKsTestImageUrl(String ksTestImageUrl) {
+		this.ksTestImageUrl = ksTestImageUrl;
+	}
+
+	public String getKsTrainImageUrl() {
+		return ksTrainImageUrl;
+	}
+
+	public void setKsTrainImageUrl(String ksTrainImageUrl) {
+		this.ksTrainImageUrl = ksTrainImageUrl;
+	}
+
+	public String getKsValidateImageUrl() {
+		return ksValidateImageUrl;
+	}
+
+	public void setKsValidateImageUrl(String ksValidateImageUrl) {
+		this.ksValidateImageUrl = ksValidateImageUrl;
+	}
 }
