@@ -7,6 +7,7 @@ import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
@@ -31,8 +32,7 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
         Experiment experiment=new Experiment();
         BeanUtils.copyProperties(experimentalTrainQuery,experiment);
         List<ExperimentBO> list= experimentService.findList(experiment);
-        List<ExperimentalTrainVO> result=new ArrayList<ExperimentalTrainVO>();
-        BeanUtils.copyProperties(list,result);
+        List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentalTrainVO.class);
         pageBO.setPageContent(result);
         pageBO.setCount(page.getTotal());
         pageBO.setPageNum(experimentalTrainQuery.getPageNum());

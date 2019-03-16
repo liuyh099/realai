@@ -28,7 +28,7 @@ public class ExperimentalTrainController {
     @GetMapping
     @ApiOperation(value="查询实验训练列表")
     @ResponseBody
-    public Result<PageBO<ExperimentalTrainVO>> list(@RequestBody ExperimentalTrainQuery experimentalTrainQuery){
+    public Result<PageBO<ExperimentalTrainVO>> list(ExperimentalTrainQuery experimentalTrainQuery){
         PageBO<ExperimentalTrainVO> page = experimentalTrainBusiness.pageList(experimentalTrainQuery);
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),page);
     }
@@ -120,11 +120,6 @@ public class ExperimentalTrainController {
         return  null;
     }
 
-    /**
-     * lyh写这个接口
-     * @param trainId
-     * @return
-     */
     @PutMapping("/createModel/{trainId}")
     @ApiOperation(value="新增实验-生成模型-一键建立模型")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
@@ -141,16 +136,14 @@ public class ExperimentalTrainController {
         return  null;
     }
 
-    /**
-     * lyh写这个接口
-     * @param experimentalTrainDoubleCreateVo
-     * @return
-     */
+
     @PutMapping("/doubleCreate")
     @ApiOperation(value="二次创建实验")
     @ResponseBody
     public Result doubleCreate(@RequestBody ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo){
         return  null;
     }
+
+
 
 }
