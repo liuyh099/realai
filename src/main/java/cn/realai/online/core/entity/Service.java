@@ -22,6 +22,12 @@ public class Service {
 	
 	public static final int STATUS_OFFLINE = 2; //下线
 	
+	private int businessType;
+	
+	public static final int BUSINESSTYPE_WIND = 1; //风控
+	
+	public static final int BUSINESSTYPE_MARKETING = 2; //营销
+	
 	//部署类型
 	private String deploymentType;
 	
@@ -145,6 +151,14 @@ public class Service {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public int getBusinessType() {
+		return businessType;
+	}
+
+	public void setBusinessType(int businessType) {
+		this.businessType = businessType;
 	}
 	
 }

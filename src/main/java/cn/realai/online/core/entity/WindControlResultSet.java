@@ -17,10 +17,6 @@ public class WindControlResultSet {
 	//业务类型
 	private int businessType;
 	
-	public static final int BUSINESSTYPE_WIND = 1; //风控
-	
-	public static final int BUSINESSTYPE_MARKETING = 2; //营销
-	
 	//组名
 	private String groupName;
 	
@@ -189,14 +185,6 @@ public class WindControlResultSet {
 
 	public void setCumulativePostiveCountInTotalPositiveCount(double cumulativePostiveCountInTotalPositiveCount) {
 		this.cumulativePostiveCountInTotalPositiveCount = cumulativePostiveCountInTotalPositiveCount;
-	}
-
-	public static int getBusinesstypeWind() {
-		return BUSINESSTYPE_WIND;
-	}
-
-	public static int getBusinesstypeMarketing() {
-		return BUSINESSTYPE_MARKETING;
 	}
 
 	public String getGroupName() {

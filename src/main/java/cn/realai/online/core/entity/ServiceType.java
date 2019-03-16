@@ -1,7 +1,7 @@
 package cn.realai.online.core.entity;
 
 /**
- * 服务类型
+ * 服务类型 暂时不用
  * @author lyh
  */
 public class ServiceType {
