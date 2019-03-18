@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.userandperm.dao.UserDao">
+    <resultMap type="cn.realai.online.userandperm.entity.User" id="UserMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="department" property="department" jdbcType="VARCHAR"/>
+        <result column="position" property="position" jdbcType="VARCHAR"/>
+        <result column="phoneNumber" property="phoneNumber" jdbcType="VARCHAR"/>
+        <result column="pwd" property="pwd" jdbcType="VARCHAR"/>
+        <result column="note" property="note" jdbcType="VARCHAR"/>
+        <result column="role_id" property="roleId" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" jdbcType="BIGINT"/>
+        <result property="group" column="group1" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="get" resultMap="UserMap" parameterType="java.lang.Long">
+        SELECT a.* ,b.name AS group1 FROM sys_user a LEFT JOIN sys_role b ON a.role_id = b.id
+        <where>
+            id =#{id}
+        </where>
+    </select>
+
+    <select id="findList" resultMap="UserMap" parameterType="cn.realai.online.userandperm.entity.User">
+        SELECT a.* ,b.name AS group1 FROM sys_user a LEFT JOIN sys_role b ON a.role_id = b.id
+        <where>
+            1=1
+            <if test="id!=null">
+                AND  id =id
+            </if>
+            <if test="name!=null and name !='' ">
+                AND  name =name
+            </if>
+            <if test="phoneNumber!=null and phoneNumber !='' ">
+                AND  phoneNumber =phoneNumber
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="cn.realai.online.userandperm.entity.User">
+        INSERT INTO sys_user (name,department,position,phone_number,pwd,note,role_id,create_time)
+        VALUE (#{name},#{department},#{position},#{phoneNumber},#{pwd},#{note},#{roleId},#{createTime})
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE FROM sys_user
+        <where>
+          <choose>
+              <when test="ids!=null and ids.size()>0">
+                 <foreach collection="ids" open="id IN(" close=")" separator="," item="id">
+                     #{id}
+                 </foreach>
+              </when>
+              <otherwise>
+                  1=2
+              </otherwise>
+          </choose>
+        </where>
+    </delete>
+
+    <update id="update" parameterType="cn.realai.online.userandperm.entity.User">
+        UPDATE sys_user SET
+          name = #{name},
+          department =#{department},
+          position =#{position},
+          phone_number=#{phoneNumber},
+          note = #{note},
+          role_id=#{roleId}
+          <where>
+              id =#{id}
+          </where>
+    </update>
+
+
+    <update id="updatePwd" parameterType="cn.realai.online.userandperm.entity.User">
+        UPDATE sys_user SET
+        pwd = #{pwd}
+        <where>
+            id =#{id}
+        </where>
+    </update>
+
+</mapper>

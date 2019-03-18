@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.userandperm.dao.SysRoleDao">
+    <resultMap type="cn.realai.online.userandperm.entity.SysRole" id="SysRoleMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="BIGINT"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+        <result column="notes" property="notes" jdbcType="VARCHAR"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="findList" resultMap="SysRoleMap" parameterType="cn.realai.online.userandperm.entity.SysRole">
+        SELECT a.* ,b.name AS create_user FROM sys_role a LEFT JOIN sys_user b ON a.create_user_id = b.id
+        <where>
+            1=1
+            <if test="id!=null">
+                AND  id =id
+            </if>
+            <if test="name!=null and name !='' ">
+                AND  name =name
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="cn.realai.online.userandperm.entity.SysRole">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            select last_insert_rowid() as id
+        </selectKey>
+        INSERT INTO sys_role (name,create_time,create_user_id,notes) VALUE
+        (#{name},#{createTime},#{createUserId},#{notes})
+    </insert>
+
+
+    <delete id="delete">
+        DELETE FROM sys_role
+        <where>
+            <choose>
+                <when test="ids!=null and ids.size()>0">
+                    <foreach collection="ids" item="id" separator="," open="id in(" close=")">
+                        #{id}
+                    </foreach>
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
+        </where>
+    </delete>
+
+</mapper>
