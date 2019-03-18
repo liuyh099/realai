@@ -17,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 实验训练的业务实现
+ */
 @Service
 @Transactional(readOnly = true)
 public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness {
@@ -24,19 +27,25 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
     @Autowired
     private ExperimentService experimentService;
 
-	@Override
-	public PageBO<ExperimentalTrainVO> pageList(ExperimentalTrainQuery experimentalTrainQuery) {
-		PageBO<ExperimentalTrainVO> pageBO = new PageBO<>();
-		Page page = PageHelper.startPage(experimentalTrainQuery.getPageNum(), experimentalTrainQuery.getPageSize());
-		Experiment experiment = new Experiment();
-		BeanUtils.copyProperties(experimentalTrainQuery, experiment);
-		List<ExperimentBO> list = experimentService.findList(experiment);
-		List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentalTrainVO.class);
-		pageBO.setPageContent(result);
-		pageBO.setCount(page.getTotal());
-		pageBO.setPageNum(experimentalTrainQuery.getPageNum());
-		pageBO.setPageSize(experimentalTrainQuery.getPageSize());
-		pageBO.setTotalPage(page.getPages());
-		return pageBO;
-	}
+    /**
+     * 根据实验名称和状态等分页查询实验列表
+     *
+     * @param experimentalTrainQuery 实验列表查询条件
+     * @return
+     */
+    @Override
+    public PageBO<ExperimentalTrainVO> pageList(ExperimentalTrainQuery experimentalTrainQuery) {
+        //开启分页
+        Page page = PageHelper.startPage(experimentalTrainQuery.getPageNum(), experimentalTrainQuery.getPageSize());
+
+        //执行条件查询
+        Experiment experiment = new Experiment();
+        BeanUtils.copyProperties(experimentalTrainQuery, experiment);
+        List<ExperimentBO> list = experimentService.findList(experiment);
+
+        //处理查询结果
+        List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentalTrainVO.class);
+        PageBO<ExperimentalTrainVO> pageBO = new PageBO<ExperimentalTrainVO>(result, experimentalTrainQuery.getPageSize(), experimentalTrainQuery.getPageNum(), page.getTotal(), page.getPages());
+        return pageBO;
+    }
 }
