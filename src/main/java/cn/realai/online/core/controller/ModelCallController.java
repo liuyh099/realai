@@ -1,17 +1,19 @@
 package cn.realai.online.core.controller;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 
+import cn.realai.online.core.bo.ModelRequestStructure;
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
 import cn.realai.online.common.Constant;
@@ -55,7 +57,15 @@ public class ModelCallController {
 	 * 模型训练预处理
 	 * @return
 	 */
-	public String callback(Integer code, Long experimentId, String task, String msg, String data) {
+	@RequestMapping(value = "/callback", method = RequestMethod.POST)
+	public String callback(@RequestBody String param) {
+		ModelRequestStructure request = JSON.parseObject(param, ModelRequestStructure.class);
+		Integer code = request.getCode();
+		Long experimentId = request.getExperimentId();
+		String task = request.getTask();
+		String msg = request.getMsg();
+		String data = request.getData();
+		Map<String, String> map = JSON.parseObject(data, Map.class);
 		//参数验证
 		if (code == null) {
 			
@@ -73,7 +83,8 @@ public class ModelCallController {
 		}
 		
 		if (Constant.TASK_PREPROCESS.equals(task)) { //预处理
-			modelCallBussiness.preprocessCallback(experimentId, data);
+			String redisKey = map.get("variableData");
+			modelCallBussiness.preprocessCallback(experimentId, redisKey);
 		} else if (Constant.TASK_TRAIN.equals(task)) { //训练
 			TrainResultRedisKey redisKey = JSON.parseObject(data, TrainResultRedisKey.class);
 			modelCallBussiness.trainCallback(experimentId, redisKey);

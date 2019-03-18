@@ -12,6 +12,7 @@ import cn.realai.online.core.dao.ExperimentDao;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.tool.redis.RedisClientTemplate;
+import cn.realai.online.util.ConvertJavaBean;
 
 import java.util.List;
 
@@ -32,19 +33,25 @@ public class ExperimentServiceImpl implements ExperimentService {
 	
 	@Override
 	public ExperimentBO selectExperimentById(long id) {
-		ExperimentBO experimentBO = redisClientTemplate.get(getExperimentRedisKey(id), ExperimentBO.class);
-		if (experimentBO != null) {
-			return experimentBO;
+		Experiment experiment = redisClientTemplate.get(getExperimentRedisKey(id), ExperimentBO.class);
+		if (experiment == null) {
+			experiment = experimentDao.selectExperimentById(id);
+			//设置缓存
 		}
-		
-		Experiment experiment = experimentDao.selectExperimentById(id);
 		if (experiment == null) {
 			return null;
 		}
-		//设置缓存
-		
-		
-		
+		//封装成BO		
+		ExperimentBO experimentBO = convertBO(experiment);
+		return experimentBO;
+	}
+	
+	/*
+	 * 转换成bo
+	 */
+	private ExperimentBO convertBO(Experiment experiment) {
+		ExperimentBO experimentBO = new ExperimentBO();
+		ConvertJavaBean.convertJavaBean(experimentBO, experiment);
 		return experimentBO;
 	}
 
@@ -54,6 +61,29 @@ public class ExperimentServiceImpl implements ExperimentService {
 		List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
 		//BeanUtilsBean.copyProperties(list,result);
 		return result;
+	}
+
+	/*
+     * 预处理完成，修改与处理结果
+     * @param experimentId 实验id
+     * @param 
+     */
+	@Override
+	public int updatePreprocessStatus(Long experimentId, int preFinishStatus) {
+		int ret = experimentDao.updatePreprocessStatus(experimentId, preFinishStatus);
+		return ret;
+	}
+
+	/*
+	 * 修改实验的状态
+	 * @param experimentId
+	 * @param statusTraining
+	 * @return
+	 */
+	@Override
+	public int updateExperimentStatus(long experimentId, int status) {
+		int ret = experimentDao.updateExperimentStatus(experimentId, status);
+		return ret;
 	}
 
 }

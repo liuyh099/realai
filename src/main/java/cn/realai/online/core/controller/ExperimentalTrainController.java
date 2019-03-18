@@ -129,15 +129,6 @@ public class ExperimentalTrainController {
         return  null;
     }
 
-    @PutMapping("/createModel/{trainId}")
-    @ApiOperation(value="新增实验-生成模型-一键建立模型")
-    @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
-    @ResponseBody
-    public Result createModel(@PathVariable  long trainId ){
-        return  null;
-    }
-
-
     @GetMapping("/createModel/getData")
     @ApiOperation(value="新增实验-生成模型-一获取同质异质数据")
     @ResponseBody
@@ -145,7 +136,22 @@ public class ExperimentalTrainController {
         return  null;
     }
 
-
+    /**
+     * 实验训练接口
+     * 一件建模
+     * @param trainId 实验id
+     * @return
+     */
+    @PutMapping("/createModel/{trainId}")
+    @ApiOperation(value="新增实验-生成模型-一键建立模型")
+    @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
+    @ResponseBody
+    public Result createModel(@PathVariable  long trainId ){
+    	int ret = experimentalTrainBusiness.train(trainId);
+    	
+    	return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
+    }
+    
     @PutMapping("/doubleCreate")
     @ApiOperation(value="二次创建实验")
     @ResponseBody
@@ -153,6 +159,17 @@ public class ExperimentalTrainController {
         return  null;
     }
 
+    @PutMapping("/testPreprocess/{experimentId}")
+    @ApiOperation(value="二次创建实验")
+    @ResponseBody
+    public Result testPreprocess(@PathVariable long experimentId) {
+    	try {
+    		experimentalTrainBusiness.testPreprocess(experimentId);
+    		return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
+    	} catch (Exception e) {
+    		return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
+    	}
+    }
 
 
 }

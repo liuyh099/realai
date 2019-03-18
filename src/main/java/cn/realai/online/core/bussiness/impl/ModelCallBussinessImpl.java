@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
+import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.VariableDataService;
@@ -70,8 +71,8 @@ public class ModelCallBussinessImpl implements ModelCallBussiness{
 		
 		int ret = variableDataService.insertVariableDataList(vdList);
 		
-		//修改实验的训练状态
-		//ret = experimentService.update
+		//修改实验的预处理状态
+		ret = experimentService.updatePreprocessStatus(experimentId, Experiment.PREFINISH_YES);
 		
 		redisClientTemplate.delete(redisKey);
 		

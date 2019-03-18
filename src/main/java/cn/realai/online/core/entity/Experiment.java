@@ -27,7 +27,7 @@ public class Experiment {
 	//变量筛选
 	public static final int STATUS_FILTER = 3;
 	
-	//试验训练
+	//试验训练中
 	public static final int STATUS_TRAINING = 4;
 	
 	//试验完毕
@@ -137,8 +137,11 @@ public class Experiment {
 
 	private String ksValidateImageUrl;
 
-
 	private Integer preFinish;
+	
+	public static final int PREFINISH_NO = 1; // 预处理未完成
+	
+	public static final int PREFINISH_YES = 2; //预处理完成
 
 	public Integer getPreFinish() {
 		return preFinish;
