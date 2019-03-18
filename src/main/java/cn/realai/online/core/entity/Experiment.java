@@ -130,7 +130,7 @@ public class Experiment {
 	private String rocValidateImageUrl;
 
 
-	//roc图片地址
+	//ks图片地址
 	private String ksTestImageUrl;
 
 	private String ksTrainImageUrl;
