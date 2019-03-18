@@ -18,8 +18,8 @@ public class RedisClientTemplate {
 
 	private static Logger logger = LoggerFactory.getLogger(RedisClientTemplate.class);
 	
-	//@Autowired
-    //private RedissonClient redissonClient;  //RedissonClient已经由配置类生成，这里自动装配即可
+	@Autowired
+    private RedissonClient redissonClient;  //RedissonClient已经由配置类生成，这里自动装配即可
 	
 	@Autowired
     private JedisClusterClient jedisClusterClient;
@@ -100,7 +100,7 @@ public class RedisClientTemplate {
     }
     
     //lock(), 拿不到lock就不罢休，不然线程就一直block
-    /*public RLock lock(String lockKey) {
+    public RLock lock(String lockKey) {
         RLock lock = redissonClient.getLock(lockKey);
         lock.lock();
         return lock;
@@ -133,7 +133,7 @@ public class RedisClientTemplate {
     public void unlock(String lockKey) {
         RLock lock = redissonClient.getLock(lockKey);
         lock.unlock();
-    }*/
+    }
     
     public void unlock(RLock lock) {
         lock.unlock();
