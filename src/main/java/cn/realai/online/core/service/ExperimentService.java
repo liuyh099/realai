@@ -10,4 +10,17 @@ public interface ExperimentService {
 	ExperimentBO selectExperimentById(long id);
 
     List<ExperimentBO> findList(Experiment experiment);
+
+    /*
+     * 预处理完成，修改与处理结果
+     */
+	int updatePreprocessStatus(Long experimentId, int preFinishStatus);
+
+	/*
+	 * 修改实验的状态
+	 * @param experimentId
+	 * @param statusTraining
+	 * @return
+	 */
+	int updateExperimentStatus(long experimentId, int status);
 }

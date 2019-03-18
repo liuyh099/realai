@@ -38,15 +38,30 @@
 
 
   <sql id="Base_Column_List" >
-        id, model_name
+        
   </sql>
 
-  
-  <insert id="insertModel">
-  	insert into model(id, model_name) 
-  		values(#{model.id},#{model.modelName})
-  </insert>
+	<select id="selectExperimentById" resultMap="ExperimentMap">
+		select * 
+		from experiment
+		where id = #{id}
+	</select>
 
+	<update id="updatePreprocessStatus">
+		update experiment 
+		set pre_finish = #{experimentId} 
+		where id = #{experimentId}
+	</update>
+
+	<update id="updateExperimentStatus">
+		update experiment 
+		set status = #{status} 
+		where id = #{experimentId}
+	</update>
+
+	
+
+  
 	<select id="findList" resultMap="ExperimentMap" parameterType="cn.realai.online.core.entity.Experiment">
 		SELECT  *  FROM  experiment
 		<where>

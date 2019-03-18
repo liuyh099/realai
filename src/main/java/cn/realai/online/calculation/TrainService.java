@@ -1,6 +1,6 @@
 package cn.realai.online.calculation;
 
-import cn.realai.online.core.bo.ExperimentBO;
+import cn.realai.online.core.entity.Experiment;
 
 public interface TrainService {
 
@@ -8,6 +8,8 @@ public interface TrainService {
 	 * 预处理
 	 * @param experimentBO
 	 */
-	void preprocess(ExperimentBO experimentBO);
+	void preprocess(Experiment experiment);
+	
+	int training(Experiment experiment);
 
 }

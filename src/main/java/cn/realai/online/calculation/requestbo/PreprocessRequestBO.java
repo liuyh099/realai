@@ -7,7 +7,7 @@ package cn.realai.online.calculation.requestbo;
 public class PreprocessRequestBO {
 
 	//实验id
-	private long experimentId;
+	private long id;
 	
 	//命令
     private String command;
@@ -23,13 +23,18 @@ public class PreprocessRequestBO {
     
     //x表含义对照数据源
     private String  xtableMeaningDataSource;
+    
+    public PreprocessRequestBO(String command) {
+    	this.command = command;
+    }
 
-	public long getExperimentId() {
-		return experimentId;
+	public long getId() {
+		return id;
 	}
 
-	public void setExperimentId(long experimentId) {
-		this.experimentId = experimentId;
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getCommand() {

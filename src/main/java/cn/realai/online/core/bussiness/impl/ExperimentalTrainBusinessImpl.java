@@ -1,5 +1,6 @@
 package cn.realai.online.core.bussiness.impl;
 
+import cn.realai.online.calculation.TrainService;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
@@ -26,6 +27,9 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
 
     @Autowired
     private ExperimentService experimentService;
+    
+    @Autowired
+    private TrainService trainService;
 
     /**
      * 根据实验名称和状态等分页查询实验列表
@@ -48,4 +52,30 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
         PageBO<ExperimentalTrainVO> pageBO = new PageBO<ExperimentalTrainVO>(result, experimentalTrainQuery.getPageSize(), experimentalTrainQuery.getPageNum(), page.getTotal(), page.getPages());
         return pageBO;
     }
+
+    
+    
+    /*
+     * 训练
+     * @param trainId 实验id
+     */
+	@Override
+	public int train(long experimentId) {
+		//获取训练锁
+		
+		
+		//修改试验状态
+		int ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
+		ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
+		trainService.training(experimentBO);
+		return ret;
+	}
+
+
+
+	@Override
+	public void testPreprocess(long experimentId) {
+		ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
+		trainService.preprocess(experimentBO);
+	}
 }
