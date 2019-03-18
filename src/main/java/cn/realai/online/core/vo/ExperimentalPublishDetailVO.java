@@ -24,6 +24,43 @@ public class ExperimentalPublishDetailVO {
     private List<ModelPerformanceVO> modelPerformanceList;
 
 
+    public String getModelName() {
+        return modelName;
+    }
 
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getAlgorithmType() {
+        return algorithmType;
+    }
+
+    public void setAlgorithmType(String algorithmType) {
+        this.algorithmType = algorithmType;
+    }
+
+    public String getSampleReview() {
+        return sampleReview;
+    }
+
+    public void setSampleReview(String sampleReview) {
+        this.sampleReview = sampleReview;
+    }
+
+    public List<ModelPerformanceVO> getModelPerformanceList() {
+        return modelPerformanceList;
+    }
+
+    public void setModelPerformanceList(List<ModelPerformanceVO> modelPerformanceList) {
+        this.modelPerformanceList = modelPerformanceList;
+    }
 }
