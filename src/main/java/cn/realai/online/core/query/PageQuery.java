@@ -4,13 +4,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel
-public class PageQuery  {
+public class PageQuery {
 
-    @ApiModelProperty(value = "当前页数" ,name="pageNum")
-    private Integer pageNum;
+    @ApiModelProperty(value = "当前页数", name = "pageNum")
+    private Integer pageNum = 1;
 
-    @ApiModelProperty(value = "页面显示数据",name = "pageSize")
-    private Integer pageSize;
+    @ApiModelProperty(value = "页面显示数据", name = "pageSize")
+    private Integer pageSize = 10;
 
     public Integer getPageNum() {
         return pageNum;

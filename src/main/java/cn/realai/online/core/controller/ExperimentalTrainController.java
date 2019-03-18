@@ -11,6 +11,8 @@ import cn.realai.online.core.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,7 @@ import java.util.List;
 @Api(tags="实验训练API")
 public class ExperimentalTrainController {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private ExperimentalTrainBusiness experimentalTrainBusiness;
@@ -29,8 +32,14 @@ public class ExperimentalTrainController {
     @ApiOperation(value="查询实验训练列表")
     @ResponseBody
     public Result<PageBO<ExperimentalTrainVO>> list(ExperimentalTrainQuery experimentalTrainQuery){
-        PageBO<ExperimentalTrainVO> page = experimentalTrainBusiness.pageList(experimentalTrainQuery);
-        return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),page);
+        try{
+            PageBO<ExperimentalTrainVO> page = experimentalTrainBusiness.pageList(experimentalTrainQuery);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),page);
+        }catch (Exception e){
+            logger.error("查询实验列表异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+        }
+
     }
 
     @DeleteMapping

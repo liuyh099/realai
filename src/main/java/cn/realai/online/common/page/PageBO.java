@@ -25,7 +25,15 @@ public class PageBO <T> {
 	
 	/** 分页总数 */
 	private int totalPage;
-	
+
+	public PageBO(List<T> pageContent, int pageSize, int pageNum, long count, int totalPage) {
+		this.pageContent = pageContent;
+		this.pageSize = pageSize;
+		this.pageNum = pageNum;
+		this.count = count;
+		this.totalPage = totalPage;
+	}
+
 	/**
 	 * 每页大小
 	 */
