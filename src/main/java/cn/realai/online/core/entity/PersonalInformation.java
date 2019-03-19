@@ -14,6 +14,9 @@ public class PersonalInformation {
 	//实验组别id
 	private long groupId;
 	
+	//计算后Python的分组名称
+	private String groupName;
+	
 	//批次id
 	private long batchId;
 	
@@ -43,6 +46,15 @@ public class PersonalInformation {
 	
 	//概率
 	private double probability;
+
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
 
 	public long getId() {
 		return id;

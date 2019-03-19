@@ -10,7 +10,7 @@ public class SampleGrouping {
 	
 	private long experimentId;
 	
-	private String groupingName;
+	private String groupName;
 	
 	private long createTime;
 	
@@ -39,12 +39,12 @@ public class SampleGrouping {
 		this.experimentId = experimentId;
 	}
 
-	public String getGroupingId() {
-		return groupingName;
+	public String getGroupName() {
+		return groupName;
 	}
 
-	public void setGroupingId(String groupingName) {
-		this.groupingName = groupingName;
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 
 	public long getCreateTime() {
