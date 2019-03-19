@@ -3,6 +3,7 @@ package cn.realai.online.userandperm.controller;
 import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
+import cn.realai.online.userandperm.vo.ForgetVo;
 import cn.realai.online.userandperm.vo.MySessionVo;
 import cn.realai.online.userandperm.vo.UserLoginVo;
 import io.swagger.annotations.Api;
@@ -16,8 +17,6 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @Api(tags = "登录/菜单/消息通知相关接口")
@@ -51,5 +50,16 @@ public class UserOptionController {
     public Result unAuth() {
         return new Result(ResultCode.NO_PERMISSION.getCode(), ResultMessage.NO_PERMISSION.getMsg(), null);
     }
+
+
+    @PostMapping("/forget")
+    @ApiOperation("忘记密码")
+    public Result forget(@RequestBody ForgetVo forgetVo) {
+
+
+
+        return new Result(ResultCode.NO_PERMISSION.getCode(), ResultMessage.NO_PERMISSION.getMsg(), null);
+    }
+
 
 }
