@@ -8,13 +8,12 @@ import cn.realai.online.core.query.PageQuery;
 import cn.realai.online.core.vo.IdVO;
 import cn.realai.online.userandperm.bo.UserBO;
 import cn.realai.online.userandperm.business.UserBusiness;
-import cn.realai.online.userandperm.entity.User;
 import cn.realai.online.userandperm.vo.*;
 import com.alibaba.fastjson.JSON;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -39,6 +38,7 @@ public class UserController {
 
     @GetMapping()
     @ApiOperation(value = "查询用户列表")
+    @RequiresPermissions("permission:user:list")
     public Result<PageBO<UserVO>> list(PageQuery pageQuery) {
         try {
             PageBO<UserBO> pageBO = userBusiness.list(pageQuery);
@@ -56,6 +56,7 @@ public class UserController {
     @GetMapping("checkName/{name}")
     @ApiOperation(value = "检查用户名（true表示检查通过）")
     @ApiImplicitParam(name ="name", value ="用户名", required = true ,type = "path")
+    @RequiresPermissions("permission:user:checkName")
     public Result<Boolean> checkName(@PathVariable String name) {
         try {
             Boolean flag = userBusiness.checkUserName(name);

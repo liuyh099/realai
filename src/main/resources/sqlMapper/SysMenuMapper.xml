@@ -18,9 +18,10 @@
                 and  parent_id = #{parentId}
             </if>
             <if test="id !=null">
-                and  parent_id = #{parentId}
+                and  id = #{id}
             </if>
         </where>
+        ORDER BY sort ASC
     </select>
 
 </mapper>

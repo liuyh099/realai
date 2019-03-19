@@ -17,4 +17,12 @@ public interface RoleMenuService {
      * @param ids
      */
     void deleteByRoleIds(List<Long> ids);
+
+
+    /**
+     * 根据角色Id 查询菜单ID
+     * @param id
+     * @return
+     */
+    List<Long> findIdsByRoleId(Long id);
 }

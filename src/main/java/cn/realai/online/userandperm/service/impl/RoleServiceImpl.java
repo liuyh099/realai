@@ -30,4 +30,14 @@ public class RoleServiceImpl implements RoleService {
     public Integer delete(List<Long> delete) {
         return sysRoleDao.delete(delete);
     }
+
+    @Override
+    public SysRole get(Long id) {
+        return sysRoleDao.get(id);
+    }
+
+    @Override
+    public Integer update(SysRole sysRole) {
+        return sysRoleDao.update(sysRole);
+    }
 }
