@@ -3,12 +3,12 @@ package cn.realai.online.userandperm.controller;
 import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
+import cn.realai.online.userandperm.bo.MenuTreeNodeBO;
+import cn.realai.online.userandperm.bo.UserBO;
+import cn.realai.online.userandperm.business.RoleBusiness;
 import cn.realai.online.userandperm.business.UserOptionBusiness;
-import cn.realai.online.userandperm.vo.ChangePwdVO;
-import cn.realai.online.userandperm.vo.ForgetVo;
-import cn.realai.online.userandperm.vo.MySessionVo;
-import cn.realai.online.userandperm.vo.UserLoginVo;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import cn.realai.online.userandperm.vo.*;
+import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -19,10 +19,12 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @RestController
 @Api(tags = "登录/菜单/消息通知相关接口")
@@ -33,6 +35,8 @@ public class UserOptionController {
 
     @Autowired
     private UserOptionBusiness userOptionBusiness;
+    @Autowired
+    private RoleBusiness roleBusiness;
 
 
     @PostMapping("login")
@@ -86,14 +90,14 @@ public class UserOptionController {
         try {
 
             //1.检查旧密码
-            if(!userOptionBusiness.checkOldPwd(changePwdVO.getOldPwd())){
+            if (!userOptionBusiness.checkOldPwd(changePwdVO.getOldPwd())) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "旧密码不正确", null);
             }
 
-            if(changePwdVO.getNewPwd().equals(changePwdVO.getOldPwd())){
+            if (changePwdVO.getNewPwd().equals(changePwdVO.getOldPwd())) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "新旧密码一致", null);
             }
-            if(!userOptionBusiness.changePwd(changePwdVO)){
+            if (!userOptionBusiness.changePwd(changePwdVO)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "更新密码失败", null);
             }
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
@@ -114,6 +118,20 @@ public class UserOptionController {
             logger.error("忘记密码消息提示异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
+    }
+
+    @PutMapping("menu")
+    @ApiOperation(value = "获得用户菜单")
+    public Result<List<IndexMenuTreeNodeVo>> menu() {
+        try {
+            List<MenuTreeNodeBO> list=roleBusiness.findIndexMenu();
+            List<IndexMenuTreeNodeVo> result = JSON.parseArray(JSON.toJSONString(list),IndexMenuTreeNodeVo.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("获得用户菜单异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+
     }
 
 }

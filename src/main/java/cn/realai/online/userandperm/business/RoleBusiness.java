@@ -72,4 +72,10 @@ public interface RoleBusiness {
      * @return
      */
     boolean update(RoleBO roleBO);
+
+    /**
+     * 获得用户菜单信息
+     * @return
+     */
+    List<MenuTreeNodeBO> findIndexMenu();
 }
