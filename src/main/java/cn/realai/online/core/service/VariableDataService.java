@@ -11,4 +11,11 @@ public interface VariableDataService {
 	 */
 	int insertVariableDataList(List<VariableData> vdList);
 
+	/*
+	 * 根据实验id查询变量数据
+	 * @param experimentId
+	 * @return
+	 */
+	List<VariableData> findListByExperimentId(Long experimentId);
+
 }

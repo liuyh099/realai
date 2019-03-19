@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.realai.online.core.dao.VariableDataDao">
-  <resultMap type="cn.realai.online.core.entity.VariableData" id="ExperimentMap">
+  <resultMap type="cn.realai.online.core.entity.VariableData" id="VariableDataMap">
   	    <id column="id" property="id" jdbcType="BIGINT"/>
   	    <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
   	    <result column="name" property="name" jdbcType="VARCHAR"/>
@@ -24,8 +24,20 @@
         
   </sql>
 
-	<insert id="insertVariableDataList">
-		
+	<insert id="insertList">
+		insert into variable_data(experiment_id, name, meaning, data_type, count, max, 
+			min, mean, median, percent25, percent75, variable_type, recommended_delete, delete, create_time) 
+		<foreach collection="vdList" item="vd" index="index" separator=",">
+             (#{vd.experimentId}, #{vd.name}, #{vd.meaning}, #{vd.dataType}, #{vd.count}, #{vd.max},
+             #{vd.min}, #{vd.mean}, #{vd.median}, #{vd.percent25} ,#{vd.percent75}, #{vd.variableType}, 
+             #{vd.recommendedDelete}, #{vd.delete}, #{vd.createTime})
+        </foreach>
 	</insert>
+	
+	<select id="findListByExperimentId" resultMap="VariableDataMap">
+		select * 
+		from variable_data
+		where experiment_id = #{experimentId}
+	</select>
   
 </mapper> 

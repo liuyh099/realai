@@ -35,13 +35,21 @@ public class VariableDataServiceImpl implements VariableDataService {
 			vd.setCreateTime(System.currentTimeMillis());
 		}
 		
-		int ret = variableDataDao.insertVariableDataList(vdList);
+		int ret = variableDataDao.insertList(vdList);
 		if (ret != vdList.size()) {
 			logger.error("VariableDataServiceImpl insertVariableDataList, 预处理失败, vdList{}" + JSON.toJSONString(vdList));
 			throw new RuntimeException("预处理失败");
 		}
 		logger.info("VariableDataServiceImpl insertVariableDataList, 预处理成功");
 		return ret;
+	}
+
+	@Override
+	public List<VariableData> findListByExperimentId(Long experimentId) {
+		if (experimentId == null) {
+			return null;
+		}
+		return variableDataDao.findListByExperimentId(experimentId);
 	}
 
 }
