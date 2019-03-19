@@ -1,5 +1,6 @@
 package cn.realai.online.core.service.impl;
 
+import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,76 +20,83 @@ import java.util.List;
 @Service
 public class ExperimentServiceImpl implements ExperimentService {
 
-	private static Logger logger = LoggerFactory.getLogger(ExperimentServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(ExperimentServiceImpl.class);
 
-	@Autowired
-	private ExperimentDao experimentDao;
-	
-	@Autowired
-	private RedisClientTemplate redisClientTemplate;
+    @Autowired
+    private ExperimentDao experimentDao;
 
-	private String getExperimentRedisKey(long id) {
-		return RedisKeyPrefix.EXPERIMENT_PREFIX + id;
-	}
-	
-	@Override
-	public ExperimentBO selectExperimentById(long id) {
-		Experiment experiment = redisClientTemplate.get(getExperimentRedisKey(id), ExperimentBO.class);
-		if (experiment == null) {
-			experiment = experimentDao.selectExperimentById(id);
-			//设置缓存
-		}
-		if (experiment == null) {
-			return null;
-		}
-		//封装成BO		
-		ExperimentBO experimentBO = convertBO(experiment);
-		return experimentBO;
-	}
-	
-	/*
-	 * 转换成bo
-	 */
-	private ExperimentBO convertBO(Experiment experiment) {
-		ExperimentBO experimentBO = new ExperimentBO();
-		ConvertJavaBean.convertJavaBean(experimentBO, experiment);
-		return experimentBO;
-	}
+    @Autowired
+    private RedisClientTemplate redisClientTemplate;
 
-	@Override
-	public List<ExperimentBO> findList(Experiment experiment) {
-		List<Experiment> list = experimentDao.findList(experiment);
-		List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
-		//BeanUtilsBean.copyProperties(list,result);
-		return result;
-	}
+    private String getExperimentRedisKey(long id) {
+        return RedisKeyPrefix.EXPERIMENT_PREFIX + id;
+    }
 
-	/*
+    @Override
+    public ExperimentBO selectExperimentById(long id) {
+        Experiment experiment = redisClientTemplate.get(getExperimentRedisKey(id), ExperimentBO.class);
+        if (experiment == null) {
+            experiment = experimentDao.selectExperimentById(id);
+            //设置缓存
+        }
+        if (experiment == null) {
+            return null;
+        }
+        //封装成BO
+        ExperimentBO experimentBO = convertBO(experiment);
+        return experimentBO;
+    }
+
+    /*
+     * 转换成bo
+     */
+    private ExperimentBO convertBO(Experiment experiment) {
+        ExperimentBO experimentBO = new ExperimentBO();
+        ConvertJavaBean.convertJavaBean(experimentBO, experiment);
+        return experimentBO;
+    }
+
+    @Override
+    public List<ExperimentBO> findList(Experiment experiment) {
+        List<Experiment> list = experimentDao.findList(experiment);
+        List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
+        //BeanUtilsBean.copyProperties(list,result);
+        return result;
+    }
+
+    /*
      * 预处理完成，修改与处理结果
      * @param experimentId 实验id
-     * @param 
+     * @param
      */
-	@Override
-	public int updatePreprocessStatus(Long experimentId, int preFinishStatus) {
-		int ret = experimentDao.updatePreprocessStatus(experimentId, preFinishStatus);
-		return ret;
-	}
+    @Override
+    public int updatePreprocessStatus(Long experimentId, int preFinishStatus) {
+        int ret = experimentDao.updatePreprocessStatus(experimentId, preFinishStatus);
+        return ret;
+    }
 
-	@Override
-	public Integer deleteExperimentByIds(List<Long> ids) {
-		return experimentDao.deleteExperimentByIds(ids);
-	}
+    @Override
+    public Integer deleteExperimentByIds(List<Long> ids) {
+        return experimentDao.deleteExperimentByIds(ids);
+    }
 
-	/*
-	 * 修改实验的状态
-	 * @param experimentId
-	 * @param statusTraining
-	 * @return
-	 */
-	@Override
-	public int updateExperimentStatus(long experimentId, int status) {
-		int ret = experimentDao.updateExperimentStatus(experimentId, status);
-		return ret;
-	}
+    /*
+     * 修改实验的状态
+     * @param experimentId
+     * @param statusTraining
+     * @return
+     */
+    @Override
+    public int updateExperimentStatus(long experimentId, int status) {
+        int ret = experimentDao.updateExperimentStatus(experimentId, status);
+        return ret;
+    }
+
+    @Override
+    public ExperimentalTrainDetailBO selectExperimentDetailById(long id) {
+        Experiment experiment = experimentDao.selectExperimentById(id);
+        ExperimentalTrainDetailBO experimentalTrainDetailBO = JSON.parseObject(JSON.toJSONString(experiment), ExperimentalTrainDetailBO.class);
+        return experimentalTrainDetailBO;
+    }
 
 }

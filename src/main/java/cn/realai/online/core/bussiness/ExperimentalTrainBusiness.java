@@ -1,10 +1,9 @@
 package cn.realai.online.core.bussiness;
 
 import cn.realai.online.common.page.PageBO;
-import cn.realai.online.common.vo.Result;
+import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -16,4 +15,7 @@ public interface ExperimentalTrainBusiness {
 	int train(long experimentId);
 
 	void testPreprocess(long experimentId);
+
+	ExperimentalTrainDetailBO detail(long experimentId);
+
 }

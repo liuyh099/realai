@@ -27,5 +27,19 @@
 	<insert id="insertVariableDataList">
 		
 	</insert>
+
+	<select id="findListByExperimentId" resultMap="VariableDataMap" parameterType="cn.realai.online.core.entity.VariableData">
+		SELECT  *  FROM  variable_data
+		<where>
+			<choose>
+				<when test="experimentId!=null and experimentId!=''">
+					experiment_id =#{experimentId}
+				</when>
+				<otherwise>
+					1=2
+				</otherwise>
+			</choose>
+		</where>
+	</select>
   
 </mapper> 

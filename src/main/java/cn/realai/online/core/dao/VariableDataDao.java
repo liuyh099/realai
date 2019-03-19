@@ -10,4 +10,6 @@ public interface VariableDataDao {
 
 	int insertVariableDataList(@Param("vdList")List<VariableData> vdList);
 
+	List<VariableData> selectVariableDataByExperimentId(long experimentId);
+
 }
