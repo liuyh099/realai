@@ -8,7 +8,7 @@ public class PersonalComboResultSet {
 
 	private long id;
 	
-	//批次id 
+	//批次id
 	private long batchId;
 	
 	//实验样本人员信息id（千人千面人员信息id）
