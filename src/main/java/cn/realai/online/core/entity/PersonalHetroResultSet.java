@@ -11,8 +11,11 @@ public class PersonalHetroResultSet {
 	//批次id
 	private long batchId;
 	
-	//实验样本人员信息id（千人千面人员信息id）
-	private long personalId;
+	//实验样本人员信息id 主键id
+	private long pid;
+	
+	//python计算返回 实验样本人员信息id（千人千面人员信息id）
+	private String personalId;
 	
 	//实验id
 	private long experimentId;
@@ -34,11 +37,11 @@ public class PersonalHetroResultSet {
 		this.id = id;
 	}
 
-	public long getPersonalId() {
+	public String getPersonalId() {
 		return personalId;
 	}
 
-	public void setPersonalId(long personalId) {
+	public void setPersonalId(String personalId) {
 		this.personalId = personalId;
 	}
 
@@ -80,6 +83,14 @@ public class PersonalHetroResultSet {
 
 	public void setBatchId(long batchId) {
 		this.batchId = batchId;
+	}
+
+	public long getPid() {
+		return pid;
+	}
+
+	public void setPid(long pid) {
+		this.pid = pid;
 	}
 
 }

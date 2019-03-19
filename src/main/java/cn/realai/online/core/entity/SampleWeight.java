@@ -11,15 +11,15 @@ public class SampleWeight {
 	private long experimentId;
 	
 	private long groupId;
+	
+	//计算后Python的分组名称
+	private String groupName;
 
 	//变量ID
 	private long variableId;
 	
 	//变量来源
 	private String variableName;
-	
-	//变量备注
-	private String variableRemark;
 	
 	//变量权重
 	private String variableWeight;
@@ -64,8 +64,6 @@ public class SampleWeight {
 		this.groupId = groupId;
 	}
 
-
-
 	public String getBoxBeans() {
 		return boxBeans;
 	}
@@ -98,14 +96,6 @@ public class SampleWeight {
 		this.variableName = variableName;
 	}
 
-	public String getVariableRemark() {
-		return variableRemark;
-	}
-
-	public void setVariableRemark(String variableRemark) {
-		this.variableRemark = variableRemark;
-	}
-
 	public String getVariableWeight() {
 		return variableWeight;
 	}
@@ -121,4 +111,13 @@ public class SampleWeight {
 	public void setVariableType(int variableType) {
 		this.variableType = variableType;
 	}
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
 }
