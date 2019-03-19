@@ -45,4 +45,11 @@ public interface UserDao {
      * @return
      */
     Integer updatePwd(User user);
+
+    /**
+     * 根据名称或者手机号码查询用户
+     * @param username
+     * @return
+     */
+    User findByNameOrPhoneNumber(String username);
 }

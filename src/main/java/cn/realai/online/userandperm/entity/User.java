@@ -1,9 +1,11 @@
 package cn.realai.online.userandperm.entity;
 
+import java.io.Serializable;
+
 /**
  * 用户信息表
  */
-public class User {
+public class User implements Serializable {
 
 	//id
 	private Long id;

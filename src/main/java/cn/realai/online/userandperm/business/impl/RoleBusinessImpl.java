@@ -2,12 +2,17 @@ package cn.realai.online.userandperm.business.impl;
 
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.query.PageQuery;
+import cn.realai.online.userandperm.bo.MenuTreeNodeBO;
 import cn.realai.online.userandperm.bo.RoleBO;
+import cn.realai.online.userandperm.bo.RoleDetailBO;
 import cn.realai.online.userandperm.business.RoleBusiness;
 import cn.realai.online.userandperm.entity.RoleMenu;
+import cn.realai.online.userandperm.entity.SysMenu;
 import cn.realai.online.userandperm.entity.SysRole;
+import cn.realai.online.userandperm.service.MenuService;
 import cn.realai.online.userandperm.service.RoleMenuService;
 import cn.realai.online.userandperm.service.RoleService;
+import cn.realai.online.userandperm.vo.RoleEditVO;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -16,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +35,9 @@ public class RoleBusinessImpl implements RoleBusiness {
 
     @Autowired
     private RoleMenuService roleMenuService;
+
+    @Autowired
+    private MenuService menuService;
 
     @Override
     public PageBO<RoleBO> list(PageQuery pageQuery) {
@@ -60,7 +69,12 @@ public class RoleBusinessImpl implements RoleBusiness {
         if (CollectionUtils.isEmpty(menuIds)) {
             return true;
         }
+        batchInsertRoleMenu(sysRole, menuIds);
 
+        return true;
+    }
+
+    private void batchInsertRoleMenu(SysRole sysRole, List<Long> menuIds) {
         //不为空的情况下插入角色菜单关系
         List<RoleMenu> roleMenus = new ArrayList<>(menuIds.size());
         for (Long menuId : menuIds) {
@@ -69,8 +83,6 @@ public class RoleBusinessImpl implements RoleBusiness {
             roleMenu.setMenuId(menuId);
         }
         roleMenuService.batchInsert(roleMenus);
-
-        return true;
     }
 
     @Override
@@ -94,4 +106,120 @@ public class RoleBusinessImpl implements RoleBusiness {
         roleMenuService.deleteByRoleIds(ids);
         return count;
     }
+
+    @Override
+    public List<MenuTreeNodeBO> menuTree() {
+       return menuTree(null,false);
+    }
+
+    @Override
+    public RoleDetailBO detail(Long id) {
+        return getRoleDetailBO(id,true);
+    }
+
+    private RoleDetailBO getRoleDetailBO(Long id,Boolean clearNocheck) {
+        SysRole sysRole=roleService.get(id);
+        if(ObjectUtils.isEmpty(sysRole)){
+            return null;
+        }
+
+        RoleDetailBO roleDetailBO =new RoleDetailBO();
+        BeanUtils.copyProperties(sysRole,roleDetailBO);
+
+        List<Long> menuIds =roleMenuService.findIdsByRoleId(sysRole.getId());
+        if(!ObjectUtils.isEmpty(sysRole)){
+            List<MenuTreeNodeBO> nodeTree=menuTree(menuIds,clearNocheck);
+            roleDetailBO.setMenu(nodeTree);
+        }
+        return roleDetailBO;
+    }
+
+    @Override
+    public RoleDetailBO edit(Long id) {
+        return getRoleDetailBO(id,false);
+    }
+
+    @Override
+    public boolean update(RoleBO roleBO) {
+
+        if(!checkName(roleBO.getName())){
+            return false;
+        }
+
+        SysRole sysRole =new SysRole();
+        BeanUtils.copyProperties(roleBO,sysRole);
+
+        Integer count =roleService.update(sysRole);
+        if(count<=0){
+            return false;
+        }
+        List<Long> ids=new ArrayList<>();
+        ids.add(sysRole.getId());
+        roleMenuService.deleteByRoleIds(ids);
+
+        List<Long> menuIds = roleBO.getMenu();
+        if (CollectionUtils.isEmpty(menuIds)) {
+            return true;
+        }
+        batchInsertRoleMenu(sysRole, menuIds);
+
+
+        return false;
+    }
+
+
+    /**
+     * 构建菜单树
+     * @param ids 选中的菜单
+     * @param clearNoCheck 是否清除未选中菜单
+     * @return
+     */
+    private List<MenuTreeNodeBO> menuTree(List<Long> ids,boolean clearNoCheck) {
+        SysMenu sysMenu = new SysMenu();
+        sysMenu.setParentId(0L);
+        List<SysMenu> parentMenus = menuService.findList(sysMenu);
+        if (CollectionUtils.isEmpty(parentMenus)) {
+            return null;
+        }
+
+        List<MenuTreeNodeBO> menuTreeNodeBOList =new ArrayList<>();
+        for (SysMenu sysMenu1:parentMenus){
+            MenuTreeNodeBO menuTreeNodeBO=new MenuTreeNodeBO();
+            BeanUtils.copyProperties(sysMenu1,menuTreeNodeBO);
+            if(ids.contains(sysMenu1.getId())){
+                menuTreeNodeBO.setCheck(true);
+            }else {
+                if(clearNoCheck){
+                    continue;
+                }
+            }
+
+            SysMenu sysMenuChild=new SysMenu();
+            sysMenuChild.setParentId(sysMenu1.getId());
+            List<SysMenu> childrenList = menuService.findList(sysMenuChild);
+            if(CollectionUtils.isEmpty(childrenList)){
+                menuTreeNodeBOList.add(menuTreeNodeBO);
+                continue;
+            }
+
+            List<MenuTreeNodeBO> childMenuTreeNodeBOList =new ArrayList<>(childrenList.size());
+            for (SysMenu sysMenuTemp: childrenList) {
+                MenuTreeNodeBO menuTreeNodeBOChild=new MenuTreeNodeBO();
+                BeanUtils.copyProperties(sysMenuTemp,menuTreeNodeBOChild);
+                if(ids.contains(sysMenuTemp.getId())){
+                    menuTreeNodeBOChild.setCheck(true);
+                }else {
+                    if(clearNoCheck){
+                        continue;
+                    }
+                }
+                childMenuTreeNodeBOList.add(menuTreeNodeBOChild);
+            }
+            menuTreeNodeBO.setChildren(childMenuTreeNodeBOList);
+            menuTreeNodeBOList.add(menuTreeNodeBO);
+        }
+
+        return menuTreeNodeBOList;
+    }
+
 }
