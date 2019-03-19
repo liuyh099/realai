@@ -1,14 +1,7 @@
 package cn.realai.online.core.entity;
 
-import cn.realai.online.common.vo.Result;
-import cn.realai.online.core.vo.IdVO;
-import cn.realai.online.core.vo.PersonalInformationDetailVO;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 /**
- * 跑批记录
+ * 批次记录
  * @author lyh
  */
 public class BatchRecord {
@@ -118,6 +111,14 @@ public class BatchRecord {
 
 	public void setCreateTime(long createTime) {
 		this.createTime = createTime;
+	}
+
+	public String getBatchName() {
+		return batchName;
+	}
+
+	public void setBatchName(String batchName) {
+		this.batchName = batchName;
 	}
 	
 }
