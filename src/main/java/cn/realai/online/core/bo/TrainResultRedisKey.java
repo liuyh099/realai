@@ -33,9 +33,6 @@ public class TrainResultRedisKey {
 	//千人千面组合和特征
 	private String personalComboResultSet;
 	
-	//线上追踪
-	private String onlineTrack;
-	
 	//psi检测结果
 	private String psiCheckResult;
 
@@ -109,14 +106,6 @@ public class TrainResultRedisKey {
 
 	public void setPersonalComboResultSet(String personalComboResultSet) {
 		this.personalComboResultSet = personalComboResultSet;
-	}
-
-	public String getOnlineTrack() {
-		return onlineTrack;
-	}
-
-	public void setOnlineTrack(String onlineTrack) {
-		this.onlineTrack = onlineTrack;
 	}
 
 	public String getPsiCheckResult() {
