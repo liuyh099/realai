@@ -17,7 +17,13 @@ public class ExperimentalPublishController {
     @ApiOperation("获得可以发布的实验列表")
     @GetMapping("/trainList")
     public Result<TrainNameSelectVO> getCanPublishTrain(){
-        return null;
+
+        try {
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  null;
+        }
     }
 
 
