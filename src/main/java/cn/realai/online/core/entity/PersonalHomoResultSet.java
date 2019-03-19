@@ -8,16 +8,21 @@ public class PersonalHomoResultSet {
 
 	private long id;
 	
+	private long experimentId;
+	
 	//批次id
 	private long batchId;
 		
 	//用户消费流水序号（第几条流水）(x轴)
 	private int k;
 	
-	//实验样本人员信息id（千人千面人员信息id）
-	private long personalId;
+	//实验样本人员信息id 主键id
+	private long pid;
 	
-	//变量名(y轴)
+	//python计算返回 实验样本人员信息id（千人千面人员信息id）
+	private String personalId;
+	
+	//变量名(X轴)
 	private String variableId;
 	
 	//值
@@ -42,12 +47,20 @@ public class PersonalHomoResultSet {
 		this.k = k;
 	}
 
-	public long getPersonalId() {
+	public String getPersonalId() {
 		return personalId;
 	}
 
-	public void setPersonalId(long personalId) {
+	public void setPersonalId(String personalId) {
 		this.personalId = personalId;
+	}
+
+	public long getPid() {
+		return pid;
+	}
+
+	public void setPid(long pid) {
+		this.pid = pid;
 	}
 
 	public String getVariableId() {
@@ -80,6 +93,14 @@ public class PersonalHomoResultSet {
 
 	public void setBatchId(long batchId) {
 		this.batchId = batchId;
+	}
+
+	public long getExperimentId() {
+		return experimentId;
+	}
+
+	public void setExperimentId(long experimentId) {
+		this.experimentId = experimentId;
 	}
 
 }

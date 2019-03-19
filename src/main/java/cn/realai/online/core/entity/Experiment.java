@@ -13,7 +13,7 @@ public class Experiment {
 	private String name;
 	
 	//服务id
-	private String serviceId;
+	private long serviceId;
 	
 	//状态
 	private Integer status;
@@ -167,11 +167,11 @@ public class Experiment {
 		this.name = name;
 	}
 
-	public String getServiceId() {
+	public long getServiceId() {
 		return serviceId;
 	}
 
-	public void setServiceId(String serviceId) {
+	public void setServiceId(long serviceId) {
 		this.serviceId = serviceId;
 	}
 
