@@ -35,6 +35,33 @@ public class TrainResultRedisKey {
 	
 	//psi检测结果
 	private String psiCheckResult;
+	
+	//样本综述
+	private String sampleReview;
+	
+	//模型路径
+	private String modelUrl;
+	
+	//分段统计图片地址（千人千面也是他）
+	private String segmentationStatisticsImageUrl;
+	
+	//badTop总数图片地址
+	private String badTopCountImageUrl;
+	
+	//roc图片地址
+	private String rocTestImageUrl;
+
+	private String rocTrainImageUrl;
+
+	private String rocValidateImageUrl;
+
+
+	//ks图片地址
+	private String ksTestImageUrl;
+
+	private String ksTrainImageUrl;
+
+	private String ksValidateImageUrl;
 
 	public String getModelperformance() {
 		return modelperformance;
@@ -114,6 +141,86 @@ public class TrainResultRedisKey {
 
 	public void setPsiCheckResult(String psiCheckResult) {
 		this.psiCheckResult = psiCheckResult;
+	}
+
+	public String getSampleReview() {
+		return sampleReview;
+	}
+
+	public void setSampleReview(String sampleReview) {
+		this.sampleReview = sampleReview;
+	}
+
+	public String getModelUrl() {
+		return modelUrl;
+	}
+
+	public void setModelUrl(String modelUrl) {
+		this.modelUrl = modelUrl;
+	}
+
+	public String getSegmentationStatisticsImageUrl() {
+		return segmentationStatisticsImageUrl;
+	}
+
+	public void setSegmentationStatisticsImageUrl(String segmentationStatisticsImageUrl) {
+		this.segmentationStatisticsImageUrl = segmentationStatisticsImageUrl;
+	}
+
+	public String getBadTopCountImageUrl() {
+		return badTopCountImageUrl;
+	}
+
+	public void setBadTopCountImageUrl(String badTopCountImageUrl) {
+		this.badTopCountImageUrl = badTopCountImageUrl;
+	}
+
+	public String getRocTestImageUrl() {
+		return rocTestImageUrl;
+	}
+
+	public void setRocTestImageUrl(String rocTestImageUrl) {
+		this.rocTestImageUrl = rocTestImageUrl;
+	}
+
+	public String getRocTrainImageUrl() {
+		return rocTrainImageUrl;
+	}
+
+	public void setRocTrainImageUrl(String rocTrainImageUrl) {
+		this.rocTrainImageUrl = rocTrainImageUrl;
+	}
+
+	public String getRocValidateImageUrl() {
+		return rocValidateImageUrl;
+	}
+
+	public void setRocValidateImageUrl(String rocValidateImageUrl) {
+		this.rocValidateImageUrl = rocValidateImageUrl;
+	}
+
+	public String getKsTestImageUrl() {
+		return ksTestImageUrl;
+	}
+
+	public void setKsTestImageUrl(String ksTestImageUrl) {
+		this.ksTestImageUrl = ksTestImageUrl;
+	}
+
+	public String getKsTrainImageUrl() {
+		return ksTrainImageUrl;
+	}
+
+	public void setKsTrainImageUrl(String ksTrainImageUrl) {
+		this.ksTrainImageUrl = ksTrainImageUrl;
+	}
+
+	public String getKsValidateImageUrl() {
+		return ksValidateImageUrl;
+	}
+
+	public void setKsValidateImageUrl(String ksValidateImageUrl) {
+		this.ksValidateImageUrl = ksValidateImageUrl;
 	}
 	
 }
