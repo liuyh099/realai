@@ -8,10 +8,8 @@ import cn.realai.online.core.bo.VariableDataBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
-import cn.realai.online.core.query.PageQuery;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.VariableDataService;
-import cn.realai.online.core.vo.ExperimentalTrainDetailVO;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
@@ -20,7 +18,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -55,6 +52,8 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
         Experiment experiment = new Experiment();
         BeanUtils.copyProperties(experimentalTrainQuery, experiment);
         List<ExperimentBO> list = experimentService.findList(experiment);
+
+
 
         //处理查询结果
         List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentalTrainVO.class);
@@ -104,7 +103,7 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
         ExperimentalTrainDetailBO experimentalTrainDetailBO = experimentService.selectExperimentDetailById(experimentId);
 
         if (experimentalTrainDetailBO != null) {
-            List<VariableDataBO> list = variableDataService.selectVariableDataByExperimentId(experimentalTrainDetailBO.getId());
+           // List<VariableDataBO> list = variableDataService.findListByExperimentId(experimentalTrainDetailBO.getId());
 
 //            experimentalTrainDetailBO.setVariableDataList(list);
         }

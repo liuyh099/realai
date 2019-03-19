@@ -41,8 +41,8 @@ public class ModelListVO {
     @ApiModelProperty(value="调优原因")
     private String tuningReason;
 
-    @ApiModelProperty(value="psi")
-    private BigDecimal psi;
+    @ApiModelProperty(value="psi喇叭值[0：psi不大于0.1，1：psi大于0.1]",example = "0,1")
+    private int psi;
 
     @ApiModelProperty(value="是否预警")
     private int aler;
@@ -120,11 +120,11 @@ public class ModelListVO {
         this.tuningReason = tuningReason;
     }
 
-    public BigDecimal getPsi() {
+    public int getPsi() {
         return psi;
     }
 
-    public void setPsi(BigDecimal psi) {
+    public void setPsi(int psi) {
         this.psi = psi;
     }
 

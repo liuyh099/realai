@@ -17,6 +17,7 @@ import cn.realai.online.core.bo.ModelRequestStructure;
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
 import cn.realai.online.common.Constant;
+import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.common.vo.ResultUtils;
@@ -58,7 +59,7 @@ public class ModelCallController {
 	 * @return
 	 */
 	@RequestMapping(value = "/callback", method = RequestMethod.POST)
-	public String callback(@RequestBody String param) {
+	public Result callback(@RequestBody String param) {
 		ModelRequestStructure request = JSON.parseObject(param, ModelRequestStructure.class);
 		Integer code = request.getCode();
 		Long experimentId = request.getExperimentId();
@@ -68,31 +69,35 @@ public class ModelCallController {
 		Map<String, String> map = JSON.parseObject(data, Map.class);
 		//参数验证
 		if (code == null) {
-			
+			modelCallBussiness.errorDealWith(experimentId, "");
+			return new Result(ResultCode.PARAM_ERROR.getCode(), ResultMessage.PARAM_ERORR.getMsg("code不能为null"), null);
 		} 
 		if (experimentId == null || experimentId == 0) {
-			
+			logger.error("ModelCallController callback. python回调experimentId为null");
+			return new Result(ResultCode.PARAM_ERROR.getCode(), ResultMessage.PARAM_ERORR.getMsg("experimentId不能为null或0"), null);
 		}
 		if (task == null || "".equals(task)) {
-			
+			logger.error("ModelCallController callback. python回调task为null");
+			modelCallBussiness.errorDealWith(experimentId, "");
+			return new Result(ResultCode.PARAM_ERROR.getCode(), ResultMessage.PARAM_ERORR.getMsg("task不能为null或空"), null);
 		}
 		
 		//解析处理结果
 		if (code != 200) { //如果处理不成功
-			
+			modelCallBussiness.errorDealWith(experimentId, msg);
+		} else { //处理成功，根据task判断处理方式
+			if (Constant.TASK_PREPROCESS.equals(task)) { //预处理
+				String redisKey = map.get("variableData");
+				modelCallBussiness.preprocessCallback(experimentId, redisKey);
+			} else if (Constant.TASK_TRAIN.equals(task)) { //训练
+				TrainResultRedisKey redisKey = JSON.parseObject(data, TrainResultRedisKey.class);
+				modelCallBussiness.trainCallback(experimentId, redisKey);
+			} else {
+				logger.warn("ModelCallController callback. python回调task为null");
+			}
 		}
 		
-		if (Constant.TASK_PREPROCESS.equals(task)) { //预处理
-			String redisKey = map.get("variableData");
-			modelCallBussiness.preprocessCallback(experimentId, redisKey);
-		} else if (Constant.TASK_TRAIN.equals(task)) { //训练
-			TrainResultRedisKey redisKey = JSON.parseObject(data, TrainResultRedisKey.class);
-			modelCallBussiness.trainCallback(experimentId, redisKey);
-		} else {
-			
-		}
-		
-		return "";
+		return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
 	}
 	
 }

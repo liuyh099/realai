@@ -59,6 +59,9 @@
 		where id = #{experimentId}
 	</update>
 
+
+
+
 	<select id="findList" resultMap="ExperimentMap" parameterType="cn.realai.online.core.entity.Experiment">
 		SELECT  *  FROM  experiment
 		<where>

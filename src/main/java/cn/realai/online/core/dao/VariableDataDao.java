@@ -8,8 +8,8 @@ import cn.realai.online.core.entity.VariableData;
 
 public interface VariableDataDao {
 
-	int insertVariableDataList(@Param("vdList")List<VariableData> vdList);
+	int insertList(@Param("vdList")List<VariableData> vdList);
 
-	List<VariableData> selectVariableDataByExperimentId(long experimentId);
+	List<VariableData> findListByExperimentId(@Param("experimentId")Long experimentId);
 
 }
