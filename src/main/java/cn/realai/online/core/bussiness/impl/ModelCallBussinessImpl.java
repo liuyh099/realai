@@ -17,6 +17,7 @@ import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.VariableDataService;
+import cn.realai.online.tool.modelcallthreadpool.BatchDailyTask;
 import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
 import cn.realai.online.tool.modelcallthreadpool.TrainTask;
 import cn.realai.online.tool.redis.RedisClientTemplate;
@@ -44,7 +45,8 @@ public class ModelCallBussinessImpl implements ModelCallBussiness{
 	 */
 	@Override
 	public void runBatchDaily(Long experimentId, String fileAddress) {
-		
+		BatchDailyTask batchDailyTask = new BatchDailyTask(experimentId, fileAddress);
+		ModelCallPool.modelCallPool.execute(batchDailyTask);
 	}
 
 	/*

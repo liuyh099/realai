@@ -80,7 +80,6 @@ public class TrainTask implements Runnable {
 		//样本分组
 		List<SampleGrouping> sampleGroupingList = analysisSampleGrouping(redisClientTemplate.get(redisKey.getSampleGrouping()));
 		
-		int length = sampleGroupingList.size();
 		Map<String, Long> sgMap = new HashMap<String, Long>();
 		for (SampleGrouping sg : sampleGroupingList) {
 			sgMap.put(sg.getGroupName(), sg.getId());
@@ -99,7 +98,6 @@ public class TrainTask implements Runnable {
 		//千人千面人员信息
 		List<PersonalInformation> personalInformationList = analysisPersonalInformation(redisClientTemplate.get(redisKey.getPersonalInformation()), sgMap);
 		
-		length = personalInformationList.size();
 		Map<String, Long> piMap = new HashMap<String, Long>();
 		for (PersonalInformation pi : personalInformationList) {
 			piMap.put(pi.getPersonalId(), pi.getId());
@@ -122,7 +120,39 @@ public class TrainTask implements Runnable {
 		analysisPersonalResultSet(redisClientTemplate.get(redisKey.getPersonalHomoResultSet()), 
 				redisClientTemplate.get(redisKey.getPersonalHetroResultSet()), piMap, batchRecordId);
 		
+		//解析千人千面聚合信息
 		analysisPersonalComboResultSet(redisClientTemplate.get(redisKey.getPersonalComboResultSet()), piMap, batchRecordId);
+		
+		//样本综述
+		String sampleReview = redisClientTemplate.get(redisKey.getSampleReview());
+		
+		//模型路径
+		String modelUrl = redisClientTemplate.get(redisKey.getModelUrl());
+		
+		
+		//分段统计图片地址（千人千面也是他）
+		String segmentationStatisticsImageUrl = redisClientTemplate.get(redisKey.getSegmentationStatisticsImageUrl());
+		
+		//badTop总数图片地址
+		String badTopCountImageUrl = redisClientTemplate.get(redisKey.getBadTopCountImageUrl());
+		
+		//roc训练图片地址
+		String rocTestImageUrl = redisClientTemplate.get(redisKey.getRocTestImageUrl());
+
+		//roc测试图片地址
+		String rocTrainImageUrl = redisClientTemplate.get(redisKey.getRocTrainImageUrl());
+
+		//roc验证图片地址
+		String rocValidateImageUrl = redisClientTemplate.get(redisKey.getRocValidateImageUrl());
+
+
+		//ks图片地址
+		String ksTestImageUrl = redisClientTemplate.get(redisKey.getKsTestImageUrl());
+
+		String ksTrainImageUrl = redisClientTemplate.get(redisKey.getKsTrainImageUrl());
+
+		String ksValidateImageUrl = redisClientTemplate.get(redisKey.getKsValidateImageUrl());
+		
 		
 	}
 	

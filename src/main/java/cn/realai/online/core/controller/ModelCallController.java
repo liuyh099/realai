@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 
+import cn.realai.online.core.bo.DailyBatchRequestStructure;
 import cn.realai.online.core.bo.ModelRequestStructure;
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
@@ -41,16 +42,19 @@ public class ModelCallController {
 	 * @return
 	 */
 	@RequestMapping(value = "/dailyBatch", method = RequestMethod.POST)
-	public String runBatchDaily(Long experimentId, String fileAddress) {
+	public String runBatchDaily(@RequestBody String param) {
+		DailyBatchRequestStructure dbrs = JSON.parseObject(param, DailyBatchRequestStructure.class);
+		Long experimentId = dbrs.getExperimentId();
+		String redisKey = dbrs.getRedisKey();
 		//获取当天日期
 		String date = DateUtil.dateToString(new Date(), DateUtil.ymd); 
 		
-		if (fileAddress != null || "".equals(fileAddress) || experimentId == null) {
+		if (redisKey != null || "".equals(redisKey) || experimentId == null) {
 			logger.error("ModelCallController runBatchDaily:date定时任务发生错误，参数格式错误. date{}, "
-					+ "experimentId{}, fileAddress{}", date, experimentId, fileAddress);
+					+ "experimentId{}, fileAddress{}", date, experimentId, redisKey);
 			return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("文件地址不能为空或null"), null);
 		}
-		modelCallBussiness.runBatchDaily(experimentId, fileAddress);
+		modelCallBussiness.runBatchDaily(experimentId, redisKey);
 		return ResultUtils.generateResultStr(ResultCode.SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
 	}
 	
