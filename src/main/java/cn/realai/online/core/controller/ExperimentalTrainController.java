@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,7 +47,20 @@ public class ExperimentalTrainController {
     @ApiOperation(value="删除实验训练列表")
     @ResponseBody
     public Result delete(@RequestBody List<Long> ids){
-        return  null;
+
+        try {
+            if(CollectionUtils.isEmpty(ids)){
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            }
+            if(experimentalTrainBusiness.deleteExperimentByIds(ids)>0){
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
+            }else {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+            }
+        } catch (Exception e) {
+            logger.error("删除实验训练列表异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
 

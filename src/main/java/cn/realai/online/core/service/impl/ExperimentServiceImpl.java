@@ -74,6 +74,11 @@ public class ExperimentServiceImpl implements ExperimentService {
 		return ret;
 	}
 
+	@Override
+	public Integer deleteExperimentByIds(List<Long> ids) {
+		return experimentDao.deleteExperimentByIds(ids);
+	}
+
 	/*
 	 * 修改实验的状态
 	 * @param experimentId

@@ -59,9 +59,6 @@
 		where id = #{experimentId}
 	</update>
 
-	
-
-  
 	<select id="findList" resultMap="ExperimentMap" parameterType="cn.realai.online.core.entity.Experiment">
 		SELECT  *  FROM  experiment
 		<where>
@@ -77,5 +74,22 @@
 			</if>
 		</where>
 	</select>
+
+	<delete id="deleteExperimentByIds" parameterType="java.lang.Long">
+		DELETE FROM experiment
+		<where>
+			<choose>
+				<when test="ids!=null and ids.size()>0">
+					<foreach collection="ids" item="id" separator="," open="id in(" close=")">
+						#{id}
+					</foreach>
+				</when>
+				<otherwise>
+					1=2
+				</otherwise>
+			</choose>
+		</where>
+	</delete>
+
   
 </mapper> 

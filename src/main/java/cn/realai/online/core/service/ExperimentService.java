@@ -16,6 +16,13 @@ public interface ExperimentService {
      */
 	int updatePreprocessStatus(Long experimentId, int preFinishStatus);
 
+
+	/**
+	 * id 删除实验训练列表
+	 * @param ids
+	 */
+	Integer deleteExperimentByIds(List<Long> ids);
+
 	/*
 	 * 修改实验的状态
 	 * @param experimentId

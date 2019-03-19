@@ -53,8 +53,18 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
         return pageBO;
     }
 
-    
-    
+    /**
+     * 根据实验训练id删除实验训练
+     *
+     *@param ids 实验训练id集合
+     */
+    @Override
+    public Integer deleteExperimentByIds(List<Long> ids) {
+        int count = experimentService.deleteExperimentByIds(ids);
+        return count;
+    }
+
+
     /*
      * 训练
      * @param trainId 实验id
