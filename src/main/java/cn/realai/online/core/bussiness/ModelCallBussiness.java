@@ -23,9 +23,4 @@ public interface ModelCallBussiness {
 	 */
 	void trainCallback(Long experimentId, TrainResultRedisKey redisKey);
 
-	/*
-	 * 错误处理
-	 */
-	void errorDealWith(Long experimentId, String errMsg);
-
 }

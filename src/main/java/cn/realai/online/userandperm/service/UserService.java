@@ -51,11 +51,4 @@ public interface UserService {
      * @return
      */
     User findByNameOrPhoneNumber(String username);
-
-    /**
-     * 检查用户旧密码
-     * @param oldPwd
-     * @return
-     */
-    Boolean checkOldPwd(String oldPwd);
 }

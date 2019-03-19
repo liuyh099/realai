@@ -19,4 +19,11 @@ public interface ExperimentDao {
 
 	int updateExperimentStatus(@Param("experimentId")long experimentId, 
 			@Param("status")int status);
+
+	/**
+	 * 删除实验训练列表
+	 * @param ids
+	 * @return
+	 */
+	Integer deleteExperimentByIds(List<Long> ids);
 }

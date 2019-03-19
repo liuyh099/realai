@@ -3,12 +3,9 @@ package cn.realai.online.userandperm.service.impl;
 import cn.realai.online.userandperm.dao.UserDao;
 import cn.realai.online.userandperm.entity.User;
 import cn.realai.online.userandperm.service.UserService;
-import cn.realai.online.util.EncodingPasswordUtils;
-import cn.realai.online.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -26,9 +23,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer insert(User user) {
-        String pwd = user.getPwd();
-        pwd=EncodingPasswordUtils.encodingPassword(pwd);
-        user.setPwd(pwd);
         return userDao.insert(user);
     }
 
@@ -39,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User get(Long id) {
-        if (id == null) {
+        if(id==null){
             return null;
         }
         return userDao.get(id);
@@ -52,29 +46,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer updatePwd(User user) {
-        String pwd = user.getPwd();
-        pwd=EncodingPasswordUtils.encodingPassword(pwd);
-        user.setPwd(pwd);
         return userDao.updatePwd(user);
     }
 
     @Override
     public User findByNameOrPhoneNumber(String username) {
         return userDao.findByNameOrPhoneNumber(username);
-    }
-
-    @Override
-    public Boolean checkOldPwd(String oldPwd) {
-        User user = UserUtils.getUser();
-        if (ObjectUtils.isEmpty(user)) {
-            return false;
-        }
-        user = get(user.getId());
-        String salt = user.getPwd().substring(0, 16);
-        String pwd = EncodingPasswordUtils.encodingPassword(oldPwd, salt.getBytes());
-        if (oldPwd.equals(pwd)) {
-            return true;
-        }
-        return false;
     }
 }

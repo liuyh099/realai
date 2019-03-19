@@ -1,6 +1,7 @@
 package cn.realai.online.core.service;
 
 import cn.realai.online.core.bo.ExperimentBO;
+import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import cn.realai.online.core.entity.Experiment;
 
 import java.util.List;
@@ -16,6 +17,13 @@ public interface ExperimentService {
      */
 	int updatePreprocessStatus(Long experimentId, int preFinishStatus);
 
+
+	/**
+	 * id 删除实验训练列表
+	 * @param ids
+	 */
+	Integer deleteExperimentByIds(List<Long> ids);
+
 	/*
 	 * 修改实验的状态
 	 * @param experimentId
@@ -23,4 +31,7 @@ public interface ExperimentService {
 	 * @return
 	 */
 	int updateExperimentStatus(long experimentId, int status);
+
+	ExperimentalTrainDetailBO selectExperimentDetailById(long id);
+
 }

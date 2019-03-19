@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 
@@ -53,7 +52,6 @@ public class ModelCallBussinessImpl implements ModelCallBussiness{
 	 * 预处理回调
 	 */
 	@Override
-	@Transactional
 	public int preprocessCallback(Long experimentId, String redisKey) {
 		ExperimentBO experimentbo = experimentService.selectExperimentById(experimentId);
 		if (experimentbo == null) {
@@ -90,15 +88,6 @@ public class ModelCallBussinessImpl implements ModelCallBussiness{
 	 */
 	@Override
 	public void trainCallback(Long experimentId, TrainResultRedisKey redisKey) {
-		TrainTask trainTask = new TrainTask(experimentId, redisKey);
-		ModelCallPool.modelCallPool.execute(trainTask);
-	}
-
-	/*
-	 * 错误处理
-	 */
-	@Override
-	public void errorDealWith(Long experimentId, String errMsg) {
 		
 	}
 
