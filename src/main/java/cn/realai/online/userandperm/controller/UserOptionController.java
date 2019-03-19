@@ -108,7 +108,7 @@ public class UserOptionController {
     }
 
 
-    @PostMapping("/forgetNotice")
+    @GetMapping("/forgetNotice")
     @ApiOperation("忘记密码消息提示")
     public Result<Integer> forgetNotice() {
         try {
@@ -120,7 +120,7 @@ public class UserOptionController {
         }
     }
 
-    @PutMapping("menu")
+    @GetMapping("menu")
     @ApiOperation(value = "获得用户菜单")
     public Result<List<IndexMenuTreeNodeVo>> menu() {
         try {
