@@ -25,4 +25,18 @@ public interface RoleService {
      * @return
      */
     Integer delete(List<Long> ids);
+
+    /**
+     * 根据ID查询角色信息
+     * @param id
+     * @return
+     */
+    SysRole get(Long id);
+
+    /**
+     * 更新角色信息
+     * @param sysRole
+     * @return
+     */
+    Integer update(SysRole sysRole);
 }

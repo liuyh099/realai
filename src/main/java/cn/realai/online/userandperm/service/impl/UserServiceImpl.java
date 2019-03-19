@@ -48,4 +48,9 @@ public class UserServiceImpl implements UserService {
     public Integer updatePwd(User user) {
         return userDao.updatePwd(user);
     }
+
+    @Override
+    public User findByNameOrPhoneNumber(String username) {
+        return userDao.findByNameOrPhoneNumber(username);
+    }
 }

@@ -16,4 +16,11 @@ public interface RoleMenuDao {
      * @param ids
      */
     void deleteByRoleIds(List<Long> ids);
+
+    /**
+     * 根据角色ID 查询菜单ID
+     * @param id
+     * @return
+     */
+    List<Long> findIdsByRoleId(Long id);
 }

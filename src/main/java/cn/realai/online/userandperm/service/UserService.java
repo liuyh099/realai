@@ -44,4 +44,11 @@ public interface UserService {
      * @return
      */
     Integer updatePwd(User user);
+
+    /**
+     * 根据用户名或者手机查询用户
+     * @param username
+     * @return
+     */
+    User findByNameOrPhoneNumber(String username);
 }

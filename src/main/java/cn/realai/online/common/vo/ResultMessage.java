@@ -12,7 +12,10 @@ public enum ResultMessage {
     PARAM_ERORR("输入信息有误"),//参数校验失败 后面跟具体原因,A参数长度过长
     UNIQUE("校验通过"),//唯一性检查通过
     NOT_UNIQUE("数据重复"),//唯一性检查不通过
-	NO_PERMISSION("没有权限或未登录");//没有权限或未登录
+	NO_PERMISSION("没有权限或未登录"),
+    PWD_ERROR("密码错误"),
+    NOT_EXISTS_USER("用户不存在"),
+    LOCKED_ACCOUNT("账号已被冻结");
 
     private String msg;
 

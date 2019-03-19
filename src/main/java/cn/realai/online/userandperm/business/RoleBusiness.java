@@ -2,7 +2,10 @@ package cn.realai.online.userandperm.business;
 
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.query.PageQuery;
+import cn.realai.online.userandperm.bo.MenuTreeNodeBO;
 import cn.realai.online.userandperm.bo.RoleBO;
+import cn.realai.online.userandperm.bo.RoleDetailBO;
+import cn.realai.online.userandperm.vo.RoleEditVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,4 +45,31 @@ public interface RoleBusiness {
      * @return
      */
     Integer delete(List<Long> ids);
+
+    /**
+     * 获得所有的菜单
+     * @return
+     */
+    List<MenuTreeNodeBO> menuTree();
+
+    /**
+     * 获得角色详情
+     * @param id
+     * @return
+     */
+    RoleDetailBO detail(Long id);
+
+    /**
+     * 获得编辑角色详情
+     * @param id
+     * @return
+     */
+    RoleDetailBO edit(Long id);
+
+    /**
+     * 跟新角色信息
+     * @param roleBO
+     * @return
+     */
+    boolean update(RoleBO roleBO);
 }
