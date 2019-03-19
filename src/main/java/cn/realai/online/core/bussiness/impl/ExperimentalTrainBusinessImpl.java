@@ -47,6 +47,8 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
         BeanUtils.copyProperties(experimentalTrainQuery, experiment);
         List<ExperimentBO> list = experimentService.findList(experiment);
 
+
+
         //处理查询结果
         List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentalTrainVO.class);
         PageBO<ExperimentalTrainVO> pageBO = new PageBO<ExperimentalTrainVO>(result, experimentalTrainQuery.getPageSize(), experimentalTrainQuery.getPageNum(), page.getTotal(), page.getPages());

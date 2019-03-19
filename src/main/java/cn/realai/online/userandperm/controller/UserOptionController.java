@@ -40,7 +40,7 @@ public class UserOptionController {
 
 
     @PostMapping("login")
-    @ApiOperation("用户登录Api")
+    @ApiOperation("用户登录Api(登录成功返回sessionId,登陆后的请求在请求头里面加入mySessionId)")
     public Result<MySessionVo> login(@RequestBody UserLoginVo userLoginVo) {
 
         Subject subject = SecurityUtils.getSubject();
