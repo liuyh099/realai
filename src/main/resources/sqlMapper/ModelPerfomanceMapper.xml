@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.core.dao.ModelPerfomanceDao">
+    <resultMap type="cn.realai.online.core.entity.ModelPerformance" id="ModelPerformanceMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="metic_name" property="metricName" jdbcType="VARCHAR"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+        <result column="training_set" property="trainingSet" jdbcType="DECIMAL"/>
+        <result column="valid_set" property="validSet" jdbcType="DECIMAL"/>
+        <result column="test_set" property="testSet" jdbcType="DECIMAL"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="cn.realai.online.core.entity.ModelPerformance">
+        INSERT INTO model_perfomance (name,create_time,experiment_id,training_set,test_set,valid_set)
+        VALUE (#{name},#{createTime},#{experimentId},#{trainingSet},#{testSet},#{validSet})
+    </insert>
+
+
+    <update id="update" parameterType="cn.realai.online.core.entity.ModelPerformance">
+        UPDATE model_perfomance SET
+        name = #{name},
+        <if test="trainingSet!=null">training_set = #{trainingSet}</if>,
+        <if test="testSet!=null">training_set = #{testSet}</if>,
+        <if test="validSet!=null">valid_set = #{validSet}</if>
+        <where>
+            id =#{id}
+        </where>
+    </update>
+
+
+    <select id="get" resultMap="ModelPerformanceMap" parameterType="java.lang.Long">
+        SELECT m.* from model m
+        <where>
+            a.id =#{id}
+        </where>
+    </select>
+
+    <select id="selectList" resultMap="ModelPerformanceMap">
+        select mp.metric_name as metricName,
+        training_set as trainingSet,
+        test_set as testSet,
+        valid_set as validSet
+        from model_performance as mp
+        join model as m on mp.experiment_id = mp.experiment_id
+        <!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错-->
+        <where>
+            <if test="modelId!=null">
+                m.id = #{modelId}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

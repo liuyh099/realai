@@ -3,6 +3,8 @@ package cn.realai.online.core.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
+
 /**
  * 功能描述：TODO
  *
@@ -14,6 +16,9 @@ public class ModelListVO {
 
     @ApiModelProperty(value="模型id")
     private long modelId;
+
+    @ApiModelProperty(value="服务名称")
+    private String modelName;
 
     @ApiModelProperty(value="服务名称")
     private String serviceName;
@@ -36,8 +41,12 @@ public class ModelListVO {
     @ApiModelProperty(value="调优原因")
     private String tuningReason;
 
-    @ApiModelProperty(value="psi喇叭值[0：psi不大于0.1，1：psi大于0.1]",example = "0,1")
-    private int psi;
+    @ApiModelProperty(value="psi")
+    private BigDecimal psi;
+
+    @ApiModelProperty(value="是否预警")
+    private int aler;
+
 
     public long getModelId() {
         return modelId;
@@ -45,6 +54,14 @@ public class ModelListVO {
 
     public void setModelId(long modelId) {
         this.modelId = modelId;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 
     public String getServiceName() {
@@ -103,11 +120,19 @@ public class ModelListVO {
         this.tuningReason = tuningReason;
     }
 
-    public int getPsi() {
+    public BigDecimal getPsi() {
         return psi;
     }
 
-    public void setPsi(int psi) {
+    public void setPsi(BigDecimal psi) {
         this.psi = psi;
+    }
+
+    public int getAler() {
+        return aler;
+    }
+
+    public void setAler(int aler) {
+        this.aler = aler;
     }
 }
