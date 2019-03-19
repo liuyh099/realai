@@ -4,7 +4,6 @@ import cn.realai.online.util.EncodingPasswordUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
@@ -13,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class OnlineApplication {
 
 	public static void main(String[] args) {
-		ApplicationContext applicationContext = SpringApplication.run(OnlineApplication.class, args);
+		SpringApplication.run(OnlineApplication.class, args);
 	}
 
 }

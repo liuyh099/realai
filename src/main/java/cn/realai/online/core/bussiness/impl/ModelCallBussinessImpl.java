@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 
@@ -17,8 +16,6 @@ import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.VariableDataService;
-import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
-import cn.realai.online.tool.modelcallthreadpool.TrainTask;
 import cn.realai.online.tool.redis.RedisClientTemplate;
 
 /**
@@ -51,7 +48,6 @@ public class ModelCallBussinessImpl implements ModelCallBussiness{
 	 * 预处理回调
 	 */
 	@Override
-	@Transactional
 	public int preprocessCallback(Long experimentId, String redisKey) {
 		ExperimentBO experimentbo = experimentService.selectExperimentById(experimentId);
 		if (experimentbo == null) {
@@ -88,15 +84,6 @@ public class ModelCallBussinessImpl implements ModelCallBussiness{
 	 */
 	@Override
 	public void trainCallback(Long experimentId, TrainResultRedisKey redisKey) {
-		TrainTask trainTask = new TrainTask(experimentId, redisKey);
-		ModelCallPool.modelCallPool.execute(trainTask);
-	}
-
-	/*
-	 * 错误处理
-	 */
-	@Override
-	public void errorDealWith(Long experimentId, String errMsg) {
 		
 	}
 

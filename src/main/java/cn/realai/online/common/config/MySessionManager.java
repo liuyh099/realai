@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 public class MySessionManager extends DefaultWebSessionManager {
 
-    private static final String AUTHORIZATION = "mySessionId";
+    private static final String AUTHORIZATION = "sessionId";
 
     private static final String REFERENCED_SESSION_ID_SOURCE = "Stateless request";
 

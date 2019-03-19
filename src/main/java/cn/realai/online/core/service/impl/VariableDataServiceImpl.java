@@ -2,6 +2,7 @@ package cn.realai.online.core.service.impl;
 
 import java.util.List;
 
+import cn.realai.online.core.bo.VariableDataBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,38 +19,41 @@ import cn.realai.online.core.service.VariableDataService;
 @Service
 public class VariableDataServiceImpl implements VariableDataService {
 
-	private static Logger logger = LoggerFactory.getLogger(RealTimeController.class);
-	
-	@Autowired
-	private VariableDataDao variableDataDao;
-	
-	@Override
-	@Transactional
-	public int insertVariableDataList(List<VariableData> vdList) {
-		if (vdList == null || vdList.size() == 0) {
-			return 0;
-		}
-		
-		for (VariableData vd : vdList) {
-			vd.setDelete(VariableData.DELETE_NO);
-			vd.setCreateTime(System.currentTimeMillis());
-		}
-		
-		int ret = variableDataDao.insertList(vdList);
-		if (ret != vdList.size()) {
-			logger.error("VariableDataServiceImpl insertVariableDataList, 预处理失败, vdList{}" + JSON.toJSONString(vdList));
-			throw new RuntimeException("预处理失败");
-		}
-		logger.info("VariableDataServiceImpl insertVariableDataList, 预处理成功");
-		return ret;
-	}
+    private static Logger logger = LoggerFactory.getLogger(RealTimeController.class);
 
-	@Override
-	public List<VariableData> findListByExperimentId(Long experimentId) {
-		if (experimentId == null) {
-			return null;
-		}
-		return variableDataDao.findListByExperimentId(experimentId);
-	}
+    @Autowired
+    private VariableDataDao variableDataDao;
+
+    @Override
+    @Transactional
+    public int insertVariableDataList(List<VariableData> vdList) {
+        if (vdList == null || vdList.size() == 0) {
+            return 0;
+        }
+
+        for (VariableData vd : vdList) {
+            vd.setDelete(VariableData.DELETE_NO);
+            vd.setCreateTime(System.currentTimeMillis());
+        }
+
+        int ret = variableDataDao.insertVariableDataList(vdList);
+        if (ret != vdList.size()) {
+            logger.error("VariableDataServiceImpl insertVariableDataList, 预处理失败, vdList{}" + JSON.toJSONString(vdList));
+            throw new RuntimeException("预处理失败");
+        }
+        logger.info("VariableDataServiceImpl insertVariableDataList, 预处理成功");
+        return ret;
+    }
+
+    @Override
+    public List<VariableDataBO> selectVariableDataByExperimentId(long experimentId) {
+
+//		List<VariableData> list = variableDataDao.selectVariableDataByExperimentId(experimentId);
+        List<VariableData> list = variableDataDao.selectVariableDataByExperimentId(experimentId);;
+//        Lsit<VariableDataBO> experimentalTrainDetailBO = JSON.parseArray(JSON.toJSONString(list), VariableDataBO.class);
+
+//        return experimentalTrainDetailBO;
+        return null;
+    }
 
 }

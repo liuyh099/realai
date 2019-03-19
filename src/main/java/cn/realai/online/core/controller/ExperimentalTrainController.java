@@ -4,24 +4,26 @@ import cn.realai.online.common.page.PageBO;
 import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
+import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.vo.*;
+import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/experimental/train")
-@Api(tags="实验训练API")
+@Api(tags = "实验训练API")
 public class ExperimentalTrainController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -30,146 +32,169 @@ public class ExperimentalTrainController {
     private ExperimentalTrainBusiness experimentalTrainBusiness;
 
     @GetMapping
-    @ApiOperation(value="查询实验训练列表")
+    @ApiOperation(value = "查询实验训练列表")
     @ResponseBody
-    public Result<PageBO<ExperimentalTrainVO>> list(ExperimentalTrainQuery experimentalTrainQuery){
-        try{
+    public Result<PageBO<ExperimentalTrainVO>> list(ExperimentalTrainQuery experimentalTrainQuery) {
+        try {
             PageBO<ExperimentalTrainVO> page = experimentalTrainBusiness.pageList(experimentalTrainQuery);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),page);
-        }catch (Exception e){
-            logger.error("查询实验列表异常",e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), page);
+        } catch (Exception e) {
+            logger.error("查询实验列表异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
 
     }
 
     @DeleteMapping
-    @ApiOperation(value="删除实验训练列表")
+    @ApiOperation(value = "删除实验训练列表")
     @ResponseBody
-    public Result delete(@RequestBody List<Long> ids){
-        return  null;
+    public Result delete(@RequestBody List<Long> ids) {
+
+        try {
+            if (CollectionUtils.isEmpty(ids)) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            }
+            if (experimentalTrainBusiness.deleteExperimentByIds(ids) > 0) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            } else {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            }
+        } catch (Exception e) {
+            logger.error("删除实验训练列表异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
-
+    
     @GetMapping("/detail/{trainId}")
-    @ApiOperation(value="实验详情")
+    @ApiOperation(value = "实验详情")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result detail(){
-
-        return  null;
+    public Result<ExperimentalTrainDetailVO> detail(IdVO idVO) {
+        try {
+            if (idVO.getId() == null) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            }
+            ExperimentalTrainDetailBO experimentalTrainDetailBO = experimentalTrainBusiness.detail(idVO.getId());
+            ExperimentalTrainDetailVO result = JSON.parseObject(JSON.toJSONString(experimentalTrainDetailBO), ExperimentalTrainDetailVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("获得实验详情异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
 
     @GetMapping("/select/{serverId}")
-    @ApiOperation(value="根据服务id活得实验名称列表")
+    @ApiOperation(value = "根据服务id活得实验名称列表")
     @ApiImplicitParam(name = "serverId", value = "服务ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<TrainNameSelectVO> getSelect(){
-        return  null;
+    public Result<TrainNameSelectVO> getSelect() {
+        return null;
     }
 
 
     @PostMapping("/selectFile")
-    @ApiOperation(value="新增实验-选择文件")
+    @ApiOperation(value = "新增实验-选择文件")
     @ResponseBody
-    public Result<IdVO> selectFileAdd(@RequestBody ExperimentalTrainSelectFileVO experimentalTrainSelectFileVo){
-       return null;
+    public Result<IdVO> selectFileAdd(@RequestBody ExperimentalTrainSelectFileVO experimentalTrainSelectFileVo) {
+        return null;
     }
 
     @GetMapping("/selectFile/{trainId}")
-    @ApiOperation(value="活得选择文件的结果")
+    @ApiOperation(value = "活得选择文件的结果")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<ExperimentalTrainSelectFileVO> selectFileQuery(@PathVariable  long trainId ){
+    public Result<ExperimentalTrainSelectFileVO> selectFileQuery(@PathVariable long trainId) {
 
-        return  null;
+        return null;
     }
 
     @PutMapping("/selectFile")
-    @ApiOperation(value="更新选择文件内容")
+    @ApiOperation(value = "更新选择文件内容")
     @ResponseBody
-    public Result selectFileUpdate(@RequestBody ExperimentalTrainSelectFileVO experimentalTrainSelectFileVo ){
-        return  null;
+    public Result selectFileUpdate(@RequestBody ExperimentalTrainSelectFileVO experimentalTrainSelectFileVo) {
+        return null;
     }
 
     @PostMapping("/selectParam")
-    @ApiOperation(value="新增实验-选择参数")
+    @ApiOperation(value = "新增实验-选择参数")
     @ResponseBody
-    public Result<IdVO> selectParamAdd(@RequestBody ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo){
+    public Result<IdVO> selectParamAdd(@RequestBody ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo) {
         return null;
     }
 
     @GetMapping("/selectParam/{trainId}")
-    @ApiOperation(value="获得选择参数的结果")
+    @ApiOperation(value = "获得选择参数的结果")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<ExperimentalTrainSelectParamVO> selectParamQuery(@PathVariable  long trainId ){
-        return  null;
+    public Result<ExperimentalTrainSelectParamVO> selectParamQuery(@PathVariable long trainId) {
+        return null;
     }
 
     @PutMapping("/selectParam")
-    @ApiOperation(value="更新选择参数内容")
+    @ApiOperation(value = "更新选择参数内容")
     @ResponseBody
-    public Result selectParamUpdate(@RequestBody ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo ){
-        return  null;
+    public Result selectParamUpdate(@RequestBody ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo) {
+        return null;
     }
 
     @GetMapping("/createModel/{trainId}")
-    @ApiOperation(value="新增实验-生成模型")
+    @ApiOperation(value = "新增实验-生成模型")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<ExperimentalTrainCreateModelCheckVO> createModelQuery(@PathVariable  long trainId ){
-        return  null;
+    public Result<ExperimentalTrainCreateModelCheckVO> createModelQuery(@PathVariable long trainId) {
+        return null;
     }
 
     @DeleteMapping("/createModel")
-    @ApiOperation(value="删除同质或者异质量数据")
+    @ApiOperation(value = "删除同质或者异质量数据")
     @ResponseBody
-    public Result createModelDelete(@RequestBody ExperimentalTrainCreateModelVO experimentalTrainCreateModelVo ){
-        return  null;
+    public Result createModelDelete(@RequestBody ExperimentalTrainCreateModelVO experimentalTrainCreateModelVo) {
+        return null;
     }
 
     @GetMapping("/createModel/getData")
-    @ApiOperation(value="新增实验-生成模型-一获取同质异质数据")
+    @ApiOperation(value = "新增实验-生成模型-一获取同质异质数据")
     @ResponseBody
-    public Result<PageBO<ExperimentalTrainCreateModelDataVO>> createModelGetData(@RequestBody ExperimentalTrainCreateModelDataQuery experimentalTrainCreateModelDataQuery){
-        return  null;
+    public Result<PageBO<ExperimentalTrainCreateModelDataVO>> createModelGetData(@RequestBody ExperimentalTrainCreateModelDataQuery experimentalTrainCreateModelDataQuery) {
+        return null;
     }
 
     /**
      * 实验训练接口
      * 一件建模
+     *
      * @param trainId 实验id
      * @return
      */
     @PutMapping("/createModel/{trainId}")
-    @ApiOperation(value="新增实验-生成模型-一键建立模型")
+    @ApiOperation(value = "新增实验-生成模型-一键建立模型")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result createModel(@PathVariable  long trainId ){
-    	int ret = experimentalTrainBusiness.train(trainId);
-    	
-    	return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
+    public Result createModel(@PathVariable long trainId) {
+        int ret = experimentalTrainBusiness.train(trainId);
+
+        return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
     }
-    
+
     @PutMapping("/doubleCreate")
-    @ApiOperation(value="二次创建实验")
+    @ApiOperation(value = "二次创建实验")
     @ResponseBody
-    public Result doubleCreate(@RequestBody ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo){
-        return  null;
+    public Result doubleCreate(@RequestBody ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo) {
+        return null;
     }
 
     @PutMapping("/testPreprocess/{experimentId}")
-    @ApiOperation(value="二次创建实验")
+    @ApiOperation(value = "二次创建实验")
     @ResponseBody
     public Result testPreprocess(@PathVariable long experimentId) {
-    	try {
-    		experimentalTrainBusiness.testPreprocess(experimentId);
-    		return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
-    	} catch (Exception e) {
-    		return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
-    	}
+        try {
+            experimentalTrainBusiness.testPreprocess(experimentId);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
+        } catch (Exception e) {
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
+        }
     }
 
 
