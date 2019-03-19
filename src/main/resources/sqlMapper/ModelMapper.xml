@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.core.dao.ModelDao">
+    <resultMap type="cn.realai.online.core.entity.Model" id="ModelMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="createTime" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="experimentId" property="experiment_id" jdbcType="BIGINT"/>
+        <result column="serviceId" property="service_id" jdbcType="BIGINT"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="cn.realai.online.core.entity.Model">
+        INSERT INTO model (name,create_time,experiment_id,service_id,remark)
+        VALUE (#{name},#{createTime},#{experimentId},#{serviceId},#{remark})
+    </insert>
+
+
+    <update id="update" parameterType="cn.realai.online.core.entity.Model">
+        UPDATE model SET
+        name = #{name},
+        <if test="remark!=null">remark = #{remark}</if>
+        <where>
+            id =#{id}
+        </where>
+    </update>
+
+
+    <select id="get" resultMap="ModelMap" parameterType="java.lang.Long">
+        SELECT m.* from model m
+        <where>
+            a.id =#{id}
+        </where>
+    </select>
+
+    <resultMap type="cn.realai.online.core.bo.ModelListBO" id="ModelListMap">
+        <result column="modelId" property="modelId" jdbcType="BIGINT"/>
+        <result column="modelName" property="modelName" jdbcType="VARCHAR"/>
+        <result column="serviceId" property="serviceId" jdbcType="BIGINT"/>
+        <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
+        <result column="experimentId" property="experimentId" jdbcType="BIGINT"/>
+        <result column="experimentName" property="experimentName" jdbcType="VARCHAR"/>
+        <result column="releaseTime" property="releaseTime" jdbcType="TIMESTAMP"/>
+        <result column="algorithmType" property="algorithmType" jdbcType="VARCHAR"/>
+        <result column="tuningCount" property="tuningCount" jdbcType="INTEGER"/>
+        <result column="tuningReason" property="tuningReason" jdbcType="VARCHAR"/>
+        <result column="psi" property="psi" jdbcType="DECIMAL"/>
+        <result column="aler" property="aler" jdbcType="TINYINT"/>
+    </resultMap>
+    <select id="selectList" resultMap="ModelListMap">
+        select
+        m.id as modelId,
+        m.name as modelName,
+        sv.id as serviceId,
+        sv.name as serviceName,
+        ep.id as experimentId,
+        ep.name as experimentName,
+        ep.release_time as releaseTime,
+        ep.algorithm_type as algorithmType,
+        ep.tuning_count as tuningCount,
+        '调优原因' as tuningReason,
+        pc.psi as psi,
+        pc.alter as aler
+        from model as m
+        join experiment as ep on m.experiment_id = ep.id
+        join service as sv on m.service_id = sv.id
+        left join psi_check as pc on ep.id = pc.experiment_id
+        <!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错-->
+        <where>
+            <if test="name!=null and name.trim()!=''">
+                and m.name like '%${name}%'
+            </if>
+            <if test="serviceId!=null">
+                and sv.id = #{serviceId}
+            </if>
+        </where>
+    </select>
+
+
+    <resultMap type="cn.realai.online.core.bo.ModelDetailBO" id="ModelDetailMap">
+        <result column="modelId" property="modelId" jdbcType="BIGINT"/>
+        <result column="modelName" property="modelName" jdbcType="VARCHAR"/>
+        <result column="serviceId" property="serviceId" jdbcType="BIGINT"/>
+        <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
+        <result column="experimentId" property="experimentId" jdbcType="BIGINT"/>
+        <result column="experimentName" property="experimentName" jdbcType="VARCHAR"/>
+        <result column="releaseTime" property="releaseTime" jdbcType="TIMESTAMP"/>
+        <result column="algorithmType" property="algorithmType" jdbcType="VARCHAR"/>
+        <result column="tuningCount" property="tuningCount" jdbcType="INTEGER"/>
+        <result column="tuningReason" property="tuningReason" jdbcType="VARCHAR"/>
+        <result column="yDefine" property="yDefine" jdbcType="VARCHAR"/>
+        <result column="serviceType" property="serviceType" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="selectDetail" resultMap="ModelDetailMap">
+        select m.id as modelId,
+        m.name as modelName,
+        sv.id as serviceId,
+        sv.name as serviceName,
+        ep.id as experimentId,
+        ep.name as experimentName,
+        ep.release_time as releaseTime,
+        ep.algorithm_type as algorithmType,
+        ep.tuning_count as tuningCount,
+        '调优原因' as tuningReason,
+        'Y的定义' as yDefine,
+        sv.type as serviceType,
+        m.remark as remark
+        from model as m
+        join experiment as ep on m.experiment_id = ep.id
+        join service as sv on m.service_id = sv.id
+        <!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错-->
+        <where>
+          m.id = #{modelId}
+        </where>
+        limit 1
+    </select>
+
+
+
+</mapper>
