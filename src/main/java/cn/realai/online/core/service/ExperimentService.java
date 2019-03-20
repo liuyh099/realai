@@ -75,4 +75,11 @@ public interface ExperimentService {
 	 */
 	MLock getExperimentTrainMLockInstance(long experimentId);
 
+
+	/**
+	 * 更新选择文件的内容
+	 * @param experiment
+	 * @return
+	 */
+	Integer selectFileUpdate(Experiment experiment);
 }

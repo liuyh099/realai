@@ -52,4 +52,10 @@ public interface ExperimentDao {
 			@Param("ksTestImageUrl")String ksTestImageUrl, 
 			@Param("ksTrainImageUrl")String ksTrainImageUrl,
 			@Param("ksValidateImageUrl")String ksValidateImageUrl);
+	/**
+	 * 更新选择的文件
+	 * @param experiment
+	 * @return
+	 */
+	Integer selectFileUpdate(Experiment experiment);
 }

@@ -71,7 +71,7 @@ public class ExperimentalTrainController {
         }
     }
 
-    
+
     @GetMapping("/detail/{trainId}")
     @ApiOperation(value = "实验详情")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
@@ -104,24 +104,24 @@ public class ExperimentalTrainController {
     @ApiOperation(value = "新增实验-选择文件")
     @ResponseBody
     public Result<IdVO> selectFileAdd(@RequestBody @Validated ExperimentalTrainSelectFileVO experimentalTrainSelectFileVo) {
-        try{
+        try {
             //检查文件名
-            boolean flag = experimentalTrainBusiness.checkTrainName(experimentalTrainSelectFileVo.getName(),experimentalTrainSelectFileVo.getId());
-            if(!flag){
-                return new Result(ResultCode.DATA_ERROR.getCode(), "实验名称不能重复",null);
+            boolean flag = experimentalTrainBusiness.checkTrainName(experimentalTrainSelectFileVo.getName(), experimentalTrainSelectFileVo.getId());
+            if (!flag) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), "实验名称不能重复", null);
             }
-            ExperimentBO experimentBO=new ExperimentBO();
-            BeanUtils.copyProperties(experimentalTrainSelectFileVo,experimentBO);
+            ExperimentBO experimentBO = new ExperimentBO();
+            BeanUtils.copyProperties(experimentalTrainSelectFileVo, experimentBO);
             Long id = experimentalTrainBusiness.selectFileAdd(experimentBO);
-            if(id==null){
-                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+            if (id == null) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
             IdVO idVO = new IdVO();
             idVO.setId(id);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), idVO);
-        }catch (Exception e){
-            logger.error("添加实验-选择文件-新增异常",e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+        } catch (Exception e) {
+            logger.error("添加实验-选择文件-新增异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }
 
@@ -139,16 +139,16 @@ public class ExperimentalTrainController {
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
     public Result<ExperimentalTrainSelectFileVO> selectFileQuery(@PathVariable @NotNull(message = "查询条件不能为空") Long trainId) {
-        try{
-            if(trainId == null){
+        try {
+            if (trainId == null) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
-            ExperimentBO experimentBO=experimentalTrainBusiness.selectById(trainId);
+            ExperimentBO experimentBO = experimentalTrainBusiness.selectById(trainId);
             ExperimentalTrainSelectFileVO experimentalTrainSelectFileVO = new ExperimentalTrainSelectFileVO();
-            BeanUtils.copyProperties(experimentBO,experimentalTrainSelectFileVO);
+            BeanUtils.copyProperties(experimentBO, experimentalTrainSelectFileVO);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalTrainSelectFileVO);
-        }catch (Exception e){
-            logger.error("添加实验-选择文件-获得详细异常",e);
+        } catch (Exception e) {
+            logger.error("添加实验-选择文件-获得详细异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }
@@ -156,8 +156,28 @@ public class ExperimentalTrainController {
     @PutMapping("/selectFile")
     @ApiOperation(value = "更新选择文件内容")
     @ResponseBody
-    public Result selectFileUpdate(@RequestBody ExperimentalTrainSelectFileVO experimentalTrainSelectFileVo) {
-        return null;
+    public Result selectFileUpdate(@RequestBody @Validated ExperimentalTrainSelectFileVO experimentalTrainSelectFileVo) {
+        try {
+            if (experimentalTrainSelectFileVo.getId() == null) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            }
+            //检查文件名
+            boolean flag = experimentalTrainBusiness.checkTrainName(experimentalTrainSelectFileVo.getName(), experimentalTrainSelectFileVo.getId());
+            if (!flag) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), "实验名称不能重复", null);
+            }
+            ExperimentBO experimentBO = new ExperimentBO();
+            BeanUtils.copyProperties(experimentalTrainSelectFileVo, experimentBO);
+            Integer count = experimentalTrainBusiness.selectFileUpdate(experimentBO);
+            if (count != null && count > 0) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            }
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        } catch (Exception e) {
+            logger.error("添加实验-选择文件-新增异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+
     }
 
     @PostMapping("/selectParam")

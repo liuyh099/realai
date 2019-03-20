@@ -141,4 +141,9 @@ public class ExperimentServiceImpl implements ExperimentService {
 		return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId, Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
 	}
 
+    @Override
+    public Integer selectFileUpdate(Experiment experiment) {
+        return experimentDao.selectFileUpdate(experiment);
+    }
+
 }
