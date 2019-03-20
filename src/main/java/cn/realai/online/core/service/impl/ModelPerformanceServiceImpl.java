@@ -17,7 +17,13 @@ public class ModelPerformanceServiceImpl implements ModelPerformanceService {
 
 	@Override
 	public void insertList(List<ModelPerformance> modelPerformanceList) {
-		
+		if (modelPerformanceList == null || modelPerformanceList.size() == 0) {
+			return ;	
+		}
+		for (ModelPerformance mp : modelPerformanceList) {
+			mp.setCreateTime(System.currentTimeMillis());
+		}
+		modelPerfomanceDao.insertList(modelPerformanceList);
 	}
 
 	@Override

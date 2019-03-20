@@ -1,4 +1,4 @@
-package cn.realai.online.tool.redis;
+package cn.realai.online.tool.lock;
 
 import java.io.IOException;
 
@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import cn.realai.online.common.config.RedisConfig;
-
 
 @Configuration
 public class RedissonManager {

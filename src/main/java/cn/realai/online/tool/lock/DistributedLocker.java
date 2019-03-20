@@ -1,4 +1,4 @@
-package cn.realai.online.tool.redis;
+package cn.realai.online.tool.lock;
 
 import java.util.concurrent.TimeUnit;
 
