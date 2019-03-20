@@ -12,6 +12,7 @@ import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.PageQuery;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.VariableDataService;
+import cn.realai.online.core.vo.ExperimentalTrainSelectFileVO;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
 import cn.realai.online.core.vo.VariableDataVO;
 import com.alibaba.fastjson.JSON;
@@ -110,5 +111,22 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
     public ExperimentalTrainDetailBO detail(long experimentId) {
         ExperimentalTrainDetailBO experimentalTrainDetailBO = experimentService.selectExperimentDetailById(experimentId);
         return experimentalTrainDetailBO;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Long selectFileAdd(ExperimentBO experimentBO) {
+        Experiment experiment = new Experiment();
+        BeanUtils.copyProperties(experimentBO,experiment);
+        experiment.setCreateTime(System.currentTimeMillis());
+        experiment.setStatus(Experiment.STATUS_FILE);
+        experiment.setReleasStatus(Experiment.RELEAS_NO);
+        return  experimentService.insert(experiment);
+    }
+
+    @Override
+    public boolean checkTrainName(String name, Long id) {
+        return  experimentService.checkTrainName(name,id);
+
     }
 }
