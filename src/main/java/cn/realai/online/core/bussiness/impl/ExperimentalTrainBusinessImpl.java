@@ -70,6 +70,7 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
      *@param ids 实验训练id集合
      */
     @Override
+    @Transactional(readOnly = false)
     public Integer deleteExperimentByIds(List<Long> ids) {
         int count = experimentService.deleteExperimentByIds(ids);
         return count;

@@ -1,7 +1,11 @@
 package cn.realai.online.core.vo;
 
+import cn.realai.online.common.validation.annotation.SimultaneousNotNull;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @ApiModel
 public class ExperimentalTrainSelectFileVO {
@@ -11,24 +15,29 @@ public class ExperimentalTrainSelectFileVO {
 
     //主键id
     @ApiModelProperty( value = "服务ID" ,required = true)
-    private long serverId;
+    @NotNull(message = "服务不能为空")
+    private Long serverId;
 
     @ApiModelProperty( value = "实验名称" ,required = true)
+    @NotBlank(message = "实验名称不能为空")
     private String name;
 
     @ApiModelProperty( value = "y表数据源" ,required = true)
+    @NotBlank(message = "y表数据源不能为空")
     private String ytableDataSource;
 
     //x表同质数据源
-    @ApiModelProperty( value = "模型X表同质数据源" ,required = true)
+    @ApiModelProperty( value = "模型X表同质数据源" )
+    @SimultaneousNotNull(checkCount = 2,message = "模型X表同质数据源和模型X表异质数据源必须选择一个")
     private String xtableHomogeneousDataSource;
 
     //x表异质数据源
-    @ApiModelProperty( value = "模型X表异质数据源" ,required = true)
+    @ApiModelProperty( value = "模型X表异质数据源")
+    @SimultaneousNotNull(checkCount = 2,message = "模型X表同质数据源和模型X表异质数据源必须选择一个")
     private String xtableHeterogeneousDataSource;
 
     //x轴含义（变量名解释）
-    @ApiModelProperty( value = "模型X表变量名称映射表" ,required = true)
+    @ApiModelProperty( value = "模型X表变量名称映射表")
     private String xtableMeaningDataSource;
 
 

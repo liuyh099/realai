@@ -25,5 +25,5 @@ public interface ExperimentDao {
 	 * @param ids
 	 * @return
 	 */
-	Integer deleteExperimentByIds(List<Long> ids);
+	Integer deleteExperimentByIds(@Param("ids") List<Long> ids);
 }

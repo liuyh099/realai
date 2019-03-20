@@ -17,8 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.executable.ValidateOnExecution;
 import java.util.List;
 
 @RestController
@@ -97,9 +100,19 @@ public class ExperimentalTrainController {
     @PostMapping("/selectFile")
     @ApiOperation(value = "新增实验-选择文件")
     @ResponseBody
-    public Result<IdVO> selectFileAdd(@RequestBody ExperimentalTrainSelectFileVO experimentalTrainSelectFileVo) {
+    public Result<IdVO> selectFileAdd(@RequestBody @Validated ExperimentalTrainSelectFileVO experimentalTrainSelectFileVo) {
+        //experimentalTrainBusiness.selectFileAdd()
+        System.out.println("111");
         return null;
     }
+
+    @GetMapping("/getFilePath")
+    @ApiOperation(value = "新增实验-选择文件-获得文件地址")
+    @ResponseBody
+    public Result<FileTreeVo> getFilePath() {
+        return null;
+    }
+
 
     @GetMapping("/selectFile/{trainId}")
     @ApiOperation(value = "活得选择文件的结果")
