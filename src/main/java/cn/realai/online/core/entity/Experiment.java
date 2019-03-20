@@ -7,7 +7,7 @@ package cn.realai.online.core.entity;
 public class Experiment {
 
 	//主键id
-	private long id;
+	private Long id;
 	
 	//训练名称
 	private String name;
@@ -67,7 +67,7 @@ public class Experiment {
 	public static final int SELECT_YES = 2;
 
 	//样本选择类型
-	private int sampleSplitType;
+		private int sampleSplitType;
 	
 	//时间
 	public static final int SAMPLE_SPLIT_TYPE_TIME = 1;
@@ -151,11 +151,11 @@ public class Experiment {
 		this.preFinish = preFinish;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

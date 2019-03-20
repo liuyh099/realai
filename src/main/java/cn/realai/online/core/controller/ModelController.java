@@ -6,13 +6,11 @@ import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bussiness.ModelBusiness;
+import cn.realai.online.core.bussiness.PsiCheckResultBusiness;
+import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.query.ModelListQuery;
-import cn.realai.online.core.service.ModelPerformanceService;
 import cn.realai.online.core.service.ModelService;
-import cn.realai.online.core.vo.ModelDetailVO;
-import cn.realai.online.core.vo.ModelListVO;
-import cn.realai.online.core.vo.ModelSelectVO;
-import cn.realai.online.core.vo.PsiResultVO;
+import cn.realai.online.core.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -22,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 功能描述：模型管理
@@ -42,7 +42,7 @@ public class ModelController {
     @Autowired
     private ModelService modelService;
     @Autowired
-    private ModelPerformanceService modelPerformanceService;
+    private PsiCheckResultBusiness psiCheckResultBusiness;
 
     @GetMapping("/list")
     @ApiOperation(value = "查询模型列表")
@@ -75,25 +75,53 @@ public class ModelController {
     @PostMapping("/update")
     @ApiOperation(value = "模型详情编辑")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "modelId", value = "模型ID", required = true, dataType = "Long", paramType = "form"),
-            @ApiImplicitParam(name = "name", value = "模型名称", required = true, dataType = "String", paramType = "form"),
-            @ApiImplicitParam(name = "remark", value = "备注", required = false, dataType = "String", paramType = "form")
+            @ApiImplicitParam(name = "modelId", value = "模型ID", required = true, dataType = "Long", paramType = "query"),
+            @ApiImplicitParam(name = "name", value = "模型名称", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "remark", value = "备注", required = false, dataType = "String", paramType = "query")
     })
     @ResponseBody
-    public Result<Void> update() {
-        Result result = new Result();
-        result.setCode(0);
-        result.setMsg("编辑成功");
-        return result;
+    public Result<Void> update(@RequestParam("modelId") Long modelId, @RequestParam("name") String name,
+                               @RequestParam(name="remark", required = false) String remark) {
+        try {
+            Model model = new Model();
+            model.setId(modelId);
+            model.setName(name);
+            model.setRemark(remark);
+            modelService.update(model);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+        } catch (Exception e) {
+            log.error("查询模型详情异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
+
+    @GetMapping("/selectModelNameList")
+    @ApiOperation(value = "查询服务下的已发布模型集合")
+    @ApiImplicitParam(name = "serviceId", value = "服务ID", required = true, dataType = "Long", paramType = "query")
+    @ResponseBody
+    public Result<List<ModelNameSelectVO>> selectModelNameList(@RequestParam(name="serviceId", required = true) Long modelId) {
+        try {
+            List<ModelNameSelectVO> result = modelBusiness.selectModelNameList(modelId);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            log.error("查询服务下的已发布模型集合", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
 
-    @GetMapping("/selectModel")
-    @ApiOperation(value = "根据服务ID查询模型信息或者查询最近一次发布的服务模型")
-    @ApiImplicitParam(name = "serviceId", value = "服务ID", required = false, dataType = "Long", paramType = "query")
+    @GetMapping("/selectRecentModelNameList")
+    @ApiOperation(value = "根据服务ID或者最近一次发布的模型对应的服务下的模型集合")
+    @ApiImplicitParam(name = "modelId", value = "模型ID", required = false, dataType = "Long", paramType = "query")
     @ResponseBody
-    public Result<ModelSelectVO> selectModel() {
-        return null;
+    public Result<ModelSelectVO> selectRecentModelNameList(@RequestParam(name="modelId", required = false) Long modelId) {
+        try {
+            ModelSelectVO result = modelBusiness.selectRecentModelNameList(modelId);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            log.error("根据服务ID或者最近一次发布的模型对应的服务下的模型集合", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
 
@@ -101,10 +129,29 @@ public class ModelController {
     @ApiOperation(value = "模型调优-检测PSI")
     @ApiImplicitParam(name = "modelId", value = "模型ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<PsiResultVO> checkPsi() {
-        return null;
+    public Result<PsiCheckVO> checkPsi(@PathVariable Long modelId) {
+        try {
+            PsiCheckVO result = psiCheckResultBusiness.checkPsi(modelId);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            log.error("模型调优-检测PSI查询异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
+    @GetMapping("/selectPsiList/{modelId}")
+    @ApiOperation(value = "根据模型ID获取PSI结果集")
+    @ApiImplicitParam(name = "modelId", value = "模型ID", required = true, dataType = "Long", paramType = "path")
+    @ResponseBody
+    public Result<List<PsiResultVO>> selectPsiList(@PathVariable Long modelId) {
+        try {
+            List<PsiResultVO> list = psiCheckResultBusiness.selectList(modelId);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), list);
+        } catch (Exception e) {
+            log.error("根据模型ID获取PSI结果集异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
 
     @PostMapping("/forceUpdateModel")
     @ApiOperation(value = "模型调优-强制调优")
@@ -113,4 +160,6 @@ public class ModelController {
     public Result<Void> forceUpdateModel(@RequestParam String pkstr) {
         return null;
     }
+
+
 }

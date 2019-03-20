@@ -10,13 +10,34 @@ public class PSICheckResult {
 	
 	//值
 	private double psi;
-	
-	private String variableName;
+
+	//变量Id
+	private String variableId;
 	
 	private long experimentId;
 	
 	//预警标志
-	private int alter; //1.不预警 2.预警
+	private int aler; //1.不预警 2.预警
+
+	public static enum STATUS {
+		YES(1, "不预警"),
+		NO(2, "不预警");
+
+		private int value;
+		private String desc;
+		STATUS(int value, String desc) {
+			this.value = value;
+			this.desc = desc;
+		}
+		public static String getDesc(int value) {
+			for (STATUS c : STATUS.values()) {
+				if (c.value == value) {
+					return c.desc;
+				}
+			}
+			return null;
+		}
+	}
 
 	public long getId() {
 		return id;
@@ -34,12 +55,12 @@ public class PSICheckResult {
 		this.psi = psi;
 	}
 
-	public String getVariableName() {
-		return variableName;
+	public String getVariableId() {
+		return variableId;
 	}
 
-	public void setVariableName(String variableName) {
-		this.variableName = variableName;
+	public void setVariableId(String variableId) {
+		this.variableId = variableId;
 	}
 
 	public long getExperimentId() {
@@ -50,12 +71,11 @@ public class PSICheckResult {
 		this.experimentId = experimentId;
 	}
 
-	public int getAlter() {
-		return alter;
+	public int getAler() {
+		return aler;
 	}
 
-	public void setAlter(int alter) {
-		this.alter = alter;
+	public void setAler(int aler) {
+		this.aler = aler;
 	}
-	
 }

@@ -3,6 +3,7 @@ package cn.realai.online.core.service.impl;
 import cn.realai.online.core.bo.ModelDetailBO;
 import cn.realai.online.core.bo.ModelListBO;
 import cn.realai.online.core.dao.ModelDao;
+import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,11 @@ public class ModelServiceImpl implements ModelService {
     private ModelDao modelDao;
 
     @Override
+    public Model get(Long modelId) {
+        return modelDao.get(modelId);
+    }
+
+    @Override
     public List<ModelListBO> selectList(String name, Long serviceId) {
         return modelDao.selectList(name, serviceId);
     }
@@ -29,5 +35,15 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public ModelDetailBO selectDetail(Long modelId) {
         return modelDao.selectDetail(modelId);
+    }
+
+    @Override
+    public Integer update(Model model) {
+        return modelDao.update(model);
+    }
+
+    @Override
+    public Model selectLatest() {
+        return modelDao.selectLatest();
     }
 }
