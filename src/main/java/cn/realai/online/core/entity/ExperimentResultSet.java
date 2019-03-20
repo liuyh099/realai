@@ -14,9 +14,6 @@ public class ExperimentResultSet {
 	//数据集类型
 	private int dataSetType;
 	
-	//业务类型
-	private int businessType;
-	
 	//组名
 	private String groupName;
 	
@@ -81,14 +78,6 @@ public class ExperimentResultSet {
 
 	public void setDataSetType(int dataSetType) {
 		this.dataSetType = dataSetType;
-	}
-
-	public int getBusinessType() {
-		return businessType;
-	}
-
-	public void setBusinessType(int businessType) {
-		this.businessType = businessType;
 	}
 
 	public double getMinPro() {

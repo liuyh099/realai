@@ -28,4 +28,8 @@ public class EncodingPasswordUtils {
         password=saltString+hashPasswordString;
         return password;
     }
+    
+    public static void main(String[] args) {
+    	System.out.println(EncodingPasswordUtils.encodingPassword("1123456"));
+	}
 }
