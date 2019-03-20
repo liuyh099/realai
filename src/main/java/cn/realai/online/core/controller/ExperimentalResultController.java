@@ -5,6 +5,8 @@ import cn.realai.online.common.page.PageBO;
 import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
+import cn.realai.online.core.bo.ExperimentBO;
+import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
 import cn.realai.online.core.query.ExperimentalResultWhileBoxQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.GlobalVariableQuery;
@@ -15,6 +17,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +29,8 @@ import java.util.List;
 public class ExperimentalResultController {
 
     private Logger logger= LoggerFactory.getLogger(this.getClass());
+
+    private ExperimentalTrainBusiness experimentalTrainBusiness;
 
     @GetMapping("/group/{trainId}")
     @ApiOperation(value="实验结果-根据实验ID活得组集合(传实验的id)")
@@ -40,12 +45,14 @@ public class ExperimentalResultController {
     @ApiOperation(value="实验评估-图片(传实验的id)")
     public Result<ExperimentalResultImageVO> assessment(@RequestBody @Validated IdVO idVo){
         try {
-
+            ExperimentBO experimentBO  =experimentalTrainBusiness.selectById(idVo.getId());
+            ExperimentalResultImageVO experimentalResultImageVO =new ExperimentalResultImageVO();
+            BeanUtils.copyProperties(experimentBO,experimentalResultImageVO);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalResultImageVO);
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
     @GetMapping("assessment/quota")
