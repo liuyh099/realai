@@ -174,7 +174,9 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result createModel(@PathVariable long trainId) {
         int ret = experimentalTrainBusiness.train(trainId);
-
+        if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
+        	return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("有其他实验正在训练中，请稍后重试"), null);
+        }
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
     }
 

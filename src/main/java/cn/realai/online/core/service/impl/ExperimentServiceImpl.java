@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.realai.online.core.bo.ExperimentBO;
+import cn.realai.online.common.Constant;
 import cn.realai.online.common.RedisKeyPrefix;
 import cn.realai.online.core.dao.ExperimentDao;
 import cn.realai.online.core.entity.Experiment;
+import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.tool.redis.RedisClientTemplate;
 import cn.realai.online.util.ConvertJavaBean;
@@ -98,5 +100,20 @@ public class ExperimentServiceImpl implements ExperimentService {
         ExperimentalTrainDetailBO experimentalTrainDetailBO = JSON.parseObject(JSON.toJSONString(experiment), ExperimentalTrainDetailBO.class);
         return experimentalTrainDetailBO;
     }
+
+	@Override
+	public int trainResultMaintain(Long experimentId, String sampleReview, String modelUrl,
+			String segmentationStatisticsImageUrl, String badTopCountImageUrl, String rocTestImageUrl,
+			String rocTrainImageUrl, String rocValidateImageUrl, String ksTestImageUrl, String ksTrainImageUrl,
+			String ksValidateImageUrl) {
+		return experimentDao.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl,
+				badTopCountImageUrl, rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl,
+				ksTrainImageUrl, ksValidateImageUrl);
+	}
+
+	@Override
+	public MLock getExperimentTrainMLockInstance(long experimentId) {
+		return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId, Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
+	}
 
 }

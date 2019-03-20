@@ -26,4 +26,16 @@ public interface ExperimentDao {
 	 * @return
 	 */
 	Integer deleteExperimentByIds(List<Long> ids);
+
+	int trainResultMaintain(@Param("experimentId")Long experimentId, 
+			@Param("sampleReview")String sampleReview, 
+			@Param("modelUrl")String modelUrl,  
+			@Param("segmentationStatisticsImageUrl")String segmentationStatisticsImageUrl, 
+			@Param("badTopCountImageUrl")String badTopCountImageUrl, 
+			@Param("rocTestImageUrl")String rocTestImageUrl,
+			@Param("rocTrainImageUrl")String rocTrainImageUrl, 
+			@Param("rocValidateImageUrl")String rocValidateImageUrl, 
+			@Param("ksTestImageUrl")String ksTestImageUrl, 
+			@Param("ksTrainImageUrl")String ksTrainImageUrl,
+			@Param("ksValidateImageUrl")String ksValidateImageUrl);
 }
