@@ -23,4 +23,6 @@ public interface ModelCallBussiness {
 	 */
 	void trainCallback(Long experimentId, TrainResultRedisKey redisKey);
 
+	void errorDealWith(Long experimentId, String errMsg);
+	
 }

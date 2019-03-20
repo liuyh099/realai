@@ -19,6 +19,8 @@ import cn.realai.online.core.service.VariableDataService;
 import cn.realai.online.tool.modelcallthreadpool.BatchDailyTask;
 import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
 import cn.realai.online.tool.modelcallthreadpool.TrainTask;
+import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
+import cn.realai.online.tool.modelcallthreadpool.TrainTask;
 import cn.realai.online.tool.redis.RedisClientTemplate;
 
 /**
@@ -88,7 +90,16 @@ public class ModelCallBussinessImpl implements ModelCallBussiness{
 	 */
 	@Override
 	public void trainCallback(Long experimentId, TrainResultRedisKey redisKey) {
-		
+		TrainTask trainTask = new TrainTask(experimentId, redisKey);
+		ModelCallPool.modelCallPool.execute(trainTask);
+	}
+
+	/*
+	 * 错误处理
+	 */
+	@Override
+	public void errorDealWith(Long experimentId, String errMsg) {
+
 	}
 
 }
