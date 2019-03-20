@@ -145,4 +145,12 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
         BeanUtils.copyProperties(experimentBO,experiment);
         return experimentService.selectFileUpdate(experiment);
     }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Integer updateParam(ExperimentBO experimentBO) {
+        Experiment experiment = new Experiment();
+        BeanUtils.copyProperties(experimentBO,experiment);
+        return experimentService.updateParam(experiment);
+    }
 }

@@ -60,6 +60,19 @@
 		where id =#{id}
 	</update>
 
+	<update id="updateParam" parameterType="cn.realai.online.core.entity.Experiment">
+		UPDATE experiment SET
+		verification_set=#{verificationSet},
+		sample_type=#{sampleSplitType},
+		train_ratio=#{trainRatio},
+		test_ratio=#{testRatio},
+		valid_ratio=#{validRatio}
+		<if test="status!=null">
+			,status=#{status}
+		</if>
+		where id =#{id}
+	</update>
+
 	<select id="selectExperimentById" resultMap="ExperimentMap">
 		select * 
 		from experiment

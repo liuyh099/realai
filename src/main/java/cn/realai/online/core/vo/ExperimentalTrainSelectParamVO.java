@@ -3,79 +3,85 @@ package cn.realai.online.core.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
+
 @ApiModel
 public class ExperimentalTrainSelectParamVO {
 
     @ApiModelProperty( value = "实验id" ,required = true)
-    private long id;
+    @NotNull(message = "请选择实验")
+    private Long id;
 
     //是否选择验证集
     @ApiModelProperty( value = "是否选择验证集" ,required = true,example = "1:未选择 2:选择")
-    private int verificationSet;
+    @NotNull(message = "请选择验证集")
+    private Integer verificationSet;
 
 
     //样本选择类型
-    @ApiModelProperty( value = "验证集选择类型" ,required = true,example = "1:时间顺序 2:随机选择")
-    private int sampleType;
+    @ApiModelProperty( value = "选择样本类型" ,required = true,example = "1:时间顺序 2:随机选择")
+    @NotNull(message = "请选择训练集类型")
+    private Integer sampleSplitType;
 
 
     @ApiModelProperty( value = "训练集比例" ,required = true)
-    private int trainRatio;
+    @NotNull(message = "请选择训练集比例")
+    private Integer trainRatio;
 
     //测试比例
     @ApiModelProperty( value = "测试集比例" ,required = true)
-    private int testRatio;
+    @NotNull(message = "请选择测试集比例")
+    private Integer testRatio;
 
     //验证比例
     @ApiModelProperty( value = "验证集比例" ,required = false)
-    private int validRatio;
+    private Integer validRatio;
 
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getVerificationSet() {
+    public Integer getVerificationSet() {
         return verificationSet;
     }
 
-    public void setVerificationSet(int verificationSet) {
+    public void setVerificationSet(Integer verificationSet) {
         this.verificationSet = verificationSet;
     }
 
-    public int getSampleType() {
-        return sampleType;
+    public Integer getSampleSplitType() {
+        return sampleSplitType;
     }
 
-    public void setSampleType(int sampleType) {
-        this.sampleType = sampleType;
+    public void setSampleSplitType(Integer sampleSplitType) {
+        this.sampleSplitType = sampleSplitType;
     }
 
-    public int getTrainRatio() {
+    public Integer getTrainRatio() {
         return trainRatio;
     }
 
-    public void setTrainRatio(int trainRatio) {
+    public void setTrainRatio(Integer trainRatio) {
         this.trainRatio = trainRatio;
     }
 
-    public int getTestRatio() {
+    public Integer getTestRatio() {
         return testRatio;
     }
 
-    public void setTestRatio(int testRatio) {
+    public void setTestRatio(Integer testRatio) {
         this.testRatio = testRatio;
     }
 
-    public int getValidRatio() {
+    public Integer getValidRatio() {
         return validRatio;
     }
 
-    public void setValidRatio(int validRatio) {
+    public void setValidRatio(Integer validRatio) {
         this.validRatio = validRatio;
     }
 }

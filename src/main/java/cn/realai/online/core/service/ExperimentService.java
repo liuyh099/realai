@@ -55,4 +55,11 @@ public interface ExperimentService {
 	 * @return
 	 */
 	Integer selectFileUpdate(Experiment experiment);
+
+	/**
+	 * 更新实验参数
+	 * @param experiment
+	 * @return
+	 */
+	Integer updateParam(Experiment experiment);
 }

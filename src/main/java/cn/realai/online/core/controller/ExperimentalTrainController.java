@@ -7,6 +7,7 @@ import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
+import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.vo.*;
@@ -183,23 +184,55 @@ public class ExperimentalTrainController {
     @PostMapping("/selectParam")
     @ApiOperation(value = "新增实验-选择参数")
     @ResponseBody
-    public Result<IdVO> selectParamAdd(@RequestBody ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo) {
-        return null;
+    public Result<IdVO> selectParamAdd(@RequestBody @Validated ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo) {
+        try {
+            return updateParam(experimentalTrainSelectParamVo,Experiment.STATUS_PARAM);
+        } catch (Exception e) {
+            logger.error("添加实验-选择参数-新增异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
     @GetMapping("/selectParam/{trainId}")
     @ApiOperation(value = "获得选择参数的结果")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<ExperimentalTrainSelectParamVO> selectParamQuery(@PathVariable long trainId) {
-        return null;
+    public Result<ExperimentalTrainSelectParamVO> selectParamQuery(@PathVariable Long trainId) {
+        try {
+            if (trainId == null) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            }
+            ExperimentBO experimentBO = experimentalTrainBusiness.selectById(trainId);
+            ExperimentalTrainSelectParamVO experimentalTrainSelectParamVO = new ExperimentalTrainSelectParamVO();
+            BeanUtils.copyProperties(experimentBO, experimentalTrainSelectParamVO);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalTrainSelectParamVO);
+        } catch (Exception e) {
+            logger.error("添加实验-选择参数-获得详细异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
     @PutMapping("/selectParam")
     @ApiOperation(value = "更新选择参数内容")
     @ResponseBody
-    public Result selectParamUpdate(@RequestBody ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo) {
-        return null;
+    public Result selectParamUpdate(@RequestBody @Validated ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo) {
+        try {
+            return updateParam(experimentalTrainSelectParamVo,null);
+        } catch (Exception e) {
+            logger.error("添加实验-选择参数-更新异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
+
+    private Result updateParam(ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo,Integer status) {
+        ExperimentBO experimentBO = new ExperimentBO();
+        BeanUtils.copyProperties(experimentalTrainSelectParamVo, experimentBO);
+        experimentBO.setStatus(status);
+        Integer count = experimentalTrainBusiness.updateParam(experimentBO);
+        if (count != null && count > 0) {
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+        }
+        return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
     }
 
     @GetMapping("/createModel/{trainId}")

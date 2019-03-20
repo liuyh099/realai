@@ -129,4 +129,9 @@ public class ExperimentServiceImpl implements ExperimentService {
         return experimentDao.selectFileUpdate(experiment);
     }
 
+    @Override
+    public Integer updateParam(Experiment experiment) {
+        return experimentDao.updateParam(experiment);
+    }
+
 }

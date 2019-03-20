@@ -47,4 +47,11 @@ public interface ExperimentDao {
 	 * @return
 	 */
 	Integer selectFileUpdate(Experiment experiment);
+
+	/**
+	 * 更新选择参数
+	 * @param experiment
+	 * @return
+	 */
+    Integer updateParam(Experiment experiment);
 }

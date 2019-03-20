@@ -47,4 +47,11 @@ public interface ExperimentalTrainBusiness {
 	 * @return
 	 */
 	Integer selectFileUpdate(ExperimentBO experimentBO);
+
+	/**
+	 * 更新实验参数
+	 * @param experimentBO
+	 * @return
+	 */
+	Integer updateParam(ExperimentBO experimentBO);
 }
