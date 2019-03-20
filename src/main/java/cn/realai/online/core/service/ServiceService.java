@@ -17,6 +17,8 @@ public interface ServiceService {
 
 	Integer update(Service service);
 
+	Service get(Long id);
+
 
 
 
