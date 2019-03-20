@@ -5,13 +5,12 @@ import cn.realai.online.core.bo.ModelDetailBO;
 import cn.realai.online.core.bo.ModelListBO;
 import cn.realai.online.core.bussiness.ModelBusiness;
 import cn.realai.online.core.dao.ModelPerfomanceDao;
+import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.ModelPerformance;
 import cn.realai.online.core.query.ModelListQuery;
 import cn.realai.online.core.service.ModelPerformanceService;
 import cn.realai.online.core.service.ModelService;
-import cn.realai.online.core.vo.ModelDetailVO;
-import cn.realai.online.core.vo.ModelListVO;
-import cn.realai.online.core.vo.ModelPerformanceVO;
+import cn.realai.online.core.vo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
@@ -77,4 +76,59 @@ public class ModelBusinessImpl implements ModelBusiness {
         }
         return detailVO;
     }
+
+    @Override
+    public List<ModelNameSelectVO> selectModelNameList(Long serviceId) {
+        List<ModelNameSelectVO> list = new ArrayList<>();
+        List<ModelListBO> modelListBOList = modelService.selectList(null, serviceId);
+        if (modelListBOList == null || modelListBOList.isEmpty()) {
+            return list;
+        }
+        modelListBOList.forEach(item -> {
+            ModelNameSelectVO itemVO = new ModelNameSelectVO();
+            itemVO.setId(item.getModelId());
+            itemVO.setName(item.getModelName());
+            list.add(itemVO);
+        });
+        return list;
+    }
+
+    @Override
+    public ModelSelectVO selectRecentModelNameList(Long modelId) {
+        ModelSelectVO selectVO = new ModelSelectVO();
+        if (modelId == null) {
+            //未传模型ID则查询最近发布的服务模型
+            Model latestModel = modelService.selectLatest();
+            if (latestModel == null) {
+                return selectVO;
+            }
+            selectVO.setServiceId(latestModel.getServiceId());
+            selectVO.setModelId(latestModel.getId());
+            selectVO.setModelName(latestModel.getName());
+        } else {
+            //直接根据模型ID查询
+            Model model = modelService.get(modelId);
+            if (model == null) {
+                return selectVO;
+            }
+            selectVO.setServiceId(model.getServiceId());
+            selectVO.setModelId(model.getId());
+            selectVO.setModelName(model.getName());
+        }
+        //根据服务ID查询模型
+        List<ModelListBO> modelList = modelService.selectList(null, selectVO.getServiceId());
+        if (modelList != null && !modelList.isEmpty()) {
+            selectVO.setServiceName(modelList.get(0).getServiceName());
+            List<ModelNameSelectVO> list = new ArrayList<>();
+            modelList.forEach(itemBO -> {
+                ModelNameSelectVO itemVO = new ModelNameSelectVO();
+                itemVO.setId(itemBO.getModelId());
+                itemVO.setName(itemBO.getModelName());
+                list.add(itemVO);
+            });
+            selectVO.setModelList(list);
+        }
+        return null;
+    }
+
 }

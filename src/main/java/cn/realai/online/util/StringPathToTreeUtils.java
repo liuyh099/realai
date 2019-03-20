@@ -3,6 +3,7 @@ package cn.realai.online.util;
 import cn.realai.online.core.bo.FileClassifyBO;
 import cn.realai.online.core.vo.FileTreeVo;
 import com.alibaba.fastjson.JSON;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -75,12 +76,6 @@ public class StringPathToTreeUtils {
 
 //        System.out.println(JSONObject.toJSONString(result));
 
-        List<Long> list =new ArrayList<>();
-        list.add(100L);
-        list.add(90L);
-        list.add(80L);
-
-        System.out.println(JSON.toJSONString(list));
 
     }
 
