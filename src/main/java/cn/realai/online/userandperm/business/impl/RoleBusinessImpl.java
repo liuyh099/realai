@@ -9,10 +9,12 @@ import cn.realai.online.userandperm.business.RoleBusiness;
 import cn.realai.online.userandperm.entity.RoleMenu;
 import cn.realai.online.userandperm.entity.SysMenu;
 import cn.realai.online.userandperm.entity.SysRole;
+import cn.realai.online.userandperm.entity.User;
 import cn.realai.online.userandperm.service.MenuService;
 import cn.realai.online.userandperm.service.RoleMenuService;
 import cn.realai.online.userandperm.service.RoleService;
-import cn.realai.online.userandperm.vo.RoleEditVO;
+import cn.realai.online.userandperm.service.UserService;
+import cn.realai.online.util.UserUtils;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -38,6 +40,9 @@ public class RoleBusinessImpl implements RoleBusiness {
 
     @Autowired
     private MenuService menuService;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public PageBO<RoleBO> list(PageQuery pageQuery) {
@@ -165,6 +170,17 @@ public class RoleBusinessImpl implements RoleBusiness {
 
 
         return false;
+    }
+
+    @Override
+    public List<MenuTreeNodeBO> findIndexMenu() {
+        User user = UserUtils.getUser();
+        if (ObjectUtils.isEmpty(user)) {
+            return null;
+        }
+        user = userService.get(user.getId());
+        List<Long> menuIds = roleMenuService.findIdsByRoleId(user.getRoleId());
+        return menuTree(menuIds, true);
     }
 
 

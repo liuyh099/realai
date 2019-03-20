@@ -36,7 +36,7 @@ public class VariableDataServiceImpl implements VariableDataService {
             vd.setCreateTime(System.currentTimeMillis());
         }
 
-        int ret = variableDataDao.insertVariableDataList(vdList);
+        int ret = variableDataDao.insertList(vdList);;
         if (ret != vdList.size()) {
             logger.error("VariableDataServiceImpl insertVariableDataList, 预处理失败, vdList{}" + JSON.toJSONString(vdList));
             throw new RuntimeException("预处理失败");
@@ -45,19 +45,16 @@ public class VariableDataServiceImpl implements VariableDataService {
         return ret;
     }
 
-    @Override
-    public List<VariableDataBO> selectVariableDataByExperimentId(long experimentId) {
-
-//		List<VariableData> list = variableDataDao.selectVariableDataByExperimentId(experimentId);
-        List<VariableData> list = variableDataDao.selectVariableDataByExperimentId(experimentId);;
-//        Lsit<VariableDataBO> experimentalTrainDetailBO = JSON.parseArray(JSON.toJSONString(list), VariableDataBO.class);
-
-//        return experimentalTrainDetailBO;
-        return null;
-    }
-
 	@Override
 	public List<VariableData> findListByExperimentId(Long experimentId) {
+		if (experimentId == null) {
+			return null;
+		}
+		return variableDataDao.findListByExperimentId(experimentId);
+	}
+
+	@Override
+	public List<VariableDataBO> selectVariableDataByExperimentId(long experimentId) {
 		return null;
 	}
 
