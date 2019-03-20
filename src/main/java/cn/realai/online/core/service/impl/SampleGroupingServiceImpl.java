@@ -25,8 +25,7 @@ public class SampleGroupingServiceImpl implements SampleGroupingService{
 
 	@Override
 	public List<SampleGrouping> findListByExperimentId(Long experimentId) {
-		
-		return null;
+		return SampleGroupingDao.findListByExperimentId(experimentId);
 	}
 
 }

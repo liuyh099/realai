@@ -19,4 +19,10 @@
         </foreach>
     </insert>
 
+	<select id="findListByExperimentId" resultMap="SampleGroupingMap">
+		select * 
+		from sample_grouping
+		where experiment_id = #{experimentId}
+	</select>
+
 </mapper>

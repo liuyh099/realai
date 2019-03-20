@@ -10,4 +10,6 @@ public interface SampleGroupingDao {
 
 	void insertList(@Param("sgList")List<SampleGrouping> sgList);
 
+	List<SampleGrouping> findListByExperimentId(@Param("experimentId")Long experimentId);
+
 }

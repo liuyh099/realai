@@ -26,5 +26,11 @@
         		#{pi.personalId},#{pi.createTime},#{pi.orderDate},#{pi.label},#{pi.probability})
         </foreach>
     </insert>
+    
+    <select id="findListByExperimentId" resultMap="PersonalInformationMap">
+    	select * 
+    	form personal_information
+    	where experiment_id = #{experimentId}
+    </select>
 
 </mapper>
