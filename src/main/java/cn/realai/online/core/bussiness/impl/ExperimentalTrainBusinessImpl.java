@@ -1,12 +1,14 @@
 package cn.realai.online.core.bussiness.impl;
 
 import cn.realai.online.calculation.TrainService;
+import cn.realai.online.common.Constant;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import cn.realai.online.core.bo.VariableDataBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
 import cn.realai.online.core.entity.Experiment;
+import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.PageQuery;
@@ -14,7 +16,9 @@ import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.VariableDataService;
 import cn.realai.online.core.vo.ExperimentalTrainSelectFileVO;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
-import cn.realai.online.core.vo.VariableDataVO;
+import cn.realai.online.tool.lock.MysqlLock;
+import cn.realai.online.tool.redis.RedisClientTemplate;
+
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -24,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 实验训练的业务实现
@@ -37,9 +42,9 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
     
     @Autowired
     private TrainService trainService;
-
+    
     @Autowired
-    private VariableDataService variableDataService;
+    private MysqlLock mysqlLock;
 
     /**
      * 根据实验名称和状态等分页查询实验列表
@@ -56,8 +61,6 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
         Experiment experiment = new Experiment();
         BeanUtils.copyProperties(experimentalTrainQuery, experiment);
         List<ExperimentBO> list = experimentService.findList(experiment);
-
-
 
         //处理查询结果
         List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentalTrainVO.class);
@@ -85,7 +88,10 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
 	@Override
 	public int train(long experimentId) {
 		//获取训练锁
-		
+		MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
+		if (mlock.tryLock()) {
+			return -1;
+		}
 		
 		//修改试验状态
 		int ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
