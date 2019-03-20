@@ -8,7 +8,7 @@
         <result column="training_set" property="trainingSet" jdbcType="DECIMAL"/>
         <result column="valid_set" property="validSet" jdbcType="DECIMAL"/>
         <result column="test_set" property="testSet" jdbcType="DECIMAL"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="BIGINT"/>
     </resultMap>
 
     <insert id="insert" parameterType="cn.realai.online.core.entity.ModelPerformance">
@@ -16,6 +16,13 @@
         VALUE (#{name},#{createTime},#{experimentId},#{trainingSet},#{testSet},#{validSet})
     </insert>
 
+	<insert id="insertList">
+        INSERT INTO model_perfomance (name,create_time,experiment_id,training_set,test_set,valid_set)
+        VALUE 
+        <foreach collection="modelPerformanceList" open="(" close=")" separator="," item="mp">
+        	#{mp.name},#{mp.createTime},#{mp.experimentId},#{mp.trainingSet},#{mp.testSet},#{mp.validSet}
+        </foreach>
+    </insert>
 
     <update id="update" parameterType="cn.realai.online.core.entity.ModelPerformance">
         UPDATE model_perfomance

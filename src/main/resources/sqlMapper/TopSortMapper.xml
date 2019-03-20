@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.core.dao.TopSortDao">
+    <resultMap type="cn.realai.online.core.entity.TopSort" id="TopSortMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="data_set_type" property="dataSetType" jdbcType="INTEGER"/>
+        <result column="response_type" property="responseType" jdbcType="INTEGER"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+        <result column="top" property="top" jdbcType="VARCHAR"/>
+        <result column="sample_count" property="sampleCount" jdbcType="INTEGER"/>
+        <result column="customer_overdue_count" property="customerOverdueCount" jdbcType="INTEGER"/>
+        <result column="overdue_rate" property="overdueRate" jdbcType="DOUBLE"/>
+        <result column="total_overdue_rate" property="totalOverdueRate" jdbcType="DOUBLE"/>
+        <result column="create_time" property="createTime" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <insert id="insertList">
+        INSERT INTO top_sort (data_set_type,response_type,experiment_id,top,sample_count,customer_overdue_count,overdue_rate,
+        	total_overdue_rate,create_time)
+        VALUE 
+        <foreach collection="tsList" open="(" close=")" separator="," item="ts">
+        	#{ts.dataSetType},#{ts.responseType},#{ts.experimentId},#{ts.top},#{ts.sampleCount},
+        	#{ts.customerOverdueCount},#{ts.overdueRate},#{ts.totalOverdueRate},#{ts.createTime}
+        </foreach>
+    </insert>
+
+</mapper>

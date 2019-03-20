@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.core.dao.SampleWeightDao">
+    <resultMap type="cn.realai.online.core.entity.SampleWeight" id="SampleWeightMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+        <result column="group_id" property="groupId" jdbcType="BIGINT"/>
+        <result column="variable_weight" property="variableWeight" jdbcType="DOUBLE"/>
+        <result column="variable_id" property="variableId" jdbcType="BIGINT"/>
+        <result column="variable_type" property="variableType" jdbcType="INTEGER"/>
+        <result column="box_beans" property="boxBeans" jdbcType="VARCHAR"/>
+        <result column="img_url" property="imgUrl" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertList">
+        INSERT INTO sample_grouping (experiment_id,group_id,variable_weight,variable_id,variable_type,
+        	box_beans,img_url)
+        VALUES
+        <foreach collection="swList" open="(" close=")" separator="," item="sw">
+        	#{sw.experimentId},#{sw.groupId},#{sw.variableWeight},#{sw.variableId},#{sw.variableType},
+        	#{sw.boxBeans},#{sw.imgUrl}
+        </foreach>
+    </insert>
+
+</mapper>
