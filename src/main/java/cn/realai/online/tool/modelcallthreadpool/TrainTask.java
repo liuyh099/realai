@@ -92,7 +92,7 @@ public class TrainTask implements Runnable {
 		List<VariableData> vdList = variableDataService.findListByExperimentId(experimentId);
 		Map<String, Long> vdMap = new HashMap<String, Long>();
 		for (VariableData vd : vdList) {
-			vdMap.put(vd.getName() + vd.getDataType(), vd.getId());
+			vdMap.put(vd.getName() + vd.getVariableType(), vd.getId());
 		}
 		
 		//样本权重
@@ -123,7 +123,7 @@ public class TrainTask implements Runnable {
 				redisClientTemplate.get(redisKey.getPersonalHetroResultSet()), piMap, batchRecordId);
 		
 		//解析千人千面聚合信息
-		analysisPersonalComboResultSet(redisClientTemplate.get(redisKey.getPersonalComboResultSet()), piMap, batchRecordId);
+		analysisPersonalComboResultSet(redisClientTemplate.get(redisKey.getPersonalComboResultSet()), piMap, vdMap, batchRecordId);
 		
 		//解析实验结果集 风控或营销
 		analysisExperimentResultSet(redisClientTemplate.get(redisKey.getExperimentResultSet()));
@@ -348,13 +348,13 @@ public class TrainTask implements Runnable {
 	/*
 	 * 千人千面个人组合信息
 	 */
-	private void analysisPersonalComboResultSet(String redisValue, Map<String, Long> piMap, Long batchRecordId) {
+	private void analysisPersonalComboResultSet(String redisValue, Map<String, Long> piMap, Map<String, Long> vdMap,Long batchRecordId) {
 		if (redisValue == null || "".equals(redisValue)) {
 			logger.error("TrainTask analysisPersonalComboResultSet. 训练结果没有千人千面人员聚合信息数据. experimentId{}", experimentId);
 			throw new RuntimeException("训练结果没有千人千面人员聚合信息数据experimentId = " + experimentId);
 		}
-		List<PersonalComboResultSet> pcrsList = JSON.parseArray(redisValue, PersonalComboResultSet.class);
-		for (PersonalComboResultSet pcrs : pcrsList) {
+		List<PersonalComboResultSet> comboList = JSON.parseArray(redisValue, PersonalComboResultSet.class);
+		for (PersonalComboResultSet pcrs : comboList) {
 			Long piId = piMap.get(pcrs.getPersonalId());
 			if (piId == null) {
 				logger.error("TrainTask analysisPersonalComboResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, pcrs.getPersonalId());
@@ -362,9 +362,15 @@ public class TrainTask implements Runnable {
 			}
 			pcrs.setPid(piId);
 			pcrs.setBatchId(batchRecordId);
+			Long variableId1 = vdMap.get(pcrs.getVariableName1() + VariableData.SCHEMA_TYPE_HETERO);
+			pcrs.setVariableId1(variableId1);
+			Long variableId2 = vdMap.get(pcrs.getVariableName2() + VariableData.SCHEMA_TYPE_HETERO);
+			pcrs.setVariableId2(variableId2);
+			Long variableId3 = vdMap.get(pcrs.getVariableName3() + VariableData.SCHEMA_TYPE_HETERO);
+			pcrs.setVariableId3(variableId3);
 		}
 		PersonalComboResultSetService personalComboResultSetService = SpringContextUtils.getBean(PersonalComboResultSetService.class);
-		personalComboResultSetService.insertList(pcrsList);
+		personalComboResultSetService.insertList(comboList);
 	}
 	
 	private void analysisExperimentResultSet(String redisValue) {
