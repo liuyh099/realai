@@ -2,6 +2,7 @@ package cn.realai.online.core.service;
 
 import java.util.List;
 
+import cn.realai.online.core.bo.VariableDataBO;
 import cn.realai.online.core.entity.VariableData;
 
 public interface VariableDataService {
@@ -19,11 +20,19 @@ public interface VariableDataService {
 	List<VariableData> findListByExperimentId(Long experimentId);
 
 	/**
+	 * 根据实验id与模式类型查询变量数据
+	 * @param variableData
+	 * @return
+	 */
+	List<VariableDataBO> findList(VariableData variableData);
+
+
+	/**
 	 * 查询实验参数
 	 * @param variableData
 	 * @return
 	 */
-    List<VariableData> findList(VariableData variableData);
+    List<VariableData> findVariableDataList(VariableData variableData);
 
 	/**
 	 * 删除数据

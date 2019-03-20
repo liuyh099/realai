@@ -21,7 +21,7 @@ public class ModelDetailBO {
     private String algorithmType;
     private int tuningCount;
     private String tuningReason;
-    private String yDefine;
+    private String ydefine;
     private String serviceType;
     private String remark;
 
@@ -105,12 +105,12 @@ public class ModelDetailBO {
         this.tuningReason = tuningReason;
     }
 
-    public String getyDefine() {
-        return yDefine;
+    public String getYdefine() {
+        return ydefine;
     }
 
-    public void setyDefine(String yDefine) {
-        this.yDefine = yDefine;
+    public void setYdefine(String ydefine) {
+        this.ydefine = ydefine;
     }
 
     public String getServiceType() {

@@ -174,7 +174,7 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
             variableData.setExperimentId(query.getId());
             variableData.setVariableType(query.getVariableType());
             Page page=PageHelper.startPage(query.getPageNum(),query.getPageSize());
-            List<VariableData> list=variableDataService.findList(variableData);
+            List<VariableData> list=variableDataService.findVariableDataList(variableData);
             if(CollectionUtils.isEmpty(list)){
                 return null;
             }
