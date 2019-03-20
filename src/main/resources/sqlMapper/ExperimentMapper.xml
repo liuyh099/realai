@@ -49,6 +49,17 @@
 		(#{name},#{serviceId},#{status},#{algorithmType},#{releasStatus},#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},#{xtableMeaningDataSource},#{createTime})
 	</insert>
 
+	<update id="selectFileUpdate" parameterType="cn.realai.online.core.entity.Experiment">
+		UPDATE experiment SET
+		name=#{name},
+		service_id=#{serviceId},
+		y_table=#{ytableDataSource},
+		x_table_homo=#{xtableHomogeneousDataSource},
+		x_table_heter=#{xtableHeterogeneousDataSource},
+		x_table_meaning=#{xtableMeaningDataSource}
+		where id =#{id}
+	</update>
+
 	<select id="selectExperimentById" resultMap="ExperimentMap">
 		select * 
 		from experiment

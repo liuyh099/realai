@@ -40,4 +40,11 @@ public interface ExperimentDao {
 	 * @return
 	 */
     Long insert(Experiment experiment);
+
+	/**
+	 * 更新选择的文件
+	 * @param experiment
+	 * @return
+	 */
+	Integer selectFileUpdate(Experiment experiment);
 }

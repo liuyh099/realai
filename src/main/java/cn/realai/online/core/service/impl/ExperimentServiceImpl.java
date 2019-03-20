@@ -124,4 +124,9 @@ public class ExperimentServiceImpl implements ExperimentService {
          return experiment.getId();
     }
 
+    @Override
+    public Integer selectFileUpdate(Experiment experiment) {
+        return experimentDao.selectFileUpdate(experiment);
+    }
+
 }

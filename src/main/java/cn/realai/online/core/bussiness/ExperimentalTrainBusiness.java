@@ -40,4 +40,11 @@ public interface ExperimentalTrainBusiness {
 	 * @return
 	 */
     ExperimentBO selectById(Long trainId);
+
+	/**
+	 * 更新选择文件内容
+	 * @param experimentBO
+	 * @return
+	 */
+	Integer selectFileUpdate(ExperimentBO experimentBO);
 }

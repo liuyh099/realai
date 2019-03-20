@@ -48,4 +48,11 @@ public interface ExperimentService {
 	 * @return
 	 */
     Long insert(Experiment experiment);
+
+	/**
+	 * 更新选择文件的内容
+	 * @param experiment
+	 * @return
+	 */
+	Integer selectFileUpdate(Experiment experiment);
 }
