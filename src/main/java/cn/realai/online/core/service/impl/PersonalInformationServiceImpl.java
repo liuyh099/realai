@@ -28,7 +28,7 @@ public class PersonalInformationServiceImpl implements PersonalInformationServic
 
 	@Override
 	public List<PersonalInformation> findListByExperimentId(Long experimentId) {
-		return null;
+		return personalInformationDao.findListByExperimentId(experimentId);
 	}
 
 }

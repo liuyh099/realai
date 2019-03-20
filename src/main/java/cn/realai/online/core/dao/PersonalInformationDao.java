@@ -10,4 +10,6 @@ public interface PersonalInformationDao {
 
 	void insertList(@Param("piList")List<PersonalInformation> piList);
 
+	List<PersonalInformation> findListByExperimentId(@Param("experimentId")Long experimentId);
+
 }

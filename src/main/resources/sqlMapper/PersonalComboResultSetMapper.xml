@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.core.dao.PersonalComboResultSetDao">
+    <resultMap type="cn.realai.online.core.entity.PersonalComboResultSet" id="PersonalComboResultSetMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="batch_id" property="batchId" jdbcType="BIGINT"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+        <result column="pid" property="pid" jdbcType="BIGINT"/>
+        <result column="variable_id_1" property="variableId1" jdbcType="BIGINT"/>
+        <result column="value_1" property="value1" jdbcType="VARCHAR"/>
+        <result column="variable_id_2" property="variableId2" jdbcType="BIGINT"/>
+        <result column="value_2" property="value2" jdbcType="VARCHAR"/>
+        <result column="variable_id_3" property="variableId3" jdbcType="BIGINT"/>
+        <result column="value_3" property="value3" jdbcType="VARCHAR"/>
+        <result column="weight" property="weight" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <insert id="insertList">
+        INSERT INTO personal_homo(experiment_id,batch_id,k,pid,variable_id,value,weight)
+        VALUES
+        <foreach collection="homoList" open="(" close=")" separator="," item="combo">
+        	#{homo.experimentId},#{homo.batchId},#{homo.k},#{homo.pid},#{homo.variableId},
+        	#{homo.value},#{homo.weight}
+        </foreach>
+    </insert>
+
+</mapper>
