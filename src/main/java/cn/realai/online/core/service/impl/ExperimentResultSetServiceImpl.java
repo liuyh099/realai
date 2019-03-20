@@ -23,4 +23,9 @@ public class ExperimentResultSetServiceImpl implements ExperimentResultSetServic
 		experimentResultSetDao.insertList(ersList);
 	}
 
+	@Override
+	public List<ExperimentResultSet> findList(ExperimentResultSet experimentResultSet) {
+		return experimentResultSetDao.findList(experimentResultSet);
+	}
+
 }

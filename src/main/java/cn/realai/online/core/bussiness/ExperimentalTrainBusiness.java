@@ -1,11 +1,10 @@
 package cn.realai.online.core.bussiness;
 
 import cn.realai.online.common.page.PageBO;
-import cn.realai.online.core.bo.ExperimentBO;
-import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
-import cn.realai.online.core.bo.VariableDataBO;
+import cn.realai.online.core.bo.*;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
+import cn.realai.online.core.vo.ExperimentalResultTopVO;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
 
 import java.util.List;
@@ -70,4 +69,25 @@ public interface ExperimentalTrainBusiness {
 	 * @param ids
 	 */
     void deleteVariableData(Long experimentId, List<Long> ids);
+
+	/**
+	 * 实验评估指标数据
+	 * @param experimentId
+	 * @return
+	 */
+	ExperimentalResultQuatoBO quota(Long experimentId);
+
+	/**
+	 * 实验指标查看
+	 * @param parentId
+	 * @return
+	 */
+    List<ExperimentResultSetBO> quotaGroup(Long parentId);
+
+	/**
+	 * TOP数据
+	 * @param experimentId
+	 * @return
+	 */
+	ExperimentalResultTopBO quotaTopGroup(Long experimentId);
 }

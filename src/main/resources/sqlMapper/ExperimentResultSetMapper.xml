@@ -36,4 +36,22 @@
         </foreach>
 	</insert>
 
+	<select id="findList" parameterType="cn.realai.online.core.entity.ExperimentResultSet" resultType="ExperimentResultSetMap">
+		SELECT * FROM
+		result_set
+		<where>
+			1=1
+			<if test="experimentId!=null">
+				AND experiment_id=#{experimentId}
+			</if>
+			<if test="experimentId!=null">
+				AND data_set_type=#{dataSetType}
+			</if>
+			<if test="parentId!=null">
+				AND parent_id=#{parentId}
+			</if>
+		</where>
+		ORDER BY postive_count DESC
+	</select>
+
 </mapper> 

@@ -86,12 +86,9 @@ public class ExperimentalTrainController {
     @ApiOperation(value = "实验详情")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<ExperimentalTrainDetailVO> detail(IdVO idVO) {
+    public Result<ExperimentalTrainDetailVO> detail(@PathVariable Long trainId) {
         try {
-            if (idVO.getId() == null) {
-                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
-            }
-            ExperimentalTrainDetailBO experimentalTrainDetailBO = experimentalTrainBusiness.detail(idVO.getId());
+            ExperimentalTrainDetailBO experimentalTrainDetailBO = experimentalTrainBusiness.detail(trainId);
             ExperimentalTrainDetailVO result = JSON.parseObject(JSON.toJSONString(experimentalTrainDetailBO), ExperimentalTrainDetailVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
@@ -101,10 +98,10 @@ public class ExperimentalTrainController {
     }
 
 
-    @GetMapping("/detail/variableData/{VariableDataQuery}")
+    @GetMapping("/detail/variableData")
     @ApiOperation(value = "实验详情-获取同质异质数据schema")
     @ResponseBody
-    public Result<VariableDataVO> variableData(VariableDataQuery variableDataQuery) {
+    public Result<VariableDataVO> variableData(@Validated VariableDataQuery variableDataQuery) {
         try {
             if (ObjectUtils.isEmpty(variableDataQuery)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);

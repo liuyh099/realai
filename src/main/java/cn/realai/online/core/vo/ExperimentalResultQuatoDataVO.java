@@ -7,149 +7,148 @@ import io.swagger.annotations.ApiModelProperty;
 public class ExperimentalResultQuatoDataVO {
 
     @ApiModelProperty(value = "组ID")
-    private long id;
+    private Long id;
 
     //最小概率
     @ApiModelProperty(value = "最小概率")
-    private double minPro;
+    private Double minPro;
 
     @ApiModelProperty(value = "最小概率对应分数")
-    private int minProScore;
+    private Integer minProScore;
 
     @ApiModelProperty(value = "最大概率")
-    private double maxPro;
+    private Double maxPro;
 
 
     @ApiModelProperty(value = "最大概率对应分数")
-    private int maxProScore;
+    private Integer maxProScore;
 
     @ApiModelProperty(value = "未逾期总数")
-    private int negtiveCount;
+    private Integer negtiveCount;
 
     @ApiModelProperty(value = "逾期总数")
-    private int postiveCount;
+    private Integer postiveCount;
 
     @ApiModelProperty(value = "总数")
-    private int count;
+    private Integer count;
 
     @ApiModelProperty(value = "未逾期总数/逾期总数")
-    private double negtiveCountInPostiveCount;
+    private Double negtiveCountInPostiveCount;
 
     @ApiModelProperty(value = "逾期率")
-    private double positiveRatio;
+    private Double positiveRatio;
 
     @ApiModelProperty(value = "累计逾期率")
-    private double cumulativePositiveRatio;
+    private Double cumulativePositiveRatio;
 
     @ApiModelProperty(value = "逾期数/总体逾期数")
-    private double postiveCountInTotalPositiveCount;
+    private Double postiveCountInTotalPositiveCount;
 
     //
     @ApiModelProperty(value = "逾期数/总体逾期数")
-    private double cumulativePostiveCountInTotalPositiveCount;
+    private Double cumulativePostiveCountInTotalPositiveCount;
 
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public double getMinPro() {
+    public Double getMinPro() {
         return minPro;
     }
 
-    public void setMinPro(double minPro) {
+    public void setMinPro(Double minPro) {
         this.minPro = minPro;
     }
 
-    public int getMinProScore() {
+    public Integer getMinProScore() {
         return minProScore;
     }
 
-    public void setMinProScore(int minProScore) {
+    public void setMinProScore(Integer minProScore) {
         this.minProScore = minProScore;
     }
 
-    public double getMaxPro() {
+    public Double getMaxPro() {
         return maxPro;
     }
 
-    public void setMaxPro(double maxPro) {
+    public void setMaxPro(Double maxPro) {
         this.maxPro = maxPro;
     }
 
-    public int getMaxProScore() {
+    public Integer getMaxProScore() {
         return maxProScore;
     }
 
-    public void setMaxProScore(int maxProScore) {
+    public void setMaxProScore(Integer maxProScore) {
         this.maxProScore = maxProScore;
     }
 
-    public int getNegtiveCount() {
+    public Integer getNegtiveCount() {
         return negtiveCount;
     }
 
-    public void setNegtiveCount(int negtiveCount) {
+    public void setNegtiveCount(Integer negtiveCount) {
         this.negtiveCount = negtiveCount;
     }
 
-    public int getPostiveCount() {
+    public Integer getPostiveCount() {
         return postiveCount;
     }
 
-    public void setPostiveCount(int postiveCount) {
+    public void setPostiveCount(Integer postiveCount) {
         this.postiveCount = postiveCount;
     }
 
-    public int getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
-    public double getNegtiveCountInPostiveCount() {
+    public Double getNegtiveCountInPostiveCount() {
         return negtiveCountInPostiveCount;
     }
 
-    public void setNegtiveCountInPostiveCount(double negtiveCountInPostiveCount) {
+    public void setNegtiveCountInPostiveCount(Double negtiveCountInPostiveCount) {
         this.negtiveCountInPostiveCount = negtiveCountInPostiveCount;
     }
 
-    public double getPositiveRatio() {
+    public Double getPositiveRatio() {
         return positiveRatio;
     }
 
-    public void setPositiveRatio(double positiveRatio) {
+    public void setPositiveRatio(Double positiveRatio) {
         this.positiveRatio = positiveRatio;
     }
 
-    public double getCumulativePositiveRatio() {
+    public Double getCumulativePositiveRatio() {
         return cumulativePositiveRatio;
     }
 
-    public void setCumulativePositiveRatio(double cumulativePositiveRatio) {
+    public void setCumulativePositiveRatio(Double cumulativePositiveRatio) {
         this.cumulativePositiveRatio = cumulativePositiveRatio;
     }
 
-    public double getPostiveCountInTotalPositiveCount() {
+    public Double getPostiveCountInTotalPositiveCount() {
         return postiveCountInTotalPositiveCount;
     }
 
-    public void setPostiveCountInTotalPositiveCount(double postiveCountInTotalPositiveCount) {
+    public void setPostiveCountInTotalPositiveCount(Double postiveCountInTotalPositiveCount) {
         this.postiveCountInTotalPositiveCount = postiveCountInTotalPositiveCount;
     }
 
-    public double getCumulativePostiveCountInTotalPositiveCount() {
+    public Double getCumulativePostiveCountInTotalPositiveCount() {
         return cumulativePostiveCountInTotalPositiveCount;
     }
 
-    public void setCumulativePostiveCountInTotalPositiveCount(double cumulativePostiveCountInTotalPositiveCount) {
+    public void setCumulativePostiveCountInTotalPositiveCount(Double cumulativePostiveCountInTotalPositiveCount) {
         this.cumulativePostiveCountInTotalPositiveCount = cumulativePostiveCountInTotalPositiveCount;
     }
 }

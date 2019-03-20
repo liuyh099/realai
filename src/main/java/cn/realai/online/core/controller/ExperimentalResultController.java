@@ -6,12 +6,16 @@ import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.ExperimentBO;
+import cn.realai.online.core.bo.ExperimentResultSetBO;
+import cn.realai.online.core.bo.ExperimentalResultQuatoBO;
+import cn.realai.online.core.bo.ExperimentalResultTopBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
 import cn.realai.online.core.query.ExperimentalResultWhileBoxQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.GlobalVariableQuery;
 import cn.realai.online.core.query.IdQuery;
 import cn.realai.online.core.vo.*;
+import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -57,36 +61,38 @@ public class ExperimentalResultController {
 
     @GetMapping("assessment/quota")
     @ApiOperation(value="实验评估-业务指标(传实验的id)")
-    public Result<ExperimentalResultQuatoVO> quota(@RequestBody IdVO idVo){
+    public Result<ExperimentalResultQuatoVO> quota( @Validated IdVO idVo){
         try {
-
+            ExperimentalResultQuatoBO experimentalResultQuatoBO = experimentalTrainBusiness.quota(idVo.getId());
+            ExperimentalResultQuatoVO experimentalResultQuatoVO= JSON.parseObject(JSON.toJSONString(experimentalResultQuatoBO),ExperimentalResultQuatoVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalResultQuatoVO);
         }catch (Exception e){
-            logger.error("实验评估-图片异常",e);
+            logger.error("实验评估-业务指标异常",e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
 
     @GetMapping("assessment/quota/{groupId}")
     @ApiOperation(value="实验评估-业务指标查看")
     @ApiImplicitParam(name = "groupId", value = "实验组ID", required = true, dataType = "Long", paramType = "path")
-    public Result<ExperimentalResultQuatoDataVO> quotaGroup(){
+    public Result<List<ExperimentalResultQuatoDataVO>> quotaGroup(@PathVariable Long groupId){
         try {
-
+            List<ExperimentResultSetBO> listBO = experimentalTrainBusiness.quotaGroup(groupId);
+            ExperimentalResultQuatoDataVO experimentalResultQuatoDataVO= JSON.parseObject(JSON.toJSONString(listBO),ExperimentalResultQuatoDataVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalResultQuatoDataVO);
         }catch (Exception e){
-            logger.error("实验评估-图片异常",e);
+            logger.error("实实验评估-业务指标查看异常",e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
 
     @GetMapping("assessment/top")
     @ApiOperation(value="实验评估-TOP(传实验的id)")
-    public Result<ExperimentalResultTopVO> quotaGroup(@RequestBody IdVO idVo){
+    public Result<ExperimentalResultTopVO> quotaTopGroup(@Validated IdVO idVo){
         try {
-
+            ExperimentalResultTopBO experimentalResultTopVO=experimentalTrainBusiness.quotaTopGroup(idVo.getId());
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
