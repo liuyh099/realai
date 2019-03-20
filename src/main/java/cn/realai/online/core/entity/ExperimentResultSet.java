@@ -6,13 +6,13 @@ package cn.realai.online.core.entity;
  */
 public class ExperimentResultSet {
 
-	private long id;
+	private Long id;
 	
 	//实验id
-	private long experimentId;
+	private Long experimentId;
 	
 	//数据集类型
-	private int dataSetType;
+	private Integer dataSetType;
 	
 	//
 	private double minPro;
@@ -50,27 +50,27 @@ public class ExperimentResultSet {
 	//
 	private double cumulativePostiveCountInTotalPositiveCount;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public long getExperimentId() {
+	public Long getExperimentId() {
 		return experimentId;
 	}
 
-	public void setExperimentId(long experimentId) {
+	public void setExperimentId(Long experimentId) {
 		this.experimentId = experimentId;
 	}
 
-	public int getDataSetType() {
+	public Integer getDataSetType() {
 		return dataSetType;
 	}
 
-	public void setDataSetType(int dataSetType) {
+	public void setDataSetType(Integer dataSetType) {
 		this.dataSetType = dataSetType;
 	}
 
@@ -169,5 +169,4 @@ public class ExperimentResultSet {
 	public void setCumulativePostiveCountInTotalPositiveCount(double cumulativePostiveCountInTotalPositiveCount) {
 		this.cumulativePostiveCountInTotalPositiveCount = cumulativePostiveCountInTotalPositiveCount;
 	}
-
 }

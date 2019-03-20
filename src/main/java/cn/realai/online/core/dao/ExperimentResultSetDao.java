@@ -10,6 +10,10 @@ public interface ExperimentResultSetDao {
 
 	void insertList(@Param("ersList")List<ExperimentResultSet> ersList);
 
-	
-	
+    /**
+     * 查询实验评估结果
+     * @param experimentResultSet
+     * @return
+     */
+    List<ExperimentResultSet> findList(ExperimentResultSet experimentResultSet);
 }
