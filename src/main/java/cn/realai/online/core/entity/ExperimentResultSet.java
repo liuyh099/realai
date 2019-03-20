@@ -4,7 +4,7 @@ package cn.realai.online.core.entity;
  * 风控结果集（实验评估风控）
  * @author lyh
  */
-public class WindControlResultSet {
+public class ExperimentResultSet {
 
 	private long id;
 	
