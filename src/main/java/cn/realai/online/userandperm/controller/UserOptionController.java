@@ -147,4 +147,16 @@ public class UserOptionController {
 
     }
 
+    @GetMapping("psiCheckNotice")
+    @ApiOperation(value = "psi检测提醒接口")
+    public Result<Integer> psiCheckNotice() {
+        try {
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+        } catch (Exception e) {
+            logger.error("psi检测提醒接口", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+
+    }
+
 }

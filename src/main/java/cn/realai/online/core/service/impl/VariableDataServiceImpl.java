@@ -45,9 +45,6 @@ public class VariableDataServiceImpl implements VariableDataService {
         return ret;
     }
 
-    public List<VariableDataBO> selectVariableDataByExperimentId(long experimentId) {
-        return null;
-    }
 
     @Override
 	public List<VariableData> findListByExperimentId(Long experimentId) {
@@ -56,6 +53,7 @@ public class VariableDataServiceImpl implements VariableDataService {
 		}
 		return variableDataDao.findListByExperimentId(experimentId);
 	}
+
 
 
 }
