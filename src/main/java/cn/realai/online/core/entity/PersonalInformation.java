@@ -7,18 +7,18 @@ package cn.realai.online.core.entity;
 public class PersonalInformation {
 
 	//数据id
-	private long id;
+	private Long id;
 	
-	private long experimentId;
+	private Long experimentId;
 	
 	//实验组别id
-	private long groupId;
+	private Long groupId;
 	
 	//计算后Python的分组名称
 	private String groupName;
 	
 	//批次id
-	private long batchId;
+	private Long batchId;
 	
 	//用户姓名
 	private String personalName;
@@ -36,7 +36,7 @@ public class PersonalInformation {
 	private String personalId;
 	
 	//创建时间
-	private long createTime;
+	private Long createTime;
 	
 	//订单日期
 	private String orderDate;
@@ -48,6 +48,51 @@ public class PersonalInformation {
 	private double probability;
 
 
+
+	private Long inputStartDate;
+
+	private Long inputEndDate;
+
+	public Long getInputStartDate() {
+		return inputStartDate;
+	}
+
+	public void setInputStartDate(Long inputStartDate) {
+		this.inputStartDate = inputStartDate;
+	}
+
+	public Long getInputEndDate() {
+		return inputEndDate;
+	}
+
+	public void setInputEndDate(Long inputEndDate) {
+		this.inputEndDate = inputEndDate;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getExperimentId() {
+		return experimentId;
+	}
+
+	public void setExperimentId(Long experimentId) {
+		this.experimentId = experimentId;
+	}
+
+	public Long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
+	}
+
 	public String getGroupName() {
 		return groupName;
 	}
@@ -56,20 +101,12 @@ public class PersonalInformation {
 		this.groupName = groupName;
 	}
 
-	public long getId() {
-		return id;
+	public Long getBatchId() {
+		return batchId;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public long getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(long groupId) {
-		this.groupId = groupId;
+	public void setBatchId(Long batchId) {
+		this.batchId = batchId;
 	}
 
 	public String getPersonalName() {
@@ -78,6 +115,14 @@ public class PersonalInformation {
 
 	public void setPersonalName(String personalName) {
 		this.personalName = personalName;
+	}
+
+	public int getStage() {
+		return stage;
+	}
+
+	public void setStage(int stage) {
+		this.stage = stage;
 	}
 
 	public String getPersonalCardId() {
@@ -104,11 +149,11 @@ public class PersonalInformation {
 		this.personalId = personalId;
 	}
 
-	public long getCreateTime() {
+	public Long getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(long createTime) {
+	public void setCreateTime(Long createTime) {
 		this.createTime = createTime;
 	}
 
@@ -135,29 +180,4 @@ public class PersonalInformation {
 	public void setProbability(double probability) {
 		this.probability = probability;
 	}
-
-	public long getExperimentId() {
-		return experimentId;
-	}
-
-	public void setExperimentId(long experimentId) {
-		this.experimentId = experimentId;
-	}
-
-	public long getBatchId() {
-		return batchId;
-	}
-
-	public void setBatchId(long batchId) {
-		this.batchId = batchId;
-	}
-
-	public int getStage() {
-		return stage;
-	}
-
-	public void setStage(int stage) {
-		this.stage = stage;
-	}
-	
 }

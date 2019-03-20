@@ -8,4 +8,10 @@ public interface BatchRecordDao {
 
 	Long insert(@Param("batchRecord")BatchRecord batchRecord);
 
+    /**
+     * 必须传入ID
+     * @param batchRecord
+     * @return
+     */
+    BatchRecord getByEntity(BatchRecord batchRecord);
 }

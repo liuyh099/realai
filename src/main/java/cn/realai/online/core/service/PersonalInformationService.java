@@ -10,4 +10,17 @@ public interface PersonalInformationService {
 
 	List<PersonalInformation> findListByExperimentId(Long experimentId);
 
+	/**
+	 * 查询personal信息
+	 * @param personal
+	 * @return
+	 */
+    List<PersonalInformation> findList(PersonalInformation personal);
+
+	/**
+	 * 根据id查询personal信息
+	 * @param id
+	 * @return
+	 */
+	PersonalInformation get(Long id);
 }

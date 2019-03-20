@@ -8,6 +8,7 @@ import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
 import cn.realai.online.core.entity.*;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
+import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.PageQuery;
 import cn.realai.online.core.service.*;
 import cn.realai.online.core.vo.ExperimentalResultTopVO;
@@ -24,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +59,15 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
 
     @Autowired
     private SampleSummaryService sampleSummaryService;
+
+    @Autowired
+    private PersonalInformationService personalInformationService;
+
+    @Autowired
+    private BatchRecordService batchRecordService;
+
+    @Autowired
+    private PersonalComboResultSetService personalComboResultSetService;
 
     /**
      * 根据实验名称和状态等分页查询实验列表
@@ -253,6 +265,62 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
         List<SampleSummary> ret = sampleSummaryService.findList(sampleSummary);
         List<SampleSummaryBO> result = JSON.parseArray(JSON.toJSONString(ret), SampleSummaryBO.class);
         return result;
+    }
+
+    @Override
+    public PageBO<PersonalInformationBO> personalInformationPage(FaceListDataQuery query, Integer batchType) {
+
+        BatchRecord batchRecord = getBatchRecord(query.getTrainId(), batchType);
+        if (ObjectUtils.isEmpty(batchRecord)) {
+            return new PageBO<PersonalInformationBO>(query);
+        }
+
+        Page page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        PersonalInformation personal = buildQueryCondition(batchRecord, query);
+        List<PersonalInformation> list = personalInformationService.findList(personal);
+
+        List<PersonalInformationBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalInformationBO.class);
+        PageBO<PersonalInformationBO> pageBO = new PageBO<PersonalInformationBO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
+        return pageBO;
+    }
+
+    private BatchRecord getBatchRecord(Long trainId, Integer batchType) {
+        BatchRecord batchRecord = new BatchRecord();
+        batchRecord.setExperimentId(trainId);
+        batchRecord.setBatchType(batchType);
+        batchRecord = batchRecordService.getByEntity(batchRecord);
+        return batchRecord;
+    }
+
+    @Override
+    public PersonalInformationBO listDataDetail(Long id) {
+        PersonalInformation personal = personalInformationService.get(id);
+        PersonalInformationBO result = new PersonalInformationBO();
+        BeanUtils.copyProperties(personal, result);
+        return result;
+    }
+
+    @Override
+    public List<PersonalComboResultSetBO> listDataDetailTopGroup(Long id) {
+        PersonalComboResultSet query = new PersonalComboResultSet();
+        query.setId(id);
+        List<PersonalComboResultSet> list = personalComboResultSetService.findList(query);
+        List<PersonalComboResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalComboResultSetBO.class);
+        return result;
+    }
+
+    private PersonalInformation buildQueryCondition(BatchRecord batchRecord, FaceListDataQuery query) {
+        PersonalInformation personal = new PersonalInformation();
+        personal.setExperimentId(batchRecord.getExperimentId());
+        personal.setBatchId(batchRecord.getId());
+        personal.setGroupId(query.getGroupId());
+        personal.setPersonalName(query.getName());
+        personal.setPersonalCardId(query.getIdCard());
+        personal.setPhoneNum(query.getPhone());
+        personal.setPersonalId(query.getId());
+        personal.setInputStartDate(query.getInputStartDate());
+        personal.setInputEndDate(query.getInputStartEnd());
+        return personal;
     }
 
     private ExperimentalResultTopGroupBO quotaTopGroupCommon(Long experimentId, Integer dataType) {

@@ -7,6 +7,7 @@ import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.*;
 import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
+import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.query.ExperimentalResultWhileBoxQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.GlobalVariableQuery;
@@ -115,7 +116,7 @@ public class ExperimentalResultController {
 
     @GetMapping("whiledecision")
     @ApiOperation(value = "实验-白盒决策")
-    public Result<PageBO<WhileBoxScoreCardVO>> whiledecision(@RequestBody ExperimentalResultWhileBoxQuery experimentalResultWhileBoxQuery) {
+    public Result<PageBO<WhileBoxScoreCardVO>> whiledecision(@Validated ExperimentalResultWhileBoxQuery experimentalResultWhileBoxQuery) {
         try {
 
         } catch (Exception e) {
@@ -127,7 +128,7 @@ public class ExperimentalResultController {
 
     @GetMapping("globalVariable")
     @ApiOperation(value = "实验-全局变量")
-    public Result<PageBO<WhileBoxScoreCardVO>> globalVariable(@RequestBody GlobalVariableQuery globalVariableQuery) {
+    public Result<PageBO<WhileBoxScoreCardVO>> globalVariable(@Validated GlobalVariableQuery globalVariableQuery) {
         try {
 
         } catch (Exception e) {
@@ -140,19 +141,19 @@ public class ExperimentalResultController {
     //从实验来
     @GetMapping("thousandsFace/image")
     @ApiOperation(value = "实验-千人千面获取图片(传实验的id)")
-    public Result<String> thousandsFace(@RequestBody IdVO idVo) {
+    public Result<String> thousandsFace(@Validated IdVO idVo) {
         try {
-
+            ExperimentBO experimentBO = experimentalTrainBusiness.selectById(idVo.getId());
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentBO.getSegmentationStatisticsImageUrl());
         } catch (Exception e) {
-            logger.error("实验评估-图片异常", e);
+            logger.error("实验-千人千面获取图片异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
     @GetMapping("thousandsFace/echartsData")
     @ApiOperation(value = "实验-千人千面 获取echarts 数据")
-    public Result echartsData(@RequestBody IdVO idVo) {
+    public Result echartsData(@Validated IdVO idVo) {
         try {
 
         } catch (Exception e) {
@@ -164,50 +165,59 @@ public class ExperimentalResultController {
 
     @GetMapping("thousandsFace/list")
     @ApiOperation(value = "实验-千人千面列表数据")
-    public Result<PageBO<PersonalInformationVO>> listData(@RequestBody FaceListDataQuery faceListDataQuery) {
+    public Result<PageBO<PersonalInformationVO>> listData(@Validated FaceListDataQuery query) {
         try {
-
+            PageBO<PersonalInformationBO> page = experimentalTrainBusiness.personalInformationPage(query, BatchRecord.BATCH_TYPE_TRAIN);
+            if (page == null) {
+                return null;
+            }
+            List<PersonalInformationVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), PersonalInformationVO.class);
+            PageBO<PersonalInformationVO> pageBO = new PageBO<PersonalInformationVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
-            logger.error("实验评估-图片异常", e);
+            logger.error("实实验-千人千面列表数据异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
     @GetMapping("thousandsFace/list/detail")
     @ApiOperation(value = "实验-千人千面列表数据-详情(传数据列表的id(不是ID字段))")
-    public Result<PersonalInformationDetailVO> listDataDetail(@RequestBody IdVO idVo) {
+    public Result<PersonalInformationDetailVO> listDataDetail(@Validated IdVO idVo) {
         try {
-
+            PersonalInformationBO personalInformationBO = experimentalTrainBusiness.listDataDetail(idVo.getId());
+            PersonalInformationDetailVO result = new PersonalInformationDetailVO();
+            BeanUtils.copyProperties(personalInformationBO, result);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
-            logger.error("实验评估-图片异常", e);
+            logger.error("验-千人千面列表数据-详情异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
     @GetMapping("thousandsFace/list/topGroup")
     @ApiOperation(value = "实验-千人千面列表数据-详情-异质最强组合特征(传数据id))")
-    public Result<List<PersonalComboResultSetVO>> listDataDetailTopGroup(@RequestBody IdVO idVo) {
+    public Result<List<PersonalComboResultSetVO>> listDataDetailTopGroup(@Validated IdVO idVo) {
         try {
-
+            List<PersonalComboResultSetBO> list = experimentalTrainBusiness.listDataDetailTopGroup(idVo.getId());
+            List<PersonalComboResultSetVO> result = JSON.parseArray(JSON.toJSONString(list), PersonalComboResultSetVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
-            logger.error("实验评估-图片异常", e);
+            logger.error("实验-千人千面列表数据-详情-异质最强组合特征异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
     @GetMapping("thousandsFace/list/topTen")
     @ApiOperation(value = "实验-千人千面列表数据-详情-异质最强TOP10(传数据id))")
-    public Result<List<PersonalHetroResultSetTopTenVO>> listDataDetailTopTen(@RequestBody IdVO idVo) {
+    public Result<List<PersonalHetroResultSetTopTenVO>> listDataDetailTopTen(@Validated IdVO idVo) {
         try {
 
+            Object result=null;
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
-            logger.error("实验评估-图片异常", e);
+            logger.error("实验-千人千面列表数据-详情-异质最强TOP10异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
     @GetMapping("thousandsFace/list/sameCharts")
