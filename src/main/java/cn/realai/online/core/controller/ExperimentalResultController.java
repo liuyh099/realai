@@ -3,6 +3,8 @@ package cn.realai.online.core.controller;
 
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.common.vo.Result;
+import cn.realai.online.common.vo.ResultCode;
+import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.query.ExperimentalResultWhileBoxQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.GlobalVariableQuery;
@@ -41,6 +43,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -52,6 +55,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -65,6 +69,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -77,6 +82,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -89,6 +95,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -101,6 +108,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -112,6 +120,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -124,6 +133,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -135,6 +145,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -146,6 +157,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -157,6 +169,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -168,6 +181,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -179,6 +193,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -190,6 +205,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -201,6 +217,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
@@ -212,6 +229,7 @@ public class ExperimentalResultController {
 
         }catch (Exception e){
             logger.error("实验评估-图片异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
     }
