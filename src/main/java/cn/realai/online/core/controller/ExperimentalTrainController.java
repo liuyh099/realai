@@ -6,8 +6,10 @@ import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
+import cn.realai.online.core.bo.VariableDataBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
 import cn.realai.online.core.entity.Experiment;
+import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.vo.*;
@@ -186,7 +188,7 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result<IdVO> selectParamAdd(@RequestBody @Validated ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo) {
         try {
-            return updateParam(experimentalTrainSelectParamVo,Experiment.STATUS_PARAM);
+            return updateParam(experimentalTrainSelectParamVo, Experiment.STATUS_PARAM);
         } catch (Exception e) {
             logger.error("添加实验-选择参数-新增异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
@@ -217,14 +219,14 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result selectParamUpdate(@RequestBody @Validated ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo) {
         try {
-            return updateParam(experimentalTrainSelectParamVo,null);
+            return updateParam(experimentalTrainSelectParamVo, null);
         } catch (Exception e) {
             logger.error("添加实验-选择参数-更新异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }
 
-    private Result updateParam(ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo,Integer status) {
+    private Result updateParam(ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo, Integer status) {
         ExperimentBO experimentBO = new ExperimentBO();
         BeanUtils.copyProperties(experimentalTrainSelectParamVo, experimentBO);
         experimentBO.setStatus(status);
@@ -239,22 +241,57 @@ public class ExperimentalTrainController {
     @ApiOperation(value = "新增实验-生成模型")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<ExperimentalTrainCreateModelCheckVO> createModelQuery(@PathVariable long trainId) {
-        return null;
+    public Result<ExperimentalTrainCreateModelCheckVO> createModelQuery(@PathVariable Long trainId) {
+        try {
+            if (trainId == null) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            }
+            ExperimentBO experimentBO = experimentalTrainBusiness.selectById(trainId);
+            ExperimentalTrainCreateModelCheckVO experimentalTrainCreateModelCheckVO = new ExperimentalTrainCreateModelCheckVO();
+            if (experimentBO != null) {
+                experimentalTrainCreateModelCheckVO.setName(experimentBO.getName());
+                if (experimentBO.getPreFinish() != null && 2 == experimentBO.getPreFinish()) {
+                    experimentalTrainCreateModelCheckVO.setCreateModelFlag(true);
+                } else {
+                    experimentalTrainCreateModelCheckVO.setCreateModelFlag(false);
+                }
+            }
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalTrainCreateModelCheckVO);
+        } catch (Exception e) {
+            logger.error("添加实验-生成模型-查询异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
     @DeleteMapping("/createModel")
     @ApiOperation(value = "删除同质或者异质量数据")
     @ResponseBody
-    public Result createModelDelete(@RequestBody ExperimentalTrainCreateModelVO experimentalTrainCreateModelVo) {
-        return null;
+    public Result createModelDelete(@RequestBody @Validated ExperimentalTrainCreateModelVO experimentalTrainCreateModelVo) {
+        try {
+            experimentalTrainBusiness.deleteVariableData(experimentalTrainCreateModelVo.getId(),experimentalTrainCreateModelVo.getIds());
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+        } catch (Exception e) {
+            logger.error("新增实验-生成模型-删除同质或者异质量数据异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
     @GetMapping("/createModel/getData")
     @ApiOperation(value = "新增实验-生成模型-一获取同质异质数据")
     @ResponseBody
-    public Result<PageBO<ExperimentalTrainCreateModelDataVO>> createModelGetData(@RequestBody ExperimentalTrainCreateModelDataQuery experimentalTrainCreateModelDataQuery) {
-        return null;
+    public Result<PageBO<ExperimentalTrainCreateModelDataVO>> createModelGetData(@RequestBody @Validated ExperimentalTrainCreateModelDataQuery query) {
+        try {
+            PageBO<VariableDataBO> page = experimentalTrainBusiness.pageHomOrHemeList(query);
+            if(page==null){
+                return null;
+            }
+            List<ExperimentalTrainCreateModelDataVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), ExperimentalTrainCreateModelDataVO.class);
+            PageBO<ExperimentalTrainCreateModelDataVO> pageBO= new PageBO<ExperimentalTrainCreateModelDataVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
+        } catch (Exception e) {
+            logger.error("新增实验-生成模型-一获取同质异质数据异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
     /**
@@ -271,7 +308,7 @@ public class ExperimentalTrainController {
     public Result createModel(@PathVariable long trainId) {
         int ret = experimentalTrainBusiness.train(trainId);
         if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
-        	return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("有其他实验正在训练中，请稍后重试"), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("有其他实验正在训练中，请稍后重试"), null);
         }
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
     }

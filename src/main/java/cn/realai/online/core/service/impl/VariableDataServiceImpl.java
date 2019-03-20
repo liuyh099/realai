@@ -54,6 +54,15 @@ public class VariableDataServiceImpl implements VariableDataService {
 		return variableDataDao.findListByExperimentId(experimentId);
 	}
 
+    @Override
+    public List<VariableData> findList(VariableData variableData) {
+        return variableDataDao.findList(variableData);
+    }
+
+    @Override
+    public void deleteVariableData(Long experimentId, List<Long> ids) {
+        variableDataDao.deleteVariableData(experimentId,ids);
+    }
 
 
 }

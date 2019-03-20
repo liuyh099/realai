@@ -3,6 +3,8 @@ package cn.realai.online.core.bussiness;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
+import cn.realai.online.core.bo.VariableDataBO;
+import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
 
@@ -54,4 +56,18 @@ public interface ExperimentalTrainBusiness {
 	 * @return
 	 */
 	Integer updateParam(ExperimentBO experimentBO);
+
+	/**
+	 * 查询同质或者异质数据
+	 * @param experimentalTrainCreateModelDataQuery
+	 * @return
+	 */
+    PageBO<VariableDataBO> pageHomOrHemeList(ExperimentalTrainCreateModelDataQuery experimentalTrainCreateModelDataQuery);
+
+	/**
+	 * 删除VariableData 数据
+	 * @param experimentId
+	 * @param ids
+	 */
+    void deleteVariableData(Long experimentId, List<Long> ids);
 }

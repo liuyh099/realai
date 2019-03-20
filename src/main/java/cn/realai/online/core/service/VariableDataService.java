@@ -17,5 +17,18 @@ public interface VariableDataService {
 	 * @return
 	 */
 	List<VariableData> findListByExperimentId(Long experimentId);
-	
+
+	/**
+	 * 查询实验参数
+	 * @param variableData
+	 * @return
+	 */
+    List<VariableData> findList(VariableData variableData);
+
+	/**
+	 * 删除数据
+	 * @param experimentId
+	 * @param ids
+	 */
+	void deleteVariableData(Long experimentId, List<Long> ids);
 }

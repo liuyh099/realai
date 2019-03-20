@@ -7,10 +7,10 @@ package cn.realai.online.core.entity;
 public class VariableData {
 
 	//主键
-	private long id;
+	private Long id;
 	
 	//实验id
-	private long experimentId;
+	private Long experimentId;
 	
 	//名称
 	private String name;
@@ -49,7 +49,7 @@ public class VariableData {
 	private String percent75;
 
 	//模式类型
-	private int variableType;
+	private Integer variableType;
 	
 	//同质
 	public static final int SCHEMA_TYPE_HOMO = 2;
@@ -73,36 +73,20 @@ public class VariableData {
 	
 	//创建时间
 	private long createTime;
-	
-	public long getCreateTime() {
-		return createTime;
-	}
 
-	public void setCreateTime(long createTime) {
-		this.createTime = createTime;
-	}
-
-	public String getCount() {
-		return count;
-	}
-
-	public void setCount(String count) {
-		this.count = count;
-	}
-
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public long getExperimentId() {
+	public Long getExperimentId() {
 		return experimentId;
 	}
 
-	public void setExperimentId(long experimentId) {
+	public void setExperimentId(Long experimentId) {
 		this.experimentId = experimentId;
 	}
 
@@ -114,12 +98,28 @@ public class VariableData {
 		this.name = name;
 	}
 
+	public String getMeaning() {
+		return meaning;
+	}
+
+	public void setMeaning(String meaning) {
+		this.meaning = meaning;
+	}
+
 	public String getDataType() {
 		return dataType;
 	}
 
 	public void setDataType(String dataType) {
 		this.dataType = dataType;
+	}
+
+	public String getCount() {
+		return count;
+	}
+
+	public void setCount(String count) {
+		this.count = count;
 	}
 
 	public String getMax() {
@@ -170,11 +170,11 @@ public class VariableData {
 		this.percent75 = percent75;
 	}
 
-	public int getVariableType() {
+	public Integer getVariableType() {
 		return variableType;
 	}
 
-	public void setVariableType(int variableType) {
+	public void setVariableType(Integer variableType) {
 		this.variableType = variableType;
 	}
 
@@ -194,12 +194,11 @@ public class VariableData {
 		this.delete = delete;
 	}
 
-	public String getMeaning() {
-		return meaning;
+	public long getCreateTime() {
+		return createTime;
 	}
 
-	public void setMeaning(String meaning) {
-		this.meaning = meaning;
+	public void setCreateTime(long createTime) {
+		this.createTime = createTime;
 	}
-	
 }
