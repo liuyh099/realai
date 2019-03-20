@@ -14,12 +14,6 @@ public class ExperimentResultSet {
 	//数据集类型
 	private int dataSetType;
 	
-	//组名
-	private String groupName;
-	
-	//父记录
-	private long parentId;
-	
 	//
 	private double minPro;
 	
@@ -176,20 +170,4 @@ public class ExperimentResultSet {
 		this.cumulativePostiveCountInTotalPositiveCount = cumulativePostiveCountInTotalPositiveCount;
 	}
 
-	public String getGroupName() {
-		return groupName;
-	}
-
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
-	}
-
-	public long getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(long parentId) {
-		this.parentId = parentId;
-	}
-	
 }
