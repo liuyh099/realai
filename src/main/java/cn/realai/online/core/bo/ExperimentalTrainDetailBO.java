@@ -80,9 +80,6 @@ public class ExperimentalTrainDetailBO {
     @ApiModelProperty(value="备注",example = "1")
     private String remark;
 
-    //（同质/异质）数据schema
-    private PageBO<VariableDataBO> VariableDataList;
-
     public long getId() {
         return id;
     }
@@ -225,13 +222,5 @@ public class ExperimentalTrainDetailBO {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public PageBO<VariableDataBO> getVariableDataList() {
-        return VariableDataList;
-    }
-
-    public void setVariableDataList(PageBO<VariableDataBO> variableDataList) {
-        VariableDataList = variableDataList;
     }
 }
