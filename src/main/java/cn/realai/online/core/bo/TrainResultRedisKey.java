@@ -36,6 +36,9 @@ public class TrainResultRedisKey {
 	//psi检测结果
 	private String psiCheckResult;
 	
+	//实验结果集，风控或营销结果
+	private String experimentResultSet;
+	
 	//样本综述
 	private String sampleReview;
 	
@@ -221,6 +224,14 @@ public class TrainResultRedisKey {
 
 	public void setKsValidateImageUrl(String ksValidateImageUrl) {
 		this.ksValidateImageUrl = ksValidateImageUrl;
+	}
+
+	public String getExperimentResultSet() {
+		return experimentResultSet;
+	}
+
+	public void setExperimentResultSet(String experimentResultSet) {
+		this.experimentResultSet = experimentResultSet;
 	}
 	
 }

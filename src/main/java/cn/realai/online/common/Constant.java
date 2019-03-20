@@ -20,6 +20,16 @@ public class Constant {
 	//实验训练
 	public static final String TASK_TRAIN = "train";
 	
+	//任意时间系统只能跑一个训练,在进行训练之前先获取锁
+	//实验训练mlock锁
+	public static final String TRAIN_MLOCK_LOCK = "TRAINING_LOCK";
+	
+	//实验训练锁的前缀
+	public static final String TRAIN_MLOCK_PREFIX = "EXPERIMENT_TRAIN_";
+	
+	//实验训练mlock锁,过期时间
+	public static final int TRAIN_MLOCK_LOCK_LEASE_TIME = 60 * 60 * 3 * 1000;
+	
 	/**** Python回调task标记结束 ****/
 	
 	//redis默认过期时间   一个星期

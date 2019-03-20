@@ -22,14 +22,14 @@ public class MySessionManager extends DefaultWebSessionManager {
     @Override
     protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
         String id = WebUtils.toHttp(request).getHeader(AUTHORIZATION);
-//        if (!StringUtils.isEmpty(id)) {
+        if (!StringUtils.isEmpty(id)) {
             request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_SOURCE, REFERENCED_SESSION_ID_SOURCE);
             request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID, id);
             request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_IS_VALID, Boolean.TRUE);
             return id;
-//        } else {
-//            //否则按默认规则从cookie取sessionId
-//            return super.getSessionId(request, response);
-//        }
+        } else {
+            //否则按默认规则从cookie取sessionId
+            return super.getSessionId(request, response);
+        }
     }
 }

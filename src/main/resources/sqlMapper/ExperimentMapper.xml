@@ -41,6 +41,38 @@
         
   </sql>
 
+	<insert id="insert" parameterType="cn.realai.online.core.entity.Experiment">
+		<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		INSERT INTO experiment (name,service_id,status,algorithm_type,releas_status,y_table,x_table_homo,x_table_heter,x_table_meaning,create_time) VALUE
+		(#{name},#{serviceId},#{status},#{algorithmType},#{releasStatus},#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},#{xtableMeaningDataSource},#{createTime})
+	</insert>
+
+	<update id="selectFileUpdate" parameterType="cn.realai.online.core.entity.Experiment">
+		UPDATE experiment SET
+		name=#{name},
+		service_id=#{serviceId},
+		y_table=#{ytableDataSource},
+		x_table_homo=#{xtableHomogeneousDataSource},
+		x_table_heter=#{xtableHeterogeneousDataSource},
+		x_table_meaning=#{xtableMeaningDataSource}
+		where id =#{id}
+	</update>
+
+	<update id="updateParam" parameterType="cn.realai.online.core.entity.Experiment">
+		UPDATE experiment SET
+		verification_set=#{verificationSet},
+		sample_type=#{sampleSplitType},
+		train_ratio=#{trainRatio},
+		test_ratio=#{testRatio},
+		valid_ratio=#{validRatio}
+		<if test="status!=null">
+			,status=#{status}
+		</if>
+		where id =#{id}
+	</update>
+
 	<select id="selectExperimentById" resultMap="ExperimentMap">
 		select * 
 		from experiment
@@ -68,6 +100,23 @@
 			1=1
 			<if test="name!=null and name!=''">
 				AND	name LIKE CONCAT('%',#{name},'%')
+			</if>
+			<if test="status!=null">
+				AND	status= #{status}
+			</if>
+			<if test="releasStatus!=null">
+				AND	releas_status= #{releasStatus}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="checkName" resultMap="ExperimentMap" parameterType="cn.realai.online.core.entity.Experiment">
+		SELECT  *  FROM  experiment
+		<where>
+			1=1
+			<if test="name!=null and name!=''">
+				AND	name = #{name}
 			</if>
 			<if test="status!=null">
 				AND	status= #{status}

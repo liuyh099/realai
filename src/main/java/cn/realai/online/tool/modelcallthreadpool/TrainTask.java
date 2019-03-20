@@ -13,6 +13,8 @@ import com.alibaba.fastjson.JSON;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.entity.BatchRecord;
+import cn.realai.online.core.entity.ExperimentResultSet;
+import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.ModelPerformance;
 import cn.realai.online.core.entity.PersonalComboResultSet;
 import cn.realai.online.core.entity.PersonalHetroResultSet;
@@ -24,6 +26,7 @@ import cn.realai.online.core.entity.SampleWeight;
 import cn.realai.online.core.entity.TopSort;
 import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.service.BatchRecordService;
+import cn.realai.online.core.service.ExperimentResultSetService;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.ModelPerformanceService;
 import cn.realai.online.core.service.PersonalComboResultSetService;
@@ -123,6 +126,9 @@ public class TrainTask implements Runnable {
 		//解析千人千面聚合信息
 		analysisPersonalComboResultSet(redisClientTemplate.get(redisKey.getPersonalComboResultSet()), piMap, batchRecordId);
 		
+		//解析实验结果集 风控或营销
+		analysisExperimentResultSet(redisClientTemplate.get(redisKey.getExperimentResultSet()));
+		
 		//样本综述
 		String sampleReview = redisClientTemplate.get(redisKey.getSampleReview());
 		
@@ -153,7 +159,13 @@ public class TrainTask implements Runnable {
 
 		String ksValidateImageUrl = redisClientTemplate.get(redisKey.getKsValidateImageUrl());
 		
+		//维护实验训练结果到实验数据
+		experimentService.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl, badTopCountImageUrl,
+				rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl, ksTrainImageUrl, ksValidateImageUrl);
 		
+		//释放MLock锁
+		MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
+		mlock.unLock();
 	}
 	
 	/*
@@ -354,6 +366,23 @@ public class TrainTask implements Runnable {
 		}
 		PersonalComboResultSetService personalComboResultSetService = SpringContextUtils.getBean(PersonalComboResultSetService.class);
 		personalComboResultSetService.insertList(pcrsList);
+	}
+	
+	private void analysisExperimentResultSet(String redisValue) {
+		if (redisValue == null || "".equals(redisValue)) {
+			logger.error("TrainTask analysisExperimentResultSet. 训练结果没有风控或营销信息数据. experimentId{}", experimentId);
+			throw new RuntimeException("训练结果没有风控或营销信息数据experimentId = " + experimentId);
+		}
+		List<ExperimentResultSet> ersList = JSON.parseArray(redisValue, ExperimentResultSet.class);
+		for (ExperimentResultSet ers : ersList) {
+			if (ers.getExperimentId() != experimentId.longValue()) {
+				logger.error("TrainTask analysisModelPerformance. 训练结果数据错误,训练实验id的结果实验id不相等. experimentId{}, resultId{}", experimentId, ers.getExperimentId());
+				throw new RuntimeException("训练结果数据错误,训练实验id的结果实验id不相等.");
+			}
+			
+		}
+		ExperimentResultSetService experimentResultSetService = SpringContextUtils.getBean(ExperimentResultSetService.class);
+		experimentResultSetService.insertList(ersList);
 	}
 	
 }
