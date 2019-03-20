@@ -7,10 +7,13 @@ import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import cn.realai.online.core.bo.VariableDataBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
 import cn.realai.online.core.entity.Experiment;
+import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
+import cn.realai.online.core.query.PageQuery;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.VariableDataService;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
+import cn.realai.online.core.vo.VariableDataVO;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -97,17 +100,14 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
 		trainService.preprocess(experimentBO);
 	}
 
+    /**
+     * 根据实验ID获取实验详情
+     * @param experimentId 实验id
+     * @return 实验详情
+     */
     @Override
     public ExperimentalTrainDetailBO detail(long experimentId) {
-
         ExperimentalTrainDetailBO experimentalTrainDetailBO = experimentService.selectExperimentDetailById(experimentId);
-
-        if (experimentalTrainDetailBO != null) {
-           // List<VariableDataBO> list = variableDataService.findListByExperimentId(experimentalTrainDetailBO.getId());
-
-//            experimentalTrainDetailBO.setVariableDataList(list);
-        }
-
         return experimentalTrainDetailBO;
     }
 }

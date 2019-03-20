@@ -53,9 +53,4 @@ public class VariableDataServiceImpl implements VariableDataService {
 		return variableDataDao.findListByExperimentId(experimentId);
 	}
 
-	@Override
-	public List<VariableDataBO> selectVariableDataByExperimentId(long experimentId) {
-		return null;
-	}
-
 }
