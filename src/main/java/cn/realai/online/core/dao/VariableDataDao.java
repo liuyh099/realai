@@ -12,4 +12,5 @@ public interface VariableDataDao {
 
 	List<VariableData> findListByExperimentId(@Param("experimentId")Long experimentId);
 
+	List<VariableData> findList(VariableData variableData);
 }

@@ -39,5 +39,20 @@
 		from variable_data
 		where experiment_id = #{experimentId}
 	</select>
+
+	<select id="findList" resultMap="VariableDataMap" parameterType = "cn.realai.online.core.entity.VariableData">
+	   select *
+	   from variable_data
+		<where>
+			1=1
+			<if test="experimentId!=null">
+				AND	experiment_id = #{experimentId}
+			</if>
+			<if test="variableType!=null">
+				AND	variable_type= #{variableType}
+			</if>
+		</where>
+
+	</select>
   
 </mapper> 

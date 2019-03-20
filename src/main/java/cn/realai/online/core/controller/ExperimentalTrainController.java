@@ -6,8 +6,10 @@ import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
+import cn.realai.online.core.bussiness.VariableDataBusiness;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
+import cn.realai.online.core.query.VariableDataQuery;
 import cn.realai.online.core.vo.*;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
@@ -17,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +33,10 @@ public class ExperimentalTrainController {
 
     @Autowired
     private ExperimentalTrainBusiness experimentalTrainBusiness;
+
+    @Autowired
+    private VariableDataBusiness variableDataBusiness;
+
 
     @GetMapping
     @ApiOperation(value = "查询实验训练列表")
@@ -78,6 +85,24 @@ public class ExperimentalTrainController {
             ExperimentalTrainDetailBO experimentalTrainDetailBO = experimentalTrainBusiness.detail(idVO.getId());
             ExperimentalTrainDetailVO result = JSON.parseObject(JSON.toJSONString(experimentalTrainDetailBO), ExperimentalTrainDetailVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("获得实验详情异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
+
+
+    @GetMapping("/detail/variableData/{VariableDataQuery}")
+    @ApiOperation(value = "实验详情-(同质/异质)数据schema")
+    @ResponseBody
+    public Result<VariableDataVO> variableData(VariableDataQuery variableDataQuery) {
+        try {
+            if (ObjectUtils.isEmpty(variableDataQuery)) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            }
+            PageBO<VariableDataVO> page = variableDataBusiness.pageList(variableDataQuery);
+
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), page);
         } catch (Exception e) {
             logger.error("获得实验详情异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
