@@ -4,6 +4,7 @@ import cn.realai.online.common.page.PageBO;
 import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
+import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
@@ -15,10 +16,15 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.executable.ValidateOnExecution;
 import java.util.List;
 
 @RestController
@@ -97,17 +103,54 @@ public class ExperimentalTrainController {
     @PostMapping("/selectFile")
     @ApiOperation(value = "新增实验-选择文件")
     @ResponseBody
-    public Result<IdVO> selectFileAdd(@RequestBody ExperimentalTrainSelectFileVO experimentalTrainSelectFileVo) {
+    public Result<IdVO> selectFileAdd(@RequestBody @Validated ExperimentalTrainSelectFileVO experimentalTrainSelectFileVo) {
+        try{
+            //检查文件名
+            boolean flag = experimentalTrainBusiness.checkTrainName(experimentalTrainSelectFileVo.getName(),experimentalTrainSelectFileVo.getId());
+            if(!flag){
+                return new Result(ResultCode.DATA_ERROR.getCode(), "实验名称不能重复",null);
+            }
+            ExperimentBO experimentBO=new ExperimentBO();
+            BeanUtils.copyProperties(experimentalTrainSelectFileVo,experimentBO);
+            Long id = experimentalTrainBusiness.selectFileAdd(experimentBO);
+            if(id==null){
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+            }
+            IdVO idVO = new IdVO();
+            idVO.setId(id);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), idVO);
+        }catch (Exception e){
+            logger.error("添加实验-选择文件-新增异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+        }
+    }
+
+    @GetMapping("/getFilePath")
+    @ApiOperation(value = "新增实验-选择文件-获得文件地址")
+    @ResponseBody
+    public Result<FileTreeVo> getFilePath() {
+
         return null;
     }
+
 
     @GetMapping("/selectFile/{trainId}")
     @ApiOperation(value = "活得选择文件的结果")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<ExperimentalTrainSelectFileVO> selectFileQuery(@PathVariable long trainId) {
-
-        return null;
+    public Result<ExperimentalTrainSelectFileVO> selectFileQuery(@PathVariable @NotNull(message = "查询条件不能为空") Long trainId) {
+        try{
+            if(trainId == null){
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            }
+            ExperimentBO experimentBO=experimentalTrainBusiness.selectById(trainId);
+            ExperimentalTrainSelectFileVO experimentalTrainSelectFileVO = new ExperimentalTrainSelectFileVO();
+            BeanUtils.copyProperties(experimentBO,experimentalTrainSelectFileVO);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalTrainSelectFileVO);
+        }catch (Exception e){
+            logger.error("添加实验-选择文件-获得详细异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
     @PutMapping("/selectFile")

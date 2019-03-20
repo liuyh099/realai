@@ -25,7 +25,21 @@ public interface ExperimentDao {
 	 * @param ids
 	 * @return
 	 */
-	Integer deleteExperimentByIds(List<Long> ids);
+	Integer deleteExperimentByIds(@Param("ids") List<Long> ids);
+
+	/**
+	 * 检查名称
+	 * @param experiment
+	 * @return
+	 */
+	List<Experiment> checkName(Experiment experiment);
+
+	/**
+	 * 插入实验
+	 * @param experiment
+	 * @return
+	 */
+    Long insert(Experiment experiment);
 
 	int trainResultMaintain(@Param("experimentId")Long experimentId, 
 			@Param("sampleReview")String sampleReview, 

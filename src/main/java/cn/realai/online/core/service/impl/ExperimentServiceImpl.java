@@ -16,6 +16,7 @@ import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.tool.redis.RedisClientTemplate;
 import cn.realai.online.util.ConvertJavaBean;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -101,6 +102,30 @@ public class ExperimentServiceImpl implements ExperimentService {
         return experimentalTrainDetailBO;
     }
 
+    @Override
+    public boolean checkTrainName(String name, Long id) {
+        Experiment experiment = new Experiment();
+        experiment.setName(name);
+        List<Experiment> experimentList = experimentDao.checkName(experiment);
+        if (CollectionUtils.isEmpty(experimentList)) {
+            return true;
+        }
+        if(id!=null){
+            for (Experiment experiment1 : experimentList) {
+                if (!experiment1.getId().equals(id)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public Long insert(Experiment experiment) {
+         experimentDao.insert(experiment);
+         return experiment.getId();
+    }
+    
 	@Override
 	public int trainResultMaintain(Long experimentId, String sampleReview, String modelUrl,
 			String segmentationStatisticsImageUrl, String badTopCountImageUrl, String rocTestImageUrl,

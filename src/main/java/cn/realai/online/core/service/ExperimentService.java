@@ -35,6 +35,20 @@ public interface ExperimentService {
 
 	ExperimentalTrainDetailBO selectExperimentDetailById(long id);
 
+	/**
+	 * 检查实验名称
+	 * @param name
+	 * @param id
+	 * @return
+	 */
+	boolean checkTrainName(String name, Long id);
+
+	/**
+	 * 插入实验
+	 * @param experiment
+	 * @return
+	 */
+    Long insert(Experiment experiment);
 	/*
 	 * 实验训练结果维护
 	 * @param experimentId 实验id
