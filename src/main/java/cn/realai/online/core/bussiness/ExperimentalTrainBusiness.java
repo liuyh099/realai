@@ -33,4 +33,11 @@ public interface ExperimentalTrainBusiness {
 	 * @return
 	 */
 	boolean checkTrainName(String name, Long id);
+
+	/**
+	 * 根据Id查询实验信息
+	 * @param trainId
+	 * @return
+	 */
+    ExperimentBO selectById(Long trainId);
 }

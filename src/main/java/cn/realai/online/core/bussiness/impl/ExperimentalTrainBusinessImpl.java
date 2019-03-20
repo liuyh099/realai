@@ -129,4 +129,12 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
         return  experimentService.checkTrainName(name,id);
 
     }
+
+    @Override
+    public ExperimentBO selectById(Long trainId) {
+        Experiment experiment=experimentService.selectExperimentById(trainId);
+        ExperimentBO experimentBO =new ExperimentBO();
+        BeanUtils.copyProperties(experiment,experimentBO);
+        return experimentBO;
+    }
 }
