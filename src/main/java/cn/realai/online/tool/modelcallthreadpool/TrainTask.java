@@ -110,7 +110,6 @@ public class TrainTask implements Runnable {
 		BatchRecord batchRecord = new BatchRecord();
 		batchRecord.setBatchType(BatchRecord.BATCH_TYPE_TRAIN);
 		batchRecord.setServiceId(experiment.getServiceId());
-		batchRecord.setCreateTime(System.currentTimeMillis());
 		batchRecord.setXtableHeterogeneousDataSource(experiment.getXtableHeterogeneousDataSource());
 		batchRecord.setXtableHomogeneousDataSource(experiment.getXtableHomogeneousDataSource());
 		batchRecord.setYtableDataSource(experiment.getYtableDataSource());
