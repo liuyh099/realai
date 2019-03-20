@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 public class ExperimentalTrainSelectFileVO {
 
     @ApiModelProperty( value = "实验id" ,required = false, example = "新增非必填，更新需要")
-    private long id;
+    private Long id;
 
     //主键id
     @ApiModelProperty( value = "服务ID" ,required = true)
@@ -41,19 +41,19 @@ public class ExperimentalTrainSelectFileVO {
     private String xtableMeaningDataSource;
 
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getServerId() {
+    public Long getServerId() {
         return serverId;
     }
 
-    public void setServerId(long serverId) {
+    public void setServerId(Long serverId) {
         this.serverId = serverId;
     }
 

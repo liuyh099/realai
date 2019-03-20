@@ -23,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.executable.ValidateOnExecution;
 import java.util.List;
 
@@ -128,6 +129,7 @@ public class ExperimentalTrainController {
     @ApiOperation(value = "新增实验-选择文件-获得文件地址")
     @ResponseBody
     public Result<FileTreeVo> getFilePath() {
+
         return null;
     }
 
@@ -136,9 +138,19 @@ public class ExperimentalTrainController {
     @ApiOperation(value = "活得选择文件的结果")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<ExperimentalTrainSelectFileVO> selectFileQuery(@PathVariable long trainId) {
-
-        return null;
+    public Result<ExperimentalTrainSelectFileVO> selectFileQuery(@PathVariable @NotNull(message = "查询条件不能为空") Long trainId) {
+        try{
+            if(trainId == null){
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            }
+            ExperimentBO experimentBO=experimentalTrainBusiness.selectById(trainId);
+            ExperimentalTrainSelectFileVO experimentalTrainSelectFileVO = new ExperimentalTrainSelectFileVO();
+            BeanUtils.copyProperties(experimentBO,experimentalTrainSelectFileVO);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalTrainSelectFileVO);
+        }catch (Exception e){
+            logger.error("添加实验-选择文件-获得详细异常",e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
     @PutMapping("/selectFile")
