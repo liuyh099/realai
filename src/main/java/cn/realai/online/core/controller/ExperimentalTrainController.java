@@ -99,7 +99,7 @@ public class ExperimentalTrainController {
 
 
     @GetMapping("/detail/variableData/{VariableDataQuery}")
-    @ApiOperation(value = "实验详情-(同质/异质)数据schema")
+    @ApiOperation(value = "实验详情-获取同质异质数据schema")
     @ResponseBody
     public Result<VariableDataVO> variableData(VariableDataQuery variableDataQuery) {
         try {
