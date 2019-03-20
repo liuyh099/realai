@@ -4,7 +4,7 @@ package cn.realai.online.core.entity;
  * 风控结果集（实验评估风控）
  * @author lyh
  */
-public class WindControlResultSet {
+public class ExperimentResultSet {
 
 	private long id;
 	
@@ -13,9 +13,6 @@ public class WindControlResultSet {
 	
 	//数据集类型
 	private int dataSetType;
-	
-	//业务类型
-	private int businessType;
 	
 	//组名
 	private String groupName;
@@ -81,14 +78,6 @@ public class WindControlResultSet {
 
 	public void setDataSetType(int dataSetType) {
 		this.dataSetType = dataSetType;
-	}
-
-	public int getBusinessType() {
-		return businessType;
-	}
-
-	public void setBusinessType(int businessType) {
-		this.businessType = businessType;
 	}
 
 	public double getMinPro() {
