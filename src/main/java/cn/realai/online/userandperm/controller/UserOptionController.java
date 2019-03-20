@@ -4,10 +4,12 @@ import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.userandperm.bo.MenuTreeNodeBO;
-import cn.realai.online.userandperm.bo.UserBO;
 import cn.realai.online.userandperm.business.RoleBusiness;
 import cn.realai.online.userandperm.business.UserOptionBusiness;
-import cn.realai.online.userandperm.vo.*;
+import cn.realai.online.userandperm.vo.ChangePwdVO;
+import cn.realai.online.userandperm.vo.ForgetVo;
+import cn.realai.online.userandperm.vo.IndexMenuTreeNodeVo;
+import cn.realai.online.userandperm.vo.UserLoginVo;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,11 +21,10 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
 import java.util.List;
 
 @RestController
@@ -40,17 +41,13 @@ public class UserOptionController {
 
 
     @PostMapping("login")
-    @ApiOperation("用户登录Api(登录成功返回sessionId,登陆后的请求在请求头里面加入mySessionId)")
-    public Result<MySessionVo> login(@RequestBody UserLoginVo userLoginVo) {
-
+    @ApiOperation("用户登录Api")
+    public Result login(@RequestBody UserLoginVo userLoginVo) {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(userLoginVo.getName(), userLoginVo.getPwd());
         try {
             subject.login(token);
-            Serializable session = subject.getSession().getId();
-            MySessionVo mySessionVo = new MySessionVo();
-            mySessionVo.setSessionId(session);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), mySessionVo);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), true);
         } catch (IncorrectCredentialsException e) {
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.PWD_ERROR.getMsg(), null);
         } catch (LockedAccountException e) {
@@ -124,11 +121,27 @@ public class UserOptionController {
     @ApiOperation(value = "获得用户菜单")
     public Result<List<IndexMenuTreeNodeVo>> menu() {
         try {
-            List<MenuTreeNodeBO> list=roleBusiness.findIndexMenu();
-            List<IndexMenuTreeNodeVo> result = JSON.parseArray(JSON.toJSONString(list),IndexMenuTreeNodeVo.class);
+            List<MenuTreeNodeBO> list = roleBusiness.findIndexMenu();
+            List<IndexMenuTreeNodeVo> result = JSON.parseArray(JSON.toJSONString(list), IndexMenuTreeNodeVo.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("获得用户菜单异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+
+    }
+
+    @RequestMapping("logout")
+    @ApiOperation(value = "退出")
+    public Result logout() {
+        try {
+            Subject subject = SecurityUtils.getSubject();
+            if (!ObjectUtils.isEmpty(subject)) {
+                subject.logout();
+            }
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), true);
+        } catch (Exception e) {
+            logger.error("退出异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
 
