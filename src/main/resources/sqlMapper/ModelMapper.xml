@@ -17,9 +17,11 @@
 
 
     <update id="update" parameterType="cn.realai.online.core.entity.Model">
-        UPDATE model SET
-        name = #{name},
-        <if test="remark!=null">remark = #{remark}</if>
+        UPDATE model
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name!=null">name=#{name},</if>
+            <if test="remark!=null">remark=#{remark},</if>
+        </trim>
         <where>
             id =#{id}
         </where>
@@ -27,10 +29,16 @@
 
 
     <select id="get" resultMap="ModelMap" parameterType="java.lang.Long">
-        SELECT m.* from model m
+        SELECT * from model
         <where>
-            a.id =#{id}
+            id =#{id}
         </where>
+    </select>
+
+    <select id="selectLatest" resultMap="ModelMap">
+        SELECT * from model
+        order by create_time desc
+        limit 1
     </select>
 
     <resultMap type="cn.realai.online.core.bo.ModelListBO" id="ModelListMap">
@@ -44,7 +52,7 @@
         <result column="algorithmType" property="algorithmType" jdbcType="VARCHAR"/>
         <result column="tuningCount" property="tuningCount" jdbcType="INTEGER"/>
         <result column="tuningReason" property="tuningReason" jdbcType="VARCHAR"/>
-        <result column="psi" property="psi" jdbcType="DECIMAL"/>
+        <result column="psi" property="psi" jdbcType="DOUBLE"/>
         <result column="aler" property="aler" jdbcType="TINYINT"/>
     </resultMap>
     <select id="selectList" resultMap="ModelListMap">
@@ -60,11 +68,11 @@
         ep.tuning_count as tuningCount,
         '调优原因' as tuningReason,
         pc.psi as psi,
-        pc.alter as aler
+        pc.aler as aler
         from model as m
         join experiment as ep on m.experiment_id = ep.id
         join service as sv on m.service_id = sv.id
-        left join psi_check as pc on ep.id = pc.experiment_id
+        left join psi_check_result as pc on ep.id = pc.experiment_id
         <!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错-->
         <where>
             <if test="name!=null and name.trim()!=''">
@@ -88,7 +96,7 @@
         <result column="algorithmType" property="algorithmType" jdbcType="VARCHAR"/>
         <result column="tuningCount" property="tuningCount" jdbcType="INTEGER"/>
         <result column="tuningReason" property="tuningReason" jdbcType="VARCHAR"/>
-        <result column="yDefine" property="yDefine" jdbcType="VARCHAR"/>
+        <result column="ydefine" property="ydefine" jdbcType="VARCHAR"/>
         <result column="serviceType" property="serviceType" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
@@ -103,7 +111,7 @@
         ep.algorithm_type as algorithmType,
         ep.tuning_count as tuningCount,
         '调优原因' as tuningReason,
-        'Y的定义' as yDefine,
+        'Y的定义' as ydefine,
         sv.type as serviceType,
         m.remark as remark
         from model as m

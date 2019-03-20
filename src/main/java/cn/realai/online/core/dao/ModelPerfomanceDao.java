@@ -13,7 +13,7 @@ public interface ModelPerfomanceDao {
     Integer update(ModelPerformance perfomance);
 
     //获取模型表现
-    ModelPerformance get(long id);
+    ModelPerformance get(Long id);
 
     //查询模型列表
     List<ModelPerformance> selectList(@Param("modelId") Long modelId);

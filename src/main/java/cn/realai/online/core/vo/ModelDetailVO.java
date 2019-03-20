@@ -30,7 +30,7 @@ public class ModelDetailVO {
     private String experimentName;
 
     @ApiModelProperty(value="Y的定义")
-    private String Ydefine;
+    private String ydefine;
 
     @ApiModelProperty(value="服务类型")
     private String serviceType;
@@ -88,11 +88,11 @@ public class ModelDetailVO {
     }
 
     public String getYdefine() {
-        return Ydefine;
+        return ydefine;
     }
 
     public void setYdefine(String ydefine) {
-        Ydefine = ydefine;
+        this.ydefine = ydefine;
     }
 
     public String getServiceType() {

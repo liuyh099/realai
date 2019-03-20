@@ -18,11 +18,13 @@
 
 
     <update id="update" parameterType="cn.realai.online.core.entity.ModelPerformance">
-        UPDATE model_perfomance SET
-        name = #{name},
-        <if test="trainingSet!=null">training_set = #{trainingSet}</if>,
-        <if test="testSet!=null">training_set = #{testSet}</if>,
-        <if test="validSet!=null">valid_set = #{validSet}</if>
+        UPDATE model_perfomance
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name!=null">name=#{name},</if>
+            <if test="trainingSet!=null">training_set=#{trainingSet},</if>
+            <if test="testSet!=null">test_set=#{testSet},</if>
+            <if test="validSet!=null">valid_set=#{validSet},</if>
+        </trim>
         <where>
             id =#{id}
         </where>
@@ -30,9 +32,9 @@
 
 
     <select id="get" resultMap="ModelPerformanceMap" parameterType="java.lang.Long">
-        SELECT m.* from model m
+        SELECT * from model
         <where>
-            a.id =#{id}
+            id =#{id}
         </where>
     </select>
 
