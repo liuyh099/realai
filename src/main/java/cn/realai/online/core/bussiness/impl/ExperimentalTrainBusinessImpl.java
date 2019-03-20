@@ -9,10 +9,7 @@ import cn.realai.online.core.entity.*;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.PageQuery;
-import cn.realai.online.core.service.ExperimentResultSetService;
-import cn.realai.online.core.service.ExperimentService;
-import cn.realai.online.core.service.TopSortService;
-import cn.realai.online.core.service.VariableDataService;
+import cn.realai.online.core.service.*;
 import cn.realai.online.core.vo.ExperimentalResultTopVO;
 import cn.realai.online.core.vo.ExperimentalTrainSelectFileVO;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
@@ -56,6 +53,9 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
 
     @Autowired
     private TopSortService topSortService;
+
+    @Autowired
+    private SampleSummaryService sampleSummaryService;
 
     /**
      * 根据实验名称和状态等分页查询实验列表
@@ -204,9 +204,9 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
         Experiment experiment = experimentService.selectExperimentById(experimentId);
 
         //TODO 去获取服务
-        List<ExperimentResultSetBO> trainResultSetListBO = quotaCommon(Experiment.DATA_SET_TRAIN,experimentId);
-        List<ExperimentResultSetBO> testResultSetListBO = quotaCommon(Experiment.DATA_SET_TEST,experimentId);
-        List<ExperimentResultSetBO> validResultSetListBO = quotaCommon(Experiment.DATA_SET_VALID,experimentId);
+        List<ExperimentResultSetBO> trainResultSetListBO = quotaCommon(Experiment.DATA_SET_TRAIN, experimentId);
+        List<ExperimentResultSetBO> testResultSetListBO = quotaCommon(Experiment.DATA_SET_TEST, experimentId);
+        List<ExperimentResultSetBO> validResultSetListBO = quotaCommon(Experiment.DATA_SET_VALID, experimentId);
         ExperimentalResultQuatoBO experimentalResultQuatoBO = new ExperimentalResultQuatoBO();
         experimentalResultQuatoBO.setModel(1);
         experimentalResultQuatoBO.setTestResultList(testResultSetListBO);
@@ -215,7 +215,7 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
         return experimentalResultQuatoBO;
     }
 
-    private List<ExperimentResultSetBO> quotaCommon(Integer dataSetType,Long experimentId){
+    private List<ExperimentResultSetBO> quotaCommon(Integer dataSetType, Long experimentId) {
         ExperimentResultSet experimentResultSet = new ExperimentResultSet();
         experimentResultSet.setExperimentId(experimentId);
         experimentResultSet.setDataSetType(dataSetType);
@@ -236,22 +236,41 @@ public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness 
 
     @Override
     public ExperimentalResultTopBO quotaTopGroup(Long experimentId) {
-
-
-
-        return null;
+        ExperimentalResultTopGroupBO train = quotaTopGroupCommon(experimentId, Experiment.DATA_SET_TRAIN);
+        ExperimentalResultTopGroupBO test = quotaTopGroupCommon(experimentId, Experiment.DATA_SET_TEST);
+        ExperimentalResultTopGroupBO valid = quotaTopGroupCommon(experimentId, Experiment.DATA_SET_VALID);
+        ExperimentalResultTopBO resultTopBO = new ExperimentalResultTopBO();
+        resultTopBO.setTestTop(test);
+        resultTopBO.setTrainTop(train);
+        resultTopBO.setValidateTop(valid);
+        return resultTopBO;
     }
 
-    private ExperimentalResultTopGroupBO quotaTopGroupCommon(Long experimentId,Integer dataType){
-
-        return null;
+    @Override
+    public List<SampleSummaryBO> summary(Long experimentId) {
+        SampleSummary sampleSummary = new SampleSummary();
+        sampleSummary.setExperimentId(experimentId);
+        List<SampleSummary> ret = sampleSummaryService.findList(sampleSummary);
+        List<SampleSummaryBO> result = JSON.parseArray(JSON.toJSONString(ret), SampleSummaryBO.class);
+        return result;
     }
-    private List<TopSortBO> quotaTopGroupDataCommon(Long experimentId,Integer dataType,Integer responseType){
+
+    private ExperimentalResultTopGroupBO quotaTopGroupCommon(Long experimentId, Integer dataType) {
+        List<TopSortBO> response = quotaTopGroupDataCommon(experimentId, dataType, 1);
+        List<TopSortBO> noResponse = quotaTopGroupDataCommon(experimentId, dataType, 1);
+        ExperimentalResultTopGroupBO result = new ExperimentalResultTopGroupBO();
+        result.setResponseDataList(response);
+        result.setNoResponseDataList(noResponse);
+        return result;
+    }
+
+    private List<TopSortBO> quotaTopGroupDataCommon(Long experimentId, Integer dataType, Integer responseType) {
         TopSort topSort = new TopSort();
         topSort.setExperimentId(experimentId);
-        topSort.setResponseType(1);
-        topSort.setDataSetType(Experiment.DATA_SET_TRAIN);
-       // List<TopSort> topSorts=topSortService.findList();
-        return null;
+        topSort.setResponseType(responseType);
+        topSort.setDataSetType(dataType);
+        List<TopSort> topSorts = topSortService.findList(topSort);
+        List<TopSortBO> result = JSON.parseArray(JSON.toJSONString(topSorts), TopSortBO.class);
+        return result;
     }
 }

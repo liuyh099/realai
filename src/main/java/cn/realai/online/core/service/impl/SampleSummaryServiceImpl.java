@@ -23,4 +23,9 @@ public class SampleSummaryServiceImpl implements SampleSummaryService {
 		sampleSummaryDao.insertList(ssList);
 	}
 
+	@Override
+	public List<SampleSummary> findList(SampleSummary sampleSummary) {
+		return sampleSummaryDao.findList(sampleSummary);
+	}
+
 }

@@ -90,4 +90,11 @@ public interface ExperimentalTrainBusiness {
 	 * @return
 	 */
 	ExperimentalResultTopBO quotaTopGroup(Long experimentId);
+
+	/**
+	 * 样本摘要
+	 * @param id
+	 * @return
+	 */
+    List<SampleSummaryBO> summary(Long experimentId);
 }

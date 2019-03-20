@@ -26,4 +26,9 @@ public class TopSortServiceImpl implements TopSortService {
 		topSortDao.insertList(tsList);
 	}
 
+	@Override
+	public List<TopSort> findList(TopSort topSort) {
+		return topSortDao.findList(topSort);
+	}
+
 }
