@@ -52,8 +52,6 @@ public class TrainTask implements Runnable {
 	
 	private Long experimentId;
 	
-	private Long serviceId;
-	
 	private TrainResultRedisKey redisKey;
 	
 	public TrainTask(Long experimentId, TrainResultRedisKey redisKey) {
@@ -70,9 +68,6 @@ public class TrainTask implements Runnable {
 		if (experiment == null) {
 			logger.error("TrainTask run. experiment信息不存在. experimentId{}", experimentId);
 		}
-		
-		//设置serviceId
-		serviceId = experiment.getServiceId();
 		
 		//获取Redis操作对象
 		RedisClientTemplate redisClientTemplate = SpringContextUtils.getBean(RedisClientTemplate.class);
@@ -373,10 +368,6 @@ public class TrainTask implements Runnable {
 			logger.error("TrainTask analysisExperimentResultSet. 训练结果没有风控或营销信息数据. experimentId{}", experimentId);
 			throw new RuntimeException("训练结果没有风控或营销信息数据experimentId = " + experimentId);
 		}
-		
-		ServiceService serviceService = SpringContextUtils.getBean(ServiceService.class);
-		Service service = serviceService.selectServiceById(serviceId);
-		
 		List<ExperimentResultSet> ersList = JSON.parseArray(redisValue, ExperimentResultSet.class);
 		for (ExperimentResultSet ers : ersList) {
 			if (ers.getExperimentId() != experimentId.longValue()) {
