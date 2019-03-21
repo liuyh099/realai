@@ -26,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("permission/group")
-@Api(tags = "角色管理")
+@Api(tags = "权限管理-角色管理")
 public class RoleController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
