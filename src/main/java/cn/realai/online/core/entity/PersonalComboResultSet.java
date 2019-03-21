@@ -50,6 +50,16 @@ public class PersonalComboResultSet {
 	//权重
 	private double weight;
 
+	//python返回的批次标记字段，只做解析不需要入库
+	private String batchStr;
+
+	public String getBatchStr() {
+		return batchStr;
+	}
+
+	public void setBatchStr(String batchStr) {
+		this.batchStr = batchStr;
+	}
 
 	public long getVariableId1() {
 		return variableId1;

@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class VariableDataBusinessImpl implements VariableDataBusiness {
+public class VariableDataBussinessImpl implements VariableDataBusiness {
 
 
     @Autowired

@@ -47,6 +47,16 @@ public class PersonalInformation {
 	//概率
 	private double probability;
 
+	//python返回的批次标记字段，只做解析不需要入库
+	private String batchStr;
+
+	public String getBatchStr() {
+		return batchStr;
+	}
+
+	public void setBatchStr(String batchStr) {
+		this.batchStr = batchStr;
+	}
 
 	public String getGroupName() {
 		return groupName;

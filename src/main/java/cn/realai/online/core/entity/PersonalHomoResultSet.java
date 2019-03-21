@@ -30,7 +30,18 @@ public class PersonalHomoResultSet {
 	
 	//权重(显示值)
 	private double weight;
+	
+	//python返回的批次标记字段，只做解析不需要入库
+	private String batchStr;
 
+	public String getBatchStr() {
+		return batchStr;
+	}
+
+	public void setBatchStr(String batchStr) {
+		this.batchStr = batchStr;
+	}
+		
 	public long getId() {
 		return id;
 	}

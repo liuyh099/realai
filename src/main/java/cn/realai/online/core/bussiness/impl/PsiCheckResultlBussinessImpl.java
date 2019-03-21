@@ -20,7 +20,7 @@ import java.util.List;
  * @create 2019-03-19 18:10
  */
 @Service
-public class PsiCheckResultlBusinessImpl implements PsiCheckResultBusiness {
+public class PsiCheckResultlBussinessImpl implements PsiCheckResultBusiness {
 
     @Autowired
     private PsiChekcResultService psiChekcResultService;

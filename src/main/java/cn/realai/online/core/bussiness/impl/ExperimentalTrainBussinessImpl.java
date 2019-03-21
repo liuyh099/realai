@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @Transactional(readOnly = true)
-public class ExperimentalTrainBusinessImpl implements ExperimentalTrainBusiness {
+public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBusiness {
 
     @Autowired
     private ExperimentService experimentService;

@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * <br>Author:  Shunping.Fu
  * <br>Date: 2019/3/20
  */
-
+@org.springframework.stereotype.Service
 public class ServiceBussinessImpl implements ServiceBussiness {
 
 
