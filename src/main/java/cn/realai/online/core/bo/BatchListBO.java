@@ -12,7 +12,7 @@ public class BatchListBO {
 
     private Long modelId;
 
-    private String modeleName;
+    private String modelName;
 
     private Long experimentId;
 
@@ -48,12 +48,12 @@ public class BatchListBO {
         this.modelId = modelId;
     }
 
-    public String getModeleName() {
-        return modeleName;
+    public String getModelName() {
+        return modelName;
     }
 
-    public void setModeleName(String modeleName) {
-        this.modeleName = modeleName;
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 
     public Long getExperimentId() {

@@ -24,4 +24,21 @@
         </foreach>
     </insert>
 
+
+    <select id="findList" resultType="cn.realai.online.core.entity.TopSort" parameterType="cn.realai.online.core.entity.TopSort">
+        SELECT * FROM top_sort
+        <where>
+            1=1
+            <if test="dataSetType!=null">
+               AND data_set_type = #{dataSetType}
+            </if>
+            <if test="responseType!=null">
+                AND response_type = #{responseType}
+            </if>
+            <if test="experimentId!=null">
+                AND experiment_id = #{experimentId}
+            </if>
+        </where>
+    </select>
+
 </mapper>

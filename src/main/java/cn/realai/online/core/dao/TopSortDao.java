@@ -10,4 +10,10 @@ public interface TopSortDao {
 
 	void insertList(@Param("tsList")List<TopSort> tsList);
 
+    /**
+     * 查找TopSortList
+     * @param topSort
+     * @return
+     */
+    List<TopSort> findList(TopSort topSort);
 }

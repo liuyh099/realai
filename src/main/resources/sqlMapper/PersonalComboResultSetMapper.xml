@@ -12,7 +12,7 @@
         <result column="value_2" property="value2" jdbcType="VARCHAR"/>
         <result column="variable_id_3" property="variableId3" jdbcType="BIGINT"/>
         <result column="value_3" property="value3" jdbcType="VARCHAR"/>
-        <result column="weight" property="weight" jdbcType="DOUBLE"/>
+        <result column="absWeight" property="weight" jdbcType="DOUBLE"/>
     </resultMap>
 
     <insert id="insertList">
@@ -23,5 +23,16 @@
         	#{homo.value},#{homo.weight}
         </foreach>
     </insert>
+
+    <select id="findList" parameterType="cn.realai.online.core.entity.PersonalComboResultSet" resultMap="PersonalComboResultSetMap">
+        SELECT *,ABS(weight) as `absWeight` FROM personal_homo
+        <where>
+            1=1
+            <if test="id!=null">
+               AND id = #{id}
+            </if>
+        </where>
+        ORDER BY ABS(weight) DESC
+    </select>
 
 </mapper>

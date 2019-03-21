@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import cn.realai.online.core.dao.BatchRecordDao;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.service.BatchRecordService;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,9 +20,20 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 	private BatchRecordDao batchRecordDao;
 	
 	@Override
-	public Long insert(BatchRecord batchRecord) {
+	public Integer insert(BatchRecord batchRecord) {
 		batchRecord.setCreateTime(System.currentTimeMillis());
 		return batchRecordDao.insert(batchRecord);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Integer delete(List<Long> idList) {
+		return batchRecordDao.delete(idList);
+	}
+
+	@Override
+	public BatchRecord getByEntity(BatchRecord batchRecord) {
+		return batchRecordDao.getByEntity(batchRecord);
 	}
 
 	@Override

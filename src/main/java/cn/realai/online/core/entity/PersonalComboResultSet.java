@@ -6,13 +6,13 @@ package cn.realai.online.core.entity;
  */
 public class PersonalComboResultSet {
 
-	private long id;
+	private Long id;
 	
 	//批次id
-	private long batchId;
+	private Long batchId;
 	
 	//实验样本人员信息id 主键id
-	private long pid;
+	private Long pid;
 	
 	//python计算返回 实验样本人员信息id（千人千面人员信息id）
 	private String personalId;
@@ -50,6 +50,53 @@ public class PersonalComboResultSet {
 	//权重
 	private double weight;
 
+	//python返回的批次标记字段，只做解析不需要入库
+	private String batchStr;
+
+	
+	public String getBatchStr() {
+		return batchStr;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getBatchId() {
+		return batchId;
+	}
+
+	public void setBatchId(Long batchId) {
+		this.batchId = batchId;
+	}
+
+	public Long getPid() {
+		return pid;
+	}
+
+	public void setPid(Long pid) {
+		this.pid = pid;
+	}
+
+	public String getPersonalId() {
+		return personalId;
+	}
+
+	public void setPersonalId(String personalId) {
+		this.personalId = personalId;
+	}
+
+	public long getExperimentId() {
+		return experimentId;
+	}
+
+	public void setExperimentId(long experimentId) {
+		this.experimentId = experimentId;
+	}
 
 	public long getVariableId1() {
 		return variableId1;
@@ -57,6 +104,14 @@ public class PersonalComboResultSet {
 
 	public void setVariableId1(long variableId1) {
 		this.variableId1 = variableId1;
+	}
+
+	public String getVariableName1() {
+		return variableName1;
+	}
+
+	public void setVariableName1(String variableName1) {
+		this.variableName1 = variableName1;
 	}
 
 	public String getValue1() {
@@ -75,36 +130,12 @@ public class PersonalComboResultSet {
 		this.variableId2 = variableId2;
 	}
 
-	public long getVariableId3() {
-		return variableId3;
+	public String getVariableName2() {
+		return variableName2;
 	}
 
-	public void setVariableId3(long variableId3) {
-		this.variableId3 = variableId3;
-	}
-
-	public long getExperimentId() {
-		return experimentId;
-	}
-
-	public void setExperimentId(long experimentId) {
-		this.experimentId = experimentId;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getPersonalId() {
-		return personalId;
-	}
-
-	public void setPersonalId(String personalId) {
-		this.personalId = personalId;
+	public void setVariableName2(String variableName2) {
+		this.variableName2 = variableName2;
 	}
 
 	public String getValue2() {
@@ -113,6 +144,22 @@ public class PersonalComboResultSet {
 
 	public void setValue2(String value2) {
 		this.value2 = value2;
+	}
+
+	public long getVariableId3() {
+		return variableId3;
+	}
+
+	public void setVariableId3(long variableId3) {
+		this.variableId3 = variableId3;
+	}
+
+	public String getVariableName3() {
+		return variableName3;
+	}
+
+	public void setVariableName3(String variableName3) {
+		this.variableName3 = variableName3;
 	}
 
 	public String getValue3() {
@@ -131,44 +178,8 @@ public class PersonalComboResultSet {
 		this.weight = weight;
 	}
 
-	public long getBatchId() {
-		return batchId;
-	}
-
-	public void setBatchId(long batchId) {
-		this.batchId = batchId;
-	}
-
-	public long getPid() {
-		return pid;
-	}
-
-	public void setPid(long pid) {
-		this.pid = pid;
-	}
-
-	public String getVariableName1() {
-		return variableName1;
-	}
-
-	public void setVariableName1(String variableName1) {
-		this.variableName1 = variableName1;
-	}
-
-	public String getVariableName2() {
-		return variableName2;
-	}
-
-	public void setVariableName2(String variableName2) {
-		this.variableName2 = variableName2;
-	}
-
-	public String getVariableName3() {
-		return variableName3;
-	}
-
-	public void setVariableName3(String variableName3) {
-		this.variableName3 = variableName3;
+	public void setBatchStr(String batchStr) {
+		this.batchStr = batchStr;
 	}
 
 }

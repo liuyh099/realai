@@ -2,6 +2,7 @@ package cn.realai.online.core.service.impl;
 
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import com.alibaba.fastjson.JSON;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import cn.realai.online.tool.redis.RedisClientTemplate;
 import cn.realai.online.util.ConvertJavaBean;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -151,4 +153,8 @@ public class ExperimentServiceImpl implements ExperimentService {
         return experimentDao.updateParam(experiment);
     }
 
+    @Override
+    public HashMap findByServiceIdAndReleaseStatus(Long serviceId, Integer releaseStatus) {
+        return experimentDao.findByServiceIdAndReleaseStatus(serviceId, releaseStatus);
+    }
 }

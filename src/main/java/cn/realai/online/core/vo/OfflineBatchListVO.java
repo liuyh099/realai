@@ -19,7 +19,7 @@ public class OfflineBatchListVO {
     private Long modelId;
 
     @ApiModelProperty(value="模型名称")
-    private String modeleName;
+    private String modelName;
 
     @ApiModelProperty(value="实验ID")
     private Long experimentId;
@@ -64,12 +64,12 @@ public class OfflineBatchListVO {
         this.modelId = modelId;
     }
 
-    public String getModeleName() {
-        return modeleName;
+    public String getModelName() {
+        return modelName;
     }
 
-    public void setModeleName(String modeleName) {
-        this.modeleName = modeleName;
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 
     public Long getExperimentId() {

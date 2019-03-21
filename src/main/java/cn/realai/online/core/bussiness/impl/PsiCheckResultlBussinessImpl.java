@@ -1,7 +1,7 @@
 package cn.realai.online.core.bussiness.impl;
 
 import cn.realai.online.core.bo.PsiResultBO;
-import cn.realai.online.core.bussiness.PsiCheckResultBusiness;
+import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
 import cn.realai.online.core.entity.PSICheckResult;
 import cn.realai.online.core.service.PsiChekcResultService;
 import cn.realai.online.core.vo.PsiCheckVO;
@@ -20,7 +20,7 @@ import java.util.List;
  * @create 2019-03-19 18:10
  */
 @Service
-public class PsiCheckResultlBusinessImpl implements PsiCheckResultBusiness {
+public class PsiCheckResultlBussinessImpl implements PsiCheckResultBussiness {
 
     @Autowired
     private PsiChekcResultService psiChekcResultService;

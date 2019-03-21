@@ -33,4 +33,43 @@
     	where experiment_id = #{experimentId}
     </select>
 
+
+    <select id="findList" resultMap="PersonalInformationMap" parameterType="cn.realai.online.core.entity.PersonalInformation">
+        select *
+    	form personal_information
+    	<where>
+            1=1
+            <if test="id!=null">
+                AND id = #{id}
+            </if>
+            <if test="experimentId!=null">
+                AND experiment_id = #{experimentId}
+            </if>
+            <if test="groupId!=null">
+                AND group_id = #{groupId}
+            </if>
+            <if test="batchId!=null">
+                AND batch_id = #{batchId}
+            </if>
+            <if test="personalName!=null and personalName!=''">
+                AND personal_name = #{personalName}
+            </if>
+            <if test="personalCardId!=null and personalCardId!=''">
+                AND personal_card_id = #{personalCardId}
+            </if>
+            <if test="phoneNum!=null and phoneNum!=''">
+                AND phone_num = #{phoneNum}
+            </if>
+            <if test="personalId!=null and personalId!=''">
+                AND personal_id = #{personalId}
+            </if>
+            <if test="inputStartDate!=null ">
+                AND order_date &gt;= #{inputStartDate}
+            </if>
+            <if test="inputEndDate!=null">
+                AND order_date &lt;= #{inputEndDate}
+            </if>
+        </where>
+    </select>
+
 </mapper>

@@ -116,8 +116,9 @@ public class TrainTask implements Runnable {
 		batchRecord.setExperimentId(experiment.getId());
 		batchRecord.setBatchName(experiment.getName() + "训练结果批次数据");
 		BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
-		Long batchRecordId = batchRecordService.insert(batchRecord);
-		
+		batchRecordService.insert(batchRecord);
+		Long batchRecordId = batchRecord.getId();
+
 		//解析千人千面同质和异质结果
 		analysisPersonalResultSet(redisClientTemplate.get(redisKey.getPersonalHomoResultSet()), 
 				redisClientTemplate.get(redisKey.getPersonalHetroResultSet()), piMap, batchRecordId);

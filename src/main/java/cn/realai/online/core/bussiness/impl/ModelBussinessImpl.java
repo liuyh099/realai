@@ -3,7 +3,7 @@ package cn.realai.online.core.bussiness.impl;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.ModelDetailBO;
 import cn.realai.online.core.bo.ModelListBO;
-import cn.realai.online.core.bussiness.ModelBusiness;
+import cn.realai.online.core.bussiness.ModelBussiness;
 import cn.realai.online.core.dao.ModelPerfomanceDao;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.ModelPerformance;
@@ -27,7 +27,7 @@ import java.util.List;
  * @create 2019-03-19 18:10
  */
 @Service
-public class ModelBusinessImpl implements ModelBusiness {
+public class ModelBussinessImpl implements ModelBussiness {
 
     @Autowired
     private ModelService modelService;

@@ -36,8 +36,10 @@
     </select>
 
     <select id="selectLatest" resultMap="ModelMap">
-        SELECT * from model
-        order by create_time desc
+        select m.* from model as m
+        join experiment as ep on m.experiment_id = ep.id
+        where ep.releas_status = 2
+        order by m.id desc
         limit 1
     </select>
 

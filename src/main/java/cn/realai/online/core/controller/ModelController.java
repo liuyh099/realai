@@ -5,8 +5,8 @@ import cn.realai.online.common.page.PageBO;
 import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
-import cn.realai.online.core.bussiness.ModelBusiness;
-import cn.realai.online.core.bussiness.PsiCheckResultBusiness;
+import cn.realai.online.core.bussiness.ModelBussiness;
+import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.query.ModelListQuery;
 import cn.realai.online.core.service.ModelService;
@@ -38,11 +38,11 @@ public class ModelController {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private ModelBusiness modelBusiness;
+    private ModelBussiness modelBusiness;
     @Autowired
     private ModelService modelService;
     @Autowired
-    private PsiCheckResultBusiness psiCheckResultBusiness;
+    private PsiCheckResultBussiness psiCheckResultBusiness;
 
     @GetMapping("/list")
     @ApiOperation(value = "查询模型列表")

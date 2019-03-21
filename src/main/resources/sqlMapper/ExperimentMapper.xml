@@ -143,5 +143,19 @@
 		</where>
 	</delete>
 
+	<select id="findByServiceIdAndReleaseStatus" resultType="java.util.HashMap">
+		select
+		ep.id as experimentId,
+		ep.name as experimentName,
+		sv.id as serviceId,
+		sv.name as serviceName
+		from service as sv
+		left join experiment as ep on ep.service_id = sv.id and ep.releas_status = #{releaseStatus}
+		<where>
+			sv.id = #{serviceId}
+		</where>
+		limit 1
+	</select>
+
   
 </mapper> 

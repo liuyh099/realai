@@ -4,7 +4,7 @@ import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.query.VariableDataQuery;
 import cn.realai.online.core.vo.VariableDataVO;
 
-public interface VariableDataBusiness {
+public interface VariableDataBussiness {
 	/**
 	 * 同质数据schema/异质数据schema
 	 * @param variableDataQuery
