@@ -123,7 +123,6 @@
         ep.algorithm_type as algorithmType,
         ep.tuning_count as tuningCount,
         '调优原因' as tuningReason,
-        'Y的定义' as ydefine,
         sv.type as serviceType,
         m.remark as remark
         from model as m
