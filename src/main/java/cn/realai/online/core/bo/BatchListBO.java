@@ -1,7 +1,4 @@
-package cn.realai.online.core.vo;
-
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+package cn.realai.online.core.bo;
 
 /**
  * 功能描述：TODO
@@ -9,43 +6,30 @@ import io.swagger.annotations.ApiModelProperty;
  * @author admin
  * @create 2019-03-18 14:28
  */
-@ApiModel
-public class OfflineBatchListVO {
+public class BatchListBO {
 
-    @ApiModelProperty(value="离线跑批id")
     private long batchId;
 
-    @ApiModelProperty(value="模型ID")
     private Long modelId;
 
-    @ApiModelProperty(value="模型名称")
     private String modelName;
 
-    @ApiModelProperty(value="实验ID")
     private Long experimentId;
 
-    @ApiModelProperty(value="实验名称")
     private String experimentName;
 
-    @ApiModelProperty(value="训练状态")
     private Integer status;
 
-    @ApiModelProperty(value="发布时间")
     private Long releaseTime;
 
-    @ApiModelProperty(value="服务Id")
     private Long serviceId;
 
-    @ApiModelProperty(value="服务名称")
     private String serviceName;
 
-    @ApiModelProperty(value="跑批次数")
     private Integer batchTimes;
 
-    @ApiModelProperty(value="下载结果")
     private String downUrl;
 
-    @ApiModelProperty(value="备注")
     private String remark;
 
     public long getBatchId() {

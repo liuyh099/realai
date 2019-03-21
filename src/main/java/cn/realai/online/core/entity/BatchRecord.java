@@ -2,123 +2,144 @@ package cn.realai.online.core.entity;
 
 /**
  * 批次记录
- *
  * @author lyh
  */
 public class BatchRecord {
 
-    private Long id;
+	private Long id;
+	
+	//y表数据源
+	private String ytableDataSource;
+	
+	//x表同质数据源
+	private String xtableHomogeneousDataSource;
+	
+	//x表异质数据源
+	private String xtableHeterogeneousDataSource;
+	
+	//实验id
+	private Long experimentId;
+	
+	//服务id
+	private Long serviceId;
+	
+	//创建时间
+	private Long createTime;
+	
+	//结果下载路径
+	private String downUrl;
+	
+	//批次类型
+	private Integer batchType;
+	
+	public static final int BATCH_TYPE_OFFLINE = 1; // 离线跑批
+	
+	public static final int BATCH_TYPE_DAILY = 2; //每日跑批
 
-    //y表数据源
-    private String ytableDataSource;
+	public static final int BATCH_TYPE_TRAIN = 3; //训练批次
 
-    //x表同质数据源
-    private String xtableHomogeneousDataSource;
+	//批次名称
+	private String batchName;
 
-    //x表异质数据源
-    private String xtableHeterogeneousDataSource;
+	private String remark;
 
-    //实验id
-    private Long experimentId;
+	public Long getId() {
+		return id;
+	}
 
-    //服务id
-    private Long serviceId;
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    //创建时间
-    private Long createTime;
+	public String getYtableDataSource() {
+		return ytableDataSource;
+	}
 
-    //结果下载路径
-    private String downUrl;
+	public void setYtableDataSource(String ytableDataSource) {
+		this.ytableDataSource = ytableDataSource;
+	}
 
-    //批次类型
-    private Integer batchType;
+	public String getXtableHomogeneousDataSource() {
+		return xtableHomogeneousDataSource;
+	}
 
-    public static final int BATCH_TYPE_OFFLINE = 1; // 离线跑批
+	public void setXtableHomogeneousDataSource(String xtableHomogeneousDataSource) {
+		this.xtableHomogeneousDataSource = xtableHomogeneousDataSource;
+	}
 
-    public static final int BATCH_TYPE_DAILY = 2; //每日跑批
+	public String getXtableHeterogeneousDataSource() {
+		return xtableHeterogeneousDataSource;
+	}
 
-    public static final int BATCH_TYPE_TRAIN = 3; //训练批次
+	public void setXtableHeterogeneousDataSource(String xtableHeterogeneousDataSource) {
+		this.xtableHeterogeneousDataSource = xtableHeterogeneousDataSource;
+	}
 
-    //批次名称
-    private String batchName;
+	public Long getExperimentId() {
+		return experimentId;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setExperimentId(Long experimentId) {
+		this.experimentId = experimentId;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getServiceId() {
+		return serviceId;
+	}
 
-    public String getYtableDataSource() {
-        return ytableDataSource;
-    }
+	public void setServiceId(Long serviceId) {
+		this.serviceId = serviceId;
+	}
 
-    public void setYtableDataSource(String ytableDataSource) {
-        this.ytableDataSource = ytableDataSource;
-    }
+	public Long getCreateTime() {
+		return createTime;
+	}
 
-    public String getXtableHomogeneousDataSource() {
-        return xtableHomogeneousDataSource;
-    }
+	public void setCreateTime(Long createTime) {
+		this.createTime = createTime;
+	}
 
-    public void setXtableHomogeneousDataSource(String xtableHomogeneousDataSource) {
-        this.xtableHomogeneousDataSource = xtableHomogeneousDataSource;
-    }
+	public String getDownUrl() {
+		return downUrl;
+	}
 
-    public String getXtableHeterogeneousDataSource() {
-        return xtableHeterogeneousDataSource;
-    }
+	public void setDownUrl(String downUrl) {
+		this.downUrl = downUrl;
+	}
 
-    public void setXtableHeterogeneousDataSource(String xtableHeterogeneousDataSource) {
-        this.xtableHeterogeneousDataSource = xtableHeterogeneousDataSource;
-    }
+	public Integer getBatchType() {
+		return batchType;
+	}
 
-    public Long getExperimentId() {
-        return experimentId;
-    }
+	public void setBatchType(Integer batchType) {
+		this.batchType = batchType;
+	}
 
-    public void setExperimentId(Long experimentId) {
-        this.experimentId = experimentId;
-    }
+	public static int getBatchTypeOffline() {
+		return BATCH_TYPE_OFFLINE;
+	}
 
-    public Long getServiceId() {
-        return serviceId;
-    }
+	public static int getBatchTypeDaily() {
+		return BATCH_TYPE_DAILY;
+	}
 
-    public void setServiceId(Long serviceId) {
-        this.serviceId = serviceId;
-    }
+	public static int getBatchTypeTrain() {
+		return BATCH_TYPE_TRAIN;
+	}
 
-    public Long getCreateTime() {
-        return createTime;
-    }
+	public String getBatchName() {
+		return batchName;
+	}
 
-    public void setCreateTime(Long createTime) {
-        this.createTime = createTime;
-    }
+	public void setBatchName(String batchName) {
+		this.batchName = batchName;
+	}
 
-    public String getDownUrl() {
-        return downUrl;
-    }
+	public String getRemark() {
+		return remark;
+	}
 
-    public void setDownUrl(String downUrl) {
-        this.downUrl = downUrl;
-    }
-
-    public Integer getBatchType() {
-        return batchType;
-    }
-
-    public void setBatchType(Integer batchType) {
-        this.batchType = batchType;
-    }
-
-    public String getBatchName() {
-        return batchName;
-    }
-
-    public void setBatchName(String batchName) {
-        this.batchName = batchName;
-    }
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }
