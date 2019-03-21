@@ -1,12 +1,12 @@
 package cn.realai.online.tool.lock;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.service.MLockService;
 
-@Configuration
+@Component
 public class MysqlLock {
 
 	@Autowired

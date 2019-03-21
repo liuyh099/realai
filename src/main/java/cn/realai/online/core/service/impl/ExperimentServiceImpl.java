@@ -14,8 +14,11 @@ import cn.realai.online.core.dao.ExperimentDao;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.service.ExperimentService;
+import cn.realai.online.tool.lock.MysqlLock;
 import cn.realai.online.tool.redis.RedisClientTemplate;
 import cn.realai.online.util.ConvertJavaBean;
+import cn.realai.online.util.SpringContextUtils;
+
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -138,7 +141,8 @@ public class ExperimentServiceImpl implements ExperimentService {
 
 	@Override
 	public MLock getExperimentTrainMLockInstance(long experimentId) {
-		return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId, Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
+		return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId, 
+				Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
 	}
 
     @Override

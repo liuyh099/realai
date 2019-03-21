@@ -25,14 +25,12 @@ public class MLock {
 	//结束时间
 	private long endTime;
 	
-	private MysqlLock mysqlLock;
+	private MysqlLock mysqlLock = SpringContextUtils.getBean(MysqlLock.class);
 	
 	public MLock(String lockKey, String lockValue, long expiredTime) {
 		this.lockKey = lockKey;
 		this.lockValue = lockValue;
 		this.expiredTime = expiredTime;
-		MysqlLock mysqlLock = SpringContextUtils.getBean(MysqlLock.class);
-		this.mysqlLock = mysqlLock;
 	}
 	
 	public MLock() {}

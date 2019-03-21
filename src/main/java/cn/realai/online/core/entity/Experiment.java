@@ -67,7 +67,7 @@ public class Experiment {
 	public static final int SELECT_YES = 2;
 
 	//样本选择类型
-		private int sampleSplitType;
+	private int sampleSplitType;
 	
 	//时间
 	public static final int SAMPLE_SPLIT_TYPE_TIME = 1;

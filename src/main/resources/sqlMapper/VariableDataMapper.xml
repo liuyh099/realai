@@ -54,6 +54,13 @@
 		</where>
 		ORDER BY create_time ASC
 	</select>
+	
+	<select id="selectDeleteListByExperimentId" resultMap="VariableDataMap">
+		select *
+		from variable_data
+		where experiment_id = #{experimentId}
+		and `delete` = 2
+	</select>
 
 	<update id="deleteVariableData">
 		UPDATE variable_data

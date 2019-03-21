@@ -2,6 +2,7 @@ package cn.realai.online.core.service;
 
 import java.util.List;
 
+import cn.realai.online.core.bo.HomoAndHetroBO;
 import cn.realai.online.core.bo.VariableDataBO;
 import cn.realai.online.core.entity.VariableData;
 
@@ -40,4 +41,11 @@ public interface VariableDataService {
 	 * @param ids
 	 */
 	void deleteVariableData(Long experimentId, List<Long> ids);
+
+	/**
+	 * 查询训练时要删除的列
+	 * @param experimentId
+	 * @return
+	 */
+	HomoAndHetroBO selectDeleteByExperimentId(Long experimentId);
 }

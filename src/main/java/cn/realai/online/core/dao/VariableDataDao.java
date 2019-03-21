@@ -25,4 +25,11 @@ public interface VariableDataDao {
 	 * @param ids
 	 */
 	void deleteVariableData(@Param("experimentId") Long experimentId,@Param("ids") List<Long> ids);
+
+	/**
+	 * 查询训练时被删除的列
+	 * @param experimentId
+	 * @return
+	 */
+	List<VariableData> selectDeleteListByExperimentId(@Param("experimentId")Long experimentId);
 }
