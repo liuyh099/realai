@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 @ApiModel
 public class ForgetVo {
 
-    @ApiModelProperty(value="用户名")
+    @ApiModelProperty(value = "用户名")
     @NotBlank(message = "用户名不能为空")
     private String name;
 

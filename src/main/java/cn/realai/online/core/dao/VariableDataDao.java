@@ -8,21 +8,30 @@ import cn.realai.online.core.entity.VariableData;
 
 public interface VariableDataDao {
 
-	int insertList(@Param("vdList")List<VariableData> vdList);
+    int insertList(@Param("vdList") List<VariableData> vdList);
 
-	List<VariableData> findListByExperimentId(@Param("experimentId")Long experimentId);
+    List<VariableData> findListByExperimentId(@Param("experimentId") Long experimentId);
 
-	/**
-	 * 查询同质异质参数
-	 * @param variableData
-	 * @return
-	 */
+    /**
+     * 查询同质异质参数
+     *
+     * @param variableData
+     * @return
+     */
     List<VariableData> findList(VariableData variableData);
 
+    /**
+     * 删除数据
+     *
+     * @param experimentId
+     * @param ids
+     */
+    void deleteVariableData(@Param("experimentId") Long experimentId, @Param("ids") List<Long> ids);
+
 	/**
-	 * 删除数据
+	 * 查询训练时被删除的列
 	 * @param experimentId
-	 * @param ids
+	 * @return
 	 */
-	void deleteVariableData(@Param("experimentId") Long experimentId,@Param("ids") List<Long> ids);
+	List<VariableData> selectDeleteListByExperimentId(@Param("experimentId")Long experimentId);
 }

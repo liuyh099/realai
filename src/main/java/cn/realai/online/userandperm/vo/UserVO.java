@@ -23,7 +23,7 @@ public class UserVO {
 
     //角色名称
     @ApiModelProperty(value = "角色名称")
-    private String  group;
+    private String group;
 
     @ApiModelProperty(value = "创建时间")
     private Long createTime;

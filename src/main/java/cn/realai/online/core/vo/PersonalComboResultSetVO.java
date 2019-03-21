@@ -2,6 +2,7 @@ package cn.realai.online.core.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 来源于 PersonalComboResultSet 需要根据ID 去变量表查询名称和含义
  */

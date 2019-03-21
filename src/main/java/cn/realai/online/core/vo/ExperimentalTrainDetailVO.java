@@ -8,75 +8,75 @@ import io.swagger.annotations.ApiModelProperty;
 public class ExperimentalTrainDetailVO {
 
     //实验id
-    @ApiModelProperty(value="实验id")
+    @ApiModelProperty(value = "实验id")
     private long id;
 
     //实验名称
-    @ApiModelProperty(value="实验名称",example = "实验名称")
+    @ApiModelProperty(value = "实验名称", example = "实验名称")
     private String name;
 
     //服务名称
-    @ApiModelProperty(value="服务名称",example = "服务名称")
-    private String serviceName ;
+    @ApiModelProperty(value = "服务名称", example = "服务名称")
+    private String serviceName;
 
     //服务Id
-    @ApiModelProperty(value="服务Id",example = "1")
+    @ApiModelProperty(value = "服务Id", example = "1")
     private String serviceId;
 
     //训练状态
-    @ApiModelProperty(value="训练状态", example = "1")
+    @ApiModelProperty(value = "训练状态", example = "1")
     private int status;
 
     //实验状态
-    @ApiModelProperty(value="实验状态",example = "1")
+    @ApiModelProperty(value = "实验状态", example = "1")
     private int releasStatus;
 
     //y表数据源
-    @ApiModelProperty(value="y表数据源")
+    @ApiModelProperty(value = "y表数据源")
     private String ytableDataSource;
 
     //x表同质数据源
-    @ApiModelProperty(value="x表同质数据源")
+    @ApiModelProperty(value = "x表同质数据源")
     private String xtableHomogeneousDataSource;
 
     //x表异质数据源
-    @ApiModelProperty(value="x表异质数据源")
+    @ApiModelProperty(value = "x表异质数据源")
     private String xtableHeterogeneousDataSource;
 
     //是否选择验证集
-    @ApiModelProperty(value="是否选择验证集",example = "1")
+    @ApiModelProperty(value = "是否选择验证集", example = "1")
     private Integer verificationSet;
 
     //训练比例  trainRatio + trainTest + trainValid = 10
-    @ApiModelProperty(value="训练比例")
+    @ApiModelProperty(value = "训练比例")
     private Integer trainRatio;
 
     //测试比例
-    @ApiModelProperty(value="测试比例")
+    @ApiModelProperty(value = "测试比例")
     private Integer testRatio;
 
     //验证比例
-    @ApiModelProperty(value="验证比例")
+    @ApiModelProperty(value = "验证比例")
     private Integer validRatio;
 
     //创建时间
-    @ApiModelProperty(value="创建时间",example = "1552621502000")
+    @ApiModelProperty(value = "创建时间", example = "1552621502000")
     private long createTime;
 
     //训练时间
-    @ApiModelProperty(value="训练时间",example = "1552621502000")
+    @ApiModelProperty(value = "训练时间", example = "1552621502000")
     private long trainingTime;
 
     //发布时间
-    @ApiModelProperty(value="发布时间",example = "1552621502000")
+    @ApiModelProperty(value = "发布时间", example = "1552621502000")
     private long releaseTime;
 
     //调优次数
-    @ApiModelProperty(value="调优次数", example = "1")
+    @ApiModelProperty(value = "调优次数", example = "1")
     private int tuningCount;
 
     //备注
-    @ApiModelProperty(value="备注",example = "1")
+    @ApiModelProperty(value = "备注", example = "1")
     private String remark;
 
     public long getId() {

@@ -21,7 +21,7 @@ public class WhileBoxScoreCardVO {
     @ApiModelProperty(value = "分箱范围-当请求类型是image时不返回")
     private String boxBeans;
 
-    @ApiModelProperty(value = "变量类型-当请求类型是image时不返回",example = "1:同质 2：异质")
+    @ApiModelProperty(value = "变量类型-当请求类型是image时不返回", example = "1:同质 2：异质")
     private int variableType;
 
     @ApiModelProperty(value = "权重-当请求类型是image时不返回")
@@ -42,6 +42,7 @@ public class WhileBoxScoreCardVO {
     public String getVariableName() {
         return variableName;
     }
+
     public void setVariableName(String variableName) {
         this.variableName = variableName;
     }

@@ -13,18 +13,18 @@ import redis.clients.jedis.JedisCluster;
 @Configuration
 public class JedisClusterClient {
 
-	@Autowired
+    @Autowired
     private RedisConfig redisConfig;
-	
-	public JedisCluster getJedisCluster(){
-        String [] serverArray = redisConfig.getClusterNodes().split(",");
+
+    public JedisCluster getJedisCluster() {
+        String[] serverArray = redisConfig.getClusterNodes().split(",");
         Set<HostAndPort> nodes = new HashSet<>();
 
-        for (String ipPort:serverArray){
-            String [] ipPortPair=ipPort.split(":");
-            nodes.add(new HostAndPort(ipPortPair[0].trim(),Integer.valueOf(ipPortPair[1].trim())));
+        for (String ipPort : serverArray) {
+            String[] ipPortPair = ipPort.split(":");
+            nodes.add(new HostAndPort(ipPortPair[0].trim(), Integer.valueOf(ipPortPair[1].trim())));
         }
-        return  new JedisCluster(nodes, redisConfig.getCommandTimeout());
+        return new JedisCluster(nodes, redisConfig.getCommandTimeout());
     }
-	
+
 }

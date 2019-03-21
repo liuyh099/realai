@@ -19,14 +19,14 @@
 
     <insert id="insertList">
         INSERT INTO personal_information(experiment_id,group_id,batch_id,personal_name,stage,personal_card_id,
-        	phone_num,personal_id,create_time,order_date,label,probability)
+        phone_num,personal_id,create_time,order_date,label,probability)
         VALUES
         <foreach collection="piList" open="(" close=")" separator="," item="pi">
-        	(#{pi.experimentId},#{pi.groupId},#{pi.batchId},#{pi.personalName},#{pi.stage},#{pi.personalCardId},#{pi.phoneNum},
-        		#{pi.personalId},#{pi.createTime},#{pi.orderDate},#{pi.label},#{pi.probability})
+            (#{pi.experimentId},#{pi.groupId},#{pi.batchId},#{pi.personalName},#{pi.stage},#{pi.personalCardId},#{pi.phoneNum},
+            #{pi.personalId},#{pi.createTime},#{pi.orderDate},#{pi.label},#{pi.probability})
         </foreach>
     </insert>
-    
+
     <select id="findListByExperimentId" resultMap="PersonalInformationMap">
     	select * 
     	form personal_information
@@ -34,10 +34,11 @@
     </select>
 
 
-    <select id="findList" resultMap="PersonalInformationMap" parameterType="cn.realai.online.core.entity.PersonalInformation">
+    <select id="findList" resultMap="PersonalInformationMap"
+            parameterType="cn.realai.online.core.entity.PersonalInformation">
         select *
-    	form personal_information
-    	<where>
+        form personal_information
+        <where>
             1=1
             <if test="id!=null">
                 AND id = #{id}

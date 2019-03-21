@@ -7,60 +7,60 @@ import com.alibaba.fastjson.JSON;
 
 /**
  * python 回调时发送的json数据封装类
- * @author 86183
  *
+ * @author 86183
  */
 public class ModelRequestStructure {
 
-	private Long experimentId;
-	
+    private Long experimentId;
+
     private String task;
-     
+
     private Integer code;
-    
+
     private String msg;
-    
+
     private String data;
-    
-	public Long getExperimentId() {
-		return experimentId;
-	}
 
-	public void setExperimentId(Long experimentId) {
-		this.experimentId = experimentId;
-	}
+    public Long getExperimentId() {
+        return experimentId;
+    }
 
-	public String getTask() {
-		return task;
-	}
+    public void setExperimentId(Long experimentId) {
+        this.experimentId = experimentId;
+    }
 
-	public void setTask(String task) {
-		this.task = task;
-	}
+    public String getTask() {
+        return task;
+    }
 
-	public Integer getCode() {
-		return code;
-	}
+    public void setTask(String task) {
+        this.task = task;
+    }
 
-	public void setCode(Integer code) {
-		this.code = code;
-	}
+    public Integer getCode() {
+        return code;
+    }
 
-	public String getMsg() {
-		return msg;
-	}
+    public void setCode(Integer code) {
+        this.code = code;
+    }
 
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
+    public String getMsg() {
+        return msg;
+    }
 
-	public String getData() {
-		return data;
-	}
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
 
-	public void setData(String data) {
-		this.data = data;
-		
-	}
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+
+    }
 
 }

@@ -31,6 +31,7 @@ public class VariableDataBussinessImpl implements VariableDataBussiness {
 
     /**
      * 根据实验id和模式类型等分页查询变量数据
+     *
      * @param variableDataQuery
      * @return
      */

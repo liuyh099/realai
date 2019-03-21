@@ -2,80 +2,94 @@ package cn.realai.online.core.entity;
 
 /**
  * psi检测结果
+ *
  * @author lyh
  */
 public class PSICheckResult {
 
-	private long id;
-	
-	//值
-	private double psi;
+    private long id;
 
-	//变量Id
-	private String variableId;
-	
-	private long experimentId;
-	
-	//预警标志
-	private int aler; //1.不预警 2.预警
+    //值
+    private double psi;
 
-	public static enum STATUS {
-		YES(1, "不预警"),
-		NO(2, "不预警");
+    //变量Id
+    private String variableId;
 
-		private int value;
-		private String desc;
-		STATUS(int value, String desc) {
-			this.value = value;
-			this.desc = desc;
-		}
-		public static String getDesc(int value) {
-			for (STATUS c : STATUS.values()) {
-				if (c.value == value) {
-					return c.desc;
-				}
-			}
-			return null;
-		}
-	}
+    private long experimentId;
 
-	public long getId() {
-		return id;
-	}
+    //预警标志
+    private int aler; //1.不预警 2.预警
+    
+    //python返回的批次标记字段，只做解析不需要入库
+    private String batchStr;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public String getBatchStr() {
+        return batchStr;
+    }
 
-	public double getPsi() {
-		return psi;
-	}
+    public void setBatchStr(String batchStr) {
+        this.batchStr = batchStr;
+    }
 
-	public void setPsi(double psi) {
-		this.psi = psi;
-	}
+    public static enum STATUS {
+        YES(1, "不预警"),
+        NO(2, "不预警");
 
-	public String getVariableId() {
-		return variableId;
-	}
+        private int value;
+        private String desc;
 
-	public void setVariableId(String variableId) {
-		this.variableId = variableId;
-	}
+        STATUS(int value, String desc) {
+            this.value = value;
+            this.desc = desc;
+        }
 
-	public long getExperimentId() {
-		return experimentId;
-	}
+        public static String getDesc(int value) {
+            for (STATUS c : STATUS.values()) {
+                if (c.value == value) {
+                    return c.desc;
+                }
+            }
+            return null;
+        }
+    }
 
-	public void setExperimentId(long experimentId) {
-		this.experimentId = experimentId;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public int getAler() {
-		return aler;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setAler(int aler) {
-		this.aler = aler;
-	}
+    public double getPsi() {
+        return psi;
+    }
+
+    public void setPsi(double psi) {
+        this.psi = psi;
+    }
+
+    public String getVariableId() {
+        return variableId;
+    }
+
+    public void setVariableId(String variableId) {
+        this.variableId = variableId;
+    }
+
+    public long getExperimentId() {
+        return experimentId;
+    }
+
+    public void setExperimentId(long experimentId) {
+        this.experimentId = experimentId;
+    }
+
+    public int getAler() {
+        return aler;
+    }
+
+    public void setAler(int aler) {
+        this.aler = aler;
+    }
 }

@@ -11,14 +11,14 @@
     </resultMap>
 
     <select id="findList" parameterType="cn.realai.online.userandperm.entity.SysMenu" resultMap="SysMenuMap">
-        SELECT *  FROM sys_menu
+        SELECT * FROM sys_menu
         <where>
             1=1
             <if test="parentId !=null">
-                and  parent_id = #{parentId}
+                and parent_id = #{parentId}
             </if>
             <if test="id !=null">
-                and  id = #{id}
+                and id = #{id}
             </if>
         </where>
         ORDER BY sort ASC

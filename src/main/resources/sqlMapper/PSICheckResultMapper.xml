@@ -4,8 +4,8 @@
     <resultMap type="cn.realai.online.core.entity.PSICheckResult" id="PSICheckResultMap">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="psi" property="psi" jdbcType="DECIMAL"/>
-        <result column="variableId" property="variable_d" jdbcType="BIGINT"/>
-        <result column="experimentId" property="experiment_id" jdbcType="BIGINT"/>
+        <result column="variable_id" property="variableId" jdbcType="BIGINT"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
         <result column="aler" property="aler" jdbcType="TINYINT"/>
     </resultMap>
 
@@ -55,11 +55,10 @@
         join variable_data as vd on psi.variable_id = vd.id
         join model as m on psi.experiment_id = m.experiment_id
         <where>
-          m.id = #{modelId}
+            m.id = #{modelId}
         </where>
         order by psi.id
     </select>
-
 
 
 </mapper>

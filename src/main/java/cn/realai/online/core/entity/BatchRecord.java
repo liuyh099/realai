@@ -41,6 +41,8 @@ public class BatchRecord {
 	//批次名称
 	private String batchName;
 
+	private String remark;
+
 	public Long getId() {
 		return id;
 	}
@@ -113,11 +115,31 @@ public class BatchRecord {
 		this.batchType = batchType;
 	}
 
+	public static int getBatchTypeOffline() {
+		return BATCH_TYPE_OFFLINE;
+	}
+
+	public static int getBatchTypeDaily() {
+		return BATCH_TYPE_DAILY;
+	}
+
+	public static int getBatchTypeTrain() {
+		return BATCH_TYPE_TRAIN;
+	}
+
 	public String getBatchName() {
 		return batchName;
 	}
 
 	public void setBatchName(String batchName) {
 		this.batchName = batchName;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }

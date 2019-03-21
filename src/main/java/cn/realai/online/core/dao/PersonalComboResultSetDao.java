@@ -8,10 +8,11 @@ import cn.realai.online.core.entity.PersonalComboResultSet;
 
 public interface PersonalComboResultSetDao {
 
-	void insertList(@Param("comboList")List<PersonalComboResultSet> comboList);
+    void insertList(@Param("comboList") List<PersonalComboResultSet> comboList);
 
     /**
      * 查询异质最强
+     *
      * @param personal
      * @return
      */

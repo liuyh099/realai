@@ -2,192 +2,193 @@ package cn.realai.online.core.entity;
 
 /**
  * 风控结果集（实验评估风控）
+ *
  * @author lyh
  */
 public class ExperimentResultSet {
 
-	private Long id;
-	
-	//实验id
-	private Long experimentId;
+    private Long id;
 
-	private Long parentId;
-	
-	//数据集类型
-	private Integer dataSetType;
-	
-	//平均切分的十组数据名称，不同于聚类分组
-	private String groupName;
-	
-	//
-	private double minPro;
-	
-	//
-	private int minProScore;
-	
-	//
-	private double maxPro;
-	
-	//
-	private int maxProScore;
-	
-	//
-	private int negtiveCount;
-	
-	//
-	private int postiveCount;
-	
-	//
-	private int count;
-	
-	//
-	private double negtiveCountInPostiveCount;
-	
-	//
-	private double positiveRatio;
-	
-	//
-	private double cumulativePositiveRatio;
-	
-	//
-	private double postiveCountInTotalPositiveCount;
-	
-	//
-	private double cumulativePostiveCountInTotalPositiveCount;
+    //实验id
+    private Long experimentId;
 
-	public Long getParentId() {
-		return parentId;
-	}
+    private Long parentId;
 
-	public void setParentId(Long parentId) {
-		this.parentId = parentId;
-	}
+    //数据集类型
+    private Integer dataSetType;
 
-	public Long getId() {
-		return id;
-	}
+    //平均切分的十组数据名称，不同于聚类分组
+    private String groupName;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    //
+    private double minPro;
 
-	public Long getExperimentId() {
-		return experimentId;
-	}
+    //
+    private int minProScore;
 
-	public void setExperimentId(Long experimentId) {
-		this.experimentId = experimentId;
-	}
+    //
+    private double maxPro;
 
-	public Integer getDataSetType() {
-		return dataSetType;
-	}
+    //
+    private int maxProScore;
 
-	public void setDataSetType(Integer dataSetType) {
-		this.dataSetType = dataSetType;
-	}
+    //
+    private int negtiveCount;
 
-	public double getMinPro() {
-		return minPro;
-	}
+    //
+    private int postiveCount;
 
-	public void setMinPro(double minPro) {
-		this.minPro = minPro;
-	}
+    //
+    private int count;
 
-	public int getMinProScore() {
-		return minProScore;
-	}
+    //
+    private double negtiveCountInPostiveCount;
 
-	public void setMinProScore(int minProScore) {
-		this.minProScore = minProScore;
-	}
+    //
+    private double positiveRatio;
 
-	public double getMaxPro() {
-		return maxPro;
-	}
+    //
+    private double cumulativePositiveRatio;
 
-	public void setMaxPro(double maxPro) {
-		this.maxPro = maxPro;
-	}
+    //
+    private double postiveCountInTotalPositiveCount;
 
-	public int getMaxProScore() {
-		return maxProScore;
-	}
+    //
+    private double cumulativePostiveCountInTotalPositiveCount;
 
-	public void setMaxProScore(int maxProScore) {
-		this.maxProScore = maxProScore;
-	}
+    public Long getParentId() {
+        return parentId;
+    }
 
-	public int getNegtiveCount() {
-		return negtiveCount;
-	}
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
 
-	public void setNegtiveCount(int negtiveCount) {
-		this.negtiveCount = negtiveCount;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public int getPostiveCount() {
-		return postiveCount;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setPostiveCount(int postiveCount) {
-		this.postiveCount = postiveCount;
-	}
+    public Long getExperimentId() {
+        return experimentId;
+    }
 
-	public int getCount() {
-		return count;
-	}
+    public void setExperimentId(Long experimentId) {
+        this.experimentId = experimentId;
+    }
 
-	public void setCount(int count) {
-		this.count = count;
-	}
+    public Integer getDataSetType() {
+        return dataSetType;
+    }
 
-	public double getNegtiveCountInPostiveCount() {
-		return negtiveCountInPostiveCount;
-	}
+    public void setDataSetType(Integer dataSetType) {
+        this.dataSetType = dataSetType;
+    }
 
-	public void setNegtiveCountInPostiveCount(double negtiveCountInPostiveCount) {
-		this.negtiveCountInPostiveCount = negtiveCountInPostiveCount;
-	}
+    public double getMinPro() {
+        return minPro;
+    }
 
-	public double getPositiveRatio() {
-		return positiveRatio;
-	}
+    public void setMinPro(double minPro) {
+        this.minPro = minPro;
+    }
 
-	public void setPositiveRatio(double positiveRatio) {
-		this.positiveRatio = positiveRatio;
-	}
+    public int getMinProScore() {
+        return minProScore;
+    }
 
-	public double getCumulativePositiveRatio() {
-		return cumulativePositiveRatio;
-	}
+    public void setMinProScore(int minProScore) {
+        this.minProScore = minProScore;
+    }
 
-	public void setCumulativePositiveRatio(double cumulativePositiveRatio) {
-		this.cumulativePositiveRatio = cumulativePositiveRatio;
-	}
+    public double getMaxPro() {
+        return maxPro;
+    }
 
-	public double getPostiveCountInTotalPositiveCount() {
-		return postiveCountInTotalPositiveCount;
-	}
+    public void setMaxPro(double maxPro) {
+        this.maxPro = maxPro;
+    }
 
-	public void setPostiveCountInTotalPositiveCount(double postiveCountInTotalPositiveCount) {
-		this.postiveCountInTotalPositiveCount = postiveCountInTotalPositiveCount;
-	}
+    public int getMaxProScore() {
+        return maxProScore;
+    }
 
-	public double getCumulativePostiveCountInTotalPositiveCount() {
-		return cumulativePostiveCountInTotalPositiveCount;
-	}
+    public void setMaxProScore(int maxProScore) {
+        this.maxProScore = maxProScore;
+    }
 
-	public void setCumulativePostiveCountInTotalPositiveCount(double cumulativePostiveCountInTotalPositiveCount) {
-		this.cumulativePostiveCountInTotalPositiveCount = cumulativePostiveCountInTotalPositiveCount;
-	}
-	
-	public String getGroupName() {
-		return groupName;
-	}
+    public int getNegtiveCount() {
+        return negtiveCount;
+    }
 
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
-	}
+    public void setNegtiveCount(int negtiveCount) {
+        this.negtiveCount = negtiveCount;
+    }
+
+    public int getPostiveCount() {
+        return postiveCount;
+    }
+
+    public void setPostiveCount(int postiveCount) {
+        this.postiveCount = postiveCount;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public double getNegtiveCountInPostiveCount() {
+        return negtiveCountInPostiveCount;
+    }
+
+    public void setNegtiveCountInPostiveCount(double negtiveCountInPostiveCount) {
+        this.negtiveCountInPostiveCount = negtiveCountInPostiveCount;
+    }
+
+    public double getPositiveRatio() {
+        return positiveRatio;
+    }
+
+    public void setPositiveRatio(double positiveRatio) {
+        this.positiveRatio = positiveRatio;
+    }
+
+    public double getCumulativePositiveRatio() {
+        return cumulativePositiveRatio;
+    }
+
+    public void setCumulativePositiveRatio(double cumulativePositiveRatio) {
+        this.cumulativePositiveRatio = cumulativePositiveRatio;
+    }
+
+    public double getPostiveCountInTotalPositiveCount() {
+        return postiveCountInTotalPositiveCount;
+    }
+
+    public void setPostiveCountInTotalPositiveCount(double postiveCountInTotalPositiveCount) {
+        this.postiveCountInTotalPositiveCount = postiveCountInTotalPositiveCount;
+    }
+
+    public double getCumulativePostiveCountInTotalPositiveCount() {
+        return cumulativePostiveCountInTotalPositiveCount;
+    }
+
+    public void setCumulativePostiveCountInTotalPositiveCount(double cumulativePostiveCountInTotalPositiveCount) {
+        this.cumulativePostiveCountInTotalPositiveCount = cumulativePostiveCountInTotalPositiveCount;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 }

@@ -4,9 +4,9 @@
     <resultMap type="cn.realai.online.core.entity.Model" id="ModelMap">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="createTime" property="create_time" jdbcType="TIMESTAMP"/>
-        <result column="experimentId" property="experiment_id" jdbcType="BIGINT"/>
-        <result column="serviceId" property="service_id" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" jdbcType="BIGINT"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+        <result column="service_id" property="serviceId" jdbcType="BIGINT"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
@@ -14,6 +14,16 @@
         INSERT INTO model (name,create_time,experiment_id,service_id,remark)
         VALUE (#{name},#{createTime},#{experimentId},#{serviceId},#{remark})
     </insert>
+
+    <select id="findList" parameterType="cn.realai.online.core.entity.Model" resultMap="ModelMap">
+        SELECT * FROM model
+        <where>
+            1=1
+            <if test="name!=null and name!=''">
+                AND name = #{name}
+            </if>
+        </where>
+    </select>
 
 
     <update id="update" parameterType="cn.realai.online.core.entity.Model">
@@ -36,8 +46,10 @@
     </select>
 
     <select id="selectLatest" resultMap="ModelMap">
-        SELECT * from model
-        order by create_time desc
+        select m.* from model as m
+        join experiment as ep on m.experiment_id = ep.id
+        where ep.releas_status = 2
+        order by m.id desc
         limit 1
     </select>
 
@@ -119,11 +131,10 @@
         join service as sv on m.service_id = sv.id
         <!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错-->
         <where>
-          m.id = #{modelId}
+            m.id = #{modelId}
         </where>
         limit 1
     </select>
-
 
 
 </mapper>

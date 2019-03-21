@@ -1,4 +1,5 @@
 package cn.realai.online.tool.http;
+
 import java.io.*;
 import java.util.Collection;
 import java.util.Date;
@@ -7,7 +8,6 @@ import java.util.Map;
 import cn.realai.online.tool.http.XHttpTools.XBody;
 import cn.realai.online.tool.http.XHttpTools.XResp;
 import cn.realai.online.tool.http.XHttpTools.XUrl;
-
 
 
 /**

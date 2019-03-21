@@ -17,7 +17,7 @@ public class BaseController extends BaseRequest {
 
     private static Logger logger = LoggerFactory.getLogger(BaseController.class);
 
-     /* 获取Tomcatsession
+    /* 获取Tomcatsession
      *
      * @return
      */
@@ -27,12 +27,13 @@ public class BaseController extends BaseRequest {
 
     /**
      * 从session获取用户的登录信息
-     * @author A tanxh
+     *
      * @return null：session中没找到用户信息，用户可能没有登录；
+     * @author A tanxh
      */
     protected UserLoginInfo getCurrentLoginUserInfo() {
-    	UserLoginInfo userLoginInfo = (UserLoginInfo) request.getAttribute(Constants.REQUEST_USER_LOGIN_INFO);
-    	if(userLoginInfo != null){
+        UserLoginInfo userLoginInfo = (UserLoginInfo) request.getAttribute(Constants.REQUEST_USER_LOGIN_INFO);
+        if (userLoginInfo != null) {
             return (UserLoginInfo) userLoginInfo;
         }
         logger.error("BaseController getCurrentLoginUserInfo 登录信息未获取到");
@@ -41,11 +42,12 @@ public class BaseController extends BaseRequest {
 
     /**
      * 返回session中存储的当前登录用户userid
-     * @author A tanxh
+     *
      * @return -1:session中没找到用户信息，用户可能没有登录； 其他：用户id
+     * @author A tanxh
      */
     protected long getCurrentLoginUserId() {
-    	UserLoginInfo userLoginInfo = getCurrentLoginUserInfo();
+        UserLoginInfo userLoginInfo = getCurrentLoginUserInfo();
         if (userLoginInfo != null) {
             return userLoginInfo.getId();
         }

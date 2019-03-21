@@ -7,18 +7,21 @@ import java.util.List;
 public interface UserService {
     /**
      * 查询用户列表
+     *
      * @return
      */
     List<User> list(User user);
 
     /**
      * 插入数据
+     *
      * @param user
      */
     Integer insert(User user);
 
     /**
      * 根据ID集合删除用户
+     *
      * @param ids
      * @return
      */
@@ -26,6 +29,7 @@ public interface UserService {
 
     /**
      * 获得用户详情
+     *
      * @param id
      * @return
      */
@@ -33,6 +37,7 @@ public interface UserService {
 
     /**
      * 更新用户信息
+     *
      * @param user
      * @return
      */
@@ -40,6 +45,7 @@ public interface UserService {
 
     /**
      * 更新用户密码
+     *
      * @param user
      * @return
      */
@@ -47,6 +53,7 @@ public interface UserService {
 
     /**
      * 根据用户名或者手机查询用户
+     *
      * @param username
      * @return
      */
@@ -54,6 +61,7 @@ public interface UserService {
 
     /**
      * 检查用户旧密码
+     *
      * @param oldPwd
      * @return
      */

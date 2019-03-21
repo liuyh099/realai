@@ -14,37 +14,37 @@ import java.math.BigDecimal;
 @ApiModel
 public class ModelListVO {
 
-    @ApiModelProperty(value="模型id")
+    @ApiModelProperty(value = "模型id")
     private long modelId;
 
-    @ApiModelProperty(value="服务名称")
+    @ApiModelProperty(value = "服务名称")
     private String modelName;
 
-    @ApiModelProperty(value="服务名称")
+    @ApiModelProperty(value = "服务名称")
     private String serviceName;
 
-    @ApiModelProperty(value="实验id")
+    @ApiModelProperty(value = "实验id")
     private long experimentId;
 
-    @ApiModelProperty(value="来源实验")
+    @ApiModelProperty(value = "来源实验")
     private String experementName;
 
-    @ApiModelProperty(value="上线时间")
+    @ApiModelProperty(value = "上线时间")
     private String releaseTime;
 
-    @ApiModelProperty(value="算法")
+    @ApiModelProperty(value = "算法")
     private String algorithm;
 
-    @ApiModelProperty(value="调优序列")
+    @ApiModelProperty(value = "调优序列")
     private String tuningNo;
 
-    @ApiModelProperty(value="调优原因")
+    @ApiModelProperty(value = "调优原因")
     private String tuningReason;
 
-    @ApiModelProperty(value="psi喇叭值[0：psi不大于0.1，1：psi大于0.1]",example = "0,1")
+    @ApiModelProperty(value = "psi喇叭值[0：psi不大于0.1，1：psi大于0.1]", example = "0,1")
     private int psi;
 
-    @ApiModelProperty(value="是否预警")
+    @ApiModelProperty(value = "是否预警")
     private int aler;
 
 

@@ -3,7 +3,7 @@
 <mapper namespace="cn.realai.online.core.dao.ModelPerfomanceDao">
     <resultMap type="cn.realai.online.core.entity.ModelPerformance" id="ModelPerformanceMap">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="metic_name" property="metricName" jdbcType="VARCHAR"/>
+        <result column="metric_name" property="metricName" jdbcType="VARCHAR"/>
         <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
         <result column="training_set" property="trainingSet" jdbcType="DECIMAL"/>
         <result column="valid_set" property="validSet" jdbcType="DECIMAL"/>
@@ -16,11 +16,11 @@
         VALUE (#{name},#{createTime},#{experimentId},#{trainingSet},#{testSet},#{validSet})
     </insert>
 
-	<insert id="insertList">
+    <insert id="insertList">
         INSERT INTO model_perfomance (name,create_time,experiment_id,training_set,test_set,valid_set)
-        VALUE 
+        VALUE
         <foreach collection="modelPerformanceList" open="(" close=")" separator="," item="mp">
-        	#{mp.name},#{mp.createTime},#{mp.experimentId},#{mp.trainingSet},#{mp.testSet},#{mp.validSet}
+            #{mp.name},#{mp.createTime},#{mp.experimentId},#{mp.trainingSet},#{mp.testSet},#{mp.validSet}
         </foreach>
     </insert>
 
@@ -42,6 +42,16 @@
         SELECT * from model
         <where>
             id =#{id}
+        </where>
+    </select>
+
+    <select id="findList" resultMap="ModelPerformanceMap" parameterType="cn.realai.online.core.entity.ModelPerformance">
+        SELECT * FROM model_performance
+        <where>
+            1=1
+            <if test="experimentId!=null">
+                experiment_id = #{experimentId}
+            </if>
         </where>
     </select>
 

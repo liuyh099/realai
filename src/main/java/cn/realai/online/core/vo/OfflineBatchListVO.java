@@ -15,25 +15,34 @@ public class OfflineBatchListVO {
     @ApiModelProperty(value="离线跑批id")
     private long batchId;
 
+    @ApiModelProperty(value="模型ID")
+    private Long modelId;
+
     @ApiModelProperty(value="模型名称")
-    private String modeleName;
+    private String modelName;
+
+    @ApiModelProperty(value="实验ID")
+    private Long experimentId;
+
+    @ApiModelProperty(value="实验名称")
+    private String experimentName;
+
+    @ApiModelProperty(value="训练状态")
+    private Integer status;
+
+    @ApiModelProperty(value="发布时间")
+    private Long releaseTime;
+
+    @ApiModelProperty(value="服务Id")
+    private Long serviceId;
 
     @ApiModelProperty(value="服务名称")
     private String serviceName;
 
-    @ApiModelProperty(value="发布时间")
-    private String releaseTime;
-
     @ApiModelProperty(value="跑批次数")
-    private String runBatchNum;
+    private Integer batchTimes;
 
-    @ApiModelProperty(value="跑批时间")
-    private String runBatchTime;
-
-    @ApiModelProperty(value="训练状态")
-    private String trainStatusName;
-
-    @ApiModelProperty(value="离线跑批结果下载地址")
+    @ApiModelProperty(value="下载结果")
     private String downUrl;
 
     @ApiModelProperty(value="备注")
@@ -47,12 +56,60 @@ public class OfflineBatchListVO {
         this.batchId = batchId;
     }
 
-    public String getModeleName() {
-        return modeleName;
+    public Long getModelId() {
+        return modelId;
     }
 
-    public void setModeleName(String modeleName) {
-        this.modeleName = modeleName;
+    public void setModelId(Long modelId) {
+        this.modelId = modelId;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public Long getExperimentId() {
+        return experimentId;
+    }
+
+    public void setExperimentId(Long experimentId) {
+        this.experimentId = experimentId;
+    }
+
+    public String getExperimentName() {
+        return experimentName;
+    }
+
+    public void setExperimentName(String experimentName) {
+        this.experimentName = experimentName;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Long getReleaseTime() {
+        return releaseTime;
+    }
+
+    public void setReleaseTime(Long releaseTime) {
+        this.releaseTime = releaseTime;
+    }
+
+    public Long getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(Long serviceId) {
+        this.serviceId = serviceId;
     }
 
     public String getServiceName() {
@@ -63,36 +120,12 @@ public class OfflineBatchListVO {
         this.serviceName = serviceName;
     }
 
-    public String getReleaseTime() {
-        return releaseTime;
+    public Integer getBatchTimes() {
+        return batchTimes;
     }
 
-    public void setReleaseTime(String releaseTime) {
-        this.releaseTime = releaseTime;
-    }
-
-    public String getRunBatchNum() {
-        return runBatchNum;
-    }
-
-    public void setRunBatchNum(String runBatchNum) {
-        this.runBatchNum = runBatchNum;
-    }
-
-    public String getRunBatchTime() {
-        return runBatchTime;
-    }
-
-    public void setRunBatchTime(String runBatchTime) {
-        this.runBatchTime = runBatchTime;
-    }
-
-    public String getTrainStatusName() {
-        return trainStatusName;
-    }
-
-    public void setTrainStatusName(String trainStatusName) {
-        this.trainStatusName = trainStatusName;
+    public void setBatchTimes(Integer batchTimes) {
+        this.batchTimes = batchTimes;
     }
 
     public String getDownUrl() {

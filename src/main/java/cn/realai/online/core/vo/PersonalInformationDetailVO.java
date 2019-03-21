@@ -9,7 +9,7 @@ public class PersonalInformationDetailVO {
     @ApiModelProperty(value = "id")
     private long id;
 
-    @ApiModelProperty(value = "ID",example = "页面展示的ID")
+    @ApiModelProperty(value = "ID", example = "页面展示的ID")
     private String personalId;
     //标签
     @ApiModelProperty(value = "标签")

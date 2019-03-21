@@ -10,13 +10,13 @@ public class ExperimentalResultQuatoVO {
 
     private String validateTypeName;
 
-    @ApiModelProperty(value = "验证结果集",dataType = "List")
+    @ApiModelProperty(value = "验证结果集", dataType = "List")
     private List<ExperimentalResultQuatoDataVO> validateResultList;
 
-    @ApiModelProperty(value = "测试结果集",dataType = "List")
+    @ApiModelProperty(value = "测试结果集", dataType = "List")
     private List<ExperimentalResultQuatoDataVO> testResultList;
 
-    @ApiModelProperty(value = "训练结果集",dataType = "List")
+    @ApiModelProperty(value = "训练结果集", dataType = "List")
     private List<ExperimentalResultQuatoDataVO> trainResultList;
 
 

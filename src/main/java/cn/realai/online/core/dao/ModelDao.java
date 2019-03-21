@@ -17,7 +17,7 @@ public interface ModelDao {
     //获取模型
     Model get(Long id);
 
-    //获取最近的模型
+    //获取最近发布的模型
     Model selectLatest();
 
     //查询模型列表
@@ -26,4 +26,10 @@ public interface ModelDao {
     //查询模型详情
     ModelDetailBO selectDetail(@Param("modelId") Long modelId);
 
+    /**
+     * 查询模型列表
+     * @param model
+     * @return
+     */
+    List<Model> findList(Model model);
 }

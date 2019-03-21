@@ -2,6 +2,7 @@ package cn.realai.online.core.service.impl;
 
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import com.alibaba.fastjson.JSON;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import cn.realai.online.tool.redis.RedisClientTemplate;
 import cn.realai.online.util.ConvertJavaBean;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -60,11 +62,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
     @Override
-    public List<ExperimentBO> findList(Experiment experiment) {
+    public List<Experiment> findList(Experiment experiment) {
         List<Experiment> list = experimentDao.findList(experiment);
-        List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
-        //BeanUtilsBean.copyProperties(list,result);
-        return result;
+        return list;
     }
 
     /*
@@ -110,7 +110,7 @@ public class ExperimentServiceImpl implements ExperimentService {
         if (CollectionUtils.isEmpty(experimentList)) {
             return true;
         }
-        if(id!=null){
+        if (id != null) {
             for (Experiment experiment1 : experimentList) {
                 if (!experiment1.getId().equals(id)) {
                     return false;
@@ -122,24 +122,24 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Override
     public Long insert(Experiment experiment) {
-         experimentDao.insert(experiment);
-         return experiment.getId();
+        experimentDao.insert(experiment);
+        return experiment.getId();
     }
-    
-	@Override
-	public int trainResultMaintain(Long experimentId, String sampleReview, String modelUrl,
-			String segmentationStatisticsImageUrl, String badTopCountImageUrl, String rocTestImageUrl,
-			String rocTrainImageUrl, String rocValidateImageUrl, String ksTestImageUrl, String ksTrainImageUrl,
-			String ksValidateImageUrl) {
-		return experimentDao.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl,
-				badTopCountImageUrl, rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl,
-				ksTrainImageUrl, ksValidateImageUrl);
-	}
 
 	@Override
 	public MLock getExperimentTrainMLockInstance(long experimentId) {
-		return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId, Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
+		return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId, 
+				Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
 	}
+    @Override
+    public int trainResultMaintain(Long experimentId, String sampleReview, String modelUrl,
+                                   String segmentationStatisticsImageUrl, String badTopCountImageUrl, String rocTestImageUrl,
+                                   String rocTrainImageUrl, String rocValidateImageUrl, String ksTestImageUrl, String ksTrainImageUrl,
+                                   String ksValidateImageUrl) {
+        return experimentDao.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl,
+                badTopCountImageUrl, rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl,
+                ksTrainImageUrl, ksValidateImageUrl);
+    }
 
     @Override
     public Integer selectFileUpdate(Experiment experiment) {
@@ -151,4 +151,8 @@ public class ExperimentServiceImpl implements ExperimentService {
         return experimentDao.updateParam(experiment);
     }
 
+    @Override
+    public HashMap findByServiceIdAndReleaseStatus(Long serviceId, Integer releaseStatus) {
+        return experimentDao.findByServiceIdAndReleaseStatus(serviceId, releaseStatus);
+    }
 }

@@ -15,22 +15,24 @@
     </resultMap>
 
     <insert id="insertList">
-        INSERT INTO top_sort (data_set_type,response_type,experiment_id,top,sample_count,customer_overdue_count,overdue_rate,
-        	total_overdue_rate,create_time)
-        VALUE 
+        INSERT INTO top_sort
+        (data_set_type,response_type,experiment_id,top,sample_count,customer_overdue_count,overdue_rate,
+        total_overdue_rate,create_time)
+        VALUE
         <foreach collection="tsList" open="(" close=")" separator="," item="ts">
-        	#{ts.dataSetType},#{ts.responseType},#{ts.experimentId},#{ts.top},#{ts.sampleCount},
-        	#{ts.customerOverdueCount},#{ts.overdueRate},#{ts.totalOverdueRate},#{ts.createTime}
+            #{ts.dataSetType},#{ts.responseType},#{ts.experimentId},#{ts.top},#{ts.sampleCount},
+            #{ts.customerOverdueCount},#{ts.overdueRate},#{ts.totalOverdueRate},#{ts.createTime}
         </foreach>
     </insert>
 
 
-    <select id="findList" resultType="cn.realai.online.core.entity.TopSort" parameterType="cn.realai.online.core.entity.TopSort">
+    <select id="findList" resultType="cn.realai.online.core.entity.TopSort"
+            parameterType="cn.realai.online.core.entity.TopSort">
         SELECT * FROM top_sort
         <where>
             1=1
             <if test="dataSetType!=null">
-               AND data_set_type = #{dataSetType}
+                AND data_set_type = #{dataSetType}
             </if>
             <if test="responseType!=null">
                 AND response_type = #{responseType}

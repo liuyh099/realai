@@ -9,7 +9,6 @@ import cn.realai.online.core.vo.IdVO;
 import cn.realai.online.userandperm.bo.MenuTreeNodeBO;
 import cn.realai.online.userandperm.bo.RoleBO;
 import cn.realai.online.userandperm.bo.RoleDetailBO;
-import cn.realai.online.userandperm.bo.UserBO;
 import cn.realai.online.userandperm.business.RoleBusiness;
 import cn.realai.online.userandperm.vo.*;
 import com.alibaba.fastjson.JSON;
@@ -27,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("permission/group")
-@Api(tags = "角色管理")
+@Api(tags = "权限管理-角色管理")
 public class RoleController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -38,7 +37,7 @@ public class RoleController {
 
     @GetMapping
     @ApiOperation("获得角色列表")
-    public Result<PageBO<RoleVO>> list(PageQuery pageQuery){
+    public Result<PageBO<RoleVO>> list(PageQuery pageQuery) {
         try {
             PageBO<RoleBO> pageBO = roleBusiness.list(pageQuery);
             List<RoleVO> result = JSON.parseArray(JSON.toJSONString(pageBO.getPageContent()), RoleVO.class);
@@ -52,8 +51,8 @@ public class RoleController {
 
     @GetMapping("/checkName/{roleName}")
     @ApiOperation("检查角色名称")
-    @ApiImplicitParam(name ="roleName", value ="角色名称", required = true ,type = "path")
-    public Result checkName(@PathVariable String roleName){
+    @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, type = "path")
+    public Result checkName(@PathVariable String roleName) {
         try {
             Boolean flag = roleBusiness.checkName(roleName);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), flag);
@@ -65,15 +64,15 @@ public class RoleController {
 
     @DeleteMapping()
     @ApiOperation("删除角色")
-    public Result delete(@RequestBody List<Long> ids){
+    public Result delete(@RequestBody List<Long> ids) {
         try {
-            if(CollectionUtils.isEmpty(ids)){
+            if (CollectionUtils.isEmpty(ids)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
-            if(roleBusiness.delete(ids)>0){
-                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
-            }else {
-                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+            if (roleBusiness.delete(ids) > 0) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            } else {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
         } catch (Exception e) {
             logger.error("删除角色异常", e);
@@ -84,14 +83,14 @@ public class RoleController {
 
     @PostMapping
     @ApiOperation("增加角色")
-    public Result add(@RequestBody RoleAddVO roleAddVO){
+    public Result add(@RequestBody RoleAddVO roleAddVO) {
         try {
-            RoleBO roleBO=new RoleBO();
-            BeanUtils.copyProperties(roleAddVO,roleBO);
-            if(roleBusiness.insert(roleBO)){
-                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
-            }else {
-                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+            RoleBO roleBO = new RoleBO();
+            BeanUtils.copyProperties(roleAddVO, roleBO);
+            if (roleBusiness.insert(roleBO)) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            } else {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
         } catch (Exception e) {
             logger.error("新增角色异常", e);
@@ -101,11 +100,11 @@ public class RoleController {
 
     @GetMapping("menuTree")
     @ApiOperation("获得所有的菜单权限")
-    public Result<List<MenuTreeNodeVo>> menuTree(){
+    public Result<List<MenuTreeNodeVo>> menuTree() {
         try {
-            List<MenuTreeNodeBO>  resultBO=roleBusiness.menuTree();
-            List<MenuTreeNodeVo> result =JSON.parseArray(JSON.toJSONString(resultBO),MenuTreeNodeVo.class);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),result);
+            List<MenuTreeNodeBO> resultBO = roleBusiness.menuTree();
+            List<MenuTreeNodeVo> result = JSON.parseArray(JSON.toJSONString(resultBO), MenuTreeNodeVo.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("角色页面获得所有的菜单异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
@@ -115,11 +114,11 @@ public class RoleController {
 
     @GetMapping("detail")
     @ApiOperation("获得角色详情")
-    public Result<RoleDetailVo> detail(IdVO idVO){
+    public Result<RoleDetailVo> detail(IdVO idVO) {
         try {
-            RoleDetailBO  resultBO=roleBusiness.detail(idVO.getId());
-            RoleDetailVo result =JSON.parseObject(JSON.toJSONString(resultBO),RoleDetailVo.class);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),result);
+            RoleDetailBO resultBO = roleBusiness.detail(idVO.getId());
+            RoleDetailVo result = JSON.parseObject(JSON.toJSONString(resultBO), RoleDetailVo.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("获得角色详情异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
@@ -128,11 +127,11 @@ public class RoleController {
 
     @GetMapping("edit")
     @ApiOperation("获得编辑角色详情")
-    public Result<RoleDetailVo> edit(IdVO idVO){
+    public Result<RoleDetailVo> edit(IdVO idVO) {
         try {
-            RoleDetailBO  resultBO=roleBusiness.edit(idVO.getId());
-            RoleDetailVo result =JSON.parseObject(JSON.toJSONString(resultBO),RoleDetailVo.class);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),result);
+            RoleDetailBO resultBO = roleBusiness.edit(idVO.getId());
+            RoleDetailVo result = JSON.parseObject(JSON.toJSONString(resultBO), RoleDetailVo.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("获得角色详情异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
@@ -141,20 +140,19 @@ public class RoleController {
 
     @PutMapping()
     @ApiOperation("更新角色")
-    public Result update(@RequestBody RoleEditVO editVO){
+    public Result update(@RequestBody RoleEditVO editVO) {
         try {
-            RoleBO roleBo =new RoleBO();
-            BeanUtils.copyProperties(editVO,roleBo);
-            if(!roleBusiness.update(roleBo)){
-                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+            RoleBO roleBo = new RoleBO();
+            BeanUtils.copyProperties(editVO, roleBo);
+            if (!roleBusiness.update(roleBo)) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             logger.error("更新角色异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }
-
 
 
 }

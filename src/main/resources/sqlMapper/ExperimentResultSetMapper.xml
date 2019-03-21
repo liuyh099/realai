@@ -1,57 +1,64 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.realai.online.core.dao.ExperimentResultSetDao">
-  <resultMap type="cn.realai.online.core.entity.ExperimentResultSet" id="ExperimentResultSetMap">
-  	    <id column="id" property="id" jdbcType="BIGINT"/>
-  	    <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
-  	    <result column="data_set_type" property="dataSetType" jdbcType="INTEGER"/>
-  	    <result column="min_pro" property="minPro" jdbcType="DOUBLE"/>
-  	    <result column="min_pro_score" property="minProScore" jdbcType="INTEGER"/>
-  	    <result column="max_pro" property="maxPro" jdbcType="DOUBLE"/>
-  	    <result column="max_pro_score" property="maxProScore" jdbcType="INTEGER"/>
-  	    <result column="negtive_count" property="negtiveCount" jdbcType="INTEGER"/>
-  	    <result column="postive_count" property="postiveCount" jdbcType="INTEGER"/>
-  	    <result column="count" property="count" jdbcType="INTEGER"/>
-  	    <result column="negtive_count_in_postive_count" property="negtiveCountInPostiveCount" jdbcType="DOUBLE"/>
-  	    <result column="positive_ratio" property="positiveRatio" jdbcType="DOUBLE"/>
-  	    <result column="cumulative_positive_ratio" property="cumulativePositiveRatio" jdbcType="DOUBLE"/>
-  	    <result column="postive_count_in_total_positive_count" property="postiveCountInTotalPositiveCount" jdbcType="DOUBLE"/>
-  	    <result column="cumulative_postive_count_in_total_positive_count" property="cumulativePostiveCountInTotalPositiveCount" jdbcType="DOUBLE"/>
-  </resultMap>
+    <resultMap type="cn.realai.online.core.entity.ExperimentResultSet" id="ExperimentResultSetMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+        <result column="data_set_type" property="dataSetType" jdbcType="INTEGER"/>
+        <result column="min_pro" property="minPro" jdbcType="DOUBLE"/>
+        <result column="min_pro_score" property="minProScore" jdbcType="INTEGER"/>
+        <result column="max_pro" property="maxPro" jdbcType="DOUBLE"/>
+        <result column="max_pro_score" property="maxProScore" jdbcType="INTEGER"/>
+        <result column="negtive_count" property="negtiveCount" jdbcType="INTEGER"/>
+        <result column="postive_count" property="postiveCount" jdbcType="INTEGER"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+        <result column="negtive_count_in_postive_count" property="negtiveCountInPostiveCount" jdbcType="DOUBLE"/>
+        <result column="positive_ratio" property="positiveRatio" jdbcType="DOUBLE"/>
+        <result column="cumulative_positive_ratio" property="cumulativePositiveRatio" jdbcType="DOUBLE"/>
+        <result column="postive_count_in_total_positive_count" property="postiveCountInTotalPositiveCount"
+                jdbcType="DOUBLE"/>
+        <result column="cumulative_postive_count_in_total_positive_count"
+                property="cumulativePostiveCountInTotalPositiveCount" jdbcType="DOUBLE"/>
+    </resultMap>
 
 
-  <sql id="Base_Column_List" >
-        
-  </sql>
+    <sql id="Base_Column_List">
 
-	<insert id="insert">
-		insert into result_set(experiment_id, data_set_type, min_pro, min_pro_score, max_pro, max_pro_score, negtive_count, postive_count,
-			count, negtive_count_in_postive_count, positive_ratio, cumulative_positive_ratio, postive_count_in_total_positive_count, 
-			cumulative_postive_count_in_total_positive_count)
-		values
-		<foreach collection="ersList" open="(" close=")" separator="," item="ers">
-            #{ers.experimentId}, #{ers.dataSetType},#{ers.minPro}, #{ers.minProScore},#{ers.maxPro}, #{ers.maxProScore},#{ers.negtiveCount}, 
-            #{ers.postiveCount},#{ers.count}, #{ers.negtiveCountInPostiveCount}, #{ers.positiveRatio},#{ers.cumulativePositiveRatio}, 
+    </sql>
+
+    <insert id="insert">
+        insert into result_set(experiment_id, data_set_type, min_pro, min_pro_score, max_pro, max_pro_score,
+        negtive_count, postive_count,
+        count, negtive_count_in_postive_count, positive_ratio, cumulative_positive_ratio,
+        postive_count_in_total_positive_count,
+        cumulative_postive_count_in_total_positive_count)
+        values
+        <foreach collection="ersList" open="(" close=")" separator="," item="ers">
+            #{ers.experimentId}, #{ers.dataSetType},#{ers.minPro}, #{ers.minProScore},#{ers.maxPro},
+            #{ers.maxProScore},#{ers.negtiveCount},
+            #{ers.postiveCount},#{ers.count}, #{ers.negtiveCountInPostiveCount},
+            #{ers.positiveRatio},#{ers.cumulativePositiveRatio},
             #{ers.postiveCountInTotalPositiveCount},#{ers.cumulativePostiveCountInTotalPositiveCount}
         </foreach>
-	</insert>
+    </insert>
 
-	<select id="findList" parameterType="cn.realai.online.core.entity.ExperimentResultSet" resultMap="ExperimentResultSetMap">
-		SELECT * FROM
-		result_set
-		<where>
-			1=1
-			<if test="experimentId!=null">
-				AND experiment_id=#{experimentId}
-			</if>
-			<if test="experimentId!=null">
-				AND data_set_type=#{dataSetType}
-			</if>
-			<if test="parentId!=null">
-				AND parent_id=#{parentId}
-			</if>
-		</where>
-		ORDER BY postive_count DESC
-	</select>
+    <select id="findList" parameterType="cn.realai.online.core.entity.ExperimentResultSet"
+            resultMap="ExperimentResultSetMap">
+        SELECT * FROM
+        result_set
+        <where>
+            1=1
+            <if test="experimentId!=null">
+                AND experiment_id=#{experimentId}
+            </if>
+            <if test="experimentId!=null">
+                AND data_set_type=#{dataSetType}
+            </if>
+            <if test="parentId!=null">
+                AND parent_id=#{parentId}
+            </if>
+        </where>
+        ORDER BY postive_count DESC
+    </select>
 
 </mapper> 

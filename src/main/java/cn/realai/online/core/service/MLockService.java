@@ -4,8 +4,8 @@ import cn.realai.online.core.entity.MLock;
 
 public interface MLockService {
 
-	boolean tryLock(MLock mlock);
+    boolean tryLock(MLock mlock);
 
-	boolean unLock(MLock mlock);
+    boolean unLock(MLock mlock);
 
 }

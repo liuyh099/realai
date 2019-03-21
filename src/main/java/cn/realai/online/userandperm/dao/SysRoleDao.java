@@ -7,6 +7,7 @@ import java.util.List;
 public interface SysRoleDao {
     /**
      * 查询角色列表
+     *
      * @param sysRole
      * @return
      */
@@ -14,6 +15,7 @@ public interface SysRoleDao {
 
     /**
      * 插入新用户
+     *
      * @param sysRole
      * @return
      */
@@ -21,6 +23,7 @@ public interface SysRoleDao {
 
     /**
      * 删除角色信息
+     *
      * @param delete
      * @return
      */
@@ -28,6 +31,7 @@ public interface SysRoleDao {
 
     /**
      * 根据Id查询角色信息
+     *
      * @param id
      * @return
      */
@@ -35,6 +39,7 @@ public interface SysRoleDao {
 
     /**
      * 更新角色信息
+     *
      * @param sysRole
      * @return
      */

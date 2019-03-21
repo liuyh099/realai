@@ -2,116 +2,117 @@ package cn.realai.online.core.entity;
 
 /**
  * 样本摘要
+ *
  * @author lyh
  */
 public class SampleSummary {
 
-	private Long id;
-	
-	//实验id
-	private Long experimentId;
-	
-	//数据集类型
-	private Integer dataSetType;
-	
-	//样本描述
-	private String sampleDesc;
-	
-	//样本数量
-	private int sampleCount;
-	
-	//样本用户数
-	private int numberOfLabelUsers;
-	
-	//标签样本比例
-	private String labelSampleRatio;
-	
-	//预测最小值
-	private String min;
-	
-	//预测最大值
-	private String max;
-	
-	//预测平均值
-	private String mean;
+    private Long id;
 
-	public Long getId() {
-		return id;
-	}
+    //实验id
+    private Long experimentId;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    //数据集类型
+    private Integer dataSetType;
 
-	public Long getExperimentId() {
-		return experimentId;
-	}
+    //样本描述
+    private String sampleDesc;
 
-	public void setExperimentId(Long experimentId) {
-		this.experimentId = experimentId;
-	}
+    //样本数量
+    private int sampleCount;
 
-	public Integer getDataSetType() {
-		return dataSetType;
-	}
+    //样本用户数
+    private int numberOfLabelUsers;
 
-	public void setDataSetType(Integer dataSetType) {
-		this.dataSetType = dataSetType;
-	}
+    //标签样本比例
+    private String labelSampleRatio;
 
-	public String getSampleDesc() {
-		return sampleDesc;
-	}
+    //预测最小值
+    private String min;
 
-	public void setSampleDesc(String sampleDesc) {
-		this.sampleDesc = sampleDesc;
-	}
+    //预测最大值
+    private String max;
 
-	public int getSampleCount() {
-		return sampleCount;
-	}
+    //预测平均值
+    private String mean;
 
-	public void setSampleCount(int sampleCount) {
-		this.sampleCount = sampleCount;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public int getNumberOfLabelUsers() {
-		return numberOfLabelUsers;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setNumberOfLabelUsers(int numberOfLabelUsers) {
-		this.numberOfLabelUsers = numberOfLabelUsers;
-	}
+    public Long getExperimentId() {
+        return experimentId;
+    }
 
-	public String getLabelSampleRatio() {
-		return labelSampleRatio;
-	}
+    public void setExperimentId(Long experimentId) {
+        this.experimentId = experimentId;
+    }
 
-	public void setLabelSampleRatio(String labelSampleRatio) {
-		this.labelSampleRatio = labelSampleRatio;
-	}
+    public Integer getDataSetType() {
+        return dataSetType;
+    }
 
-	public String getMin() {
-		return min;
-	}
+    public void setDataSetType(Integer dataSetType) {
+        this.dataSetType = dataSetType;
+    }
 
-	public void setMin(String min) {
-		this.min = min;
-	}
+    public String getSampleDesc() {
+        return sampleDesc;
+    }
 
-	public String getMax() {
-		return max;
-	}
+    public void setSampleDesc(String sampleDesc) {
+        this.sampleDesc = sampleDesc;
+    }
 
-	public void setMax(String max) {
-		this.max = max;
-	}
+    public int getSampleCount() {
+        return sampleCount;
+    }
 
-	public String getMean() {
-		return mean;
-	}
+    public void setSampleCount(int sampleCount) {
+        this.sampleCount = sampleCount;
+    }
 
-	public void setMean(String mean) {
-		this.mean = mean;
-	}
+    public int getNumberOfLabelUsers() {
+        return numberOfLabelUsers;
+    }
+
+    public void setNumberOfLabelUsers(int numberOfLabelUsers) {
+        this.numberOfLabelUsers = numberOfLabelUsers;
+    }
+
+    public String getLabelSampleRatio() {
+        return labelSampleRatio;
+    }
+
+    public void setLabelSampleRatio(String labelSampleRatio) {
+        this.labelSampleRatio = labelSampleRatio;
+    }
+
+    public String getMin() {
+        return min;
+    }
+
+    public void setMin(String min) {
+        this.min = min;
+    }
+
+    public String getMax() {
+        return max;
+    }
+
+    public void setMax(String max) {
+        this.max = max;
+    }
+
+    public String getMean() {
+        return mean;
+    }
+
+    public void setMean(String mean) {
+        this.mean = mean;
+    }
 }
