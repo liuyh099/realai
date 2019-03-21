@@ -10,10 +10,7 @@ import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.PageQuery;
-import cn.realai.online.core.service.ExperimentResultSetService;
-import cn.realai.online.core.service.ExperimentService;
-import cn.realai.online.core.service.TopSortService;
-import cn.realai.online.core.service.VariableDataService;
+import cn.realai.online.core.service.*;
 import cn.realai.online.core.vo.ExperimentalResultTopVO;
 import cn.realai.online.core.vo.ExperimentalTrainSelectFileVO;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
@@ -28,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +56,18 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Autowired
     private TopSortService topSortService;
+
+    @Autowired
+    private SampleSummaryService sampleSummaryService;
+
+    @Autowired
+    private PersonalInformationService personalInformationService;
+
+    @Autowired
+    private BatchRecordService batchRecordService;
+
+    @Autowired
+    private PersonalComboResultSetService personalComboResultSetService;
 
     /**
      * 根据实验名称和状态等分页查询实验列表
@@ -205,9 +216,9 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         Experiment experiment = experimentService.selectExperimentById(experimentId);
 
         //TODO 去获取服务
-        List<ExperimentResultSetBO> trainResultSetListBO = quotaCommon(Experiment.DATA_SET_TRAIN,experimentId);
-        List<ExperimentResultSetBO> testResultSetListBO = quotaCommon(Experiment.DATA_SET_TEST,experimentId);
-        List<ExperimentResultSetBO> validResultSetListBO = quotaCommon(Experiment.DATA_SET_VALID,experimentId);
+        List<ExperimentResultSetBO> trainResultSetListBO = quotaCommon(Experiment.DATA_SET_TRAIN, experimentId);
+        List<ExperimentResultSetBO> testResultSetListBO = quotaCommon(Experiment.DATA_SET_TEST, experimentId);
+        List<ExperimentResultSetBO> validResultSetListBO = quotaCommon(Experiment.DATA_SET_VALID, experimentId);
         ExperimentalResultQuatoBO experimentalResultQuatoBO = new ExperimentalResultQuatoBO();
         experimentalResultQuatoBO.setModel(1);
         experimentalResultQuatoBO.setTestResultList(testResultSetListBO);
@@ -216,7 +227,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         return experimentalResultQuatoBO;
     }
 
-    private List<ExperimentResultSetBO> quotaCommon(Integer dataSetType,Long experimentId){
+    private List<ExperimentResultSetBO> quotaCommon(Integer dataSetType, Long experimentId) {
         ExperimentResultSet experimentResultSet = new ExperimentResultSet();
         experimentResultSet.setExperimentId(experimentId);
         experimentResultSet.setDataSetType(dataSetType);
@@ -237,47 +248,97 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Override
     public ExperimentalResultTopBO quotaTopGroup(Long experimentId) {
-
-
-
-        return null;
+        ExperimentalResultTopGroupBO train = quotaTopGroupCommon(experimentId, Experiment.DATA_SET_TRAIN);
+        ExperimentalResultTopGroupBO test = quotaTopGroupCommon(experimentId, Experiment.DATA_SET_TEST);
+        ExperimentalResultTopGroupBO valid = quotaTopGroupCommon(experimentId, Experiment.DATA_SET_VALID);
+        ExperimentalResultTopBO resultTopBO = new ExperimentalResultTopBO();
+        resultTopBO.setTestTop(test);
+        resultTopBO.setTrainTop(train);
+        resultTopBO.setValidateTop(valid);
+        return resultTopBO;
     }
 
-    private ExperimentalResultTopGroupBO quotaTopGroupCommon(Long experimentId,Integer dataType){
-
-        return null;
+    @Override
+    public List<SampleSummaryBO> summary(Long experimentId) {
+        SampleSummary sampleSummary = new SampleSummary();
+        sampleSummary.setExperimentId(experimentId);
+        List<SampleSummary> ret = sampleSummaryService.findList(sampleSummary);
+        List<SampleSummaryBO> result = JSON.parseArray(JSON.toJSONString(ret), SampleSummaryBO.class);
+        return result;
     }
-    private List<TopSortBO> quotaTopGroupDataCommon(Long experimentId,Integer dataType,Integer responseType){
+
+    @Override
+    public PageBO<PersonalInformationBO> personalInformationPage(FaceListDataQuery query, Integer batchType) {
+
+        BatchRecord batchRecord = getBatchRecord(query.getTrainId(), batchType);
+        if (ObjectUtils.isEmpty(batchRecord)) {
+            return new PageBO<PersonalInformationBO>(query);
+        }
+
+        Page page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        PersonalInformation personal = buildQueryCondition(batchRecord, query);
+        List<PersonalInformation> list = personalInformationService.findList(personal);
+
+        List<PersonalInformationBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalInformationBO.class);
+        PageBO<PersonalInformationBO> pageBO = new PageBO<PersonalInformationBO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
+        return pageBO;
+    }
+
+    private BatchRecord getBatchRecord(Long trainId, Integer batchType) {
+        BatchRecord batchRecord = new BatchRecord();
+        batchRecord.setExperimentId(trainId);
+        batchRecord.setBatchType(batchType);
+        batchRecord = batchRecordService.getByEntity(batchRecord);
+        return batchRecord;
+    }
+
+    @Override
+    public PersonalInformationBO listDataDetail(Long id) {
+        PersonalInformation personal = personalInformationService.get(id);
+        PersonalInformationBO result = new PersonalInformationBO();
+        BeanUtils.copyProperties(personal, result);
+        return result;
+    }
+
+    @Override
+    public List<PersonalComboResultSetBO> listDataDetailTopGroup(Long id) {
+        PersonalComboResultSet query = new PersonalComboResultSet();
+        query.setId(id);
+        List<PersonalComboResultSet> list = personalComboResultSetService.findList(query);
+        List<PersonalComboResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalComboResultSetBO.class);
+        return result;
+    }
+
+    private PersonalInformation buildQueryCondition(BatchRecord batchRecord, FaceListDataQuery query) {
+        PersonalInformation personal = new PersonalInformation();
+        personal.setExperimentId(batchRecord.getExperimentId());
+        personal.setBatchId(batchRecord.getId());
+        personal.setGroupId(query.getGroupId());
+        personal.setPersonalName(query.getName());
+        personal.setPersonalCardId(query.getIdCard());
+        personal.setPhoneNum(query.getPhone());
+        personal.setPersonalId(query.getId());
+        personal.setInputStartDate(query.getInputStartDate());
+        personal.setInputEndDate(query.getInputStartEnd());
+        return personal;
+    }
+
+    private ExperimentalResultTopGroupBO quotaTopGroupCommon(Long experimentId, Integer dataType) {
+        List<TopSortBO> response = quotaTopGroupDataCommon(experimentId, dataType, 1);
+        List<TopSortBO> noResponse = quotaTopGroupDataCommon(experimentId, dataType, 1);
+        ExperimentalResultTopGroupBO result = new ExperimentalResultTopGroupBO();
+        result.setResponseDataList(response);
+        result.setNoResponseDataList(noResponse);
+        return result;
+    }
+
+    private List<TopSortBO> quotaTopGroupDataCommon(Long experimentId, Integer dataType, Integer responseType) {
         TopSort topSort = new TopSort();
         topSort.setExperimentId(experimentId);
-        topSort.setResponseType(1);
-        topSort.setDataSetType(Experiment.DATA_SET_TRAIN);
-       // List<TopSort> topSorts=topSortService.findList();
-        return null;
+        topSort.setResponseType(responseType);
+        topSort.setDataSetType(dataType);
+        List<TopSort> topSorts = topSortService.findList(topSort);
+        List<TopSortBO> result = JSON.parseArray(JSON.toJSONString(topSorts), TopSortBO.class);
+        return result;
     }
-
-	@Override
-	public List<SampleSummaryBO> summary(Long experimentId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PageBO<PersonalInformationBO> personalInformationPage(FaceListDataQuery faceListDataQuery,
-			Integer batchType) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PersonalInformationBO listDataDetail(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<PersonalComboResultSetBO> listDataDetailTopGroup(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
