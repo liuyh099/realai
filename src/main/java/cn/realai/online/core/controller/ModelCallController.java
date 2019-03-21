@@ -56,7 +56,7 @@ public class ModelCallController {
                     + "experimentId{}, fileAddress{}", date, experimentId, redisKey);
             return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("文件地址不能为空或null"), null);
         }
-        modelCallBussiness.runBatchDaily(experimentId, redisKey);
+        modelCallBussiness.runBatchDaily(experimentId, redisKey, dbrs.getRedisKey());
         return ResultUtils.generateResultStr(ResultCode.SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
 

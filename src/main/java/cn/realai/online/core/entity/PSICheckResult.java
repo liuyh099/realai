@@ -19,6 +19,17 @@ public class PSICheckResult {
 
     //预警标志
     private int aler; //1.不预警 2.预警
+    
+    //python返回的批次标记字段，只做解析不需要入库
+    private String batchStr;
+
+    public String getBatchStr() {
+        return batchStr;
+    }
+
+    public void setBatchStr(String batchStr) {
+        this.batchStr = batchStr;
+    }
 
     public static enum STATUS {
         YES(1, "不预警"),
