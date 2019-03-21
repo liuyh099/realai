@@ -16,11 +16,11 @@
         VALUE (#{name},#{createTime},#{experimentId},#{trainingSet},#{testSet},#{validSet})
     </insert>
 
-	<insert id="insertList">
+    <insert id="insertList">
         INSERT INTO model_perfomance (name,create_time,experiment_id,training_set,test_set,valid_set)
-        VALUE 
+        VALUE
         <foreach collection="modelPerformanceList" open="(" close=")" separator="," item="mp">
-        	#{mp.name},#{mp.createTime},#{mp.experimentId},#{mp.trainingSet},#{mp.testSet},#{mp.validSet}
+            #{mp.name},#{mp.createTime},#{mp.experimentId},#{mp.trainingSet},#{mp.testSet},#{mp.validSet}
         </foreach>
     </insert>
 

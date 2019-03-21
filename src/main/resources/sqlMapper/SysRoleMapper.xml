@@ -22,10 +22,10 @@
         <where>
             1=1
             <if test="id!=null">
-                AND  id =#{id}
+                AND id =#{id}
             </if>
             <if test="name!=null and name !='' ">
-                AND  name =#{name}
+                AND name =#{name}
             </if>
         </where>
     </select>
@@ -57,8 +57,8 @@
 
     <update id="update" parameterType="cn.realai.online.userandperm.entity.SysRole">
         UPDATE sys_role SET
-          name=#{name},
-          notes=#{notes}
+        name=#{name},
+        notes=#{notes}
         <where>
             id=#{id}
         </where>

@@ -1,76 +1,76 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.realai.online.core.dao.VariableDataDao">
-  <resultMap type="cn.realai.online.core.entity.VariableData" id="VariableDataMap">
-  	    <id column="id" property="id" jdbcType="BIGINT"/>
-  	    <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
-  	    <result column="name" property="name" jdbcType="VARCHAR"/>
-  	    <result column="meaning" property="meaning" jdbcType="INTEGER"/>
-  	    <result column="data_type" property="dataType" jdbcType="INTEGER"/>
-  	    <result column="count" property="count" jdbcType="INTEGER"/>
-  	    <result column="max" property="max" jdbcType="VARCHAR"/>
-  	    <result column="min" property="min" jdbcType="VARCHAR"/>
-  	    <result column="mean" property="mean" jdbcType="VARCHAR"/>
-  	    <result column="median" property="median" jdbcType="VARCHAR"/>
-  	    <result column="percent25" property="percent25" jdbcType="VARCHAR"/>
-  	    <result column="percent75" property="percent75" jdbcType="VARCHAR"/>
-  	    <result column="variable_type" property="variableType" jdbcType="INTEGER"/>
-  	    <result column="recommended_delete" property="recommendedDelete" jdbcType="INTEGER"/>
-  	    <result column="delete" property="delete" jdbcType="INTEGER"/>
-  	    <result column="create_time" property="createTime" jdbcType="BIGINT"/>
-  </resultMap>
+    <resultMap type="cn.realai.online.core.entity.VariableData" id="VariableDataMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="meaning" property="meaning" jdbcType="INTEGER"/>
+        <result column="data_type" property="dataType" jdbcType="INTEGER"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+        <result column="max" property="max" jdbcType="VARCHAR"/>
+        <result column="min" property="min" jdbcType="VARCHAR"/>
+        <result column="mean" property="mean" jdbcType="VARCHAR"/>
+        <result column="median" property="median" jdbcType="VARCHAR"/>
+        <result column="percent25" property="percent25" jdbcType="VARCHAR"/>
+        <result column="percent75" property="percent75" jdbcType="VARCHAR"/>
+        <result column="variable_type" property="variableType" jdbcType="INTEGER"/>
+        <result column="recommended_delete" property="recommendedDelete" jdbcType="INTEGER"/>
+        <result column="delete" property="delete" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="BIGINT"/>
+    </resultMap>
 
-  <sql id="Base_Column_List" >
-        
-  </sql>
+    <sql id="Base_Column_List">
 
-	<insert id="insertList">
-		insert into variable_data(experiment_id, name, meaning, data_type, count, max,
-			min, mean, median, percent25, percent75, variable_type, recommended_delete, delete, create_time)
-		<foreach collection="vdList" item="vd" index="index" separator=",">
-             (#{vd.experimentId}, #{vd.name}, #{vd.meaning}, #{vd.dataType}, #{vd.count}, #{vd.max},
-             #{vd.min}, #{vd.mean}, #{vd.median}, #{vd.percent25} ,#{vd.percent75}, #{vd.variableType},
-             #{vd.recommendedDelete}, #{vd.delete}, #{vd.createTime})
+    </sql>
+
+    <insert id="insertList">
+        insert into variable_data(experiment_id, name, meaning, data_type, count, max,
+        min, mean, median, percent25, percent75, variable_type, recommended_delete, delete, create_time)
+        <foreach collection="vdList" item="vd" index="index" separator=",">
+            (#{vd.experimentId}, #{vd.name}, #{vd.meaning}, #{vd.dataType}, #{vd.count}, #{vd.max},
+            #{vd.min}, #{vd.mean}, #{vd.median}, #{vd.percent25} ,#{vd.percent75}, #{vd.variableType},
+            #{vd.recommendedDelete}, #{vd.delete}, #{vd.createTime})
         </foreach>
-	</insert>
+    </insert>
 
-	<select id="findListByExperimentId" resultMap="VariableDataMap">
+    <select id="findListByExperimentId" resultMap="VariableDataMap">
 		select *
 		from variable_data
 		where experiment_id = #{experimentId}
 	</select>
 
-	<select id="findList" resultMap="VariableDataMap" parameterType="cn.realai.online.core.entity.VariableData">
-		select *
-		from variable_data
-		<where>
-			`delete` !=2
-			<if test="experimentId!=null">
-				AND experiment_id = #{experimentId}
-			</if>
-			<if test="variableType!=null">
-				AND variable_type = #{variableType}
-			</if>
-		</where>
-		ORDER BY create_time ASC
-	</select>
+    <select id="findList" resultMap="VariableDataMap" parameterType="cn.realai.online.core.entity.VariableData">
+        select *
+        from variable_data
+        <where>
+            `delete` !=2
+            <if test="experimentId!=null">
+                AND experiment_id = #{experimentId}
+            </if>
+            <if test="variableType!=null">
+                AND variable_type = #{variableType}
+            </if>
+        </where>
+        ORDER BY create_time ASC
+    </select>
 
-	<update id="deleteVariableData">
-		UPDATE variable_data
-		SET `delete` =2
-		<where>
-			<if test="experimentId!=null">
-				experiment_id = #{experimentId}
-			</if>
-			<if test="ids!=null">
-				<if test="experimentId!=null">
-					AND
-				</if>
-				<foreach collection="ids" separator="," open=" id in (" close=")" item="id">
-					#{id}
-				</foreach>
-			</if>
-		</where>
-	</update>
+    <update id="deleteVariableData">
+        UPDATE variable_data
+        SET `delete` =2
+        <where>
+            <if test="experimentId!=null">
+                experiment_id = #{experimentId}
+            </if>
+            <if test="ids!=null">
+                <if test="experimentId!=null">
+                    AND
+                </if>
+                <foreach collection="ids" separator="," open=" id in (" close=")" item="id">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </update>
 
 </mapper> 

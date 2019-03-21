@@ -16,12 +16,13 @@
         INSERT INTO personal_homo(experiment_id,batch_id,k,pid,variable_id,value,weight)
         VALUES
         <foreach collection="homoList" open="(" close=")" separator="," item="homo">
-        	#{homo.experimentId},#{homo.batchId},#{homo.k},#{homo.pid},#{homo.variableId},
-        	#{homo.value},#{homo.weight}
+            #{homo.experimentId},#{homo.batchId},#{homo.k},#{homo.pid},#{homo.variableId},
+            #{homo.value},#{homo.weight}
         </foreach>
     </insert>
 
-    <select id="findList" resultMap="PersonalHomoResultSetMap" parameterType="cn.realai.online.core.entity.PersonalHomoResultSet">
+    <select id="findList" resultMap="PersonalHomoResultSetMap"
+            parameterType="cn.realai.online.core.entity.PersonalHomoResultSet">
         SELECT *,ABS(weight) AS `absWeight` FROM personal_homo
         <where>
             1=1
@@ -32,7 +33,8 @@
         ORDER BY ABS(weight) DESC
     </select>
 
-    <select id="listCharts" resultMap="PersonalHomoResultSetMap" parameterType="cn.realai.online.core.entity.PersonalHomoResultSet">
+    <select id="listCharts" resultMap="PersonalHomoResultSetMap"
+            parameterType="cn.realai.online.core.entity.PersonalHomoResultSet">
         SELECT *,ABS(weight) AS `absWeight` FROM personal_homo
         <where>
             1=1
@@ -40,7 +42,7 @@
                 AND pid = #{pid}
             </if>
         </where>
-        ORDER BY  k ASC
+        ORDER BY k ASC
     </select>
 
 </mapper>

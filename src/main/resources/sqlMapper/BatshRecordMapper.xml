@@ -15,14 +15,14 @@
     </resultMap>
 
     <insert id="insert">
-    	<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
-			SELECT LAST_INSERT_ID() AS id
-		</selectKey>
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
         INSERT INTO batch_record (y_table , x_table_homo, x_table_Heter, experiment_id, service_id,
-        	create_time, down_url, batch_type, batch_name)
+        create_time, down_url, batch_type, batch_name)
         VALUE (#{batchRecord.ytableDataSource},#{batchRecord.xtableHomogeneousDataSource},
-        	#{batchRecord.xtableHeterogeneousDataSource},#{batchRecord.experimentId},#{batchRecord.serviceId},
-        	#{batchRecord.createTime},#{batchRecord.downUrl},#{batchRecord.batchType},#{batchRecord.batchName})
+        #{batchRecord.xtableHeterogeneousDataSource},#{batchRecord.experimentId},#{batchRecord.serviceId},
+        #{batchRecord.createTime},#{batchRecord.downUrl},#{batchRecord.batchType},#{batchRecord.batchName})
     </insert>
 
     <select id="get" resultMap="BatshRecordMap" parameterType="java.lang.Long">
