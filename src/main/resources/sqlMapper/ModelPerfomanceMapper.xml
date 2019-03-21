@@ -3,12 +3,12 @@
 <mapper namespace="cn.realai.online.core.dao.ModelPerfomanceDao">
     <resultMap type="cn.realai.online.core.entity.ModelPerformance" id="ModelPerformanceMap">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="metic_name" property="metricName" jdbcType="VARCHAR"/>
+        <result column="metric_name" property="metricName" jdbcType="VARCHAR"/>
         <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
         <result column="training_set" property="trainingSet" jdbcType="DECIMAL"/>
         <result column="valid_set" property="validSet" jdbcType="DECIMAL"/>
         <result column="test_set" property="testSet" jdbcType="DECIMAL"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="BIGINT"/>
     </resultMap>
 
     <insert id="insert" parameterType="cn.realai.online.core.entity.ModelPerformance">
