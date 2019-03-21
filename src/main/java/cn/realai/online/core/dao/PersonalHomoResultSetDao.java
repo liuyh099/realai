@@ -10,4 +10,17 @@ public interface PersonalHomoResultSetDao {
 
 	void insertList(@Param("homoList")List<PersonalHomoResultSet> homoList);
 
+    /**
+     * 查询同质数据列表
+     * @param queryCondition
+     * @return
+     */
+    List<PersonalHomoResultSet> findList(PersonalHomoResultSet queryCondition);
+
+    /**
+     * echarts数据
+     * @param id
+     * @return
+     */
+    List<PersonalHomoResultSet> listCharts(Long id);
 }

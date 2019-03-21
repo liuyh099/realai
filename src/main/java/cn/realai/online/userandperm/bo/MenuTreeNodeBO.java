@@ -1,6 +1,5 @@
 package cn.realai.online.userandperm.bo;
 
-import cn.realai.online.userandperm.vo.MenuTreeNodeVo;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;

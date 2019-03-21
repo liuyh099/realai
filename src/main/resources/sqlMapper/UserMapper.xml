@@ -29,7 +29,8 @@
     </select>
 
     <select id="findList" resultMap="UserMap" parameterType="cn.realai.online.userandperm.entity.User">
-        SELECT a.* ,b.name AS group1 FROM sys_user a LEFT JOIN sys_role b ON a.role_id = b.id
+        SELECT DISTINCT a.* ,b.name AS group1 FROM sys_user a
+            LEFT JOIN sys_role b ON a.role_id = b.id
         <where>
             1=1
             <if test="id!=null">
@@ -40,6 +41,9 @@
             </if>
             <if test="phoneNumber!=null and phoneNumber !='' ">
                 AND   a.phoneNumber =#{phoneNumber}
+            </if>
+            <if test="forget!=null and forget ==1 ">
+                AND   a.id IN (SELECT user_id FROM sys_forget_notice)
             </if>
         </where>
     </select>

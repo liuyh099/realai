@@ -31,6 +31,9 @@
             <if test="id!=null">
                AND id = #{id}
             </if>
+            <if test="pid!=null">
+                AND pid = #{pid}
+            </if>
         </where>
         ORDER BY ABS(weight) DESC
     </select>

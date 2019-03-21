@@ -12,7 +12,7 @@ public class RoleAddVO {
 
     //角色名称
     @NotBlank(message = "角色名称不能为空")
-    @Length(max = 20,min = 1,message = "角色名称为1-20个字节")
+    @Length(max = 20, min = 1, message = "角色名称为1-20个字节")
     @ApiModelProperty(value = "角色名称")
     private String name;
     //创建备注

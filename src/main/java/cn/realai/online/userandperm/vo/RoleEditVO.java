@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+
 @ApiModel
 public class RoleEditVO {
 
@@ -16,7 +17,7 @@ public class RoleEditVO {
 
     //角色名称
     @NotBlank(message = "角色名称不能为空")
-    @Length(max = 20,min = 1,message = "角色名称为1-20个字节")
+    @Length(max = 20, min = 1, message = "角色名称为1-20个字节")
     @ApiModelProperty(value = "角色名称")
     private String name;
     //创建备注

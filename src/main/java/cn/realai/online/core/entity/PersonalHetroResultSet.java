@@ -6,46 +6,54 @@ package cn.realai.online.core.entity;
  */
 public class PersonalHetroResultSet {
 
-	private long id;
+	private Long id;
 	
 	//批次id
-	private long batchId;
+	private Long batchId;
 	
 	//实验样本人员信息id 主键id
-	private long pid;
+	private Long pid;
 	
 	//python计算返回 实验样本人员信息id（千人千面人员信息id）
 	private String personalId;
 	
 	//实验id
-	private long experimentId;
+	private Long experimentId;
 	
 	//变量id
-	private long variableId;
+	private Long variableId;
 	
 	//值
 	private String value;
 	
 	//权重(权重排序取绝对值)
-	private double weight;
+	private Double weight;
 
 	//python返回的批次标记字段，只做解析不需要入库
 	private String batchStr;
 
-	public String getBatchStr() {
-		return batchStr;
-	}
-
-	public void setBatchStr(String batchStr) {
-		this.batchStr = batchStr;
-	}
-		
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getBatchId() {
+		return batchId;
+	}
+
+	public void setBatchId(Long batchId) {
+		this.batchId = batchId;
+	}
+
+	public Long getPid() {
+		return pid;
+	}
+
+	public void setPid(Long pid) {
+		this.pid = pid;
 	}
 
 	public String getPersonalId() {
@@ -56,11 +64,19 @@ public class PersonalHetroResultSet {
 		this.personalId = personalId;
 	}
 
-	public long getVariableId() {
+	public Long getExperimentId() {
+		return experimentId;
+	}
+
+	public void setExperimentId(Long experimentId) {
+		this.experimentId = experimentId;
+	}
+
+	public Long getVariableId() {
 		return variableId;
 	}
 
-	public void setVariableId(long variableId) {
+	public void setVariableId(Long variableId) {
 		this.variableId = variableId;
 	}
 
@@ -72,36 +88,19 @@ public class PersonalHetroResultSet {
 		this.value = value;
 	}
 
-	public double getWeight() {
+	public Double getWeight() {
 		return weight;
 	}
 
-	public void setWeight(double weight) {
+	public void setWeight(Double weight) {
 		this.weight = weight;
 	}
 
-	public long getExperimentId() {
-		return experimentId;
+	public String getBatchStr() {
+		return batchStr;
 	}
 
-	public void setExperimentId(long experimentId) {
-		this.experimentId = experimentId;
+	public void setBatchStr(String batchStr) {
+		this.batchStr = batchStr;
 	}
-
-	public long getBatchId() {
-		return batchId;
-	}
-
-	public void setBatchId(long batchId) {
-		this.batchId = batchId;
-	}
-
-	public long getPid() {
-		return pid;
-	}
-
-	public void setPid(long pid) {
-		this.pid = pid;
-	}
-
 }

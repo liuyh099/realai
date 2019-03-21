@@ -23,4 +23,9 @@ public class PersonalHetroResultSetServiceImpl implements PersonalHetroResultSet
 		personalHetroResultSetDao.insertList(hetroList);
 	}
 
+	@Override
+	public List<PersonalHetroResultSet> findList(PersonalHetroResultSet query) {
+		return personalHetroResultSetDao.findList(query);
+	}
+
 }

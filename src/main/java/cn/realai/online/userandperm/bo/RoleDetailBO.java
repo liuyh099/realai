@@ -1,7 +1,5 @@
 package cn.realai.online.userandperm.bo;
 
-import cn.realai.online.userandperm.vo.MenuTreeNodeVo;
-
 import java.util.List;
 
 public class RoleDetailBO {

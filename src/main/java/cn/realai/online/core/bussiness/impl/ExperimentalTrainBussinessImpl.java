@@ -63,6 +63,12 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Autowired
     private PersonalComboResultSetService personalComboResultSetService;
 
+    @Autowired
+    private PersonalHetroResultSetService personalHetroResultSetService;
+
+    @Autowired
+    private PersonalHomoResultSetService personalHomoResultSetService;
+
     /**
      * 根据实验名称和状态等分页查询实验列表
      *
