@@ -30,4 +30,19 @@ public interface ModelService {
     //获取最近的模型
     Model selectLatest();
 
+    /**
+     * 查询模型列表
+     *
+     * @param model
+     * @return
+     */
+    List<Model> findList(Model model);
+
+    /**
+     * 插入模型数据
+     *
+     * @param model
+     * @return
+     */
+    int insert(Model model);
 }

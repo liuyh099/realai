@@ -1,6 +1,7 @@
 package cn.realai.online.core.bussiness;
 
 import cn.realai.online.common.page.PageBO;
+import cn.realai.online.core.bo.ModelBO;
 import cn.realai.online.core.query.ModelListQuery;
 import cn.realai.online.core.vo.ModelDetailVO;
 import cn.realai.online.core.vo.ModelListVO;
@@ -17,4 +18,18 @@ public interface ModelBussiness {
     List<ModelNameSelectVO> selectModelNameList(Long serviceId);
 
     ModelSelectVO selectRecentModelNameList(Long modelId);
+
+    /**
+     * 检查模型名称是否可用
+     * @param name
+     * @return
+     */
+    Boolean checkName(String name);
+
+    /**
+     * 发布实验
+     * @param modelBO
+     * @return
+     */
+    int publish(ModelBO modelBO);
 }

@@ -7,36 +7,25 @@ package cn.realai.online.core.entity;
  */
 public class Model {
 
-    private long id;
+    private Long id;
 
     //模型名称
     private String name;
 
     //创建时间
-    private long createTime;
+    private Long createTime;
 
     //实验id
-    private long experimentId;
+    private Long experimentId;
 
     //服务id
-    private long serviceId;
+    private Long serviceId;
 
-    //备注
-    private String remark;
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -48,28 +37,27 @@ public class Model {
         this.name = name;
     }
 
-    public long getCreateTime() {
+    public Long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
 
-    public long getExperimentId() {
+    public Long getExperimentId() {
         return experimentId;
     }
 
-    public void setExperimentId(long experimentId) {
+    public void setExperimentId(Long experimentId) {
         this.experimentId = experimentId;
     }
 
-    public long getServiceId() {
+    public Long getServiceId() {
         return serviceId;
     }
 
-    public void setServiceId(long serviceId) {
+    public void setServiceId(Long serviceId) {
         this.serviceId = serviceId;
     }
-
 }

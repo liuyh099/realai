@@ -1,5 +1,6 @@
 package cn.realai.online.core.service.impl;
 
+import cn.realai.online.core.bo.ModelBO;
 import cn.realai.online.core.bo.ModelDetailBO;
 import cn.realai.online.core.bo.ModelListBO;
 import cn.realai.online.core.dao.ModelDao;
@@ -45,5 +46,15 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public Model selectLatest() {
         return modelDao.selectLatest();
+    }
+
+    @Override
+    public List<Model> findList(Model model) {
+        return modelDao.findList(model);
+    }
+
+    @Override
+    public int insert(Model model) {
+        return modelDao.insert(model);
     }
 }
