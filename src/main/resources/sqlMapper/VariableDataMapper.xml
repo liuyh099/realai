@@ -40,21 +40,6 @@
 		where experiment_id = #{experimentId}
 	</select>
 
-	<select id="findList" resultMap="VariableDataMap" parameterType="cn.realai.online.core.entity.VariableData">
-		select *
-		from variable_data
-		<where>
-			`delete` !=2
-			<if test="experimentId!=null">
-				AND experiment_id = #{experimentId}
-			</if>
-			<if test="variableType!=null">
-				AND variable_type = #{variableType}
-			</if>
-		</where>
-		ORDER BY create_time ASC
-	</select>
-	
 	<select id="selectDeleteListByExperimentId" resultMap="VariableDataMap">
 		select *
 		from variable_data
