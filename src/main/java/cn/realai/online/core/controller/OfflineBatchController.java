@@ -3,6 +3,9 @@ package cn.realai.online.core.controller;
 
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.common.vo.Result;
+import cn.realai.online.common.vo.ResultCode;
+import cn.realai.online.common.vo.ResultMessage;
+import cn.realai.online.core.bussiness.BatchRecordBusiness;
 import cn.realai.online.core.query.ModelListQuery;
 import cn.realai.online.core.query.OfflineBatchListQuery;
 import cn.realai.online.core.vo.ModelDetailVO;
@@ -15,6 +18,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -30,6 +34,9 @@ import org.springframework.web.bind.annotation.*;
 public class OfflineBatchController {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private BatchRecordBusiness batchRecordBusiness;
 
     @PostMapping("/create")
     @ApiOperation(value="离线跑批运算")
@@ -55,7 +62,13 @@ public class OfflineBatchController {
     @ApiOperation(value="查询离线跑批列表")
     @ResponseBody
     public Result<PageBO<OfflineBatchListVO>> list(OfflineBatchListQuery query){
-        return null;
+        try {
+            PageBO<OfflineBatchListVO> page = batchRecordBusiness.pageList(query);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), page);
+        } catch (Exception e) {
+            log.error("查询离线跑批列表", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
     @GetMapping("/download")

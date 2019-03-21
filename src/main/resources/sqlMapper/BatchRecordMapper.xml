@@ -76,6 +76,20 @@
         join service as s on br.service_id = s.id
         join experiment as ep on br.experiment_id = ep.id
         join model as m on br.experiment_id = m.experiment_id
+        <where>
+            <if test="batchListBO!=null and batchListBo.modelName!=null">
+                and m.name like '%${name}%'
+            </if>
+            <if test="batchListBO!=null and batchListBo.status!=null">
+                and ep.status = #{batchListBO.status}
+            </if>
+            <if test="minDate!=null">
+                and <![CDATA[ ep.release_time >= #{minDate} ]]>
+            </if>
+            <if test="maxDate!=null">
+                and <![CDATA[ ep.release_time <= #{maxDate} ]]>
+            </if>
+        </where>
         order by br.create_time desc
     </select>
 

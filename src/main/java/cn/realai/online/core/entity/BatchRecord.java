@@ -41,6 +41,9 @@ public class BatchRecord {
 	//批次名称
 	private String batchName;
 
+	//备注
+	private String remark;
+
 	public long getServiceId() {
 		return serviceId;
 	}
@@ -120,5 +123,12 @@ public class BatchRecord {
 	public void setBatchName(String batchName) {
 		this.batchName = batchName;
 	}
-	
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }
