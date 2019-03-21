@@ -178,4 +178,11 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     List<ModelPerformanceBO> findModelPerformance(Long id);
+
+    /**
+     * 查询组名
+     * @param experimentId
+     * @return
+     */
+    List<SampleGroupingBO> getGroupOptionName(Long experimentId);
 }

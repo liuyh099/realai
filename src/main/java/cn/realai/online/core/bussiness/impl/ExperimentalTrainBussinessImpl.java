@@ -66,6 +66,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Autowired
     private ModelPerformanceService modelPerformanceService;
 
+
+
     /**
      * 根据实验名称和状态等分页查询实验列表
      *
@@ -371,6 +373,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         List<ModelPerformance> list = modelPerformanceService.findList(modelPerformance);
         List<ModelPerformanceBO> result = JSON.parseArray(JSON.toJSONString(list), ModelPerformanceBO.class);
         return result;
+    }
+
+    @Override
+    public List<SampleGroupingBO> getGroupOptionName(Long experimentId) {
+        return null;
     }
 
 

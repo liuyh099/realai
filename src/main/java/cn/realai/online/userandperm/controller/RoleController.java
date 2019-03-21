@@ -85,8 +85,9 @@ public class RoleController {
     @ApiOperation("增加角色")
     public Result add(@RequestBody RoleAddVO roleAddVO) {
         try {
-            RoleBO roleBO = new RoleBO();
-            BeanUtils.copyProperties(roleAddVO, roleBO);
+            //RoleBO roleBO = new RoleBO();
+            RoleBO roleBO =JSON.parseObject(JSON.toJSONString(roleAddVO),RoleBO.class);
+          //  BeanUtils.copyProperties(roleAddVO, roleBO);
             if (roleBusiness.insert(roleBO)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             } else {
@@ -100,7 +101,7 @@ public class RoleController {
 
     @GetMapping("menuTree")
     @ApiOperation("获得所有的菜单权限")
-    public Result<List<MenuTreeNodeVo>> menuTree() {
+    public Result<MenuTreeNodeVo> menuTree() {
         try {
             List<MenuTreeNodeBO> resultBO = roleBusiness.menuTree();
             List<MenuTreeNodeVo> result = JSON.parseArray(JSON.toJSONString(resultBO), MenuTreeNodeVo.class);
@@ -142,8 +143,7 @@ public class RoleController {
     @ApiOperation("更新角色")
     public Result update(@RequestBody RoleEditVO editVO) {
         try {
-            RoleBO roleBo = new RoleBO();
-            BeanUtils.copyProperties(editVO, roleBo);
+            RoleBO roleBo =JSON.parseObject(JSON.toJSONString(editVO),RoleBO.class);
             if (!roleBusiness.update(roleBo)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
