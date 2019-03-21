@@ -5,6 +5,7 @@ import cn.realai.online.core.bo.*;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
+import cn.realai.online.core.query.IdQuery;
 import cn.realai.online.core.vo.ExperimentalResultTopVO;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
 
@@ -13,110 +14,148 @@ import java.util.List;
 public interface ExperimentalTrainBussiness {
     PageBO<ExperimentalTrainVO> pageList(ExperimentalTrainQuery experimentalTrainQuery);
 
-	Integer deleteExperimentByIds(List<Long> ids);
+    Integer deleteExperimentByIds(List<Long> ids);
 
-	int train(long experimentId);
+    int train(long experimentId);
 
-	void testPreprocess(long experimentId);
+    void testPreprocess(long experimentId);
 
-	ExperimentalTrainDetailBO detail(long experimentId);
+    ExperimentalTrainDetailBO detail(long experimentId);
 
-	/**
-	 * 新增选择文件
-	 * @param experimentBO
-	 * @return
-	 */
-    Long selectFileAdd( ExperimentBO experimentBO);
+    /**
+     * 新增选择文件
+     *
+     * @param experimentBO
+     * @return
+     */
+    Long selectFileAdd(ExperimentBO experimentBO);
 
-	/**
-	 * 检查文件名是否重复
-	 * @param name
-	 * @param id
-	 * @return
-	 */
-	boolean checkTrainName(String name, Long id);
+    /**
+     * 检查文件名是否重复
+     *
+     * @param name
+     * @param id
+     * @return
+     */
+    boolean checkTrainName(String name, Long id);
 
-	/**
-	 * 根据Id查询实验信息
-	 * @param trainId
-	 * @return
-	 */
+    /**
+     * 根据Id查询实验信息
+     *
+     * @param trainId
+     * @return
+     */
     ExperimentBO selectById(Long trainId);
 
-	/**
-	 * 更新选择文件内容
-	 * @param experimentBO
-	 * @return
-	 */
-	Integer selectFileUpdate(ExperimentBO experimentBO);
+    /**
+     * 更新选择文件内容
+     *
+     * @param experimentBO
+     * @return
+     */
+    Integer selectFileUpdate(ExperimentBO experimentBO);
 
-	/**
-	 * 更新实验参数
-	 * @param experimentBO
-	 * @return
-	 */
-	Integer updateParam(ExperimentBO experimentBO);
+    /**
+     * 更新实验参数
+     *
+     * @param experimentBO
+     * @return
+     */
+    Integer updateParam(ExperimentBO experimentBO);
 
-	/**
-	 * 查询同质或者异质数据
-	 * @param experimentalTrainCreateModelDataQuery
-	 * @return
-	 */
+    /**
+     * 查询同质或者异质数据
+     *
+     * @param experimentalTrainCreateModelDataQuery
+     * @return
+     */
     PageBO<VariableDataBO> pageHomOrHemeList(ExperimentalTrainCreateModelDataQuery experimentalTrainCreateModelDataQuery);
 
-	/**
-	 * 删除VariableData 数据
-	 * @param experimentId
-	 * @param ids
-	 */
+    /**
+     * 删除VariableData 数据
+     *
+     * @param experimentId
+     * @param ids
+     */
     void deleteVariableData(Long experimentId, List<Long> ids);
 
-	/**
-	 * 实验评估指标数据
-	 * @param experimentId
-	 * @return
-	 */
-	ExperimentalResultQuatoBO quota(Long experimentId);
+    /**
+     * 实验评估指标数据
+     *
+     * @param experimentId
+     * @return
+     */
+    ExperimentalResultQuatoBO quota(Long experimentId);
 
-	/**
-	 * 实验指标查看
-	 * @param parentId
-	 * @return
-	 */
+    /**
+     * 实验指标查看
+     *
+     * @param parentId
+     * @return
+     */
     List<ExperimentResultSetBO> quotaGroup(Long parentId);
 
-	/**
-	 * TOP数据
-	 * @param experimentId
-	 * @return
-	 */
-	ExperimentalResultTopBO quotaTopGroup(Long experimentId);
+    /**
+     * TOP数据
+     *
+     * @param experimentId
+     * @return
+     */
+    ExperimentalResultTopBO quotaTopGroup(Long experimentId);
 
-	/**
-	 * 样本摘要
-	 * @param experimentId
-	 * @return
-	 */
+    /**
+     * 样本摘要
+     *
+     * @param experimentId
+     * @return
+     */
     List<SampleSummaryBO> summary(Long experimentId);
 
-	/**
-	 * 千人千面页面数据
-	 * @param faceListDataQuery
-	 * @return
-	 */
-	PageBO<PersonalInformationBO> personalInformationPage(FaceListDataQuery faceListDataQuery,Integer batchType);
+    /**
+     * 千人千面页面数据
+     *
+     * @param faceListDataQuery
+     * @return
+     */
+    PageBO<PersonalInformationBO> personalInformationPage(FaceListDataQuery faceListDataQuery, Integer batchType);
 
-	/**
-	 * 千人千面列表数据详情信息
-	 * @param id
-	 * @return
-	 */
+    /**
+     * 千人千面列表数据详情信息
+     *
+     * @param id
+     * @return
+     */
     PersonalInformationBO listDataDetail(Long id);
 
-	/**
-	 * 千人千面异质最强组合特征
-	 * @param id
-	 * @return
-	 */
-	List<PersonalComboResultSetBO> listDataDetailTopGroup(Long id);
+    /**
+     * 千人千面异质最强组合特征
+     *
+     * @param id
+     * @return
+     */
+    List<PersonalComboResultSetBO> listDataDetailTopGroup(Long id);
+
+    /**
+     * 千人千面异质数据TOP 10
+     *
+     * @param id
+     * @return
+     */
+    List<PersonalHetroResultSetBO> listDataDetailTopTen(Long id);
+
+    /**
+     * 千人千面异质数据列表
+     *
+     * @param query
+     * @return
+     */
+    PageBO<PersonalHetroResultSetBO> listPersonalHetroResultSet(IdQuery query);
+
+    /**
+     * 千人千面同质数据列表
+     *
+     * @param query
+     * @return
+     */
+    PageBO<PersonalHomoResultSetBO> listPersonalHomoResultSet(IdQuery query);
 }

@@ -20,6 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,7 @@ public class ExperimentalResultController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
     private ExperimentalTrainBussiness experimentalTrainBusiness;
 
     @GetMapping("/group/{trainId}")
@@ -211,8 +213,8 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-千人千面列表数据-详情-异质最强TOP10(传数据id))")
     public Result<List<PersonalHetroResultSetTopTenVO>> listDataDetailTopTen(@Validated IdVO idVo) {
         try {
-
-            Object result=null;
+            List<PersonalHetroResultSetBO> list = experimentalTrainBusiness.listDataDetailTopTen(idVo.getId());
+            List<PersonalHetroResultSetTopTenVO> result = JSON.parseArray(JSON.toJSONString(list), PersonalHetroResultSetTopTenVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("实验-千人千面列表数据-详情-异质最强TOP10异常", e);
@@ -222,11 +224,12 @@ public class ExperimentalResultController {
 
     @GetMapping("thousandsFace/list/sameCharts")
     @ApiOperation(value = "实验-千人千面列表数据-详情-同质特征数据(echarts)(传数据id))")
-    public Result<List<PersonalHetroResultSetTopTenVO>> listDataDetailSameCharts(@RequestBody IdVO idVo) {
+    public Result<PersonalHomoResultChartsVO> listDataDetailSameCharts(@Validated IdVO idVo) {
         try {
 
+
         } catch (Exception e) {
-            logger.error("实验评估-图片异常", e);
+            logger.error("实验-千人千面列表数据-详情-同质特征数据(echarts)异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
         return null;
@@ -234,25 +237,36 @@ public class ExperimentalResultController {
 
     @GetMapping("thousandsFace/list/diff")
     @ApiOperation(value = "实验-千人千面列表数据-详情-所有异质数据(传数据id))")
-    public Result<PageBO<PersonalHetroResultSetTopTenVO>> listDiff(@RequestBody IdQuery idQuery) {
+    public Result<PageBO<PersonalHetroResultSetTopTenVO>> listDiff(@Validated IdQuery query) {
         try {
-
+            PageBO<PersonalHetroResultSetBO> page = experimentalTrainBusiness.listPersonalHetroResultSet(query);
+            if (page == null) {
+                return null;
+            }
+            List<PersonalHetroResultSetTopTenVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), PersonalHetroResultSetTopTenVO.class);
+            PageBO<PersonalHetroResultSetTopTenVO> pageBO = new PageBO<PersonalHetroResultSetTopTenVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
-            logger.error("实验评估-图片异常", e);
+            logger.error("实验-千人千面列表数据-详情-所有异质数据异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
     @GetMapping("thousandsFace/list/same")
     @ApiOperation(value = "实验-千人千面列表数据-详情-所有同质数据(传数据id))")
-    public Result<List<PersonalHomoResultSetVO>> listSame(@RequestBody IdQuery idQuery) {
+    public Result<List<PersonalHomoResultSetVO>> listSame(@RequestBody IdQuery query) {
         try {
+            PageBO<PersonalHomoResultSetBO> page = experimentalTrainBusiness.listPersonalHomoResultSet(query);
+            if (page == null) {
+                return null;
+            }
+            List<PersonalHomoResultSetVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), PersonalHomoResultSetVO.class);
+            PageBO<PersonalHomoResultSetVO> pageBO = new PageBO<PersonalHomoResultSetVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
 
         } catch (Exception e) {
-            logger.error("实验评估-图片异常", e);
+            logger.error("实实验-千人千面列表数据-详情-所有同质数据异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 }

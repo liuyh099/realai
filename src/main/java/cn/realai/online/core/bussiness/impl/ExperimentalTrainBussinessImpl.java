@@ -6,10 +6,7 @@ import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.*;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.entity.*;
-import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
-import cn.realai.online.core.query.ExperimentalTrainQuery;
-import cn.realai.online.core.query.FaceListDataQuery;
-import cn.realai.online.core.query.PageQuery;
+import cn.realai.online.core.query.*;
 import cn.realai.online.core.service.*;
 import cn.realai.online.core.vo.ExperimentalResultTopVO;
 import cn.realai.online.core.vo.ExperimentalTrainSelectFileVO;
@@ -68,6 +65,12 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Autowired
     private PersonalComboResultSetService personalComboResultSetService;
+
+    @Autowired
+    private PersonalHetroResultSetService personalHetroResultSetService;
+
+    @Autowired
+    private PersonalHomoResultSetService personalHomoResultSetService;
 
     /**
      * 根据实验名称和状态等分页查询实验列表
@@ -303,11 +306,50 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     public List<PersonalComboResultSetBO> listDataDetailTopGroup(Long id) {
         PersonalComboResultSet query = new PersonalComboResultSet();
-        query.setId(id);
+        query.setPid(id);
         List<PersonalComboResultSet> list = personalComboResultSetService.findList(query);
         List<PersonalComboResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalComboResultSetBO.class);
         return result;
     }
+
+    @Override
+    public List<PersonalHetroResultSetBO> listDataDetailTopTen(Long id) {
+        PersonalHetroResultSet query = new PersonalHetroResultSet();
+        query.setPid(id);
+        PageHelper.startPage(1, 10);
+        List<PersonalHetroResultSet> list = personalHetroResultSetService.findList(query);
+        List<PersonalHetroResultSetBO> bo = JSON.parseArray(JSON.toJSONString(list), PersonalHetroResultSetBO.class);
+        //TODO 去关联变量表数据
+        return bo;
+    }
+
+    @Override
+    public PageBO<PersonalHetroResultSetBO> listPersonalHetroResultSet(IdQuery query) {
+        PersonalHetroResultSet queryCondition = new PersonalHetroResultSet();
+        queryCondition.setPid(query.getId());
+        Page page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        List<PersonalHetroResultSet> list = personalHetroResultSetService.findList(queryCondition);
+        List<PersonalHetroResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalHetroResultSetBO.class);
+        //TODO 去关联变量表数据
+
+        PageBO<PersonalHetroResultSetBO> pageBO = new PageBO<PersonalHetroResultSetBO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
+        return pageBO;
+    }
+
+    @Override
+    public PageBO<PersonalHomoResultSetBO> listPersonalHomoResultSet(IdQuery query) {
+        PersonalHomoResultSet queryCondition = new PersonalHomoResultSet();
+        queryCondition.setPid(query.getId());
+        Page page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
+        List<PersonalHomoResultSet> list = personalHomoResultSetService.findList(queryCondition);
+        List<PersonalHomoResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalHomoResultSetBO.class);
+        //TODO 去关联变量表数据
+
+        PageBO<PersonalHomoResultSetBO> pageBO = new PageBO<PersonalHomoResultSetBO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
+        return pageBO;
+
+    }
+
 
     private PersonalInformation buildQueryCondition(BatchRecord batchRecord, FaceListDataQuery query) {
         PersonalInformation personal = new PersonalInformation();

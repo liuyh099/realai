@@ -8,7 +8,7 @@
         <result column="pid" property="pid" jdbcType="BIGINT"/>
         <result column="variable_id" property="variableId" jdbcType="VARCHAR"/>
         <result column="value" property="value" jdbcType="VARCHAR"/>
-        <result column="weight" property="weight" jdbcType="DOUBLE"/>
+        <result column="absWeight" property="weight" jdbcType="DOUBLE"/>
     </resultMap>
 
     <insert id="insertList">
@@ -19,5 +19,16 @@
         	#{hetro.value},#{hetro.weight}
         </foreach>
     </insert>
+
+    <select id="findList" parameterType="cn.realai.online.core.entity.PersonalHetroResultSet" resultMap="PersonalHetroResultSetMap">
+        SELECT *,ABS(weight) AS `absWeight` FROM personal_hetro
+        <where>
+            1=1
+            <if test="pid!=null">
+                AND pid = #{pid}
+            </if>
+        </where>
+        ORDER BY ABS(weight) DESC
+    </select>
 
 </mapper>
