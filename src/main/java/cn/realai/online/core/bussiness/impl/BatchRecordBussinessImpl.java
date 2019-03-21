@@ -101,6 +101,11 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
             record.setExperimentId((Long) releaseMap.get("experimentId"));
             record.setBatchName(String.valueOf(releaseMap.get("serviceName")) + "_" + String.valueOf(record.getCreateTime()) + "_离线跑批");
             record.setExperimentId((Long) releaseMap.get("experimentId"));
+            if (releaseMap.get("batchTimes") != null) {
+                record.setOfflineTimes((Integer)releaseMap.get("batchTimes") + 1);
+            } else {
+                record.setOfflineTimes(1);
+            }
         }
         batchRecordService.insert(record);
         log.warn("新增的recordId:" + record.getId());

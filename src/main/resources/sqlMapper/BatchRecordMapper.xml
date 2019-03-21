@@ -12,14 +12,15 @@
         <result column="down_url" property="downUrl" jdbcType="VARCHAR"/>
         <result column="batch_type" property="batchType" jdbcType="INTEGER"/>
         <result column="batch_name" property="batchName" jdbcType="VARCHAR"/>
+        <result column="offline_times" property="offlineTimes" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO batch_record (y_table , x_table_homo, x_table_heter, experiment_id, service_id,
-        	create_time, down_url, batch_type, batch_name, remark)
+        	create_time, down_url, batch_type, batch_name, offline_times, remark)
         VALUE (#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},#{experimentId},#{serviceId},
-        	#{createTime},#{downUrl},#{batchType},#{batchName},#{remark})
+        	#{createTime},#{downUrl},#{batchType},#{batchName}, #{offlineTimes}, #{remark})
     </insert>
 
     <update id="update" parameterType="cn.realai.online.core.entity.BatchRecord">
@@ -59,6 +60,7 @@
         <result column="serviceId" property="serviceId" jdbcType="BIGINT"/>
         <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
         <result column="batchTimes" property="batchTimes" jdbcType="INTEGER"/>
+        <result column="offlineTimes" property="offlineTimes" jdbcType="INTEGER"/>
         <result column="downUrl" property="downUrl" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
@@ -73,6 +75,7 @@
         s.id as serviceId,
         s.name as serviceName,
         s.batch_times as batchTimes,
+        br.offline_times as offlineTimes,
         br.down_url as downUrl,
         br.remark as remark
         from batch_record as br
@@ -117,5 +120,39 @@
             </if>
         </where>
     </select>
+
+    <resultMap type="cn.realai.online.core.bo.BatchDetailBO" id="BatchDetailMap">
+        <result column="batchId" property="batchId" jdbcType="BIGINT"/>
+        <result column="serviceId" property="serviceId" jdbcType="BIGINT"/>
+        <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
+        <result column="experimentId" property="experimentId" jdbcType="BIGINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="offlineTimes" property="offlineTimes" jdbcType="INTEGER"/>
+        <result column="xtabaleHeter" property="xtabaleHeter" jdbcType="VARCHAR"/>
+        <result column="xtableHomo" property="xtableHomo" jdbcType="VARCHAR"/>
+        <result column="ytable" property="ytable" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="BIGINT"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="selectDetail" resultMap="BatchDetailMap">
+        select br.id as batchId,
+        br.service_id as serviceId,
+        sv.name as serviceName,
+        br.experiment_id as experimentId,
+        ep.status,
+        br.offline_times as offlineTimes,
+        br.x_table_heter as xtabaleHeter,
+        br.x_table_homo as xtableHomo,
+        br.y_table as ytable,
+        br.create_time as createTime,
+        br.remark as remark
+        from batch_record as br
+        join service as sv on br.service_id = sv.id
+        left join experiment as ep on br.experiment_id = ep.id
+        <where>
+            br.id = #{batchId}
+        </where>
+    </select>
+
 
 </mapper>

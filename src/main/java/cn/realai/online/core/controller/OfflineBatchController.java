@@ -5,12 +5,14 @@ import cn.realai.online.common.page.PageBO;
 import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
+import cn.realai.online.core.bo.BatchDetailBO;
 import cn.realai.online.core.bussiness.BatchRecordBussiness;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.query.OfflineBatchListQuery;
 import cn.realai.online.core.service.BatchRecordService;
 import cn.realai.online.core.vo.OfflineBatchCompleteVO;
 import cn.realai.online.core.vo.OfflineBatchCreateVO;
+import cn.realai.online.core.vo.OfflineBatchDetailVO;
 import cn.realai.online.core.vo.OfflineBatchListVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -18,6 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -117,4 +120,21 @@ public class OfflineBatchController {
         }
     }
 
+
+    @GetMapping("/detail/{batchId}")
+    @ApiOperation(value="查询离线跑批详情")
+    @ApiImplicitParam(name = "batchId", value = "离线跑批Id", required = true, dataType = "Long", paramType = "path")
+    @ResponseBody
+    public Result<OfflineBatchDetailVO> detail(@PathVariable("batchId") Long batchId){
+        try {
+            BatchDetailBO resultBO = batchRecordService.selectDetail(batchId);
+            Assert.notNull(resultBO, "未找到对应跑批记录详情");
+            OfflineBatchDetailVO resultVO = new OfflineBatchDetailVO();
+            BeanUtils.copyProperties(resultBO, resultVO);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), resultVO);
+        } catch (Exception e) {
+            log.error("查询离线跑批是否计算完成异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
+        }
+    }
 }
