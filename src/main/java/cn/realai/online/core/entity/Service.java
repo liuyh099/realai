@@ -44,6 +44,12 @@ public class Service {
 	//到期时间
 	private long expireDate;
 
+	//受控信息
+	private String detail;
+
+	//调优秘钥
+	private String tuningSecretKey;
+
 	//秘钥
 	private String secretKey;
 	
@@ -56,6 +62,13 @@ public class Service {
 	//离线跑批次数
 	private long batchTimes;
 
+	public String getDetail() {
+		return detail;
+	}
+
+	public void setDetail(String detail) {
+		this.detail = detail;
+	}
 
 	public long getBatchTimes() {
 		return batchTimes;
@@ -160,5 +173,12 @@ public class Service {
 	public void setBusinessType(int businessType) {
 		this.businessType = businessType;
 	}
-	
+
+	public String getTuningSecretKey() {
+		return tuningSecretKey;
+	}
+
+	public void setTuningSecretKey(String tuningSecretKey) {
+		this.tuningSecretKey = tuningSecretKey;
+	}
 }
