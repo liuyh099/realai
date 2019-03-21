@@ -2,8 +2,6 @@ package cn.realai.online.util;
 
 import cn.realai.online.core.bo.FileClassifyBO;
 import cn.realai.online.core.vo.FileTreeVo;
-import com.alibaba.fastjson.JSON;
-import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ import java.util.stream.Collectors;
 public class StringPathToTreeUtils {
 
 
-    public static List<FileTreeVo> listPathToTree(List<String> urlList){
+    public static List<FileTreeVo> listPathToTree(List<String> urlList) {
         //文件分类后的集合
         List<FileClassifyBO> fileClassifyList = new ArrayList<>();
         // 对数据进行分类
@@ -46,7 +44,7 @@ public class StringPathToTreeUtils {
         Map<String, List<FileClassifyBO>> groupByMap = fileClassifyListnew.stream().filter(fileClassify -> fileClassify.getParent() == null).collect(Collectors.groupingBy(FileClassifyBO::getSelf));
 
 
-        for (Map.Entry<String, List<FileClassifyBO>> entry:groupByMap.entrySet()) {
+        for (Map.Entry<String, List<FileClassifyBO>> entry : groupByMap.entrySet()) {
             List<FileClassifyBO> list = entry.getValue();
             List<FileClassifyBO> listnew = new ArrayList<>();
             list.stream().forEach(
@@ -62,10 +60,6 @@ public class StringPathToTreeUtils {
         List<FileTreeVo> result = getFileTreeVoList(groupByMap, fileClassifyListnew);
         return result;
     }
-
-
-
-
 
 
     public static void main(String[] args) {
