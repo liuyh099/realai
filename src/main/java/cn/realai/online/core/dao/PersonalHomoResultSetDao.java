@@ -16,4 +16,11 @@ public interface PersonalHomoResultSetDao {
      * @return
      */
     List<PersonalHomoResultSet> findList(PersonalHomoResultSet queryCondition);
+
+    /**
+     * echarts数据
+     * @param id
+     * @return
+     */
+    List<PersonalHomoResultSet> listCharts(Long id);
 }

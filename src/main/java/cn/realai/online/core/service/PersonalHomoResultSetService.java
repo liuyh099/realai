@@ -14,4 +14,11 @@ public interface PersonalHomoResultSetService {
      * @return
      */
     List<PersonalHomoResultSet> findList(PersonalHomoResultSet queryCondition);
+
+    /**
+     * echrs 数据
+     * @param id
+     * @return
+     */
+    List<PersonalHomoResultSet> listCharts(Long id);
 }

@@ -22,7 +22,7 @@ public class PersonalHomoResultSet {
 	//python计算返回 实验样本人员信息id（千人千面人员信息id）
 	private String personalId;
 	
-	//变量名(X轴)
+	//变量名(Y轴)
 	private String variableId;
 	
 	//值

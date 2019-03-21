@@ -6,7 +6,6 @@ import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.IdQuery;
-import cn.realai.online.core.vo.ExperimentalResultTopVO;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
 
 import java.util.List;
@@ -158,4 +157,11 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     PageBO<PersonalHomoResultSetBO> listPersonalHomoResultSet(IdQuery query);
+
+    /**
+     * 千人千面echars
+     * @param id
+     * @return
+     */
+    List<PersonalHomoResultSetBO> listDataDetailSameCharts(Long id);
 }

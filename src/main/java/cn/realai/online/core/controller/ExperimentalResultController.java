@@ -8,6 +8,7 @@ import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.*;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.entity.BatchRecord;
+import cn.realai.online.core.entity.PersonalHomoResultSet;
 import cn.realai.online.core.query.ExperimentalResultWhileBoxQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.GlobalVariableQuery;
@@ -21,9 +22,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -226,13 +229,28 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-千人千面列表数据-详情-同质特征数据(echarts)(传数据id))")
     public Result<PersonalHomoResultChartsVO> listDataDetailSameCharts(@Validated IdVO idVo) {
         try {
-
-
+            List<PersonalHomoResultSetBO> list = experimentalTrainBusiness.listDataDetailSameCharts(idVo.getId());
+            PersonalHomoResultChartsVO result= new PersonalHomoResultChartsVO();
+            if(!CollectionUtils.isEmpty(list)){
+                List<Integer> x =new ArrayList<>(list.size());
+                List<String> y =new ArrayList<>(list.size());
+                List<List<Double>> data =new ArrayList<>(list.size());
+                for (PersonalHomoResultSetBO tmp: list) {
+                    x.add(tmp.getK());
+                    y.add(tmp.getVariableId());
+                    List<Double> dataItem =new ArrayList<>(1);
+                    dataItem.add(tmp.getWeight());
+                    data.add(dataItem);
+                }
+                result.setX(x);
+                result.setY(y);
+                result.setData(data);
+            }
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("实验-千人千面列表数据-详情-同质特征数据(echarts)异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
     @GetMapping("thousandsFace/list/diff")

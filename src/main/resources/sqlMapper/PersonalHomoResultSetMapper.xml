@@ -32,4 +32,15 @@
         ORDER BY ABS(weight) DESC
     </select>
 
+    <select id="listCharts" resultMap="PersonalHomoResultSetMap" parameterType="cn.realai.online.core.entity.PersonalHomoResultSet">
+        SELECT *,ABS(weight) AS `absWeight` FROM personal_homo
+        <where>
+            1=1
+            <if test="pid!=null">
+                AND pid = #{pid}
+            </if>
+        </where>
+        ORDER BY  k ASC
+    </select>
+
 </mapper>

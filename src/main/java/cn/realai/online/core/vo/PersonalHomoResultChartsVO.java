@@ -9,28 +9,28 @@ import java.util.List;
 public class PersonalHomoResultChartsVO {
 
     @ApiModelProperty(value = "x轴")
-    private List<String> x;
+    private List<Integer> x;
 
     @ApiModelProperty(value = "y轴")
-    private List<Integer> y;
+    private List<String> y;
 
     @ApiModelProperty(value = "数据")
     private List<List<Double>> data;
 
 
-    public List<String> getX() {
+    public List<Integer> getX() {
         return x;
     }
 
-    public void setX(List<String> x) {
+    public void setX(List<Integer> x) {
         this.x = x;
     }
 
-    public List<Integer> getY() {
+    public List<String> getY() {
         return y;
     }
 
-    public void setY(List<Integer> y) {
+    public void setY(List<String> y) {
         this.y = y;
     }
 

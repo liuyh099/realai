@@ -350,6 +350,13 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     }
 
+    @Override
+    public List<PersonalHomoResultSetBO> listDataDetailSameCharts(Long id) {
+        List<PersonalHomoResultSet> list = personalHomoResultSetService.listCharts(id);
+        List<PersonalHomoResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalHomoResultSetBO.class);
+        return result;
+    }
+
 
     private PersonalInformation buildQueryCondition(BatchRecord batchRecord, FaceListDataQuery query) {
         PersonalInformation personal = new PersonalInformation();

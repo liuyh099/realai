@@ -28,4 +28,9 @@ public class PersonalHomoResultSetServiceImpl implements PersonalHomoResultSetSe
 		return personalHomoResultSetDao.findList(queryCondition);
 	}
 
+	@Override
+	public List<PersonalHomoResultSet> listCharts(Long id) {
+		return personalHomoResultSetDao.listCharts(id);
+	}
+
 }
