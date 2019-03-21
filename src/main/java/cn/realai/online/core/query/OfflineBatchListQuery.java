@@ -13,14 +13,17 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class OfflineBatchListQuery extends PageQuery {
 
-    @ApiModelProperty(value = "模型名称")
+    @ApiModelProperty(value="模型名称")
     private String name;
 
-    @ApiModelProperty(value = "训练状态")
-    private String trainStatus;
+    @ApiModelProperty(value="训练状态", example = "//选择文件= 1; //选择参数= 2; //变量筛选= 3; //试验训练中= 4; //试验完毕= 5")
+    private Integer trainStatus;
 
-    @ApiModelProperty(value = "跑批时间，格式：yyyy-MM-dd")
-    private String runBatchTime;
+    @ApiModelProperty(value="最小跑批时间，格式：yyyy-MM-dd")
+    private String minDate;
+
+    @ApiModelProperty(value="最大跑批时间，格式：yyyy-MM-dd")
+    private String maxDate;
 
     public String getName() {
         return name;
@@ -30,19 +33,27 @@ public class OfflineBatchListQuery extends PageQuery {
         this.name = name;
     }
 
-    public String getTrainStatus() {
+    public Integer getTrainStatus() {
         return trainStatus;
     }
 
-    public void setTrainStatus(String trainStatus) {
+    public void setTrainStatus(Integer trainStatus) {
         this.trainStatus = trainStatus;
     }
 
-    public String getRunBatchTime() {
-        return runBatchTime;
+    public String getMinDate() {
+        return minDate;
     }
 
-    public void setRunBatchTime(String runBatchTime) {
-        this.runBatchTime = runBatchTime;
+    public void setMinDate(String minDate) {
+        this.minDate = minDate;
+    }
+
+    public String getMaxDate() {
+        return maxDate;
+    }
+
+    public void setMaxDate(String maxDate) {
+        this.maxDate = maxDate;
     }
 }

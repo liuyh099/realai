@@ -17,7 +17,7 @@ public interface ModelDao {
     //获取模型
     Model get(Long id);
 
-    //获取最近的模型
+    //获取最近发布的模型
     Model selectLatest();
 
     //查询模型列表

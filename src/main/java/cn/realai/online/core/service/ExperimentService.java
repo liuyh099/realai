@@ -4,7 +4,9 @@ import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.MLock;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface ExperimentService {
@@ -95,4 +97,6 @@ public interface ExperimentService {
      * @return
      */
     Integer updateParam(Experiment experiment);
+
+	HashMap findByServiceIdAndReleaseStatus(Long serviceId, Integer releaseStatus);
 }
