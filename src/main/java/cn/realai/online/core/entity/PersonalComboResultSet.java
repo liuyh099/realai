@@ -177,4 +177,9 @@ public class PersonalComboResultSet {
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
+
+	public void setBatchStr(String batchStr) {
+		this.batchStr = batchStr;
+	}
+
 }

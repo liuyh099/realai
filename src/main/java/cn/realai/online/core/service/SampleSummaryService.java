@@ -8,4 +8,10 @@ public interface SampleSummaryService {
 
 	void insertList(List<SampleSummary> ssList);
 
+    /**
+     * 查询样本综述
+     * @param sampleSummary
+     * @return
+     */
+    List<SampleSummary> findList(SampleSummary sampleSummary);
 }

@@ -19,4 +19,9 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 		return batchRecordDao.insert(batchRecord);
 	}
 
+	@Override
+	public BatchRecord getByEntity(BatchRecord batchRecord) {
+		return batchRecordDao.getByEntity(batchRecord);
+	}
+
 }

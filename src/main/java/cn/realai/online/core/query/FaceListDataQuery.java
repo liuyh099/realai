@@ -3,14 +3,17 @@ package cn.realai.online.core.query;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
+
 @ApiModel
 public class FaceListDataQuery extends PageQuery {
 
     @ApiModelProperty(value="实验id")
-    private long trainId;
+    @NotNull(message = "请先选择实验")
+    private Long trainId;
 
     @ApiModelProperty(value="分组")
-    private long groupId;
+    private Long groupId;
 
     @ApiModelProperty(value="姓名")
     private String name;
@@ -22,27 +25,27 @@ public class FaceListDataQuery extends PageQuery {
     private String phone;
 
     @ApiModelProperty(value="ID")
-    private long id;
+    private String id;
 
     @ApiModelProperty(value="进件开始日期(时间戳毫秒)")
-    private long inputStartDate;
+    private Long inputStartDate;
 
     @ApiModelProperty(value="进件结束日期(时间戳毫秒)")
-    private long inputStartEnd;
+    private Long inputStartEnd;
 
-    public long getTrainId() {
+    public Long getTrainId() {
         return trainId;
     }
 
-    public void setTrainId(long trainId) {
+    public void setTrainId(Long trainId) {
         this.trainId = trainId;
     }
 
-    public long getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(long groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 
@@ -70,27 +73,27 @@ public class FaceListDataQuery extends PageQuery {
         this.phone = phone;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public long getInputStartDate() {
+    public Long getInputStartDate() {
         return inputStartDate;
     }
 
-    public void setInputStartDate(long inputStartDate) {
+    public void setInputStartDate(Long inputStartDate) {
         this.inputStartDate = inputStartDate;
     }
 
-    public long getInputStartEnd() {
+    public Long getInputStartEnd() {
         return inputStartEnd;
     }
 
-    public void setInputStartEnd(long inputStartEnd) {
+    public void setInputStartEnd(Long inputStartEnd) {
         this.inputStartEnd = inputStartEnd;
     }
 }

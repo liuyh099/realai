@@ -25,4 +25,30 @@
         	#{batchRecord.createTime},#{batchRecord.downUrl},#{batchRecord.batchType},#{batchRecord.batchName})
     </insert>
 
+    <select id="get" resultMap="BatshRecordMap" parameterType="java.lang.Long">
+        SELECT * FROM batch_record WHERE id = #{id}
+    </select>
+
+    <select id="getByEntity" resultMap="BatshRecordMap" parameterType="cn.realai.online.core.entity.BatchRecord">
+        SELECT * FROM batch_record
+        <where>
+            1=1
+            <if test="experimentId!=null">
+                AND experiment_id = #{experimentId}
+            </if>
+            <if test="batchType!=null">
+                AND batch_type = #{batchType}
+            </if>
+            <if test="batchName!=null">
+                AND batch_name = #{batchName}
+            </if>
+            <if test="id!=null">
+                AND id = #{id}
+            </if>
+            <if test="serviceId!=null">
+                AND service_id = #{serviceId}
+            </if>
+        </where>
+    </select>
+
 </mapper>

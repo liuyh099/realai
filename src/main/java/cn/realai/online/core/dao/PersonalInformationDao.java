@@ -12,4 +12,17 @@ public interface PersonalInformationDao {
 
 	List<PersonalInformation> findListByExperimentId(@Param("experimentId")Long experimentId);
 
+	/**
+	 * 查询personal信息列表
+	 * @param personal
+	 * @return
+	 */
+    List<PersonalInformation> findList(PersonalInformation personal);
+
+	/**
+	 * 根据ID 查询personal信息
+	 * @param id
+	 * @return
+	 */
+	PersonalInformation get(Long id);
 }

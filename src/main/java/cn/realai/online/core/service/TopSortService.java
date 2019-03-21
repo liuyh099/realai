@@ -8,4 +8,10 @@ public interface TopSortService {
 
 	void insertList(List<TopSort> tsList);
 
+    /**
+     * 查询TopSort
+     * @param topSort
+     * @return
+     */
+    List<TopSort> findList(TopSort topSort);
 }

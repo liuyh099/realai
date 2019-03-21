@@ -31,4 +31,14 @@ public class PersonalInformationServiceImpl implements PersonalInformationServic
 		return personalInformationDao.findListByExperimentId(experimentId);
 	}
 
+	@Override
+	public List<PersonalInformation> findList(PersonalInformation personal) {
+		return personalInformationDao.findList(personal);
+	}
+
+	@Override
+	public PersonalInformation get(Long id) {
+		return personalInformationDao.get(id);
+	}
+
 }

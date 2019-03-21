@@ -4,6 +4,7 @@ import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.*;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
+import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.vo.ExperimentalResultTopVO;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
 
@@ -90,4 +91,32 @@ public interface ExperimentalTrainBusiness {
 	 * @return
 	 */
 	ExperimentalResultTopBO quotaTopGroup(Long experimentId);
+
+	/**
+	 * 样本摘要
+	 * @param experimentId
+	 * @return
+	 */
+    List<SampleSummaryBO> summary(Long experimentId);
+
+	/**
+	 * 千人千面页面数据
+	 * @param faceListDataQuery
+	 * @return
+	 */
+	PageBO<PersonalInformationBO> personalInformationPage(FaceListDataQuery faceListDataQuery,Integer batchType);
+
+	/**
+	 * 千人千面列表数据详情信息
+	 * @param id
+	 * @return
+	 */
+    PersonalInformationBO listDataDetail(Long id);
+
+	/**
+	 * 千人千面异质最强组合特征
+	 * @param id
+	 * @return
+	 */
+	List<PersonalComboResultSetBO> listDataDetailTopGroup(Long id);
 }

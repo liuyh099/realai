@@ -110,7 +110,7 @@ public class ExperimentalTrainController {
 
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), page);
         } catch (Exception e) {
-            logger.error("获得实验详情异常", e);
+            logger.error("实验详情-获取同质异质数据schema", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }

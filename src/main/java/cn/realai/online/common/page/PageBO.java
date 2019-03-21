@@ -1,5 +1,7 @@
 package cn.realai.online.common.page;
 
+import cn.realai.online.core.query.PageQuery;
+
 import java.util.List;
 
 /**
@@ -33,6 +35,8 @@ public class PageBO <T> {
 		this.count = count;
 		this.totalPage = totalPage;
 	}
+
+
 
 	/**
 	 * 每页大小
@@ -73,6 +77,16 @@ public class PageBO <T> {
 
 	public PageBO() {
 		super();
+	}
+
+	public PageBO(PageQuery pageQuery) {
+		this.pageSize = pageQuery.getPageSize();
+		this.pageNum = pageQuery.getPageNum();
+	}
+
+	public PageBO(int pageSize, int pageNum) {
+		this.pageSize = pageSize;
+		this.pageNum = pageNum;
 	}
 
 	public int getTotalPage() {

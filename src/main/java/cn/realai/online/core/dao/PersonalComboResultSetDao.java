@@ -10,4 +10,10 @@ public interface PersonalComboResultSetDao {
 
 	void insertList(@Param("comboList")List<PersonalComboResultSet> comboList);
 
+    /**
+     * 查询异质最强
+     * @param personal
+     * @return
+     */
+    List<PersonalComboResultSet> findList(PersonalComboResultSet personal);
 }
