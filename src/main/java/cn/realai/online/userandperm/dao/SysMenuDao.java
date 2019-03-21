@@ -11,6 +11,7 @@ public interface SysMenuDao {
 
     /**
      * 查询菜单列表数据
+     *
      * @param sysMenu
      * @return
      */

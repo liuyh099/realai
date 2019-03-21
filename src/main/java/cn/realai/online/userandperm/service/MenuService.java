@@ -7,6 +7,7 @@ import java.util.List;
 public interface MenuService {
     /**
      * 查询Menu信息
+     *
      * @param sysMenu
      * @return
      */

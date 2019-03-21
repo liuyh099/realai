@@ -9,7 +9,6 @@ import cn.realai.online.userandperm.vo.ChangePwdVO;
 import cn.realai.online.userandperm.vo.ForgetVo;
 import cn.realai.online.util.EncodingPasswordUtils;
 import cn.realai.online.util.UserUtils;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,18 +28,19 @@ public class UserOptionBusinessImpl implements UserOptionBusiness {
 
     /**
      * 忘记密码业务 先检查用户是否存在，如果存在将数据存入forget_notice表
+     *
      * @param forgetVo
      * @return
      */
     @Override
     @Transactional(readOnly = false)
     public Boolean forget(ForgetVo forgetVo) {
-        HashMap<String, Object> result =new HashMap<>();
-        User user=userService.findByNameOrPhoneNumber(forgetVo.getName());
-        if(ObjectUtils.isEmpty(user)){
-           return false;
+        HashMap<String, Object> result = new HashMap<>();
+        User user = userService.findByNameOrPhoneNumber(forgetVo.getName());
+        if (ObjectUtils.isEmpty(user)) {
+            return false;
         }
-        SysForgetNotice sysForgetNotice=new SysForgetNotice();
+        SysForgetNotice sysForgetNotice = new SysForgetNotice();
         sysForgetNotice.setUserId(user.getId());
         sysForgetNotice.setCreateTime(System.currentTimeMillis());
         sysForgetNoticeService.insert(sysForgetNotice);
@@ -59,15 +59,15 @@ public class UserOptionBusinessImpl implements UserOptionBusiness {
 
     @Override
     public Boolean changePwd(ChangePwdVO changePwdVO) {
-        User user=UserUtils.getUser();
-        if(ObjectUtils.isEmpty(user)){
+        User user = UserUtils.getUser();
+        if (ObjectUtils.isEmpty(user)) {
             return false;
         }
-        String pwd=changePwdVO.getOldPwd();
-        pwd= EncodingPasswordUtils.encodingPassword(pwd);
+        String pwd = changePwdVO.getOldPwd();
+        pwd = EncodingPasswordUtils.encodingPassword(pwd);
         user.setPwd(pwd);
 
-        if(userService.updatePwd(user)>0){
+        if (userService.updatePwd(user) > 0) {
             return true;
         }
         return false;

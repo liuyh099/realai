@@ -7,6 +7,7 @@ public interface UserOptionBusiness {
 
     /**
      * 忘记密码业务
+     *
      * @param forgetVo
      * @return
      */
@@ -14,12 +15,14 @@ public interface UserOptionBusiness {
 
     /**
      * 获得忘记密码提示总数
+     *
      * @return
      */
     Integer forgetNotice();
 
     /**
      * 检查旧密码
+     *
      * @param oldPwd
      * @return
      */
@@ -27,6 +30,7 @@ public interface UserOptionBusiness {
 
     /**
      * 修改密码
+     *
      * @param changePwdVO
      * @return
      */

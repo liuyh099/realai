@@ -326,7 +326,7 @@ public class ExperimentalTrainController {
     @ApiOperation(value = "新增实验-生成模型-一键建立模型")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result createModel(@PathVariable long trainId) {
+    public Result createModel(@PathVariable Long trainId) {
         int ret = experimentalTrainBussiness.train(trainId);
         if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("有其他实验正在训练中，请稍后重试"), null);

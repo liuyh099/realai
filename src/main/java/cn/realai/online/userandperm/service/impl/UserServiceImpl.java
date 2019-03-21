@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer insert(User user) {
         String pwd = user.getPwd();
-        pwd=EncodingPasswordUtils.encodingPassword(pwd);
+        pwd = EncodingPasswordUtils.encodingPassword(pwd);
         user.setPwd(pwd);
         return userDao.insert(user);
     }
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer updatePwd(User user) {
         String pwd = user.getPwd();
-        pwd=EncodingPasswordUtils.encodingPassword(pwd);
+        pwd = EncodingPasswordUtils.encodingPassword(pwd);
         user.setPwd(pwd);
         return userDao.updatePwd(user);
     }

@@ -14,7 +14,7 @@ public class ChangePwdVO {
     private String oldPwd;
 
     @NotBlank(message = "新密码不能为空")
-    @Length(min=8,message = "密码至少为8位")
+    @Length(min = 8, message = "密码至少为8位")
     @ApiModelProperty(value = "新密码")
     private String newPwd;
 

@@ -7,106 +7,115 @@ import java.io.Serializable;
  */
 public class User implements Serializable {
 
-	//id
-	private Long id;
-	//用户名
-	private String name;
-	//部门名称
-	private String department;
-	//部门职位
-	private String position;
-	//手机号码
-	private String phoneNumber;
-	//密码
-	private String pwd;
-	//备注
-	private String note;
+    //id
+    private Long id;
+    //用户名
+    private String name;
+    //部门名称
+    private String department;
+    //部门职位
+    private String position;
+    //手机号码
+    private String phoneNumber;
+    //密码
+    private String pwd;
+    //备注
+    private String note;
 
-	//角色ID
-	private Long roleId;
+    //角色ID
+    private Long roleId;
 
-	private Long createTime;
+    private Long createTime;
 
-	private String group;
+    private String group;
 
+    private Integer forget;
 
-	public Long getCreateTime() {
-		return createTime;
-	}
+    public Integer getForget() {
+        return forget;
+    }
 
-	public void setCreateTime(Long createTime) {
-		this.createTime = createTime;
-	}
+    public void setForget(Integer forget) {
+        this.forget = forget;
+    }
 
-	public String getGroup() {
-		return group;
-	}
+    public Long getCreateTime() {
+        return createTime;
+    }
 
-	public void setGroup(String group) {
-		this.group = group;
-	}
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
 
-	public Long getRoleId() {
-		return roleId;
-	}
+    public String getGroup() {
+        return group;
+    }
 
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
-	}
+    public void setGroup(String group) {
+        this.group = group;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getRoleId() {
+        return roleId;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getDepartment() {
-		return department;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setDepartment(String department) {
-		this.department = department;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getPosition() {
-		return position;
-	}
+    public String getDepartment() {
+        return department;
+    }
 
-	public void setPosition(String position) {
-		this.position = position;
-	}
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
+    public String getPosition() {
+        return position;
+    }
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
+    public void setPosition(String position) {
+        this.position = position;
+    }
 
-	public String getPwd() {
-		return pwd;
-	}
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
-	public String getNote() {
-		return note;
-	}
+    public String getPwd() {
+        return pwd;
+    }
 
-	public void setNote(String note) {
-		this.note = note;
-	}
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 }
