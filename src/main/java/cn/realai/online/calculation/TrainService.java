@@ -3,7 +3,6 @@ package cn.realai.online.calculation;
 import java.util.List;
 
 import cn.realai.online.core.entity.Experiment;
-import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.VariableData;
 
 public interface TrainService {

@@ -5,6 +5,7 @@ import cn.realai.online.util.SpringContextUtils;
 
 /**
  * 数据库锁
+ *
  * @author lyh
  */
 public class MLock {

@@ -14,12 +14,8 @@ import cn.realai.online.core.dao.ExperimentDao;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.service.ExperimentService;
-import cn.realai.online.tool.lock.MysqlLock;
 import cn.realai.online.tool.redis.RedisClientTemplate;
 import cn.realai.online.util.ConvertJavaBean;
-import cn.realai.online.util.SpringContextUtils;
-import cn.realai.online.core.service.MLockService;
-
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -34,7 +30,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Autowired
     private RedisClientTemplate redisClientTemplate;
-    
+
     private String getExperimentRedisKey(long id) {
         return RedisKeyPrefix.EXPERIMENT_PREFIX + id;
     }
@@ -114,7 +110,7 @@ public class ExperimentServiceImpl implements ExperimentService {
         if (CollectionUtils.isEmpty(experimentList)) {
             return true;
         }
-        if(id!=null){
+        if (id != null) {
             for (Experiment experiment1 : experimentList) {
                 if (!experiment1.getId().equals(id)) {
                     return false;

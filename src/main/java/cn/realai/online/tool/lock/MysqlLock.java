@@ -9,6 +9,7 @@ import cn.realai.online.core.service.MLockService;
 @Component
 public class MysqlLock implements Lock {
 
+	
 	@Autowired
 	private MLockService mlockService;
 	
