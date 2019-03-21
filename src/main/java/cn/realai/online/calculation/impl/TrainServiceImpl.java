@@ -49,10 +49,10 @@ public class TrainServiceImpl implements TrainService {
 		trbo.setDeleteColumnsHomo(getVariableDataName(homoList));
 		trbo.setDeleteColumnsHetero(getVariableDataName(hetroList));
 		String url = config.getUrl();
-		String ret = HttpUtil.postRequest(url, JSON.toJSONString(trbo), String.class);
+		/*String ret = HttpUtil.postRequest(url, JSON.toJSONString(trbo), String.class);
 		if (ret == null) {
 			throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(trbo));
-		}
+		}*/
 		return 0;
 	}
 	

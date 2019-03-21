@@ -14,7 +14,7 @@
 	<update id="tryLock">
 		update m_lock
 		set lock_value = #{mlock.lockValue},
-			end_time = #{mlock.end_time}
+			end_time = #{mlock.endTime}
 		where lock_key = #{mlock.lockKey}
 		and end_time &lt; #{mlock.currentTime}
 	</update>

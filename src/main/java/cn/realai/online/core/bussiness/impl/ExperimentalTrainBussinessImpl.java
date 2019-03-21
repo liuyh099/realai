@@ -13,6 +13,7 @@ import cn.realai.online.core.vo.ExperimentalTrainSelectFileVO;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
 import cn.realai.online.tool.lock.MysqlLock;
 import cn.realai.online.tool.redis.RedisClientTemplate;
+import cn.realai.online.util.SpringContextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
@@ -68,7 +69,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Autowired
     private PersonalHomoResultSetService personalHomoResultSetService;
-
+    
     /**
      * 根据实验名称和状态等分页查询实验列表
      *
@@ -111,11 +112,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     @Transactional(readOnly = false)
     public int train(long experimentId) {
-        //获取训练锁
-        /*MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
-        if (mlock.tryLock()) {
+    	//获取训练锁
+        MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
+        if (!mlock.tryLock()) {
             return -1;
-        }*/
+        }
 
         //查询需要删除的列
         HomoAndHetroBO deleteVariableData = variableDataService.selectDeleteByExperimentId(experimentId);

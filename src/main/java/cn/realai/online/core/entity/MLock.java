@@ -1,7 +1,6 @@
 package cn.realai.online.core.entity;
 
-import cn.realai.online.core.service.ExperimentService;
-import cn.realai.online.tool.lock.MysqlLock;
+import cn.realai.online.core.service.MLockService;
 import cn.realai.online.util.SpringContextUtils;
 
 /**
@@ -25,12 +24,15 @@ public class MLock {
 	//结束时间
 	private long endTime;
 	
-	private MysqlLock mysqlLock = SpringContextUtils.getBean(MysqlLock.class);
+	MLockService mlockService = SpringContextUtils.getBean(MLockService.class);
 	
 	public MLock(String lockKey, String lockValue, long expiredTime) {
 		this.lockKey = lockKey;
 		this.lockValue = lockValue;
 		this.expiredTime = expiredTime;
+		this.expiredTime = expiredTime;
+		this.currentTime = System.currentTimeMillis();
+		this.endTime = currentTime + expiredTime;
 	}
 	
 	public MLock() {}
@@ -39,26 +41,16 @@ public class MLock {
 		return lockKey;
 	}
 
-	public void setLockKey(String lockKey) {
-		this.lockKey = lockKey;
-	}
-
 	public long getExpiredTime() {
 		return expiredTime;
 	}
 
-	public void setExpiredTime(long expiredTime) {
-		this.expiredTime = expiredTime;
-		this.currentTime = System.currentTimeMillis();
-		this.endTime = currentTime + expiredTime;
+	public MLockService getMlockService() {
+		return mlockService;
 	}
 
 	public String getLockValue() {
 		return lockValue;
-	}
-
-	public void setLockValue(String lockValue) {
-		this.lockValue = lockValue;
 	}
 
 	public long getCurrentTime() {
@@ -70,11 +62,11 @@ public class MLock {
 	}
 
 	public boolean tryLock() {
-		return mysqlLock.tryLock(this);
+		return mlockService.tryLock(this);
 	}
 	
 	public boolean unLock() {
-		return mysqlLock.unLock(this);
+		return mlockService.unLock(this);
 	}
-	
+
 }

@@ -7,12 +7,12 @@ import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.service.MLockService;
 
 @Component
-public class MysqlLock {
+public class MysqlLock implements Lock {
 
 	@Autowired
 	private MLockService mlockService;
 	
-	public boolean tryLock(String key, String value, long expiredTime) {
+	/*public boolean tryLock(String key, String value, long expiredTime) {
 		MLock mlock = new MLock(key, value, expiredTime);
 		return tryLock(mlock);
 	}
@@ -28,5 +28,5 @@ public class MysqlLock {
 	
 	public boolean unLock(MLock mlock) {
 		return mlockService.unLock(mlock);
-	}
+	}*/
 }

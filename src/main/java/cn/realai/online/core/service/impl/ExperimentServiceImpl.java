@@ -18,6 +18,7 @@ import cn.realai.online.tool.lock.MysqlLock;
 import cn.realai.online.tool.redis.RedisClientTemplate;
 import cn.realai.online.util.ConvertJavaBean;
 import cn.realai.online.util.SpringContextUtils;
+import cn.realai.online.core.service.MLockService;
 
 import org.springframework.util.CollectionUtils;
 
@@ -33,7 +34,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Autowired
     private RedisClientTemplate redisClientTemplate;
-
+    
     private String getExperimentRedisKey(long id) {
         return RedisKeyPrefix.EXPERIMENT_PREFIX + id;
     }
