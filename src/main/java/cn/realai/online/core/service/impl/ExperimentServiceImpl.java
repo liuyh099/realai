@@ -124,6 +124,11 @@ public class ExperimentServiceImpl implements ExperimentService {
         return experiment.getId();
     }
 
+	@Override
+	public MLock getExperimentTrainMLockInstance(long experimentId) {
+		return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId, 
+				Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
+	}
     @Override
     public int trainResultMaintain(Long experimentId, String sampleReview, String modelUrl,
                                    String segmentationStatisticsImageUrl, String badTopCountImageUrl, String rocTestImageUrl,
@@ -132,11 +137,6 @@ public class ExperimentServiceImpl implements ExperimentService {
         return experimentDao.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl,
                 badTopCountImageUrl, rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl,
                 ksTrainImageUrl, ksValidateImageUrl);
-    }
-
-    @Override
-    public MLock getExperimentTrainMLockInstance(long experimentId) {
-        return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId, Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
     }
 
     @Override

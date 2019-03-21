@@ -10,7 +10,7 @@ import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.IdQuery;
 import cn.realai.online.core.service.*;
-import cn.realai.online.tool.lock.MysqlLock;
+
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -35,9 +35,6 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Autowired
     private TrainService trainService;
-
-    @Autowired
-    private MysqlLock mysqlLock;
 
     @Autowired
     private VariableDataService variableDataService;
@@ -65,7 +62,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Autowired
     private PersonalHomoResultSetService personalHomoResultSetService;
-
+    
     @Autowired
     private ModelPerformanceService modelPerformanceService;
 
@@ -110,17 +107,21 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
      * @param trainId 实验id
      */
     @Override
+    @Transactional(readOnly = false)
     public int train(long experimentId) {
-        //获取训练锁
+    	//获取训练锁
         MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
-        if (mlock.tryLock()) {
+        if (!mlock.tryLock()) {
             return -1;
         }
 
+        //查询需要删除的列
+        HomoAndHetroBO deleteVariableData = variableDataService.selectDeleteByExperimentId(experimentId);
+        
         //修改试验状态
         int ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
         ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
-        trainService.training(experimentBO);
+        trainService.training(experimentBO, 0L, deleteVariableData.getHomoList(), deleteVariableData.getHetroList());
         return ret;
     }
 

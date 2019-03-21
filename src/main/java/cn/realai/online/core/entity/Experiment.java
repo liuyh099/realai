@@ -13,6 +13,23 @@ public class Experiment {
     //训练名称
     private String name;
 
+	//样本选择类型
+	private int sampleSplitType;
+	
+	//时间
+	public static final int SAMPLE_SPLIT_TYPE_TIME = 1;
+	
+	//随机
+	public static final int SAMPLE_SPLIT_TYPE_RANDOM = 2;
+	
+	//训练比例  trainRatio + trainTest + trainValid = 10
+	private Integer trainRatio;
+	
+	//测试比例
+	private Integer testRatio;
+	
+	//验证比例
+	private Integer validRatio;
     //服务id
     private long serviceId;
 
@@ -66,25 +83,6 @@ public class Experiment {
 
     //选择
     public static final int SELECT_YES = 2;
-
-    //样本选择类型
-    private int sampleSplitType;
-
-    //时间
-    public static final int SAMPLE_SPLIT_TYPE_TIME = 1;
-
-    //随机
-    public static final int SAMPLE_SPLIT_TYPE_RANDOM = 2;
-
-    //训练比例  trainRatio + trainTest + trainValid = 10
-    private Integer trainRatio;
-
-    //测试比例
-    private Integer testRatio;
-
-    //验证比例
-    private Integer validRatio;
-
 
     public static final int DATA_SET_TRAIN = 1;
 

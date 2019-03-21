@@ -1,7 +1,11 @@
 package cn.realai.online.core.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import cn.realai.online.core.bo.HomoAndHetroBO;
 import cn.realai.online.core.bo.VariableDataBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +41,6 @@ public class VariableDataServiceImpl implements VariableDataService {
         }
 
         int ret = variableDataDao.insertList(vdList);
-        ;
         if (ret != vdList.size()) {
             logger.error("VariableDataServiceImpl insertVariableDataList, 预处理失败, vdList{}" + JSON.toJSONString(vdList));
             throw new RuntimeException("预处理失败");
@@ -48,13 +51,13 @@ public class VariableDataServiceImpl implements VariableDataService {
 
 
     @Override
-    public List<VariableData> findListByExperimentId(Long experimentId) {
-        if (experimentId == null) {
-            return null;
-        }
-        return variableDataDao.findListByExperimentId(experimentId);
-    }
-
+	public List<VariableData> findListByExperimentId(Long experimentId) {
+    	if (experimentId == null) {
+			return null;
+		}
+		return variableDataDao.findListByExperimentId(experimentId);
+	}
+    
     /**
      * 根据实验id与模式类型查询变量数据
      *
@@ -78,5 +81,37 @@ public class VariableDataServiceImpl implements VariableDataService {
         variableDataDao.deleteVariableData(experimentId, ids);
     }
 
+    
+	@Override
+	public HomoAndHetroBO selectDeleteByExperimentId(Long experimentId) {
+		List<VariableData> list = variableDataDao.selectDeleteListByExperimentId(experimentId);
+		if (list == null) {
+			return null;
+		}
+		HomoAndHetroBO hahbo = new HomoAndHetroBO(experimentId);
+		Map<String, List<VariableData>> map = breakDownList(list);
+		hahbo.setHetroList(map.get("homo"));
+		hahbo.setHetroList(map.get("hetro"));
+		return hahbo;
+	}
+
+	/*
+	 * 将传入的VariableData数组分解成同住和异质数组
+	 */
+	private Map<String, List<VariableData>> breakDownList(List<VariableData> vdList) {
+		Map<String, List<VariableData>> map = new HashMap<String, List<VariableData>>();
+		List<VariableData> homoList = new ArrayList<VariableData>();
+		List<VariableData> hetroList = new ArrayList<VariableData>();
+		for (VariableData vd : vdList) {
+			if (vd.getVariableType() == VariableData.SCHEMA_TYPE_HOMO) {
+				homoList.add(vd);
+			} else {
+				hetroList.add(vd);
+			}
+		}
+		map.put("homo", homoList);
+		map.put("hetro", hetroList);
+		return map;
+	}
 
 }
