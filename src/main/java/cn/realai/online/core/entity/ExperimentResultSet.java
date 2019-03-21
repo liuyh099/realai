@@ -16,6 +16,9 @@ public class ExperimentResultSet {
 	//数据集类型
 	private Integer dataSetType;
 	
+	//平均切分的十组数据名称，不同于聚类分组
+	private String groupName;
+	
 	//
 	private double minPro;
 	
@@ -178,5 +181,13 @@ public class ExperimentResultSet {
 
 	public void setCumulativePostiveCountInTotalPositiveCount(double cumulativePostiveCountInTotalPositiveCount) {
 		this.cumulativePostiveCountInTotalPositiveCount = cumulativePostiveCountInTotalPositiveCount;
+	}
+	
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 }
