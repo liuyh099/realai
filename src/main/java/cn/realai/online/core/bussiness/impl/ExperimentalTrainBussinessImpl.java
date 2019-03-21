@@ -1,19 +1,16 @@
 package cn.realai.online.core.bussiness.impl;
 
 import cn.realai.online.calculation.TrainService;
-import cn.realai.online.common.Constant;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.*;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.entity.*;
-import cn.realai.online.core.query.*;
+import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
+import cn.realai.online.core.query.ExperimentalTrainQuery;
+import cn.realai.online.core.query.FaceListDataQuery;
+import cn.realai.online.core.query.IdQuery;
 import cn.realai.online.core.service.*;
-import cn.realai.online.core.vo.ExperimentalResultTopVO;
-import cn.realai.online.core.vo.ExperimentalTrainSelectFileVO;
-import cn.realai.online.core.vo.ExperimentalTrainVO;
 import cn.realai.online.tool.lock.MysqlLock;
-import cn.realai.online.tool.redis.RedisClientTemplate;
-
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -23,11 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.validation.annotation.Validated;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 实验训练的业务实现
@@ -72,6 +66,9 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Autowired
     private PersonalHomoResultSetService personalHomoResultSetService;
 
+    @Autowired
+    private ModelPerformanceService modelPerformanceService;
+
     /**
      * 根据实验名称和状态等分页查询实验列表
      *
@@ -79,18 +76,19 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
      * @return
      */
     @Override
-    public PageBO<ExperimentalTrainVO> pageList(ExperimentalTrainQuery experimentalTrainQuery) {
+    public PageBO<ExperimentBO> pageList(ExperimentalTrainQuery experimentalTrainQuery) {
         //开启分页
         Page page = PageHelper.startPage(experimentalTrainQuery.getPageNum(), experimentalTrainQuery.getPageSize());
 
         //执行条件查询
         Experiment experiment = new Experiment();
         BeanUtils.copyProperties(experimentalTrainQuery, experiment);
-        List<ExperimentBO> list = experimentService.findList(experiment);
-
+        List<Experiment> list = experimentService.findList(experiment);
+        List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
+        //BeanUtilsBean.copyProperties(list,result);
         //处理查询结果
-        List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentalTrainVO.class);
-        PageBO<ExperimentalTrainVO> pageBO = new PageBO<ExperimentalTrainVO>(result, experimentalTrainQuery.getPageSize(), experimentalTrainQuery.getPageNum(), page.getTotal(), page.getPages());
+        //List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentalTrainVO.class);
+        PageBO<ExperimentBO> pageBO = new PageBO<ExperimentBO>(result, experimentalTrainQuery.getPageSize(), experimentalTrainQuery.getPageNum(), page.getTotal(), page.getPages());
         return pageBO;
     }
 
@@ -354,6 +352,25 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public List<PersonalHomoResultSetBO> listDataDetailSameCharts(Long id) {
         List<PersonalHomoResultSet> list = personalHomoResultSetService.listCharts(id);
         List<PersonalHomoResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalHomoResultSetBO.class);
+        return result;
+    }
+
+    @Override
+    public List<ExperimentBO> getCanPublishTrain() {
+        Experiment experiment = new Experiment();
+        experiment.setStatus(Experiment.STATUS_TRAINING_OVER);
+        experiment.setReleasStatus(Experiment.RELEAS_YES);
+        List<Experiment> list = experimentService.findList(experiment);
+        List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
+        return result;
+    }
+
+    @Override
+    public List<ModelPerformanceBO> findModelPerformance(Long id) {
+        ModelPerformance modelPerformance = new ModelPerformance();
+        modelPerformance.setExperimentId(id);
+        List<ModelPerformance> list = modelPerformanceService.findList(modelPerformance);
+        List<ModelPerformanceBO> result = JSON.parseArray(JSON.toJSONString(list), ModelPerformanceBO.class);
         return result;
     }
 

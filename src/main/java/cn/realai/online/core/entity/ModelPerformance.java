@@ -8,13 +8,13 @@ package cn.realai.online.core.entity;
  */
 public class ModelPerformance {
 
-    private long id;
+    private Long id;
 
     //指标名
     private String metricName;
 
     //实验id
-    private long experimentId;
+    private Long experimentId;
 
     //训练集
     private Double trainingSet;
@@ -25,13 +25,13 @@ public class ModelPerformance {
     //验证集
     private Double validSet;
 
-    private long createTime;
+    private Long createTime;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -43,11 +43,11 @@ public class ModelPerformance {
         this.metricName = metricName;
     }
 
-    public long getExperimentId() {
+    public Long getExperimentId() {
         return experimentId;
     }
 
-    public void setExperimentId(long experimentId) {
+    public void setExperimentId(Long experimentId) {
         this.experimentId = experimentId;
     }
 
@@ -75,12 +75,11 @@ public class ModelPerformance {
         this.validSet = validSet;
     }
 
-    public long getCreateTime() {
+    public Long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
-
 }

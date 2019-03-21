@@ -11,7 +11,7 @@ public interface ExperimentService {
 
     ExperimentBO selectExperimentById(long id);
 
-    List<ExperimentBO> findList(Experiment experiment);
+    List<Experiment> findList(Experiment experiment);
 
     /*
      * 预处理完成，修改与处理结果

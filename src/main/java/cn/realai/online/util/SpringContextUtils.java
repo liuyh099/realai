@@ -7,7 +7,7 @@ public class SpringContextUtils {
     private static ApplicationContext applicationContext = null;
 
     public static void setApplicationContext(ApplicationContext applicationContext) {
-        synchronized (SpringContextUtils.applicationContext) {
+        synchronized (SpringContextUtils.class) {
             if (SpringContextUtils.applicationContext == null) {
                 SpringContextUtils.applicationContext = applicationContext;
             }

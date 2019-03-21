@@ -21,4 +21,10 @@ public interface ModelPerfomanceDao {
     //批量插入
     void insertList(@Param("modelPerformanceList") List<ModelPerformance> modelPerformanceList);
 
+    /**
+     * 根据实验ID查询模型表现
+     * @param modelPerformance
+     * @return
+     */
+    List<ModelPerformance> findList(ModelPerformance modelPerformance);
 }

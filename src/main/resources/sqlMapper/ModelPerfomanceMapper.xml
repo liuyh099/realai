@@ -45,6 +45,16 @@
         </where>
     </select>
 
+    <select id="findList" resultMap="ModelPerformanceMap" parameterType="cn.realai.online.core.entity.ModelPerformance">
+        SELECT * FROM model_performance
+        <where>
+            1=1
+            <if test="experimentId!=null">
+                experiment_id = #{experimentId}
+            </if>
+        </where>
+    </select>
+
     <select id="selectList" resultMap="ModelPerformanceMap">
         select mp.metric_name as metricName,
         training_set as trainingSet,

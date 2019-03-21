@@ -27,9 +27,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.executable.ValidateOnExecution;
 import java.util.List;
 
 @RestController
@@ -49,10 +47,15 @@ public class ExperimentalTrainController {
     @GetMapping
     @ApiOperation(value = "查询实验训练列表")
     @ResponseBody
-    public Result<PageBO<ExperimentalTrainVO>> list(ExperimentalTrainQuery experimentalTrainQuery) {
+    public Result<PageBO<ExperimentalTrainVO>> list(ExperimentalTrainQuery query) {
         try {
-            PageBO<ExperimentalTrainVO> page = experimentalTrainBussiness.pageList(experimentalTrainQuery);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), page);
+            PageBO<ExperimentBO> page = experimentalTrainBussiness.pageList(query);
+            if (page == null) {
+                return null;
+            }
+            List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), ExperimentalTrainVO.class);
+            PageBO<ExperimentalTrainVO> pageBO = new PageBO<ExperimentalTrainVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
             logger.error("查询实验列表异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);

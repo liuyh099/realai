@@ -30,4 +30,9 @@ public class ModelPerformanceServiceImpl implements ModelPerformanceService {
     public List<ModelPerformance> selectList(Long modelId) {
         return modelPerfomanceDao.selectList(modelId);
     }
+
+    @Override
+    public List<ModelPerformance> findList(ModelPerformance modelPerformance) {
+        return modelPerfomanceDao.findList(modelPerformance);
+    }
 }

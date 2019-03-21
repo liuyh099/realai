@@ -11,7 +11,7 @@ import cn.realai.online.core.vo.ExperimentalTrainVO;
 import java.util.List;
 
 public interface ExperimentalTrainBussiness {
-    PageBO<ExperimentalTrainVO> pageList(ExperimentalTrainQuery experimentalTrainQuery);
+    PageBO<ExperimentBO> pageList(ExperimentalTrainQuery experimentalTrainQuery);
 
     Integer deleteExperimentByIds(List<Long> ids);
 
@@ -165,4 +165,17 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     List<PersonalHomoResultSetBO> listDataDetailSameCharts(Long id);
+
+    /**
+     * 获得可发布实验列表
+     * @return
+     */
+    List<ExperimentBO> getCanPublishTrain();
+
+    /**
+     * 获得模型表现
+     * @param id
+     * @return
+     */
+    List<ModelPerformanceBO> findModelPerformance(Long id);
 }

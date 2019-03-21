@@ -60,11 +60,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
     @Override
-    public List<ExperimentBO> findList(Experiment experiment) {
+    public List<Experiment> findList(Experiment experiment) {
         List<Experiment> list = experimentDao.findList(experiment);
-        List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
-        //BeanUtilsBean.copyProperties(list,result);
-        return result;
+        return list;
     }
 
     /*
