@@ -2,28 +2,28 @@ package cn.realai.online.core.bo;
 
 import cn.realai.online.core.entity.Experiment;
 
-public class ExperimentBO extends Experiment{
+public class ExperimentBO extends Experiment {
 
-	//服务名称
-	private String serviceName;
-	
-	//状态名称
-	private String statusName;
+    //服务名称
+    private String serviceName;
 
-	public String getServiceName() {
-		return serviceName;
-	}
+    //状态名称
+    private String statusName;
 
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
+    public String getServiceName() {
+        return serviceName;
+    }
 
-	public String getStatusName() {
-		return statusName;
-	}
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
 
-	public void setStatusName(String statusName) {
-		this.statusName = statusName;
-	}
-	
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
 }

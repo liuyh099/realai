@@ -8,21 +8,23 @@ import cn.realai.online.core.entity.PersonalInformation;
 
 public interface PersonalInformationDao {
 
-	void insertList(@Param("piList")List<PersonalInformation> piList);
+    void insertList(@Param("piList") List<PersonalInformation> piList);
 
-	List<PersonalInformation> findListByExperimentId(@Param("experimentId")Long experimentId);
+    List<PersonalInformation> findListByExperimentId(@Param("experimentId") Long experimentId);
 
-	/**
-	 * 查询personal信息列表
-	 * @param personal
-	 * @return
-	 */
+    /**
+     * 查询personal信息列表
+     *
+     * @param personal
+     * @return
+     */
     List<PersonalInformation> findList(PersonalInformation personal);
 
-	/**
-	 * 根据ID 查询personal信息
-	 * @param id
-	 * @return
-	 */
-	PersonalInformation get(Long id);
+    /**
+     * 根据ID 查询personal信息
+     *
+     * @param id
+     * @return
+     */
+    PersonalInformation get(Long id);
 }

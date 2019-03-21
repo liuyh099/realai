@@ -19,6 +19,6 @@ public interface ModelPerfomanceDao {
     List<ModelPerformance> selectList(@Param("modelId") Long modelId);
 
     //批量插入
-	void insertList(@Param("modelPerformanceList")List<ModelPerformance> modelPerformanceList);
+    void insertList(@Param("modelPerformanceList") List<ModelPerformance> modelPerformanceList);
 
 }

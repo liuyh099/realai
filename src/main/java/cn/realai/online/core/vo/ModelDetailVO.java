@@ -14,37 +14,37 @@ import java.util.List;
 @ApiModel
 public class ModelDetailVO {
 
-    @ApiModelProperty(value="模型id")
+    @ApiModelProperty(value = "模型id")
     private long modelId;
 
-    @ApiModelProperty(value="模型名称")
+    @ApiModelProperty(value = "模型名称")
     private String modelName;
 
-    @ApiModelProperty(value="上线时间")
+    @ApiModelProperty(value = "上线时间")
     private String releaseTime;
 
-    @ApiModelProperty(value="调优原因")
+    @ApiModelProperty(value = "调优原因")
     private String tuningReason;
 
-    @ApiModelProperty(value="来源实验名称")
+    @ApiModelProperty(value = "来源实验名称")
     private String experimentName;
 
-    @ApiModelProperty(value="Y的定义")
+    @ApiModelProperty(value = "Y的定义")
     private String ydefine;
 
-    @ApiModelProperty(value="服务类型")
+    @ApiModelProperty(value = "服务类型")
     private String serviceType;
 
-    @ApiModelProperty(value="算法类型")
+    @ApiModelProperty(value = "算法类型")
     private String algorithmType;
 
-    @ApiModelProperty(value="样本综述")
+    @ApiModelProperty(value = "样本综述")
     private String sampleSummary;
 
-    @ApiModelProperty(value="备注")
+    @ApiModelProperty(value = "备注")
     private String remark;
 
-    @ApiModelProperty(value="模型表现")
+    @ApiModelProperty(value = "模型表现")
     private List<ModelPerformanceVO> performanceList;
 
     public long getModelId() {

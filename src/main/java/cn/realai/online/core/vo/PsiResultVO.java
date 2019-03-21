@@ -14,22 +14,22 @@ import java.util.List;
 @ApiModel
 public class PsiResultVO {
 
-    @ApiModelProperty(value="PSI检测结果Id")
+    @ApiModelProperty(value = "PSI检测结果Id")
     private long psiId;
 
-    @ApiModelProperty(value="变量来源")
+    @ApiModelProperty(value = "变量来源")
     private String varSource;
 
-    @ApiModelProperty(value="变量含义")
+    @ApiModelProperty(value = "变量含义")
     private String mean;
 
-    @ApiModelProperty(value="PSI")
+    @ApiModelProperty(value = "PSI")
     private String psi;
 
-    @ApiModelProperty(value="是否预警 ")
+    @ApiModelProperty(value = "是否预警 ")
     private int aler;
 
-    @ApiModelProperty(value="是否预警中文名称")
+    @ApiModelProperty(value = "是否预警中文名称")
     private String alerName;
 
     public long getPsiId() {

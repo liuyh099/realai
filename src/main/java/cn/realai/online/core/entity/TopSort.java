@@ -3,117 +3,118 @@ package cn.realai.online.core.entity;
 /**
  * top排序
  * 最好和最坏的预测值表现
+ *
  * @author lyh
  */
 public class TopSort {
 
-	private long id;
-	
-	//实验id
-	private long experimentId;
-	
-	//数据集类型
-	private int dataSetType;
-	
-	//响应类型
-	private int responseType;
-	
-	//top
-	private String top;
-	
-	//样本数量
-	private int sampleCount;
-	
-	//客户逾期数
-	private int customerOverdueCount;
-	
-	//逾期率
-	private Double overdueRate;
-	
-	//总逾期率 占总逾期客户比例
-	private Double totalOverdueRate;
-	
-	//创建时间
-	private long createTime;
+    private long id;
 
-	public long getId() {
-		return id;
-	}
+    //实验id
+    private long experimentId;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    //数据集类型
+    private int dataSetType;
 
-	public long getExperimentId() {
-		return experimentId;
-	}
+    //响应类型
+    private int responseType;
 
-	public void setExperimentId(long experimentId) {
-		this.experimentId = experimentId;
-	}
+    //top
+    private String top;
 
-	public int getDataSetType() {
-		return dataSetType;
-	}
+    //样本数量
+    private int sampleCount;
 
-	public void setDataSetType(int dataSetType) {
-		this.dataSetType = dataSetType;
-	}
+    //客户逾期数
+    private int customerOverdueCount;
 
-	public int getResponseType() {
-		return responseType;
-	}
+    //逾期率
+    private Double overdueRate;
 
-	public void setResponseType(int responseType) {
-		this.responseType = responseType;
-	}
+    //总逾期率 占总逾期客户比例
+    private Double totalOverdueRate;
 
-	public String getTop() {
-		return top;
-	}
+    //创建时间
+    private long createTime;
 
-	public void setTop(String top) {
-		this.top = top;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public int getSampleCount() {
-		return sampleCount;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setSampleCount(int sampleCount) {
-		this.sampleCount = sampleCount;
-	}
+    public long getExperimentId() {
+        return experimentId;
+    }
 
-	public int getCustomerOverdueCount() {
-		return customerOverdueCount;
-	}
+    public void setExperimentId(long experimentId) {
+        this.experimentId = experimentId;
+    }
 
-	public void setCustomerOverdueCount(int customerOverdueCount) {
-		this.customerOverdueCount = customerOverdueCount;
-	}
+    public int getDataSetType() {
+        return dataSetType;
+    }
 
-	public Double getOverdueRate() {
-		return overdueRate;
-	}
+    public void setDataSetType(int dataSetType) {
+        this.dataSetType = dataSetType;
+    }
 
-	public void setOverdueRate(Double overdueRate) {
-		this.overdueRate = overdueRate;
-	}
+    public int getResponseType() {
+        return responseType;
+    }
 
-	public Double getTotalOverdueRate() {
-		return totalOverdueRate;
-	}
+    public void setResponseType(int responseType) {
+        this.responseType = responseType;
+    }
 
-	public void setTotalOverdueRate(Double totalOverdueRate) {
-		this.totalOverdueRate = totalOverdueRate;
-	}
+    public String getTop() {
+        return top;
+    }
 
-	public long getCreateTime() {
-		return createTime;
-	}
+    public void setTop(String top) {
+        this.top = top;
+    }
 
-	public void setCreateTime(long createTime) {
-		this.createTime = createTime;
-	}
-	
+    public int getSampleCount() {
+        return sampleCount;
+    }
+
+    public void setSampleCount(int sampleCount) {
+        this.sampleCount = sampleCount;
+    }
+
+    public int getCustomerOverdueCount() {
+        return customerOverdueCount;
+    }
+
+    public void setCustomerOverdueCount(int customerOverdueCount) {
+        this.customerOverdueCount = customerOverdueCount;
+    }
+
+    public Double getOverdueRate() {
+        return overdueRate;
+    }
+
+    public void setOverdueRate(Double overdueRate) {
+        this.overdueRate = overdueRate;
+    }
+
+    public Double getTotalOverdueRate() {
+        return totalOverdueRate;
+    }
+
+    public void setTotalOverdueRate(Double totalOverdueRate) {
+        this.totalOverdueRate = totalOverdueRate;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
 }

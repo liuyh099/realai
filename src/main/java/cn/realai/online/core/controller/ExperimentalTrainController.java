@@ -247,7 +247,7 @@ public class ExperimentalTrainController {
         }
     }
 
-    private Result updateParam(ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo,Integer status) {
+    private Result updateParam(ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo, Integer status) {
         ExperimentBO experimentBO = new ExperimentBO();
         BeanUtils.copyProperties(experimentalTrainSelectParamVo, experimentBO);
         experimentBO.setStatus(status);
@@ -289,7 +289,7 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result createModelDelete(@RequestBody @Validated ExperimentalTrainCreateModelVO experimentalTrainCreateModelVo) {
         try {
-            experimentalTrainBussiness.deleteVariableData(experimentalTrainCreateModelVo.getId(),experimentalTrainCreateModelVo.getIds());
+            experimentalTrainBussiness.deleteVariableData(experimentalTrainCreateModelVo.getId(), experimentalTrainCreateModelVo.getIds());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             logger.error("新增实验-生成模型-删除同质或者异质量数据异常", e);
@@ -303,11 +303,11 @@ public class ExperimentalTrainController {
     public Result<PageBO<ExperimentalTrainCreateModelDataVO>> createModelGetData(@RequestBody @Validated ExperimentalTrainCreateModelDataQuery query) {
         try {
             PageBO<VariableDataBO> page = experimentalTrainBussiness.pageHomOrHemeList(query);
-            if(page==null){
+            if (page == null) {
                 return null;
             }
             List<ExperimentalTrainCreateModelDataVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), ExperimentalTrainCreateModelDataVO.class);
-            PageBO<ExperimentalTrainCreateModelDataVO> pageBO= new PageBO<ExperimentalTrainCreateModelDataVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
+            PageBO<ExperimentalTrainCreateModelDataVO> pageBO = new PageBO<ExperimentalTrainCreateModelDataVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
             logger.error("新增实验-生成模型-一获取同质异质数据异常", e);

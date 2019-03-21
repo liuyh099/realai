@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 public class CalculationQueue {
 
-	public final static ThreadPoolExecutor queue = new ThreadPoolExecutor(2, 2, 10,
-            TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), 
+    public final static ThreadPoolExecutor queue = new ThreadPoolExecutor(2, 2, 10,
+            TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
             new ThreadPoolExecutor.DiscardOldestPolicy());
-	
+
 }

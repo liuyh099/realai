@@ -12,20 +12,20 @@ import cn.realai.online.core.service.SampleSummaryService;
 @Service
 public class SampleSummaryServiceImpl implements SampleSummaryService {
 
-	@Autowired
-	private SampleSummaryDao sampleSummaryDao;
-	
-	@Override
-	public void insertList(List<SampleSummary> ssList) {
-		if (ssList == null || ssList.size() == 0) {
-			return;
-		}
-		sampleSummaryDao.insertList(ssList);
-	}
+    @Autowired
+    private SampleSummaryDao sampleSummaryDao;
 
-	@Override
-	public List<SampleSummary> findList(SampleSummary sampleSummary) {
-		return sampleSummaryDao.findList(sampleSummary);
-	}
+    @Override
+    public void insertList(List<SampleSummary> ssList) {
+        if (ssList == null || ssList.size() == 0) {
+            return;
+        }
+        sampleSummaryDao.insertList(ssList);
+    }
+
+    @Override
+    public List<SampleSummary> findList(SampleSummary sampleSummary) {
+        return sampleSummaryDao.findList(sampleSummary);
+    }
 
 }

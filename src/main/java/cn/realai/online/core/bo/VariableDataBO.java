@@ -7,43 +7,43 @@ import io.swagger.annotations.ApiModelProperty;
 public class VariableDataBO {
 
     //实验id
-    @ApiModelProperty(value="实验id")
+    @ApiModelProperty(value = "实验id")
     private long experimentId;
 
     //名称
-    @ApiModelProperty(value="名称",example = "名称")
+    @ApiModelProperty(value = "名称", example = "名称")
     private String name;
 
     //数据类型
-    @ApiModelProperty(value="数据类型")
+    @ApiModelProperty(value = "数据类型")
     private String dataType;
 
     //最大值
-    @ApiModelProperty(value="最大值")
+    @ApiModelProperty(value = "最大值")
     private String max;
 
     //最小值
-    @ApiModelProperty(value="最小值")
+    @ApiModelProperty(value = "最小值")
     private String min;
 
     //平均值
-    @ApiModelProperty(value="平均值")
+    @ApiModelProperty(value = "平均值")
     private String mean;
 
     //中间值 中位数
-    @ApiModelProperty(value="中间值")
+    @ApiModelProperty(value = "中间值")
     private String median;
 
     //25%
-    @ApiModelProperty(value="25%")
+    @ApiModelProperty(value = "25%")
     private String percent25;
 
     //75%
-    @ApiModelProperty(value="75%")
+    @ApiModelProperty(value = "75%")
     private String percent75;
 
     //模式类型
-    @ApiModelProperty(value="模式类型")
+    @ApiModelProperty(value = "模式类型")
     private int variableType;
 
     public long getExperimentId() {

@@ -36,7 +36,8 @@ public class VariableDataServiceImpl implements VariableDataService {
             vd.setCreateTime(System.currentTimeMillis());
         }
 
-        int ret = variableDataDao.insertList(vdList);;
+        int ret = variableDataDao.insertList(vdList);
+        ;
         if (ret != vdList.size()) {
             logger.error("VariableDataServiceImpl insertVariableDataList, 预处理失败, vdList{}" + JSON.toJSONString(vdList));
             throw new RuntimeException("预处理失败");
@@ -47,15 +48,16 @@ public class VariableDataServiceImpl implements VariableDataService {
 
 
     @Override
-	public List<VariableData> findListByExperimentId(Long experimentId) {
-		if (experimentId == null) {
-			return null;
-		}
-		return variableDataDao.findListByExperimentId(experimentId);
-	}
+    public List<VariableData> findListByExperimentId(Long experimentId) {
+        if (experimentId == null) {
+            return null;
+        }
+        return variableDataDao.findListByExperimentId(experimentId);
+    }
 
     /**
      * 根据实验id与模式类型查询变量数据
+     *
      * @param variableData
      * @return
      */
@@ -65,6 +67,7 @@ public class VariableDataServiceImpl implements VariableDataService {
         List<VariableDataBO> result = JSON.parseArray(JSON.toJSONString(list), VariableDataBO.class);
         return result;
     }
+
     @Override
     public List<VariableData> findVariableDataList(VariableData variableData) {
         return variableDataDao.findList(variableData);
@@ -72,7 +75,7 @@ public class VariableDataServiceImpl implements VariableDataService {
 
     @Override
     public void deleteVariableData(Long experimentId, List<Long> ids) {
-        variableDataDao.deleteVariableData(experimentId,ids);
+        variableDataDao.deleteVariableData(experimentId, ids);
     }
 
 

@@ -6,8 +6,8 @@ import cn.realai.online.core.entity.MLock;
 
 public interface MLockDao {
 
-	int tryLock(@Param("mlock")MLock mlock);
+    int tryLock(@Param("mlock") MLock mlock);
 
-	int unLock(@Param("mlock")MLock mlock);
-	
+    int unLock(@Param("mlock") MLock mlock);
+
 }

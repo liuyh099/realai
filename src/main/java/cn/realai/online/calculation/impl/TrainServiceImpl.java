@@ -16,29 +16,29 @@ import cn.realai.online.util.HttpUtil;
 @Service
 public class TrainServiceImpl implements TrainService {
 
-	@Autowired
-	private Config config;
-	
-	/*
-	 * 预处理
-	 */
-	@Override
-	public void preprocess(Experiment experiment) {
-		PreprocessRequestBO prbo = new PreprocessRequestBO(Constant.TASK_PREPROCESS);
-		ConvertJavaBean.convertJavaBean(prbo, experiment);
-		String url = config.getUrl();
-		String ret = HttpUtil.postRequest(url, JSON.toJSONString(prbo), String.class);
-		if (ret == null) {
-			throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(prbo));
-		}
-	}
+    @Autowired
+    private Config config;
 
-	/*
-	 * 训练
-	 */
-	@Override
-	public int training(Experiment experiment) {
-		return 0;
-	}
-	
+    /*
+     * 预处理
+     */
+    @Override
+    public void preprocess(Experiment experiment) {
+        PreprocessRequestBO prbo = new PreprocessRequestBO(Constant.TASK_PREPROCESS);
+        ConvertJavaBean.convertJavaBean(prbo, experiment);
+        String url = config.getUrl();
+        String ret = HttpUtil.postRequest(url, JSON.toJSONString(prbo), String.class);
+        if (ret == null) {
+            throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(prbo));
+        }
+    }
+
+    /*
+     * 训练
+     */
+    @Override
+    public int training(Experiment experiment) {
+        return 0;
+    }
+
 }

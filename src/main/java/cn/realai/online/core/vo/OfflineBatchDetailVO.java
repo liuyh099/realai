@@ -14,34 +14,34 @@ import java.util.List;
 @ApiModel
 public class OfflineBatchDetailVO {
 
-    @ApiModelProperty(value="跑批ID")
+    @ApiModelProperty(value = "跑批ID")
     private long batchId;
 
-    @ApiModelProperty(value="模型名称")
+    @ApiModelProperty(value = "模型名称")
     private String modelName;
 
-    @ApiModelProperty(value="服务名称")
+    @ApiModelProperty(value = "服务名称")
     private String serviceName;
 
-    @ApiModelProperty(value="训练状态")
+    @ApiModelProperty(value = "训练状态")
     private String trainStatusName;
 
-    @ApiModelProperty(value="跑批次数")
+    @ApiModelProperty(value = "跑批次数")
     private String batchNum;
 
-    @ApiModelProperty(value="模型Y表数据源")
+    @ApiModelProperty(value = "模型Y表数据源")
     private String YDataSource;
 
-    @ApiModelProperty(value="模型X表同质数据源")
+    @ApiModelProperty(value = "模型X表同质数据源")
     private String XHomoDataSource;
 
-    @ApiModelProperty(value="模型X表异质数据源")
+    @ApiModelProperty(value = "模型X表异质数据源")
     private String XHeteroDataSource;
 
-    @ApiModelProperty(value="跑批时间")
+    @ApiModelProperty(value = "跑批时间")
     private String runTime;
 
-    @ApiModelProperty(value="备注")
+    @ApiModelProperty(value = "备注")
     private String remark;
 
     public long getBatchId() {

@@ -5,12 +5,13 @@ import cn.realai.online.core.entity.MLock;
 
 public interface TrainService {
 
-	/**
-	 * 预处理
-	 * @param experimentBO
-	 */
-	void preprocess(Experiment experiment);
-	
-	int training(Experiment experiment);
+    /**
+     * 预处理
+     *
+     * @param experimentBO
+     */
+    void preprocess(Experiment experiment);
+
+    int training(Experiment experiment);
 
 }

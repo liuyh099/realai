@@ -12,22 +12,22 @@ import cn.realai.online.core.service.ModelPerformanceService;
 @Service
 public class ModelPerformanceServiceImpl implements ModelPerformanceService {
 
-	@Autowired
-	private ModelPerfomanceDao modelPerfomanceDao;
+    @Autowired
+    private ModelPerfomanceDao modelPerfomanceDao;
 
-	@Override
-	public void insertList(List<ModelPerformance> modelPerformanceList) {
-		if (modelPerformanceList == null || modelPerformanceList.size() == 0) {
-			return ;	
-		}
-		for (ModelPerformance mp : modelPerformanceList) {
-			mp.setCreateTime(System.currentTimeMillis());
-		}
-		modelPerfomanceDao.insertList(modelPerformanceList);
-	}
+    @Override
+    public void insertList(List<ModelPerformance> modelPerformanceList) {
+        if (modelPerformanceList == null || modelPerformanceList.size() == 0) {
+            return;
+        }
+        for (ModelPerformance mp : modelPerformanceList) {
+            mp.setCreateTime(System.currentTimeMillis());
+        }
+        modelPerfomanceDao.insertList(modelPerformanceList);
+    }
 
-	@Override
-	public List<ModelPerformance> selectList(Long modelId) {
-		return modelPerfomanceDao.selectList(modelId);
-	}
+    @Override
+    public List<ModelPerformance> selectList(Long modelId) {
+        return modelPerfomanceDao.selectList(modelId);
+    }
 }

@@ -8,29 +8,29 @@ import javax.validation.constraints.NotNull;
 @ApiModel
 public class FaceListDataQuery extends PageQuery {
 
-    @ApiModelProperty(value="实验id")
+    @ApiModelProperty(value = "实验id")
     @NotNull(message = "请先选择实验")
     private Long trainId;
 
-    @ApiModelProperty(value="分组")
+    @ApiModelProperty(value = "分组")
     private Long groupId;
 
-    @ApiModelProperty(value="姓名")
+    @ApiModelProperty(value = "姓名")
     private String name;
 
-    @ApiModelProperty(value="身份证号")
+    @ApiModelProperty(value = "身份证号")
     private String idCard;
 
-    @ApiModelProperty(value="手机号")
+    @ApiModelProperty(value = "手机号")
     private String phone;
 
-    @ApiModelProperty(value="ID")
+    @ApiModelProperty(value = "ID")
     private String id;
 
-    @ApiModelProperty(value="进件开始日期(时间戳毫秒)")
+    @ApiModelProperty(value = "进件开始日期(时间戳毫秒)")
     private Long inputStartDate;
 
-    @ApiModelProperty(value="进件结束日期(时间戳毫秒)")
+    @ApiModelProperty(value = "进件结束日期(时间戳毫秒)")
     private Long inputStartEnd;
 
     public Long getTrainId() {

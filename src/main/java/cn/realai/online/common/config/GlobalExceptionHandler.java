@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
 
     /**
      * 注册全局参数校验异常
+     *
      * @param exception
      * @param httpServletResponse
      * @return

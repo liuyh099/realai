@@ -6,77 +6,79 @@ import cn.realai.online.util.SpringContextUtils;
 
 /**
  * 数据库锁
+ *
  * @author lyh
  */
 public class MLock {
 
-	//锁
-	private String lockKey;
-	
-	//锁的过期时间
-	private long expiredTime;
-	
-	//锁的值
-	private String lockValue;
-	
-	//当前时间
-	private long currentTime;
-	
-	//结束时间
-	private long endTime;
-	
-	private MysqlLock mysqlLock;
-	
-	public MLock(String lockKey, String lockValue, long expiredTime) {
-		this.lockKey = lockKey;
-		this.lockValue = lockValue;
-		this.expiredTime = expiredTime;
-		MysqlLock mysqlLock = SpringContextUtils.getBean(MysqlLock.class);
-		this.mysqlLock = mysqlLock;
-	}
-	
-	public MLock() {}
-	
-	public String getLockKey() {
-		return lockKey;
-	}
+    //锁
+    private String lockKey;
 
-	public void setLockKey(String lockKey) {
-		this.lockKey = lockKey;
-	}
+    //锁的过期时间
+    private long expiredTime;
 
-	public long getExpiredTime() {
-		return expiredTime;
-	}
+    //锁的值
+    private String lockValue;
 
-	public void setExpiredTime(long expiredTime) {
-		this.expiredTime = expiredTime;
-		this.currentTime = System.currentTimeMillis();
-		this.endTime = currentTime + expiredTime;
-	}
+    //当前时间
+    private long currentTime;
 
-	public String getLockValue() {
-		return lockValue;
-	}
+    //结束时间
+    private long endTime;
 
-	public void setLockValue(String lockValue) {
-		this.lockValue = lockValue;
-	}
+    private MysqlLock mysqlLock;
 
-	public long getCurrentTime() {
-		return currentTime;
-	}
+    public MLock(String lockKey, String lockValue, long expiredTime) {
+        this.lockKey = lockKey;
+        this.lockValue = lockValue;
+        this.expiredTime = expiredTime;
+        MysqlLock mysqlLock = SpringContextUtils.getBean(MysqlLock.class);
+        this.mysqlLock = mysqlLock;
+    }
 
-	public long getEndTime() {
-		return endTime;
-	}
+    public MLock() {
+    }
 
-	public boolean tryLock() {
-		return mysqlLock.tryLock(this);
-	}
-	
-	public boolean unLock() {
-		return mysqlLock.unLock(this);
-	}
-	
+    public String getLockKey() {
+        return lockKey;
+    }
+
+    public void setLockKey(String lockKey) {
+        this.lockKey = lockKey;
+    }
+
+    public long getExpiredTime() {
+        return expiredTime;
+    }
+
+    public void setExpiredTime(long expiredTime) {
+        this.expiredTime = expiredTime;
+        this.currentTime = System.currentTimeMillis();
+        this.endTime = currentTime + expiredTime;
+    }
+
+    public String getLockValue() {
+        return lockValue;
+    }
+
+    public void setLockValue(String lockValue) {
+        this.lockValue = lockValue;
+    }
+
+    public long getCurrentTime() {
+        return currentTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public boolean tryLock() {
+        return mysqlLock.tryLock(this);
+    }
+
+    public boolean unLock() {
+        return mysqlLock.unLock(this);
+    }
+
 }

@@ -26,14 +26,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/offlineBatch")
-@Api(tags="离线跑批管理API")
+@Api(tags = "离线跑批管理API")
 public class OfflineBatchController {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/create")
-    @ApiOperation(value="离线跑批运算")
-    @ApiImplicitParams ({
+    @ApiOperation(value = "离线跑批运算")
+    @ApiImplicitParams({
             @ApiImplicitParam(name = "modelId", value = "模型ID", required = true, dataType = "Long", paramType = "form"),
             @ApiImplicitParam(name = "serviceId", value = "服务ID", required = true, dataType = "Long", paramType = "form"),
             @ApiImplicitParam(name = "xtableHomoDataSource", value = "X表同质数据源", required = true, dataType = "String", paramType = "form"),
@@ -43,26 +43,26 @@ public class OfflineBatchController {
             @ApiImplicitParam(name = "remark", value = "备注", required = false, dataType = "String", paramType = "form")
     })
     @ResponseBody
-    public Result<Long> create(){
+    public Result<Long> create() {
         Result result = new Result();
         result.setCode(0);
         result.setMsg("执行离线跑批运算成功");
         result.setData(111L);
-        return  result;
+        return result;
     }
 
     @GetMapping("/list")
-    @ApiOperation(value="查询离线跑批列表")
+    @ApiOperation(value = "查询离线跑批列表")
     @ResponseBody
-    public Result<PageBO<OfflineBatchListVO>> list(OfflineBatchListQuery query){
+    public Result<PageBO<OfflineBatchListVO>> list(OfflineBatchListQuery query) {
         return null;
     }
 
     @GetMapping("/download")
-    @ApiOperation(value="下载离线跑批运算结果")
+    @ApiOperation(value = "下载离线跑批运算结果")
     @ApiImplicitParam(name = "downUrl", value = "离线跑批下载Url", required = true, dataType = "String", paramType = "form")
     @ResponseBody
-    public void download(OfflineBatchListQuery query){
+    public void download(OfflineBatchListQuery query) {
         try {
 
         } catch (Exception e) {
@@ -71,10 +71,10 @@ public class OfflineBatchController {
     }
 
     @GetMapping("/detail/{batchId}")
-    @ApiOperation(value="离线跑批实验详情")
+    @ApiOperation(value = "离线跑批实验详情")
     @ApiImplicitParam(name = "batchId", value = "离线跑批Id", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<OfflineBatchDetailVO> detail(){
+    public Result<OfflineBatchDetailVO> detail() {
         return null;
     }
 

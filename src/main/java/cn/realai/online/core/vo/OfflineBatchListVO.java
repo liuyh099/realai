@@ -12,31 +12,31 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class OfflineBatchListVO {
 
-    @ApiModelProperty(value="离线跑批id")
+    @ApiModelProperty(value = "离线跑批id")
     private long batchId;
 
-    @ApiModelProperty(value="模型名称")
+    @ApiModelProperty(value = "模型名称")
     private String modeleName;
 
-    @ApiModelProperty(value="服务名称")
+    @ApiModelProperty(value = "服务名称")
     private String serviceName;
 
-    @ApiModelProperty(value="发布时间")
+    @ApiModelProperty(value = "发布时间")
     private String releaseTime;
 
-    @ApiModelProperty(value="跑批次数")
+    @ApiModelProperty(value = "跑批次数")
     private String runBatchNum;
 
-    @ApiModelProperty(value="跑批时间")
+    @ApiModelProperty(value = "跑批时间")
     private String runBatchTime;
 
-    @ApiModelProperty(value="训练状态")
+    @ApiModelProperty(value = "训练状态")
     private String trainStatusName;
 
-    @ApiModelProperty(value="离线跑批结果下载地址")
+    @ApiModelProperty(value = "离线跑批结果下载地址")
     private String downUrl;
 
-    @ApiModelProperty(value="备注")
+    @ApiModelProperty(value = "备注")
     private String remark;
 
     public long getBatchId() {

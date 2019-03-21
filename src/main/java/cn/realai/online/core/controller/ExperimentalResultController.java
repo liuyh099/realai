@@ -230,15 +230,15 @@ public class ExperimentalResultController {
     public Result<PersonalHomoResultChartsVO> listDataDetailSameCharts(@Validated IdVO idVo) {
         try {
             List<PersonalHomoResultSetBO> list = experimentalTrainBusiness.listDataDetailSameCharts(idVo.getId());
-            PersonalHomoResultChartsVO result= new PersonalHomoResultChartsVO();
-            if(!CollectionUtils.isEmpty(list)){
-                List<Integer> x =new ArrayList<>(list.size());
-                List<String> y =new ArrayList<>(list.size());
-                List<List<Double>> data =new ArrayList<>(list.size());
-                for (PersonalHomoResultSetBO tmp: list) {
+            PersonalHomoResultChartsVO result = new PersonalHomoResultChartsVO();
+            if (!CollectionUtils.isEmpty(list)) {
+                List<Integer> x = new ArrayList<>(list.size());
+                List<String> y = new ArrayList<>(list.size());
+                List<List<Double>> data = new ArrayList<>(list.size());
+                for (PersonalHomoResultSetBO tmp : list) {
                     x.add(tmp.getK());
                     y.add(tmp.getVariableId());
-                    List<Double> dataItem =new ArrayList<>(1);
+                    List<Double> dataItem = new ArrayList<>(1);
                     dataItem.add(tmp.getWeight());
                     data.add(dataItem);
                 }

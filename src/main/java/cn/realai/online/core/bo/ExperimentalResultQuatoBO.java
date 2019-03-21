@@ -2,7 +2,7 @@ package cn.realai.online.core.bo;
 
 import java.util.List;
 
-public class ExperimentalResultQuatoBO{
+public class ExperimentalResultQuatoBO {
 
     private Integer model;
 

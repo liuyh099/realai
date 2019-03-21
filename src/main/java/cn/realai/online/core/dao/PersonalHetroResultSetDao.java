@@ -8,10 +8,11 @@ import cn.realai.online.core.entity.PersonalHetroResultSet;
 
 public interface PersonalHetroResultSetDao {
 
-	void insertList(@Param("hetroList")List<PersonalHetroResultSet> hetroList);
+    void insertList(@Param("hetroList") List<PersonalHetroResultSet> hetroList);
 
     /**
      * 查询异质数据列表
+     *
      * @param query
      * @return
      */

@@ -10,19 +10,19 @@ import cn.realai.online.core.service.MLockService;
 @Service
 public class MLockServiceImpl implements MLockService {
 
-	@Autowired
-	private MLockDao mlockDao;
+    @Autowired
+    private MLockDao mlockDao;
 
-	@Override
-	public boolean tryLock(MLock mlock) {
-		int ret = mlockDao.tryLock(mlock);
-		return ret == 1 ? true : false;
-	}
+    @Override
+    public boolean tryLock(MLock mlock) {
+        int ret = mlockDao.tryLock(mlock);
+        return ret == 1 ? true : false;
+    }
 
-	@Override
-	public boolean unLock(MLock mlock) {
-		int ret = mlockDao.unLock(mlock);
-		return ret == 1 ? true : false;
-	}
-	
+    @Override
+    public boolean unLock(MLock mlock) {
+        int ret = mlockDao.unLock(mlock);
+        return ret == 1 ? true : false;
+    }
+
 }
