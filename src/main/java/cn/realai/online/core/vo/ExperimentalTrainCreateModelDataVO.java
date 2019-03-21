@@ -15,39 +15,39 @@ public class ExperimentalTrainCreateModelDataVO {
     private long experimentId;
 
     //名称
-    @ApiModelProperty(value  = "名称")
+    @ApiModelProperty(value = "名称")
     private String name;
 
     //数据类型
-    @ApiModelProperty(value  = "数据类型" )
+    @ApiModelProperty(value = "数据类型")
     private String dataType;
 
     //总数
-    @ApiModelProperty(value  = "总数" )
+    @ApiModelProperty(value = "总数")
     private String count;
 
     //最大值
-    @ApiModelProperty(value  = "max" )
+    @ApiModelProperty(value = "max")
     private String max;
 
     //最小值
-    @ApiModelProperty(value = "min" )
+    @ApiModelProperty(value = "min")
     private String min;
 
     //平均值
-    @ApiModelProperty(value = "mean" )
+    @ApiModelProperty(value = "mean")
     private String mean;
 
     //中间值 中位数
-    @ApiModelProperty(value  = "median" )
+    @ApiModelProperty(value = "median")
     private String median;
 
     //25%
-    @ApiModelProperty(value  = "percent25" )
+    @ApiModelProperty(value = "percent25")
     private String percent25;
 
     //75%
-    @ApiModelProperty(value  = "percent75" )
+    @ApiModelProperty(value = "percent75")
     private String percent75;
 
     //推荐删除

@@ -24,7 +24,7 @@ public class ServiceVO {
     @ApiModelProperty(value = "创建时间")
     private long createTime;
 
-    @ApiModelProperty(value = "服务类型",example = "1:风控 2:营销")
+    @ApiModelProperty(value = "服务类型", example = "1:风控 2:营销")
     private int type;
 
     public long getStartTime() {

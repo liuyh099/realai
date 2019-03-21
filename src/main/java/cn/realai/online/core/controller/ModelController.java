@@ -81,7 +81,7 @@ public class ModelController {
     })
     @ResponseBody
     public Result<Void> update(@RequestParam("modelId") Long modelId, @RequestParam("name") String name,
-                               @RequestParam(name="remark", required = false) String remark) {
+                               @RequestParam(name = "remark", required = false) String remark) {
         try {
             Model model = new Model();
             model.setId(modelId);
@@ -99,7 +99,7 @@ public class ModelController {
     @ApiOperation(value = "查询服务下的已发布模型集合")
     @ApiImplicitParam(name = "serviceId", value = "服务ID", required = true, dataType = "Long", paramType = "query")
     @ResponseBody
-    public Result<List<ModelNameSelectVO>> selectModelNameList(@RequestParam(name="serviceId", required = true) Long modelId) {
+    public Result<List<ModelNameSelectVO>> selectModelNameList(@RequestParam(name = "serviceId", required = true) Long modelId) {
         try {
             List<ModelNameSelectVO> result = modelBusiness.selectModelNameList(modelId);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
@@ -114,7 +114,7 @@ public class ModelController {
     @ApiOperation(value = "根据服务ID或者最近一次发布的模型对应的服务下的模型集合")
     @ApiImplicitParam(name = "modelId", value = "模型ID", required = false, dataType = "Long", paramType = "query")
     @ResponseBody
-    public Result<ModelSelectVO> selectRecentModelNameList(@RequestParam(name="modelId", required = false) Long modelId) {
+    public Result<ModelSelectVO> selectRecentModelNameList(@RequestParam(name = "modelId", required = false) Long modelId) {
         try {
             ModelSelectVO result = modelBusiness.selectRecentModelNameList(modelId);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);

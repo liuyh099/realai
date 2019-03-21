@@ -33,7 +33,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/offlineBatch")
-@Api(tags="离线跑批管理API")
+@Api(tags = "离线跑批管理API")
 public class OfflineBatchController {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -57,9 +57,9 @@ public class OfflineBatchController {
     }
 
     @GetMapping("/list")
-    @ApiOperation(value="查询离线跑批列表")
+    @ApiOperation(value = "查询离线跑批列表")
     @ResponseBody
-    public Result<PageBO<OfflineBatchListVO>> list(OfflineBatchListQuery query){
+    public Result<PageBO<OfflineBatchListVO>> list(OfflineBatchListQuery query) {
         try {
             PageBO<OfflineBatchListVO> page = batchRecordBussiness.pageList(query);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), page);
@@ -86,7 +86,7 @@ public class OfflineBatchController {
 
 
     @GetMapping("/download/{batchId}")
-    @ApiOperation(value="下载离线跑批运算结果")
+    @ApiOperation(value = "下载离线跑批运算结果")
     @ApiImplicitParam(name = "batchId", value = "离线跑批Id", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
     public void download(@PathVariable("batchId") Long batchId){

@@ -15,6 +15,7 @@ public interface BatchRecordDao {
 
     /**
      * 必须传入ID
+     *
      * @param batchRecord
      * @return
      */

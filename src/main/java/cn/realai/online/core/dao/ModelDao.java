@@ -26,4 +26,10 @@ public interface ModelDao {
     //查询模型详情
     ModelDetailBO selectDetail(@Param("modelId") Long modelId);
 
+    /**
+     * 查询模型列表
+     * @param model
+     * @return
+     */
+    List<Model> findList(Model model);
 }

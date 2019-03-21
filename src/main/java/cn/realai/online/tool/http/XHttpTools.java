@@ -28,41 +28,43 @@ public final class XHttpTools {
     }
 
     static {
-    	try{
-    		Ssls.s.disableSslVerification();
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}
+        try {
+            Ssls.s.disableSslVerification();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
-    	XUrl url = XUrl.base("https://www.baidu.com/");
-    	String respStr = XHttpTools.request(new XHttpTools.XOption(ChannelAccessConstant.CHARACTER_ENCODING_UTF8, ChannelAccessConstant.WECHAT_CONNECTION_TIMEOUT, ChannelAccessConstant.WECHAT_READ_TIMEOUT),url,null).string();
-    	System.out.println(respStr);
+        XUrl url = XUrl.base("https://www.baidu.com/");
+        String respStr = XHttpTools.request(new XHttpTools.XOption(ChannelAccessConstant.CHARACTER_ENCODING_UTF8, ChannelAccessConstant.WECHAT_CONNECTION_TIMEOUT, ChannelAccessConstant.WECHAT_READ_TIMEOUT), url, null).string();
+        System.out.println(respStr);
     }
-    
+
     /**
      * http get 请求
+     *
      * @param urlStr
      * @return
      */
-    public static String httpGet(String urlStr){
-    	XUrl url = XUrl.base("http://" + urlStr);
-    	String respStr = XHttpTools.request(new XHttpTools.XOption(ChannelAccessConstant.CHARACTER_ENCODING_UTF8, ChannelAccessConstant.WECHAT_CONNECTION_TIMEOUT, ChannelAccessConstant.WECHAT_READ_TIMEOUT),url,null).string();
-    	return respStr;
-    } 
-    
+    public static String httpGet(String urlStr) {
+        XUrl url = XUrl.base("http://" + urlStr);
+        String respStr = XHttpTools.request(new XHttpTools.XOption(ChannelAccessConstant.CHARACTER_ENCODING_UTF8, ChannelAccessConstant.WECHAT_CONNECTION_TIMEOUT, ChannelAccessConstant.WECHAT_READ_TIMEOUT), url, null).string();
+        return respStr;
+    }
+
     /**
      * http get 请求
+     *
      * @param urlStr
      * @return
      */
-    public static String httpsGet(String urlStr){
-    	XUrl url = XUrl.base("https://" + urlStr);
-    	String respStr = XHttpTools.request(new XHttpTools.XOption(ChannelAccessConstant.CHARACTER_ENCODING_UTF8, ChannelAccessConstant.WECHAT_CONNECTION_TIMEOUT, ChannelAccessConstant.WECHAT_READ_TIMEOUT),url,null).string();
-    	return respStr;
-    } 
-    
+    public static String httpsGet(String urlStr) {
+        XUrl url = XUrl.base("https://" + urlStr);
+        String respStr = XHttpTools.request(new XHttpTools.XOption(ChannelAccessConstant.CHARACTER_ENCODING_UTF8, ChannelAccessConstant.WECHAT_CONNECTION_TIMEOUT, ChannelAccessConstant.WECHAT_READ_TIMEOUT), url, null).string();
+        return respStr;
+    }
+
     /**
      * 使用给定的请求选项进行HTTP请求
      *
@@ -258,8 +260,8 @@ public final class XHttpTools {
          * @param connection 需要配置的连接
          */
         public void connectionSetting(HttpURLConnection connection) {
-        	connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36");
-        	connection.setRequestProperty("Connection", "keep-alive");
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36");
+            connection.setRequestProperty("Connection", "keep-alive");
 //        	connection.setRequestProperty("Referer", "https://wx.qq.com/");
             connection.setRequestProperty("Charset", charset);
             connection.setConnectTimeout(connectTimeout);
@@ -600,7 +602,7 @@ public final class XHttpTools {
                 //e.printStackTrace();
                 return null;
             } finally {
-            	
+
                 close();
             }
         }

@@ -3,83 +3,83 @@ package cn.realai.online.core.entity;
 /**
  * 模型表现
  * 描述实验的效果
+ *
  * @author lyh
  */
 public class ModelPerformance {
 
-	private long id;
-	
-	//指标名
-	private String metricName;
-	
-	//实验id
-	private long experimentId;
-	
-	//训练集
-	private Double trainingSet;
-	
-	//测试集
-	private Double testSet;
-	
-	//验证集
-	private Double validSet;
-	
-	private long createTime;
+    private Long id;
 
-	public long getId() {
-		return id;
-	}
+    //指标名
+    private String metricName;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    //实验id
+    private Long experimentId;
 
-	public String getMetricName() {
-		return metricName;
-	}
+    //训练集
+    private Double trainingSet;
 
-	public void setMetricName(String metricName) {
-		this.metricName = metricName;
-	}
+    //测试集
+    private Double testSet;
 
-	public long getExperimentId() {
-		return experimentId;
-	}
+    //验证集
+    private Double validSet;
 
-	public void setExperimentId(long experimentId) {
-		this.experimentId = experimentId;
-	}
+    private Long createTime;
 
-	public Double getTrainingSet() {
-		return trainingSet;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setTrainingSet(Double trainingSet) {
-		this.trainingSet = trainingSet;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Double getTestSet() {
-		return testSet;
-	}
+    public String getMetricName() {
+        return metricName;
+    }
 
-	public void setTestSet(Double testSet) {
-		this.testSet = testSet;
-	}
+    public void setMetricName(String metricName) {
+        this.metricName = metricName;
+    }
 
-	public Double getValidSet() {
-		return validSet;
-	}
+    public Long getExperimentId() {
+        return experimentId;
+    }
 
-	public void setValidSet(Double validSet) {
-		this.validSet = validSet;
-	}
+    public void setExperimentId(Long experimentId) {
+        this.experimentId = experimentId;
+    }
 
-	public long getCreateTime() {
-		return createTime;
-	}
+    public Double getTrainingSet() {
+        return trainingSet;
+    }
 
-	public void setCreateTime(long createTime) {
-		this.createTime = createTime;
-	}
-	
+    public void setTrainingSet(Double trainingSet) {
+        this.trainingSet = trainingSet;
+    }
+
+    public Double getTestSet() {
+        return testSet;
+    }
+
+    public void setTestSet(Double testSet) {
+        this.testSet = testSet;
+    }
+
+    public Double getValidSet() {
+        return validSet;
+    }
+
+    public void setValidSet(Double validSet) {
+        this.validSet = validSet;
+    }
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
 }

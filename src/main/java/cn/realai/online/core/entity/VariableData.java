@@ -2,203 +2,204 @@ package cn.realai.online.core.entity;
 
 /**
  * X轴变量数据
+ *
  * @author lyh
  */
 public class VariableData {
 
-	//主键
-	private Long id;
-	
-	//实验id
-	private Long experimentId;
-	
-	//名称
-	private String name;
-	
-	//变量含义
-	private String meaning;
-	
-	//数据类型
-	private String dataType;
-	
-	//数值
-	public static final int DATATYPE_NUM = 1;
-	
-	//类别
-	public static final int DATATYPE_ENUM = 3;
-	
-	//总数
-	private String count;
-	
-	//最大值
-	private String max;
-	
-	//最小值
-	private String min;
-	
-	//平均值
-	private String mean;
-	
-	//中间值 中位数
-	private String median;
-	
-	//25%
-	private String percent25;
-	
-	//75%
-	private String percent75;
+    //主键
+    private Long id;
 
-	//模式类型
-	private Integer variableType;
-	
-	//同质
-	public static final int SCHEMA_TYPE_HOMO = 2;
-	
-	//异质
-	public static final int SCHEMA_TYPE_HETERO = 1;
-	
-	//推荐删除
-	private int recommendedDelete;
-	
-	public static final int RECOMMENDED_DELETE_YES = 2;
-	
-	public static final int RECOMMENDED_DELETE_NO = 1;
-	
-	//删除
-	private int delete;
-	
-	public static final int DELETE_YES = 2;
-	
-	public static final int DELETE_NO = 1;
-	
-	//创建时间
-	private long createTime;
+    //实验id
+    private Long experimentId;
 
-	public Long getId() {
-		return id;
-	}
+    //名称
+    private String name;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    //变量含义
+    private String meaning;
 
-	public Long getExperimentId() {
-		return experimentId;
-	}
+    //数据类型
+    private String dataType;
 
-	public void setExperimentId(Long experimentId) {
-		this.experimentId = experimentId;
-	}
+    //数值
+    public static final int DATATYPE_NUM = 1;
 
-	public String getName() {
-		return name;
-	}
+    //类别
+    public static final int DATATYPE_ENUM = 3;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    //总数
+    private String count;
 
-	public String getMeaning() {
-		return meaning;
-	}
+    //最大值
+    private String max;
 
-	public void setMeaning(String meaning) {
-		this.meaning = meaning;
-	}
+    //最小值
+    private String min;
 
-	public String getDataType() {
-		return dataType;
-	}
+    //平均值
+    private String mean;
 
-	public void setDataType(String dataType) {
-		this.dataType = dataType;
-	}
+    //中间值 中位数
+    private String median;
 
-	public String getCount() {
-		return count;
-	}
+    //25%
+    private String percent25;
 
-	public void setCount(String count) {
-		this.count = count;
-	}
+    //75%
+    private String percent75;
 
-	public String getMax() {
-		return max;
-	}
+    //模式类型
+    private Integer variableType;
 
-	public void setMax(String max) {
-		this.max = max;
-	}
+    //同质
+    public static final int SCHEMA_TYPE_HOMO = 2;
 
-	public String getMin() {
-		return min;
-	}
+    //异质
+    public static final int SCHEMA_TYPE_HETERO = 1;
 
-	public void setMin(String min) {
-		this.min = min;
-	}
+    //推荐删除
+    private int recommendedDelete;
 
-	public String getMean() {
-		return mean;
-	}
+    public static final int RECOMMENDED_DELETE_YES = 2;
 
-	public void setMean(String mean) {
-		this.mean = mean;
-	}
+    public static final int RECOMMENDED_DELETE_NO = 1;
 
-	public String getMedian() {
-		return median;
-	}
+    //删除
+    private int delete;
 
-	public void setMedian(String median) {
-		this.median = median;
-	}
+    public static final int DELETE_YES = 2;
 
-	public String getPercent25() {
-		return percent25;
-	}
+    public static final int DELETE_NO = 1;
 
-	public void setPercent25(String percent25) {
-		this.percent25 = percent25;
-	}
+    //创建时间
+    private long createTime;
 
-	public String getPercent75() {
-		return percent75;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setPercent75(String percent75) {
-		this.percent75 = percent75;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Integer getVariableType() {
-		return variableType;
-	}
+    public Long getExperimentId() {
+        return experimentId;
+    }
 
-	public void setVariableType(Integer variableType) {
-		this.variableType = variableType;
-	}
+    public void setExperimentId(Long experimentId) {
+        this.experimentId = experimentId;
+    }
 
-	public int getRecommendedDelete() {
-		return recommendedDelete;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setRecommendedDelete(int recommendedDelete) {
-		this.recommendedDelete = recommendedDelete;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public int getDelete() {
-		return delete;
-	}
+    public String getMeaning() {
+        return meaning;
+    }
 
-	public void setDelete(int delete) {
-		this.delete = delete;
-	}
+    public void setMeaning(String meaning) {
+        this.meaning = meaning;
+    }
 
-	public long getCreateTime() {
-		return createTime;
-	}
+    public String getDataType() {
+        return dataType;
+    }
 
-	public void setCreateTime(long createTime) {
-		this.createTime = createTime;
-	}
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public String getMax() {
+        return max;
+    }
+
+    public void setMax(String max) {
+        this.max = max;
+    }
+
+    public String getMin() {
+        return min;
+    }
+
+    public void setMin(String min) {
+        this.min = min;
+    }
+
+    public String getMean() {
+        return mean;
+    }
+
+    public void setMean(String mean) {
+        this.mean = mean;
+    }
+
+    public String getMedian() {
+        return median;
+    }
+
+    public void setMedian(String median) {
+        this.median = median;
+    }
+
+    public String getPercent25() {
+        return percent25;
+    }
+
+    public void setPercent25(String percent25) {
+        this.percent25 = percent25;
+    }
+
+    public String getPercent75() {
+        return percent75;
+    }
+
+    public void setPercent75(String percent75) {
+        this.percent75 = percent75;
+    }
+
+    public Integer getVariableType() {
+        return variableType;
+    }
+
+    public void setVariableType(Integer variableType) {
+        this.variableType = variableType;
+    }
+
+    public int getRecommendedDelete() {
+        return recommendedDelete;
+    }
+
+    public void setRecommendedDelete(int recommendedDelete) {
+        this.recommendedDelete = recommendedDelete;
+    }
+
+    public int getDelete() {
+        return delete;
+    }
+
+    public void setDelete(int delete) {
+        this.delete = delete;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
 }

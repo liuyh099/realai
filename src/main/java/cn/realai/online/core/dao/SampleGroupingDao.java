@@ -8,8 +8,8 @@ import cn.realai.online.core.entity.SampleGrouping;
 
 public interface SampleGroupingDao {
 
-	void insertList(@Param("sgList")List<SampleGrouping> sgList);
+    void insertList(@Param("sgList") List<SampleGrouping> sgList);
 
-	List<SampleGrouping> findListByExperimentId(@Param("experimentId")Long experimentId);
+    List<SampleGrouping> findListByExperimentId(@Param("experimentId") Long experimentId);
 
 }

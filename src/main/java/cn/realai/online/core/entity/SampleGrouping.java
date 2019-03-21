@@ -2,81 +2,82 @@ package cn.realai.online.core.entity;
 
 /**
  * 样本分组
+ *
  * @author lyh
  */
 public class SampleGrouping {
 
-	private long id;
-	
-	private long experimentId;
-	
-	private String groupName;
-	
-	private long createTime;
-	
-	//组数量
-	private int count;
-	
-	//组占总数的比例
-	private Double percentage;
-	
-	//正本比例
-	private Double positiveRatio;
+    private long id;
 
-	public long getId() {
-		return id;
-	}
+    private long experimentId;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    private String groupName;
 
-	public long getExperimentId() {
-		return experimentId;
-	}
+    private long createTime;
 
-	public void setExperimentId(long experimentId) {
-		this.experimentId = experimentId;
-	}
+    //组数量
+    private int count;
 
-	public String getGroupName() {
-		return groupName;
-	}
+    //组占总数的比例
+    private Double percentage;
 
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
-	}
+    //正本比例
+    private Double positiveRatio;
 
-	public long getCreateTime() {
-		return createTime;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setCreateTime(long createTime) {
-		this.createTime = createTime;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public int getCount() {
-		return count;
-	}
+    public long getExperimentId() {
+        return experimentId;
+    }
 
-	public void setCount(int count) {
-		this.count = count;
-	}
+    public void setExperimentId(long experimentId) {
+        this.experimentId = experimentId;
+    }
 
-	public Double getPercentage() {
-		return percentage;
-	}
+    public String getGroupName() {
+        return groupName;
+    }
 
-	public void setPercentage(Double percentage) {
-		this.percentage = percentage;
-	}
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 
-	public Double getPositiveRatio() {
-		return positiveRatio;
-	}
+    public long getCreateTime() {
+        return createTime;
+    }
 
-	public void setPositiveRatio(Double positiveRatio) {
-		this.positiveRatio = positiveRatio;
-	}
-	
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public Double getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(Double percentage) {
+        this.percentage = percentage;
+    }
+
+    public Double getPositiveRatio() {
+        return positiveRatio;
+    }
+
+    public void setPositiveRatio(Double positiveRatio) {
+        this.positiveRatio = positiveRatio;
+    }
+
 }

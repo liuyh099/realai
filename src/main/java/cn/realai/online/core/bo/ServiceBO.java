@@ -4,6 +4,5 @@ import cn.realai.online.core.entity.Service;
 
 public class ServiceBO extends Service {
 
-	
-	
+
 }

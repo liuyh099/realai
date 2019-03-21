@@ -14,6 +14,7 @@ public interface BatchRecordService {
 
     /**
      * 根据ID和其他条件查询批次信息
+     *
      * @param batchRecord
      * @return
      */

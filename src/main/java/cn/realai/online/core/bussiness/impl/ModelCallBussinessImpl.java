@@ -24,83 +24,82 @@ import cn.realai.online.tool.modelcallthreadpool.TrainTask;
 import cn.realai.online.tool.redis.RedisClientTemplate;
 
 /**
- * 
  * @author lyh
  */
 @Service
-public class ModelCallBussinessImpl implements ModelCallBussiness{
+public class ModelCallBussinessImpl implements ModelCallBussiness {
 
-	private static Logger logger = LoggerFactory.getLogger(ModelCallBussinessImpl.class);
-	
-	@Autowired
-	private RedisClientTemplate redisClientTemplate;
-	
-	@Autowired
-	private ExperimentService experimentService;
-	
-	@Autowired
-	private VariableDataService variableDataService;
-	
-	/*
-	 * 处理每日跑批任务
-	 */
-	@Override
-	public void runBatchDaily(Long experimentId, String fileAddress) {
-		BatchDailyTask batchDailyTask = new BatchDailyTask(experimentId, fileAddress);
-		ModelCallPool.modelCallPool.execute(batchDailyTask);
-	}
+    private static Logger logger = LoggerFactory.getLogger(ModelCallBussinessImpl.class);
 
-	/*
-	 * 预处理回调
-	 */
-	@Override
-	public int preprocessCallback(Long experimentId, String redisKey) {
-		ExperimentBO experimentbo = experimentService.selectExperimentById(experimentId);
-		if (experimentbo == null) {
-			logger.error("ModelCallBussinessImpl preprocessCallback. 预处理实验不存在. experimentId{}, redisKey{}", experimentId, redisKey);
-			return 0;
-		}
-		String str = redisClientTemplate.get(redisKey);
-		if (str == null || "".equals(str)) {
-			logger.warn("ModelCallBussinessImpl preprocessCallback. 预处理RedisKey为空. experimentId{}, redisKey{}", experimentId, redisKey);
-			return 0;
-		}
-		
-		List<VariableData> vdList = JSON.parseArray(str, VariableData.class);
-		for (VariableData vd : vdList) {
-			if (experimentId != vd.getExperimentId()) {
-				logger.error("ModelCallBussinessImpl preprocessCallback. 预处理结果不属于指定的实验. experimentId{}, redisKey{}, vd{}", 
-						experimentId, redisKey, JSON.toJSONString(vd));
-				throw new RuntimeException("");
-			}
-		}
-		
-		int ret = variableDataService.insertVariableDataList(vdList);
-		
-		//修改实验的预处理状态
-		ret = experimentService.updatePreprocessStatus(experimentId, Experiment.PREFINISH_YES);
-		
-		redisClientTemplate.delete(redisKey);
-		
-		return ret;
-	}
+    @Autowired
+    private RedisClientTemplate redisClientTemplate;
 
-	/*
-	 * 模型训练回调
-	 */
-	@Override
-	public void trainCallback(Long experimentId, TrainResultRedisKey redisKey) {
-		TrainTask trainTask = new TrainTask(experimentId, redisKey);
-		ModelCallPool.modelCallPool.execute(trainTask);
-	}
+    @Autowired
+    private ExperimentService experimentService;
 
-	/*
-	 * 错误处理
-	 */
-	@Override
-	public void errorDealWith(Long experimentId, String errMsg) {
+    @Autowired
+    private VariableDataService variableDataService;
 
-	}
+    /*
+     * 处理每日跑批任务
+     */
+    @Override
+    public void runBatchDaily(Long experimentId, String fileAddress) {
+        BatchDailyTask batchDailyTask = new BatchDailyTask(experimentId, fileAddress);
+        ModelCallPool.modelCallPool.execute(batchDailyTask);
+    }
+
+    /*
+     * 预处理回调
+     */
+    @Override
+    public int preprocessCallback(Long experimentId, String redisKey) {
+        ExperimentBO experimentbo = experimentService.selectExperimentById(experimentId);
+        if (experimentbo == null) {
+            logger.error("ModelCallBussinessImpl preprocessCallback. 预处理实验不存在. experimentId{}, redisKey{}", experimentId, redisKey);
+            return 0;
+        }
+        String str = redisClientTemplate.get(redisKey);
+        if (str == null || "".equals(str)) {
+            logger.warn("ModelCallBussinessImpl preprocessCallback. 预处理RedisKey为空. experimentId{}, redisKey{}", experimentId, redisKey);
+            return 0;
+        }
+
+        List<VariableData> vdList = JSON.parseArray(str, VariableData.class);
+        for (VariableData vd : vdList) {
+            if (experimentId != vd.getExperimentId()) {
+                logger.error("ModelCallBussinessImpl preprocessCallback. 预处理结果不属于指定的实验. experimentId{}, redisKey{}, vd{}",
+                        experimentId, redisKey, JSON.toJSONString(vd));
+                throw new RuntimeException("");
+            }
+        }
+
+        int ret = variableDataService.insertVariableDataList(vdList);
+
+        //修改实验的预处理状态
+        ret = experimentService.updatePreprocessStatus(experimentId, Experiment.PREFINISH_YES);
+
+        redisClientTemplate.delete(redisKey);
+
+        return ret;
+    }
+
+    /*
+     * 模型训练回调
+     */
+    @Override
+    public void trainCallback(Long experimentId, TrainResultRedisKey redisKey) {
+        TrainTask trainTask = new TrainTask(experimentId, redisKey);
+        ModelCallPool.modelCallPool.execute(trainTask);
+    }
+
+    /*
+     * 错误处理
+     */
+    @Override
+    public void errorDealWith(Long experimentId, String errMsg) {
+
+    }
 
 }
 

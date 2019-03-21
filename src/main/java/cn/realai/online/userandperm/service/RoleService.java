@@ -7,6 +7,7 @@ import java.util.List;
 public interface RoleService {
     /**
      * 查询所有的角色
+     *
      * @param sysRole
      * @return
      */
@@ -14,6 +15,7 @@ public interface RoleService {
 
     /**
      * 保存角色
+     *
      * @param sysRole
      * @return
      */
@@ -21,6 +23,7 @@ public interface RoleService {
 
     /**
      * 删除角色信息
+     *
      * @param ids
      * @return
      */
@@ -28,6 +31,7 @@ public interface RoleService {
 
     /**
      * 根据ID查询角色信息
+     *
      * @param id
      * @return
      */
@@ -35,6 +39,7 @@ public interface RoleService {
 
     /**
      * 更新角色信息
+     *
      * @param sysRole
      * @return
      */

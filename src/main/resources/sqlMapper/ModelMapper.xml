@@ -15,6 +15,16 @@
         VALUE (#{name},#{createTime},#{experimentId},#{serviceId},#{remark})
     </insert>
 
+    <select id="findList" parameterType="cn.realai.online.core.entity.Model" resultMap="ModelMap">
+        SELECT * FROM model
+        <where>
+            1=1
+            <if test="name!=null and name!=''">
+                AND name = #{name}
+            </if>
+        </where>
+    </select>
+
 
     <update id="update" parameterType="cn.realai.online.core.entity.Model">
         UPDATE model
@@ -121,11 +131,10 @@
         join service as sv on m.service_id = sv.id
         <!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错-->
         <where>
-          m.id = #{modelId}
+            m.id = #{modelId}
         </where>
         limit 1
     </select>
-
 
 
 </mapper>

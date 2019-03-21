@@ -10,22 +10,22 @@ import cn.realai.online.core.service.SampleGroupingService;
 import cn.realai.online.core.dao.SampleGroupingDao;
 
 @Service
-public class SampleGroupingServiceImpl implements SampleGroupingService{
+public class SampleGroupingServiceImpl implements SampleGroupingService {
 
-	@Autowired
-	private SampleGroupingDao SampleGroupingDao;
-	
-	@Override
-	public void insertList(List<SampleGrouping> sgList) {
-		if (sgList == null || sgList.size() == 0) {
-			return;
-		}
-		SampleGroupingDao.insertList(sgList);
-	}
+    @Autowired
+    private SampleGroupingDao SampleGroupingDao;
 
-	@Override
-	public List<SampleGrouping> findListByExperimentId(Long experimentId) {
-		return SampleGroupingDao.findListByExperimentId(experimentId);
-	}
+    @Override
+    public void insertList(List<SampleGrouping> sgList) {
+        if (sgList == null || sgList.size() == 0) {
+            return;
+        }
+        SampleGroupingDao.insertList(sgList);
+    }
+
+    @Override
+    public List<SampleGrouping> findListByExperimentId(Long experimentId) {
+        return SampleGroupingDao.findListByExperimentId(experimentId);
+    }
 
 }

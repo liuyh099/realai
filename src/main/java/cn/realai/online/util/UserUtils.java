@@ -1,6 +1,5 @@
 package cn.realai.online.util;
 
-import cn.realai.online.userandperm.dao.UserDao;
 import cn.realai.online.userandperm.entity.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;

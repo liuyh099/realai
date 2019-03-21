@@ -1,10 +1,10 @@
 package cn.realai.online.userandperm.business.impl;
 
 import cn.realai.online.common.page.PageBO;
-import cn.realai.online.core.query.PageQuery;
 import cn.realai.online.userandperm.bo.UserBO;
 import cn.realai.online.userandperm.business.UserBusiness;
 import cn.realai.online.userandperm.entity.User;
+import cn.realai.online.userandperm.query.UserPageQuery;
 import cn.realai.online.userandperm.service.UserService;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
@@ -25,9 +25,11 @@ public class UserBusinessImpl implements UserBusiness {
     private UserService userService;
 
     @Override
-    public PageBO<UserBO> list(PageQuery pageQuery) {
+    public PageBO<UserBO> list(UserPageQuery pageQuery) {
         Page page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
-        List<User> list = userService.list(new User());
+        User user = new User();
+        user.setForget(pageQuery.getForget());
+        List<User> list = userService.list(user);
         List<UserBO> result = JSON.parseArray(JSON.toJSONString(list), UserBO.class);
         return new PageBO<UserBO>(result, pageQuery.getPageSize(), pageQuery.getPageNum(), page.getTotal(), page.getPages());
     }
@@ -90,8 +92,8 @@ public class UserBusinessImpl implements UserBusiness {
     @Override
     public UserBO detail(Long id) {
         User user = userService.get(id);
-        UserBO userBO =new UserBO();
-        BeanUtils.copyProperties(user,userBO);
+        UserBO userBO = new UserBO();
+        BeanUtils.copyProperties(user, userBO);
         return userBO;
     }
 
@@ -110,8 +112,8 @@ public class UserBusinessImpl implements UserBusiness {
     @Override
     @Transactional(readOnly = false)
     public boolean updatePwd(UserBO userbo) {
-        User user =new User();
-        BeanUtils.copyProperties(userbo,user);
+        User user = new User();
+        BeanUtils.copyProperties(userbo, user);
         if (userService.updatePwd(user) <= 0) {
             return false;
         }
@@ -121,6 +123,7 @@ public class UserBusinessImpl implements UserBusiness {
 
     /**
      * 检查用户名或者密码是否相同
+     *
      * @param userBO
      * @return
      */

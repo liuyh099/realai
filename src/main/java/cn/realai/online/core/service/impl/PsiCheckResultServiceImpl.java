@@ -15,7 +15,7 @@ import java.util.List;
  * @create 2019-03-20 11:35
  */
 @Service
-public class PsiCheckResultServiceImpl implements PsiChekcResultService{
+public class PsiCheckResultServiceImpl implements PsiChekcResultService {
 
     @Autowired
     private PSICheckResultDao psiCheckResultDao;

@@ -21,7 +21,7 @@ public enum Ssls {
 
     public void disableSslVerification() {
         try {
-            TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
 
                 @Override
                 public void checkClientTrusted(X509Certificate[] chain, String authType)
@@ -40,7 +40,7 @@ public enum Ssls {
                     return null;
                 }
 
-            } };
+            }};
 
             // Install the all-trusting trust manager
             SSLContext sc = SSLContext.getInstance("SSL");
