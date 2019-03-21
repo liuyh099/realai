@@ -57,9 +57,9 @@ public class FileClassifyBO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        FileClassifyBO fileClassify  = (FileClassifyBO) o;
-        if(StringUtils.equals(fileClassify.getSelf(), this.getSelf()) &&
-                StringUtils.equals(fileClassify.getChild(),this.getChild()))  {
+        FileClassifyBO fileClassify = (FileClassifyBO) o;
+        if (StringUtils.equals(fileClassify.getSelf(), this.getSelf()) &&
+                StringUtils.equals(fileClassify.getChild(), this.getChild())) {
 
             return true;
         }
@@ -70,7 +70,7 @@ public class FileClassifyBO {
     @Override
     public int hashCode() {
         int result = self != null ? self.hashCode() : 0;
-        result = 31 * result +  self != null ? self.hashCode() : 0;
+        result = 31 * result + self != null ? self.hashCode() : 0;
         return result;
     }
 }

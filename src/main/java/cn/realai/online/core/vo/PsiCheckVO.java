@@ -12,13 +12,13 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class PsiCheckVO {
 
-    @ApiModelProperty(value="modelId")
+    @ApiModelProperty(value = "modelId")
     private long modelId;
 
-    @ApiModelProperty(value="最大Psi")
+    @ApiModelProperty(value = "最大Psi")
     private double maxPsi;
 
-    @ApiModelProperty(value="是否可以检测Psi（true：是 false：否）")
+    @ApiModelProperty(value = "是否可以检测Psi（true：是 false：否）")
     private boolean flag;
 
     public long getModelId() {

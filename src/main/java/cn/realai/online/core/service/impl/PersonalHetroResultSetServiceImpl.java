@@ -12,20 +12,20 @@ import cn.realai.online.core.service.PersonalHetroResultSetService;
 @Service
 public class PersonalHetroResultSetServiceImpl implements PersonalHetroResultSetService {
 
-	@Autowired
-	private PersonalHetroResultSetDao personalHetroResultSetDao;
-	
-	@Override
-	public void insertList(List<PersonalHetroResultSet> hetroList) {
-		if (hetroList == null || hetroList.size() == 0) {
-			return ;
-		}
-		personalHetroResultSetDao.insertList(hetroList);
-	}
+    @Autowired
+    private PersonalHetroResultSetDao personalHetroResultSetDao;
 
-	@Override
-	public List<PersonalHetroResultSet> findList(PersonalHetroResultSet query) {
-		return personalHetroResultSetDao.findList(query);
-	}
+    @Override
+    public void insertList(List<PersonalHetroResultSet> hetroList) {
+        if (hetroList == null || hetroList.size() == 0) {
+            return;
+        }
+        personalHetroResultSetDao.insertList(hetroList);
+    }
+
+    @Override
+    public List<PersonalHetroResultSet> findList(PersonalHetroResultSet query) {
+        return personalHetroResultSetDao.findList(query);
+    }
 
 }

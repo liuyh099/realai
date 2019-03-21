@@ -2,7 +2,6 @@ package cn.realai.online.util;
 
 import org.apache.commons.lang3.Validate;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
@@ -21,6 +20,7 @@ public class Digests {
     public static byte[] md5(byte[] input) {
         return digest(input, MD5, null, 1);
     }
+
     public static byte[] md5(byte[] input, int iterations) {
         return digest(input, MD5, null, iterations);
     }

@@ -2,123 +2,124 @@ package cn.realai.online.core.entity;
 
 /**
  * 样本权重
+ *
  * @author lyh
  */
 public class SampleWeight {
 
-	private long id;
-	
-	private long experimentId;
-	
-	private long groupId;
-	
-	//计算后Python的分组名称
-	private String groupName;
+    private long id;
 
-	//变量ID
-	private long variableId;
-	
-	//变量来源
-	private String variableName;
-	
-	//变量权重
-	private Double variableWeight;
-	
-	//变量类型
-	private int variableType;
-	
-	//同质
-	public static final int SAMPLE_TYPE_HOMO = 1;
-	
-	//异质
-	public static final int SAMPLE_TYPE_HETERO = 2;
-	
-	//分箱特征
-	private String boxBeans;
-	
-	//图片路径
-	private String imgUrl;
+    private long experimentId;
 
+    private long groupId;
 
-	public long getVariableId() {
-		return variableId;
-	}
+    //计算后Python的分组名称
+    private String groupName;
 
-	public void setVariableId(long variableId) {
-		this.variableId = variableId;
-	}
+    //变量ID
+    private long variableId;
 
-	public long getId() {
-		return id;
-	}
+    //变量来源
+    private String variableName;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    //变量权重
+    private Double variableWeight;
 
-	public long getGroupId() {
-		return groupId;
-	}
+    //变量类型
+    private int variableType;
 
-	public void setGroupId(long groupId) {
-		this.groupId = groupId;
-	}
+    //同质
+    public static final int SAMPLE_TYPE_HOMO = 1;
 
-	public String getBoxBeans() {
-		return boxBeans;
-	}
+    //异质
+    public static final int SAMPLE_TYPE_HETERO = 2;
 
-	public void setBoxBeans(String boxBeans) {
-		this.boxBeans = boxBeans;
-	}
+    //分箱特征
+    private String boxBeans;
 
-	public String getImgUrl() {
-		return imgUrl;
-	}
-
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
-	}
-
-	public long getExperimentId() {
-		return experimentId;
-	}
-
-	public void setExperimentId(long experimentId) {
-		this.experimentId = experimentId;
-	}
-
-	public String getVariableName() {
-		return variableName;
-	}
-
-	public void setVariableName(String variableName) {
-		this.variableName = variableName;
-	}
+    //图片路径
+    private String imgUrl;
 
 
-	public Double getVariableWeight() {
-		return variableWeight;
-	}
+    public long getVariableId() {
+        return variableId;
+    }
 
-	public void setVariableWeight(Double variableWeight) {
-		this.variableWeight = variableWeight;
-	}
+    public void setVariableId(long variableId) {
+        this.variableId = variableId;
+    }
 
-	public int getVariableType() {
-		return variableType;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setVariableType(int variableType) {
-		this.variableType = variableType;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public String getGroupName() {
-		return groupName;
-	}
+    public long getGroupId() {
+        return groupId;
+    }
 
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
-	}
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getBoxBeans() {
+        return boxBeans;
+    }
+
+    public void setBoxBeans(String boxBeans) {
+        this.boxBeans = boxBeans;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public long getExperimentId() {
+        return experimentId;
+    }
+
+    public void setExperimentId(long experimentId) {
+        this.experimentId = experimentId;
+    }
+
+    public String getVariableName() {
+        return variableName;
+    }
+
+    public void setVariableName(String variableName) {
+        this.variableName = variableName;
+    }
+
+
+    public Double getVariableWeight() {
+        return variableWeight;
+    }
+
+    public void setVariableWeight(Double variableWeight) {
+        this.variableWeight = variableWeight;
+    }
+
+    public int getVariableType() {
+        return variableType;
+    }
+
+    public void setVariableType(int variableType) {
+        this.variableType = variableType;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 
 }

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.realai.online.core.dao.MLockDao">
-  <resultMap type="cn.realai.online.core.entity.MLock" id="MLockMap">
-  	    <id column="lock_key" property="lockKey" jdbcType="VARCHAR"/>
-  	    <result column="lock_value" property="lockValue" jdbcType="VARCHAR"/>
-  	    <result column="end_time" property="endTime" jdbcType="BIGINT"/>
-  </resultMap>
+    <resultMap type="cn.realai.online.core.entity.MLock" id="MLockMap">
+        <id column="lock_key" property="lockKey" jdbcType="VARCHAR"/>
+        <result column="lock_value" property="lockValue" jdbcType="VARCHAR"/>
+        <result column="end_time" property="endTime" jdbcType="BIGINT"/>
+    </resultMap>
 
-  <sql id="Base_Column_List" >
-        
-  </sql>
-	
-	<update id="tryLock">
+    <sql id="Base_Column_List">
+
+    </sql>
+
+    <update id="tryLock">
 		update m_lock
 		set lock_value = #{mlock.lockValue},
 			end_time = #{mlock.endTime}
 		where lock_key = #{mlock.lockKey}
 		and end_time &lt; #{mlock.currentTime}
 	</update>
-  
-  	<update id="unLock">
+
+    <update id="unLock">
   		update m_lock
   		set end_time = 0
   		where lock_key = #{mlock.lockKey}
   		and lock_value = #{mlock.lockValue}
   	</update>
-  
+
 </mapper> 

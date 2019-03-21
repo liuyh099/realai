@@ -55,11 +55,10 @@
         join variable_data as vd on psi.variable_id = vd.id
         join model as m on psi.experiment_id = m.experiment_id
         <where>
-          m.id = #{modelId}
+            m.id = #{modelId}
         </where>
         order by psi.id
     </select>
-
 
 
 </mapper>

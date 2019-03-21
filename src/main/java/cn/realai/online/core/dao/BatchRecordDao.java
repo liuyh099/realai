@@ -6,10 +6,11 @@ import cn.realai.online.core.entity.BatchRecord;
 
 public interface BatchRecordDao {
 
-	Long insert(@Param("batchRecord")BatchRecord batchRecord);
+    Long insert(@Param("batchRecord") BatchRecord batchRecord);
 
     /**
      * 必须传入ID
+     *
      * @param batchRecord
      * @return
      */

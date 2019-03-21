@@ -22,10 +22,9 @@ public class MLockServiceImpl implements MLockService {
 	}
 
 	@Override
-	@Transactional
-	public boolean unLock(MLock mlock) {
-		int ret = mlockDao.unLock(mlock);
-		return ret == 1 ? true : false;
-	}
-	
+    public boolean unLock(MLock mlock) {
+        int ret = mlockDao.unLock(mlock);
+        return ret == 1 ? true : false;
+    }
+
 }

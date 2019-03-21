@@ -119,11 +119,10 @@
         join service as sv on m.service_id = sv.id
         <!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错-->
         <where>
-          m.id = #{modelId}
+            m.id = #{modelId}
         </where>
         limit 1
     </select>
-
 
 
 </mapper>

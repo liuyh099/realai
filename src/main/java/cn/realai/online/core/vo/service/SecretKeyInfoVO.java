@@ -19,7 +19,7 @@ public class SecretKeyInfoVO {
     @ApiModelProperty(value = "秘钥到期时间")
     private long expireDate;
 
-    @ApiModelProperty(value = "服务类型",example = "1:风控 2:营销")
+    @ApiModelProperty(value = "服务类型", example = "1:风控 2:营销")
     private int type;
 
     public long getStartTime() {

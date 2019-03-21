@@ -60,11 +60,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
     @Override
-    public List<ExperimentBO> findList(Experiment experiment) {
+    public List<Experiment> findList(Experiment experiment) {
         List<Experiment> list = experimentDao.findList(experiment);
-        List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
-        //BeanUtilsBean.copyProperties(list,result);
-        return result;
+        return list;
     }
 
     /*
@@ -122,25 +120,24 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Override
     public Long insert(Experiment experiment) {
-         experimentDao.insert(experiment);
-         return experiment.getId();
+        experimentDao.insert(experiment);
+        return experiment.getId();
     }
-    
-	@Override
-	public int trainResultMaintain(Long experimentId, String sampleReview, String modelUrl,
-			String segmentationStatisticsImageUrl, String badTopCountImageUrl, String rocTestImageUrl,
-			String rocTrainImageUrl, String rocValidateImageUrl, String ksTestImageUrl, String ksTrainImageUrl,
-			String ksValidateImageUrl) {
-		return experimentDao.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl,
-				badTopCountImageUrl, rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl,
-				ksTrainImageUrl, ksValidateImageUrl);
-	}
 
 	@Override
 	public MLock getExperimentTrainMLockInstance(long experimentId) {
 		return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId, 
 				Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
 	}
+    @Override
+    public int trainResultMaintain(Long experimentId, String sampleReview, String modelUrl,
+                                   String segmentationStatisticsImageUrl, String badTopCountImageUrl, String rocTestImageUrl,
+                                   String rocTrainImageUrl, String rocValidateImageUrl, String ksTestImageUrl, String ksTrainImageUrl,
+                                   String ksValidateImageUrl) {
+        return experimentDao.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl,
+                badTopCountImageUrl, rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl,
+                ksTrainImageUrl, ksValidateImageUrl);
+    }
 
     @Override
     public Integer selectFileUpdate(Experiment experiment) {

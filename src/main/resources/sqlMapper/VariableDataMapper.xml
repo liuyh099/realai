@@ -24,17 +24,17 @@
 
     </sql>
 
-	<insert id="insertList">
-		insert into variable_data(experiment_id, name, meaning, data_type, count, max,
-			min, mean, median, percent25, percent75, variable_type, recommended_delete, delete, create_time)
-		<foreach collection="vdList" item="vd" index="index" separator=",">
-             (#{vd.experimentId}, #{vd.name}, #{vd.meaning}, #{vd.dataType}, #{vd.count}, #{vd.max},
-             #{vd.min}, #{vd.mean}, #{vd.median}, #{vd.percent25} ,#{vd.percent75}, #{vd.variableType},
-             #{vd.recommendedDelete}, #{vd.delete}, #{vd.createTime})
+    <insert id="insertList">
+        insert into variable_data(experiment_id, name, meaning, data_type, count, max,
+        min, mean, median, percent25, percent75, variable_type, recommended_delete, delete, create_time)
+        <foreach collection="vdList" item="vd" index="index" separator=",">
+            (#{vd.experimentId}, #{vd.name}, #{vd.meaning}, #{vd.dataType}, #{vd.count}, #{vd.max},
+            #{vd.min}, #{vd.mean}, #{vd.median}, #{vd.percent25} ,#{vd.percent75}, #{vd.variableType},
+            #{vd.recommendedDelete}, #{vd.delete}, #{vd.createTime})
         </foreach>
-	</insert>
+    </insert>
 
-	<select id="findListByExperimentId" resultMap="VariableDataMap">
+    <select id="findListByExperimentId" resultMap="VariableDataMap">
 		select *
 		from variable_data
 		where experiment_id = #{experimentId}
@@ -62,22 +62,37 @@
 		and `delete` = 2
 	</select>
 
-	<update id="deleteVariableData">
-		UPDATE variable_data
-		SET `delete` =2
-		<where>
-			<if test="experimentId!=null">
-				experiment_id = #{experimentId}
-			</if>
-			<if test="ids!=null">
-				<if test="experimentId!=null">
-					AND
-				</if>
-				<foreach collection="ids" separator="," open=" id in (" close=")" item="id">
-					#{id}
-				</foreach>
-			</if>
-		</where>
-	</update>
+    <select id="findList" resultMap="VariableDataMap" parameterType="cn.realai.online.core.entity.VariableData">
+        select *
+        from variable_data
+        <where>
+            `delete` !=2
+            <if test="experimentId!=null">
+                AND experiment_id = #{experimentId}
+            </if>
+            <if test="variableType!=null">
+                AND variable_type = #{variableType}
+            </if>
+        </where>
+        ORDER BY create_time ASC
+    </select>
+
+    <update id="deleteVariableData">
+        UPDATE variable_data
+        SET `delete` =2
+        <where>
+            <if test="experimentId!=null">
+                experiment_id = #{experimentId}
+            </if>
+            <if test="ids!=null">
+                <if test="experimentId!=null">
+                    AND
+                </if>
+                <foreach collection="ids" separator="," open=" id in (" close=")" item="id">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </update>
 
 </mapper> 

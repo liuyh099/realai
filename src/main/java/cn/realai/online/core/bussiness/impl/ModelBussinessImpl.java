@@ -45,7 +45,7 @@ public class ModelBussinessImpl implements ModelBussiness {
         //处理查询结果
         List<ModelListVO> voList = new ArrayList<>();
         if (list != null && !list.isEmpty()) {
-            for (ModelListBO item:list) {
+            for (ModelListBO item : list) {
                 ModelListVO voItem = new ModelListVO();
                 BeanUtils.copyProperties(item, voItem);
                 voList.add(voItem);
@@ -67,7 +67,7 @@ public class ModelBussinessImpl implements ModelBussiness {
         List<ModelPerformance> performanceList = modelPerformanceService.selectList(modelId);
         if (performanceList != null && !performanceList.isEmpty()) {
             List<ModelPerformanceVO> performanceVOList = new ArrayList<>();
-            for (ModelPerformance item:performanceList) {
+            for (ModelPerformance item : performanceList) {
                 ModelPerformanceVO itemVO = new ModelPerformanceVO();
                 BeanUtils.copyProperties(item, itemVO);
                 performanceVOList.add(itemVO);

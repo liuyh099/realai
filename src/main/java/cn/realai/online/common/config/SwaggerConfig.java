@@ -36,4 +36,5 @@ public class SwaggerConfig {
                 .description("hyx")
                 .version("1.0.0")
                 .build();
-    }}
+    }
+}

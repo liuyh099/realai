@@ -2,73 +2,74 @@ package cn.realai.online.core.entity;
 
 /**
  * 模型
+ *
  * @author lyh
  */
 public class Model {
 
-	private long id;
-	
-	//模型名称	
-	private String name;
-	
-	//创建时间
-	private long createTime;
-	
-	//实验id
-	private long experimentId;
-	
-	//服务id
-	private long serviceId;
-	
-	//备注
-	private String remark;
-	
-	public String getRemark() {
-		return remark;
-	}
+    private long id;
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    //模型名称
+    private String name;
 
-	public long getId() {
-		return id;
-	}
+    //创建时间
+    private long createTime;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    //实验id
+    private long experimentId;
 
-	public String getName() {
-		return name;
-	}
+    //服务id
+    private long serviceId;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    //备注
+    private String remark;
 
-	public long getCreateTime() {
-		return createTime;
-	}
+    public String getRemark() {
+        return remark;
+    }
 
-	public void setCreateTime(long createTime) {
-		this.createTime = createTime;
-	}
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
-	public long getExperimentId() {
-		return experimentId;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setExperimentId(long experimentId) {
-		this.experimentId = experimentId;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public long getServiceId() {
-		return serviceId;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setServiceId(long serviceId) {
-		this.serviceId = serviceId;
-	}
-	
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public long getExperimentId() {
+        return experimentId;
+    }
+
+    public void setExperimentId(long experimentId) {
+        this.experimentId = experimentId;
+    }
+
+    public long getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(long serviceId) {
+        this.serviceId = serviceId;
+    }
+
 }

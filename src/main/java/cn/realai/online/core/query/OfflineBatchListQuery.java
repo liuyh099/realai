@@ -13,13 +13,13 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class OfflineBatchListQuery extends PageQuery {
 
-    @ApiModelProperty(value="模型名称")
+    @ApiModelProperty(value = "模型名称")
     private String name;
 
-    @ApiModelProperty(value="训练状态")
+    @ApiModelProperty(value = "训练状态")
     private String trainStatus;
 
-    @ApiModelProperty(value="跑批时间，格式：yyyy-MM-dd")
+    @ApiModelProperty(value = "跑批时间，格式：yyyy-MM-dd")
     private String runBatchTime;
 
     public String getName() {

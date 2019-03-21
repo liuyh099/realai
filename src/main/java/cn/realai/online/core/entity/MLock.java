@@ -35,19 +35,13 @@ public class MLock {
 		this.currentTime = System.currentTimeMillis();
 		this.endTime = currentTime + expiredTime;
 	}
-	
-	public MLock() {}
-	
+
 	public String getLockKey() {
 		return lockKey;
 	}
 
 	public long getExpiredTime() {
 		return expiredTime;
-	}
-
-	public MLockService getMlockService() {
-		return mlockService;
 	}
 
 	public String getLockValue() {
@@ -61,7 +55,7 @@ public class MLock {
 	public long getEndTime() {
 		return endTime;
 	}
-
+	
 	public boolean tryLock() {
 		return mlockService.tryLock(this);
 	}
@@ -69,5 +63,5 @@ public class MLock {
 	public boolean unLock() {
 		return mlockService.unLock(this);
 	}
-
+	
 }

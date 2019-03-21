@@ -6,10 +6,11 @@ import cn.realai.online.core.entity.SampleSummary;
 
 public interface SampleSummaryService {
 
-	void insertList(List<SampleSummary> ssList);
+    void insertList(List<SampleSummary> ssList);
 
     /**
      * 查询样本综述
+     *
      * @param sampleSummary
      * @return
      */

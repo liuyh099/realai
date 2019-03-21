@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @ApiModel
 public class IdQuery extends PageQuery {
-    @ApiModelProperty(value="id")
+    @ApiModelProperty(value = "id")
     @NotNull(message = "请先选择组")
     private Long id;
 

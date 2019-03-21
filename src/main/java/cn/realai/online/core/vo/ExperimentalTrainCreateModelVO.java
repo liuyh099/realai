@@ -9,11 +9,11 @@ import java.util.List;
 @ApiModel
 public class ExperimentalTrainCreateModelVO {
 
-    @ApiModelProperty(value = "id",name = "实验id",dataType = "long")
+    @ApiModelProperty(value = "id", name = "实验id", dataType = "long")
     @NotNull(message = "请选择实验")
     private Long id;
 
-    @ApiModelProperty(value = "ids",name = "选择的id集合",dataType = "list")
+    @ApiModelProperty(value = "ids", name = "选择的id集合", dataType = "list")
     @NotNull(message = "请选择要删除的数据")
     private List<Long> ids;
 

@@ -38,7 +38,6 @@ public class TrainServiceImpl implements TrainService {
         }
     }
 
-
 	/*
 	 * 训练
 	 */
@@ -67,5 +66,4 @@ public class TrainServiceImpl implements TrainService {
 		}
 		return strList;
 	}
-	
 }
