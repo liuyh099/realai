@@ -5,7 +5,7 @@ import cn.realai.online.core.vo.PsiResultVO;
 
 import java.util.List;
 
-public interface PsiCheckResultBusiness {
+public interface PsiCheckResultBussiness {
 
     List<PsiResultVO> selectList(Long modelId);
 

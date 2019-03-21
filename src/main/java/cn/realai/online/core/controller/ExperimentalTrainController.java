@@ -7,10 +7,9 @@ import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import cn.realai.online.core.bo.VariableDataBO;
-import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
-import cn.realai.online.core.bussiness.VariableDataBusiness;
+import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
+import cn.realai.online.core.bussiness.VariableDataBussiness;
 import cn.realai.online.core.entity.Experiment;
-import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.VariableDataQuery;
@@ -41,10 +40,10 @@ public class ExperimentalTrainController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private ExperimentalTrainBusiness experimentalTrainBusiness;
+    private ExperimentalTrainBussiness experimentalTrainBussiness;
 
     @Autowired
-    private VariableDataBusiness variableDataBusiness;
+    private VariableDataBussiness variableDataBusiness;
 
 
     @GetMapping
@@ -52,7 +51,7 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result<PageBO<ExperimentalTrainVO>> list(ExperimentalTrainQuery experimentalTrainQuery) {
         try {
-            PageBO<ExperimentalTrainVO> page = experimentalTrainBusiness.pageList(experimentalTrainQuery);
+            PageBO<ExperimentalTrainVO> page = experimentalTrainBussiness.pageList(experimentalTrainQuery);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), page);
         } catch (Exception e) {
             logger.error("查询实验列表异常", e);
@@ -70,7 +69,7 @@ public class ExperimentalTrainController {
             if (CollectionUtils.isEmpty(ids)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
-            if (experimentalTrainBusiness.deleteExperimentByIds(ids) > 0) {
+            if (experimentalTrainBussiness.deleteExperimentByIds(ids) > 0) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             } else {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
@@ -88,7 +87,7 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result<ExperimentalTrainDetailVO> detail(@PathVariable Long trainId) {
         try {
-            ExperimentalTrainDetailBO experimentalTrainDetailBO = experimentalTrainBusiness.detail(trainId);
+            ExperimentalTrainDetailBO experimentalTrainDetailBO = experimentalTrainBussiness.detail(trainId);
             ExperimentalTrainDetailVO result = JSON.parseObject(JSON.toJSONString(experimentalTrainDetailBO), ExperimentalTrainDetailVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
@@ -131,13 +130,13 @@ public class ExperimentalTrainController {
     public Result<IdVO> selectFileAdd(@RequestBody @Validated ExperimentalTrainSelectFileVO experimentalTrainSelectFileVo) {
         try {
             //检查文件名
-            boolean flag = experimentalTrainBusiness.checkTrainName(experimentalTrainSelectFileVo.getName(), experimentalTrainSelectFileVo.getId());
+            boolean flag = experimentalTrainBussiness.checkTrainName(experimentalTrainSelectFileVo.getName(), experimentalTrainSelectFileVo.getId());
             if (!flag) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "实验名称不能重复", null);
             }
             ExperimentBO experimentBO = new ExperimentBO();
             BeanUtils.copyProperties(experimentalTrainSelectFileVo, experimentBO);
-            Long id = experimentalTrainBusiness.selectFileAdd(experimentBO);
+            Long id = experimentalTrainBussiness.selectFileAdd(experimentBO);
             if (id == null) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
@@ -168,7 +167,7 @@ public class ExperimentalTrainController {
             if (trainId == null) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
-            ExperimentBO experimentBO = experimentalTrainBusiness.selectById(trainId);
+            ExperimentBO experimentBO = experimentalTrainBussiness.selectById(trainId);
             ExperimentalTrainSelectFileVO experimentalTrainSelectFileVO = new ExperimentalTrainSelectFileVO();
             BeanUtils.copyProperties(experimentBO, experimentalTrainSelectFileVO);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalTrainSelectFileVO);
@@ -187,13 +186,13 @@ public class ExperimentalTrainController {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
             //检查文件名
-            boolean flag = experimentalTrainBusiness.checkTrainName(experimentalTrainSelectFileVo.getName(), experimentalTrainSelectFileVo.getId());
+            boolean flag = experimentalTrainBussiness.checkTrainName(experimentalTrainSelectFileVo.getName(), experimentalTrainSelectFileVo.getId());
             if (!flag) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "实验名称不能重复", null);
             }
             ExperimentBO experimentBO = new ExperimentBO();
             BeanUtils.copyProperties(experimentalTrainSelectFileVo, experimentBO);
-            Integer count = experimentalTrainBusiness.selectFileUpdate(experimentBO);
+            Integer count = experimentalTrainBussiness.selectFileUpdate(experimentBO);
             if (count != null && count > 0) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
@@ -226,7 +225,7 @@ public class ExperimentalTrainController {
             if (trainId == null) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
-            ExperimentBO experimentBO = experimentalTrainBusiness.selectById(trainId);
+            ExperimentBO experimentBO = experimentalTrainBussiness.selectById(trainId);
             ExperimentalTrainSelectParamVO experimentalTrainSelectParamVO = new ExperimentalTrainSelectParamVO();
             BeanUtils.copyProperties(experimentBO, experimentalTrainSelectParamVO);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalTrainSelectParamVO);
@@ -252,7 +251,7 @@ public class ExperimentalTrainController {
         ExperimentBO experimentBO = new ExperimentBO();
         BeanUtils.copyProperties(experimentalTrainSelectParamVo, experimentBO);
         experimentBO.setStatus(status);
-        Integer count = experimentalTrainBusiness.updateParam(experimentBO);
+        Integer count = experimentalTrainBussiness.updateParam(experimentBO);
         if (count != null && count > 0) {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         }
@@ -268,7 +267,7 @@ public class ExperimentalTrainController {
             if (trainId == null) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
-            ExperimentBO experimentBO = experimentalTrainBusiness.selectById(trainId);
+            ExperimentBO experimentBO = experimentalTrainBussiness.selectById(trainId);
             ExperimentalTrainCreateModelCheckVO experimentalTrainCreateModelCheckVO = new ExperimentalTrainCreateModelCheckVO();
             if (experimentBO != null) {
                 experimentalTrainCreateModelCheckVO.setName(experimentBO.getName());
@@ -290,7 +289,7 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result createModelDelete(@RequestBody @Validated ExperimentalTrainCreateModelVO experimentalTrainCreateModelVo) {
         try {
-            experimentalTrainBusiness.deleteVariableData(experimentalTrainCreateModelVo.getId(),experimentalTrainCreateModelVo.getIds());
+            experimentalTrainBussiness.deleteVariableData(experimentalTrainCreateModelVo.getId(),experimentalTrainCreateModelVo.getIds());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             logger.error("新增实验-生成模型-删除同质或者异质量数据异常", e);
@@ -303,7 +302,7 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result<PageBO<ExperimentalTrainCreateModelDataVO>> createModelGetData(@RequestBody @Validated ExperimentalTrainCreateModelDataQuery query) {
         try {
-            PageBO<VariableDataBO> page = experimentalTrainBusiness.pageHomOrHemeList(query);
+            PageBO<VariableDataBO> page = experimentalTrainBussiness.pageHomOrHemeList(query);
             if(page==null){
                 return null;
             }
@@ -328,7 +327,7 @@ public class ExperimentalTrainController {
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
     public Result createModel(@PathVariable long trainId) {
-        int ret = experimentalTrainBusiness.train(trainId);
+        int ret = experimentalTrainBussiness.train(trainId);
         if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("有其他实验正在训练中，请稍后重试"), null);
         }
@@ -347,7 +346,7 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result testPreprocess(@PathVariable long experimentId) {
         try {
-            experimentalTrainBusiness.testPreprocess(experimentId);
+            experimentalTrainBussiness.testPreprocess(experimentId);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
         } catch (Exception e) {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);

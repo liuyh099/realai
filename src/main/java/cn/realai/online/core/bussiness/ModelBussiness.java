@@ -9,7 +9,7 @@ import cn.realai.online.core.vo.ModelSelectVO;
 
 import java.util.List;
 
-public interface ModelBusiness {
+public interface ModelBussiness {
     PageBO<ModelListVO> pageList(ModelListQuery query);
 
     ModelDetailVO selectModelDetail(Long modelId);

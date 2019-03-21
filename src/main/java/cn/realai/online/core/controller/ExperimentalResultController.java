@@ -6,7 +6,7 @@ import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.*;
-import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
+import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.query.ExperimentalResultWhileBoxQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
@@ -32,7 +32,7 @@ public class ExperimentalResultController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private ExperimentalTrainBusiness experimentalTrainBusiness;
+    private ExperimentalTrainBussiness experimentalTrainBusiness;
 
     @GetMapping("/group/{trainId}")
     @ApiOperation(value = "实验结果-根据实验ID活得组集合(传实验的id)")

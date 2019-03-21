@@ -3,7 +3,7 @@ package cn.realai.online.core.bussiness.impl;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.VariableDataBO;
-import cn.realai.online.core.bussiness.VariableDataBusiness;
+import cn.realai.online.core.bussiness.VariableDataBussiness;
 import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.query.VariableDataQuery;
 import cn.realai.online.core.service.VariableDataService;
@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class VariableDataBussinessImpl implements VariableDataBusiness {
+public class VariableDataBussinessImpl implements VariableDataBussiness {
 
 
     @Autowired

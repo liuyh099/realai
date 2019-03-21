@@ -4,7 +4,7 @@ import cn.realai.online.calculation.TrainService;
 import cn.realai.online.common.Constant;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.*;
-import cn.realai.online.core.bussiness.ExperimentalTrainBusiness;
+import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.entity.*;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @Transactional(readOnly = true)
-public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBusiness {
+public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussiness {
 
     @Autowired
     private ExperimentService experimentService;

@@ -10,7 +10,7 @@ import cn.realai.online.core.vo.ExperimentalTrainVO;
 
 import java.util.List;
 
-public interface ExperimentalTrainBusiness {
+public interface ExperimentalTrainBussiness {
     PageBO<ExperimentalTrainVO> pageList(ExperimentalTrainQuery experimentalTrainQuery);
 
 	Integer deleteExperimentByIds(List<Long> ids);
