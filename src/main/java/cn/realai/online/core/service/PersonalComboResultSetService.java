@@ -6,6 +6,6 @@ import cn.realai.online.core.entity.PersonalComboResultSet;
 
 public interface PersonalComboResultSetService {
 
-	void insertList(List<PersonalComboResultSet> pcrsList);
+	void insertList(List<PersonalComboResultSet> comboList);
 
 }

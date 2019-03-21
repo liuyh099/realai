@@ -54,6 +54,26 @@ public class VariableDataServiceImpl implements VariableDataService {
 		return variableDataDao.findListByExperimentId(experimentId);
 	}
 
+    /**
+     * 根据实验id与模式类型查询变量数据
+     * @param variableData
+     * @return
+     */
+    @Override
+    public List<VariableDataBO> findList(VariableData variableData) {
+        List<VariableData> list = variableDataDao.findList(variableData);
+        List<VariableDataBO> result = JSON.parseArray(JSON.toJSONString(list), VariableDataBO.class);
+        return result;
+    }
+    @Override
+    public List<VariableData> findVariableDataList(VariableData variableData) {
+        return variableDataDao.findList(variableData);
+    }
+
+    @Override
+    public void deleteVariableData(Long experimentId, List<Long> ids) {
+        variableDataDao.deleteVariableData(experimentId,ids);
+    }
 
 
 }

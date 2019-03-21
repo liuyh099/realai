@@ -23,17 +23,26 @@ public class PersonalComboResultSet {
 	//变量id
 	private long variableId1;
 	
+	//变量名字1
+	private String variableName1;
+	
 	//值1
 	private String value1;
 	
 	//变量id2
-	private String variableId2;
+	private long variableId2;
+	
+	//变量名字2
+	private String variableName2;
 	
 	//值2
 	private String value2;
 	
 	//变量id3
-	private String variableId3;
+	private long variableId3;
+	
+	//变量名字3
+	private String variableName3;
 
 	//值3
 	private String value3;
@@ -58,19 +67,19 @@ public class PersonalComboResultSet {
 		this.value1 = value1;
 	}
 
-	public String getVariableId2() {
+	public long getVariableId2() {
 		return variableId2;
 	}
 
-	public void setVariableId2(String variableId2) {
+	public void setVariableId2(long variableId2) {
 		this.variableId2 = variableId2;
 	}
 
-	public String getVariableId3() {
+	public long getVariableId3() {
 		return variableId3;
 	}
 
-	public void setVariableId3(String variableId3) {
+	public void setVariableId3(long variableId3) {
 		this.variableId3 = variableId3;
 	}
 
@@ -136,6 +145,30 @@ public class PersonalComboResultSet {
 
 	public void setPid(long pid) {
 		this.pid = pid;
+	}
+
+	public String getVariableName1() {
+		return variableName1;
+	}
+
+	public void setVariableName1(String variableName1) {
+		this.variableName1 = variableName1;
+	}
+
+	public String getVariableName2() {
+		return variableName2;
+	}
+
+	public void setVariableName2(String variableName2) {
+		this.variableName2 = variableName2;
+	}
+
+	public String getVariableName3() {
+		return variableName3;
+	}
+
+	public void setVariableName3(String variableName3) {
+		this.variableName3 = variableName3;
 	}
 
 }

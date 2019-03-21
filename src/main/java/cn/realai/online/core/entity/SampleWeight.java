@@ -22,7 +22,7 @@ public class SampleWeight {
 	private String variableName;
 	
 	//变量权重
-	private String variableWeight;
+	private Double variableWeight;
 	
 	//变量类型
 	private int variableType;
@@ -96,11 +96,12 @@ public class SampleWeight {
 		this.variableName = variableName;
 	}
 
-	public String getVariableWeight() {
+
+	public Double getVariableWeight() {
 		return variableWeight;
 	}
 
-	public void setVariableWeight(String variableWeight) {
+	public void setVariableWeight(Double variableWeight) {
 		this.variableWeight = variableWeight;
 	}
 

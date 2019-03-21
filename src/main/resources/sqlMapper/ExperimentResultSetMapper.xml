@@ -28,11 +28,30 @@
 		insert into result_set(experiment_id, data_set_type, min_pro, min_pro_score, max_pro, max_pro_score, negtive_count, postive_count,
 			count, negtive_count_in_postive_count, positive_ratio, cumulative_positive_ratio, postive_count_in_total_positive_count, 
 			cumulative_postive_count_in_total_positive_count)
+		values
 		<foreach collection="ersList" open="(" close=")" separator="," item="ers">
             #{ers.experimentId}, #{ers.dataSetType},#{ers.minPro}, #{ers.minProScore},#{ers.maxPro}, #{ers.maxProScore},#{ers.negtiveCount}, 
             #{ers.postiveCount},#{ers.count}, #{ers.negtiveCountInPostiveCount}, #{ers.positiveRatio},#{ers.cumulativePositiveRatio}, 
             #{ers.postiveCountInTotalPositiveCount},#{ers.cumulativePostiveCountInTotalPositiveCount}
         </foreach>
 	</insert>
+
+	<select id="findList" parameterType="cn.realai.online.core.entity.ExperimentResultSet" resultType="ExperimentResultSetMap">
+		SELECT * FROM
+		result_set
+		<where>
+			1=1
+			<if test="experimentId!=null">
+				AND experiment_id=#{experimentId}
+			</if>
+			<if test="experimentId!=null">
+				AND data_set_type=#{dataSetType}
+			</if>
+			<if test="parentId!=null">
+				AND parent_id=#{parentId}
+			</if>
+		</where>
+		ORDER BY postive_count DESC
+	</select>
 
 </mapper> 

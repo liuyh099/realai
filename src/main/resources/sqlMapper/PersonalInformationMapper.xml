@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.core.dao.PersonalInformationDao">
+    <resultMap type="cn.realai.online.core.entity.PersonalInformation" id="PersonalInformationMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+        <result column="group_id" property="groupId" jdbcType="BIGINT"/>
+        <result column="batch_id" property="batchId" jdbcType="BIGINT"/>
+        <result column="personal_name" property="personalName" jdbcType="VARCHAR"/>
+        <result column="stage" property="stage" jdbcType="INTEGER"/>
+        <result column="personal_card_id" property="personalCardId" jdbcType="VARCHAR"/>
+        <result column="phone_num" property="phoneNum" jdbcType="VARCHAR"/>
+        <result column="personal_id" property="personalId" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="BIGINT"/>
+        <result column="order_date" property="orderDate" jdbcType="VARCHAR"/>
+        <result column="label" property="label" jdbcType="INTEGER"/>
+        <result column="probability" property="probability" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <insert id="insertList">
+        INSERT INTO personal_information(experiment_id,group_id,batch_id,personal_name,stage,personal_card_id,
+        	phone_num,personal_id,create_time,order_date,label,probability)
+        VALUES
+        <foreach collection="piList" open="(" close=")" separator="," item="pi">
+        	(#{pi.experimentId},#{pi.groupId},#{pi.batchId},#{pi.personalName},#{pi.stage},#{pi.personalCardId},#{pi.phoneNum},
+        		#{pi.personalId},#{pi.createTime},#{pi.orderDate},#{pi.label},#{pi.probability})
+        </foreach>
+    </insert>
+    
+    <select id="findListByExperimentId" resultMap="PersonalInformationMap">
+    	select * 
+    	form personal_information
+    	where experiment_id = #{experimentId}
+    </select>
+
+</mapper>
