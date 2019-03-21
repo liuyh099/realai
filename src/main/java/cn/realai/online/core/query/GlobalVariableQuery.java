@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel
-public class GlobalVariableQuery {
+public class GlobalVariableQuery extends PageQuery {
 
     @ApiModelProperty(value = "实验ID")
     private long trainId;

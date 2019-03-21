@@ -22,4 +22,22 @@
         </foreach>
     </insert>
 
+    <select id="findList" resultMap="SampleWeightMap" parameterType="cn.realai.online.core.entity.SampleWeight">
+        select *
+        from sample_weight
+        <where>
+            1=1
+            <if test="trainId!=null">
+                AND	train_id = #{trainId}
+            </if>
+            <if test="groupName!=null and groupName!=''">
+                AND	group_name = #{groupName}
+            </if>
+            <if test="variableType!=null">
+                AND	variable_type= #{variableType}
+            </if>
+        </where>
+        ORDER BY create_time ASC
+    </select>
+
 </mapper>
