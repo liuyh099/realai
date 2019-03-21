@@ -21,6 +21,16 @@ public class Model {
     //服务id
     private Long serviceId;
 
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public Long getId() {
         return id;
     }
