@@ -53,7 +53,7 @@ public class TrainTask implements Runnable {
     private Long experimentId;
 
     private TrainResultRedisKey redisKey;
-
+    
     public TrainTask(Long experimentId, TrainResultRedisKey redisKey) {
         this.experimentId = experimentId;
         this.redisKey = redisKey;

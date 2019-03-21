@@ -11,7 +11,7 @@ public interface ModelCallBussiness {
      * @param experimentId
      * @param fileAddress
      */
-    void runBatchDaily(Long experimentId, String fileAddress);
+    void runBatchDaily(Long experimentId, String redisKey, String type);
 
     /*
      * 预处理回调处理

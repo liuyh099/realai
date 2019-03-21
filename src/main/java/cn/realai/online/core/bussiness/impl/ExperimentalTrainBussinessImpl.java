@@ -101,7 +101,6 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         return count;
     }
 
-
     /*
      * 训练
      * @param trainId 实验id
@@ -124,7 +123,6 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         trainService.training(experimentBO, 0L, deleteVariableData.getHomoList(), deleteVariableData.getHetroList());
         return ret;
     }
-
 
     @Override
     public void testPreprocess(long experimentId) {
