@@ -1,4 +1,4 @@
-package cn.realai.online.core.vo.service;
+package cn.realai.online.core.query.service;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  * <br>Date: 2019/3/20
  */
 @ApiModel(description = "获取服务信息")
-public class GetServiceDetailsVO {
+public class GetServiceDetailsQuery {
 
     @ApiModelProperty(value = "服务ID")
     private String serviceId;

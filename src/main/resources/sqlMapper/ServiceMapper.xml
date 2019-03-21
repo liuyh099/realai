@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.core.dao.ServiceDao">
+    <resultMap type="cn.realai.online.core.entity.Service" id="serviceMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="deployment_type" property="deploymentType" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="BIGINT"/>
+        <result column="detail" property="detail" jdbcType="VARCHAR"/>
+        <result column="tuning_secret_key" property="tuningSecretKey" jdbcType="VARCHAR"/>
+        <result column="secret_key" property="secretKey" jdbcType="VARCHAR"/>
+        <result column="online_experiment" property="onlineExperiment" jdbcType="BIGINT"/>
+        <result column="batch_times" property="batchTimes" jdbcType="BIGINT"/>
+    </resultMap>
+
+
+    <select id="get" resultMap="serviceMap" parameterType="java.lang.Long">
+        SELECT a.* FROM service a
+        <where>
+            a.id =#{id}
+        </where>
+    </select>
+
+    <select id="findList" resultMap="serviceMap" parameterType="cn.realai.online.core.entity.Service">
+        SELECT a.*  FROM service a
+        <where>
+            1=1
+            <if test="id!=null">
+                AND   a.id =#{id}
+            </if>
+            <if test="status!=null">
+                AND   a.status =#{status}
+            </if>
+            <if test="type!=null">
+                AND   a.type =#{type}
+            </if>
+            <if test="name!=null and name !='' ">
+                AND   a.name =#{name}
+            </if>
+            <if test="secretKey!=null and secretKey !='' ">
+                AND   a.secret_key =#{secretKey}
+            </if>
+            <if test="tuningSecretKey !=null and tuningSecretKey !='' ">
+                AND   a.tuning_secret_key =#{tuningSecretKey}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="cn.realai.online.core.entity.Service">
+        INSERT INTO service (name,type,status,deployment_type,create_time,detail,tuning_secret_key,secret_key,online_experiment,batch_times)
+        VALUE (#{name},#{type},#{status},#{deploymentType},#{createTime},#{detail},#{tuningSecretKey},#{secretKey},#{onlineExperiment},#{batchTimes})
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE FROM service
+        <where>
+          <choose>
+              <when test="ids!=null and ids.size()>0">
+                 <foreach collection="ids" open="id IN(" close=")" separator="," item="id">
+                     #{id}
+                 </foreach>
+              </when>
+              <otherwise>
+                  1=2
+              </otherwise>
+          </choose>
+        </where>
+    </delete>
+
+    <update id="update" parameterType="cn.realai.online.core.entity.Service">
+        UPDATE service SET
+            name = #{name},
+            type =#{type},
+            status =#{status},
+            deployment_type=#{deploymentType},
+            create_time = #{createTime},
+            detail=#{detail},
+            tuning_secret_key=#{tuningSecretKey},
+            secret_key=#{secretKey},
+            online_experiment=#{onlineExperiment},
+            batch_times=#{batchTimes}
+          <where>
+              id =#{id}
+          </where>
+    </update>
+
+
+</mapper>
