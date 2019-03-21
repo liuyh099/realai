@@ -15,6 +15,16 @@
         VALUE (#{name},#{createTime},#{experimentId},#{serviceId},#{remark})
     </insert>
 
+    <select id="findList" parameterType="cn.realai.online.core.entity.Model" resultMap="ModelMap">
+        SELECT * FROM model
+        <where>
+            1=1
+            <if test="name!=null and name!=''">
+                AND name = #{name}
+            </if>
+        </where>
+    </select>
+
 
     <update id="update" parameterType="cn.realai.online.core.entity.Model">
         UPDATE model
