@@ -7,6 +7,7 @@ import java.util.List;
 public interface UserDao {
     /**
      * 查询用户列表
+     *
      * @param user
      * @return
      */
@@ -14,12 +15,14 @@ public interface UserDao {
 
     /**
      * 保存用户
+     *
      * @param user
      */
     Integer insert(User user);
 
     /**
      * 删除用户
+     *
      * @param ids
      * @return
      */
@@ -27,6 +30,7 @@ public interface UserDao {
 
     /**
      * 获得用户详情
+     *
      * @param id
      * @return
      */
@@ -34,6 +38,7 @@ public interface UserDao {
 
     /**
      * 更新用户信息
+     *
      * @param user
      * @return
      */
@@ -41,6 +46,7 @@ public interface UserDao {
 
     /**
      * 更新用户密码
+     *
      * @param user
      * @return
      */
@@ -48,6 +54,7 @@ public interface UserDao {
 
     /**
      * 根据名称或者手机号码查询用户
+     *
      * @param username
      * @return
      */

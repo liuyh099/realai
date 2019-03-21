@@ -6,10 +6,11 @@ import cn.realai.online.core.entity.TopSort;
 
 public interface TopSortService {
 
-	void insertList(List<TopSort> tsList);
+    void insertList(List<TopSort> tsList);
 
     /**
      * 查询TopSort
+     *
      * @param topSort
      * @return
      */

@@ -13,17 +13,17 @@ public class UserDetailVO {
     @ApiModelProperty(value = "用户名")
     private String name;
     //部门名称
-    @Length(max = 20,min = 0,message ="用户名为0-20个字节")
+    @Length(max = 20, min = 0, message = "用户名为0-20个字节")
     private String department;
     //部门职位
-    @Length(max = 20,min = 0,message ="用户名为0-20个字节")
+    @Length(max = 20, min = 0, message = "用户名为0-20个字节")
     private String position;
     //手机号码
-    @Length(max = 11,min = 11,message ="手机号码为11位")
+    @Length(max = 11, min = 11, message = "手机号码为11位")
     private String phoneNumber;
     //角色名称
     @ApiModelProperty(value = "角色id")
-    private Long  roleId;
+    private Long roleId;
 
     @ApiModelProperty(value = "角色名称")
     private String group;

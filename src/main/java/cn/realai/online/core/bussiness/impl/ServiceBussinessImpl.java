@@ -36,7 +36,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
         serviceBO = serviceService.selectServiceById(serviceBO.getId());
 
-        if(serviceBO == null) {
+        if (serviceBO == null) {
             return false;
         }
         Service service = new Service();

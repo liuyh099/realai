@@ -6,7 +6,7 @@ import java.util.*;
 
 public class DateUtil {
 
-	public static String ymdhms = "yyyy-MM-dd HH:mm:ss";
+    public static String ymdhms = "yyyy-MM-dd HH:mm:ss";
     public static String ymd = "yyyy-MM-dd";
     public static SimpleDateFormat ymdSDF = new SimpleDateFormat(ymd);
     public static String year = "yyyy";
@@ -29,6 +29,7 @@ public class DateUtil {
 
     /**
      * 将date转换成String
+     *
      * @param date
      * @param format
      * @return
@@ -37,10 +38,11 @@ public class DateUtil {
         SimpleDateFormat f = new SimpleDateFormat(format);
         return f.format(date);
     }
-    
+
     /**
      * 将传入String转换成时间
-     * @param date 传入时间
+     *
+     * @param date   传入时间
      * @param format 要转换的类型
      * @return
      */
@@ -52,10 +54,11 @@ public class DateUtil {
         }
         return null;
     }
-    
+
     /**
      * 判断date1是否大于等于date2
      * 调用方自行判断date1和date2不为空 才能调此方法
+     *
      * @param date1
      * @param date2
      * @return true date1大于等于date2
@@ -63,8 +66,8 @@ public class DateUtil {
     public static boolean compareDate(Date date1, Date date2) {
         return date1.getTime() >= date2.getTime();
     }
-    
-    
+
+
     public static String getCurrentTime() {
         return yyyyMMddHHmmss.format(new Date());
     }
@@ -535,18 +538,19 @@ public class DateUtil {
 
     /**
      * 传入时间格式化城固定字符串
+     *
      * @param date
      * @param format
      * @return
      */
     public static String formatDateToString(Date date, String format) {
-    	SimpleDateFormat formatter = new SimpleDateFormat(format);
-    	String dateString = formatter.format(date);
-    	return dateString;
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        String dateString = formatter.format(date);
+        return dateString;
     }
-    
+
     public static void main(String[] args) {
-    	System.out.println(formatDateToString(new Date(), "HHmmss"));
-	}
-    
+        System.out.println(formatDateToString(new Date(), "HHmmss"));
+    }
+
 }

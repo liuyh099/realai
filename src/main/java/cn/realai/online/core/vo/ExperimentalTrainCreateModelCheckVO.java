@@ -6,9 +6,9 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class ExperimentalTrainCreateModelCheckVO {
 
-    @ApiModelProperty(value = "name",name = "模型名称",dataType = "String")
+    @ApiModelProperty(value = "name", name = "模型名称", dataType = "String")
     private String name;
-    @ApiModelProperty(value = "createModelFlag",name = "是否可以一键建模",dataType = "boolean")
+    @ApiModelProperty(value = "createModelFlag", name = "是否可以一键建模", dataType = "boolean")
     private boolean createModelFlag;
 
     public String getName() {

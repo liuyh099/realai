@@ -13,10 +13,10 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class ModelListQuery extends PageQuery {
 
-    @ApiModelProperty(value="模型名称")
+    @ApiModelProperty(value = "模型名称")
     private String name;
 
-    @ApiModelProperty(value="服务Id")
+    @ApiModelProperty(value = "服务Id")
     private Long serviceId;
 
     public String getName() {

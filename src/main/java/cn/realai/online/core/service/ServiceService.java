@@ -7,19 +7,17 @@ import java.util.List;
 
 public interface ServiceService {
 
-	ServiceBO selectServiceById(long serviceId);
+    ServiceBO selectServiceById(long serviceId);
 
-	List<Service> list(Service service);
+    List<Service> list(Service service);
 
-	Integer insert(Service service);
+    Integer insert(Service service);
 
-	Integer delete(List<Long> ids);
+    Integer delete(List<Long> ids);
 
-	Integer update(Service service);
+    Integer update(Service service);
 
-	Service get(Long id);
-
-
+    Service get(Long id);
 
 
 }

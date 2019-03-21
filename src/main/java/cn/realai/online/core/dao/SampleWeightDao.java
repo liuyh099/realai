@@ -8,7 +8,7 @@ import cn.realai.online.core.entity.SampleWeight;
 
 public interface SampleWeightDao {
 
-	void insertList(@Param("swList")List<SampleWeight> swList);
+    void insertList(@Param("swList") List<SampleWeight> swList);
 
 	List<SampleWeight> findList(SampleWeight sampleWeight);
 }

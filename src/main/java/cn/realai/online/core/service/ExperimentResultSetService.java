@@ -6,10 +6,11 @@ import cn.realai.online.core.entity.ExperimentResultSet;
 
 public interface ExperimentResultSetService {
 
-	void insertList(List<ExperimentResultSet> ersList);
+    void insertList(List<ExperimentResultSet> ersList);
 
     /**
      * 查询实验评估结果
+     *
      * @param experimentResultSet
      * @return
      */

@@ -4,10 +4,12 @@ import cn.realai.online.common.page.PageBO;
 import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
-import cn.realai.online.core.query.PageQuery;
 import cn.realai.online.core.vo.IdVO;
+import cn.realai.online.userandperm.bo.RoleBO;
 import cn.realai.online.userandperm.bo.UserBO;
+import cn.realai.online.userandperm.business.RoleBusiness;
 import cn.realai.online.userandperm.business.UserBusiness;
+import cn.realai.online.userandperm.query.UserPageQuery;
 import cn.realai.online.userandperm.vo.*;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
@@ -36,10 +38,13 @@ public class UserController {
     @Autowired
     private UserBusiness userBusiness;
 
+    @Autowired
+    private RoleBusiness roleBusiness;
+
     @GetMapping()
     @ApiOperation(value = "查询用户列表")
     @RequiresPermissions("permission:user:list")
-    public Result<PageBO<UserVO>> list(PageQuery pageQuery) {
+    public Result<PageBO<UserVO>> list(UserPageQuery pageQuery) {
         try {
             PageBO<UserBO> pageBO = userBusiness.list(pageQuery);
             List<UserVO> result = JSON.parseArray(JSON.toJSONString(pageBO.getPageContent()), UserVO.class);
@@ -55,7 +60,7 @@ public class UserController {
 
     @GetMapping("checkName/{name}")
     @ApiOperation(value = "检查用户名（true表示检查通过）")
-    @ApiImplicitParam(name ="name", value ="用户名", required = true ,type = "path")
+    @ApiImplicitParam(name = "name", value = "用户名", required = true, type = "path")
     @RequiresPermissions("permission:user:checkName")
     public Result<Boolean> checkName(@PathVariable String name) {
         try {
@@ -69,7 +74,7 @@ public class UserController {
 
     @GetMapping("checkPhoneNumber/{phoneNumber}")
     @ApiOperation(value = "检查手机号码（true表示检查通过）")
-    @ApiImplicitParam(name ="phoneNumber", value ="手机号码", required = true ,type = "path")
+    @ApiImplicitParam(name = "phoneNumber", value = "手机号码", required = true, type = "path")
     public Result<Boolean> checkPhoneNumber(@PathVariable String phoneNumber) {
         try {
             Boolean flag = userBusiness.checkPhoneNumber(phoneNumber);
@@ -84,12 +89,12 @@ public class UserController {
     @ApiOperation(value = "新增用户")
     public Result<PageBO<UserVO>> add(UserAddVO userAddVO) {
         try {
-            UserBO userBO=new UserBO();
-            BeanUtils.copyProperties(userAddVO,userBO);
-            if(userBusiness.insert(userBO)){
-                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
-            }else {
-                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+            UserBO userBO = new UserBO();
+            BeanUtils.copyProperties(userAddVO, userBO);
+            if (userBusiness.insert(userBO)) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            } else {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
         } catch (Exception e) {
             logger.error("新增用户异常", e);
@@ -101,10 +106,11 @@ public class UserController {
     @ApiOperation(value = "获得所有的角色选项")
     public Result<List<RoleSelectVO>> roles() {
         try {
-            //userBusiness.insert(userBO);
-            return null;
+            List<RoleBO> roles = roleBusiness.findList();
+            List<RoleSelectVO> result = JSON.parseArray(JSON.toJSONString(roles), RoleSelectVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
-            logger.error("新增用户异常", e);
+            logger.error("获得所有的角色选项异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }
@@ -112,15 +118,15 @@ public class UserController {
 
     @DeleteMapping()
     @ApiOperation(value = "删除用户")
-    public Result<PageBO<UserVO>> delete(@RequestBody List<Long> ids) {
+    public Result delete(@RequestBody List<Long> ids) {
         try {
-            if(CollectionUtils.isEmpty(ids)){
+            if (CollectionUtils.isEmpty(ids)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
-            if(userBusiness.delete(ids)>0){
-                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
-            }else {
-                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+            if (userBusiness.delete(ids) > 0) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            } else {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
 
         } catch (Exception e) {
@@ -134,10 +140,10 @@ public class UserController {
     @ApiOperation(value = "获得用户详情")
     public Result<UserDetailVO> detail(IdVO idVO) {
         try {
-            UserBO userBO=userBusiness.detail(idVO.getId());
-            UserDetailVO userDetailVO=new UserDetailVO();
-            BeanUtils.copyProperties(userBO,userDetailVO);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),userDetailVO);
+            UserBO userBO = userBusiness.detail(idVO.getId());
+            UserDetailVO userDetailVO = new UserDetailVO();
+            BeanUtils.copyProperties(userBO, userDetailVO);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), userDetailVO);
         } catch (Exception e) {
             logger.error("获得用户详情异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
@@ -149,12 +155,12 @@ public class UserController {
     @ApiOperation(value = "更新用户")
     public Result update(@RequestBody UserUpdateVO userUpdateVO) {
         try {
-            UserBO userbo =new UserBO();
-            BeanUtils.copyProperties(userUpdateVO,userbo);
-            if(!userBusiness.update(userbo)){
-                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+            UserBO userbo = new UserBO();
+            BeanUtils.copyProperties(userUpdateVO, userbo);
+            if (!userBusiness.update(userbo)) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             logger.error("更新用户信息异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
@@ -166,20 +172,18 @@ public class UserController {
     @ApiOperation(value = "更新用户密码")
     public Result updatePwd(@RequestBody UserUpdatePwdVO userUpdatePwdVO) {
         try {
-            UserBO userbo =new UserBO();
-            BeanUtils.copyProperties(userUpdatePwdVO,userbo);
-            if(!userBusiness.updatePwd(userbo)){
-                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+            UserBO userbo = new UserBO();
+            BeanUtils.copyProperties(userUpdatePwdVO, userbo);
+            if (!userBusiness.updatePwd(userbo)) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             logger.error("更新用户密码异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
 
     }
-
-
 
 
 }

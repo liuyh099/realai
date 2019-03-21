@@ -7,8 +7,8 @@ import cn.realai.online.core.entity.SampleWeight;
 
 public interface SampleWeightService {
 
-	void insertList(List<SampleWeight> sgList);
+    void insertList(List<SampleWeight> sgList);
 
-	List<SampleWeightBO> findList(SampleWeight sampleWeight);
+    List<SampleWeightBO> findList(SampleWeight sampleWeight);
 
 }

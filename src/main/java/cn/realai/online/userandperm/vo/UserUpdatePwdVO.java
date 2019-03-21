@@ -13,7 +13,7 @@ public class UserUpdatePwdVO {
     private Long id;
 
     @NotBlank(message = "密码不能为空")
-    @Length(min=8,message = "密码最短8位")
+    @Length(min = 8, message = "密码最短8位")
     @ApiModelProperty(value = "密码")
     private String pwd;
 

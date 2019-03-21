@@ -14,16 +14,16 @@ import cn.realai.online.core.service.SampleWeightService;
 @Service
 public class SampleWeightServiceImpl implements SampleWeightService {
 
-	@Autowired
-	private SampleWeightDao sampleWeightDao;
-	
-	@Override
-	public void insertList(List<SampleWeight> swList) {
-		if (swList == null || swList.size() == 0) {
-			return ;
-		}
-		sampleWeightDao.insertList(swList);
-	}
+    @Autowired
+    private SampleWeightDao sampleWeightDao;
+
+    @Override
+    public void insertList(List<SampleWeight> swList) {
+        if (swList == null || swList.size() == 0) {
+            return;
+        }
+        sampleWeightDao.insertList(swList);
+    }
 
 	@Override
 	public List<SampleWeightBO> findList(SampleWeight sampleWeight) {

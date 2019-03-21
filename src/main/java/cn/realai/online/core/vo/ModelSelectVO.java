@@ -11,7 +11,7 @@ public class ModelSelectVO {
     private Long serviceId;
     @ApiModelProperty(value = "传入或者最近发布的服务名称")
     private String serviceName;
-    @ApiModelProperty(value="传入或者最近发布的模型ID")
+    @ApiModelProperty(value = "传入或者最近发布的模型ID")
     private Long modelId;
     @ApiModelProperty(value = "传入或者最近发布的模型名称")
     private String modelName;

@@ -114,26 +114,26 @@ public class RoleBusinessImpl implements RoleBusiness {
 
     @Override
     public List<MenuTreeNodeBO> menuTree() {
-       return menuTree(null,false);
+        return menuTree(null, false);
     }
 
     @Override
     public RoleDetailBO detail(Long id) {
-        return getRoleDetailBO(id,true);
+        return getRoleDetailBO(id, true);
     }
 
-    private RoleDetailBO getRoleDetailBO(Long id,Boolean clearNocheck) {
-        SysRole sysRole=roleService.get(id);
-        if(ObjectUtils.isEmpty(sysRole)){
+    private RoleDetailBO getRoleDetailBO(Long id, Boolean clearNocheck) {
+        SysRole sysRole = roleService.get(id);
+        if (ObjectUtils.isEmpty(sysRole)) {
             return null;
         }
 
-        RoleDetailBO roleDetailBO =new RoleDetailBO();
-        BeanUtils.copyProperties(sysRole,roleDetailBO);
+        RoleDetailBO roleDetailBO = new RoleDetailBO();
+        BeanUtils.copyProperties(sysRole, roleDetailBO);
 
-        List<Long> menuIds =roleMenuService.findIdsByRoleId(sysRole.getId());
-        if(!ObjectUtils.isEmpty(sysRole)){
-            List<MenuTreeNodeBO> nodeTree=menuTree(menuIds,clearNocheck);
+        List<Long> menuIds = roleMenuService.findIdsByRoleId(sysRole.getId());
+        if (!ObjectUtils.isEmpty(sysRole)) {
+            List<MenuTreeNodeBO> nodeTree = menuTree(menuIds, clearNocheck);
             roleDetailBO.setMenu(nodeTree);
         }
         return roleDetailBO;
@@ -141,24 +141,24 @@ public class RoleBusinessImpl implements RoleBusiness {
 
     @Override
     public RoleDetailBO edit(Long id) {
-        return getRoleDetailBO(id,false);
+        return getRoleDetailBO(id, false);
     }
 
     @Override
     public boolean update(RoleBO roleBO) {
 
-        if(!checkName(roleBO.getName())){
+        if (!checkName(roleBO.getName())) {
             return false;
         }
 
-        SysRole sysRole =new SysRole();
-        BeanUtils.copyProperties(roleBO,sysRole);
+        SysRole sysRole = new SysRole();
+        BeanUtils.copyProperties(roleBO, sysRole);
 
-        Integer count =roleService.update(sysRole);
-        if(count<=0){
+        Integer count = roleService.update(sysRole);
+        if (count <= 0) {
             return false;
         }
-        List<Long> ids=new ArrayList<>();
+        List<Long> ids = new ArrayList<>();
         ids.add(sysRole.getId());
         roleMenuService.deleteByRoleIds(ids);
 
@@ -183,14 +183,23 @@ public class RoleBusinessImpl implements RoleBusiness {
         return menuTree(menuIds, true);
     }
 
+    @Override
+    public List<RoleBO> findList() {
+        SysRole sysRole = new SysRole();
+        List<SysRole> list = roleService.list(sysRole);
+        List<RoleBO> result = JSON.parseArray(JSON.toJSONString(list), RoleBO.class);
+        return result;
+    }
+
 
     /**
      * 构建菜单树
-     * @param ids 选中的菜单
+     *
+     * @param ids          选中的菜单
      * @param clearNoCheck 是否清除未选中菜单
      * @return
      */
-    private List<MenuTreeNodeBO> menuTree(List<Long> ids,boolean clearNoCheck) {
+    private List<MenuTreeNodeBO> menuTree(List<Long> ids, boolean clearNoCheck) {
         SysMenu sysMenu = new SysMenu();
         sysMenu.setParentId(0L);
         List<SysMenu> parentMenus = menuService.findList(sysMenu);
@@ -198,34 +207,34 @@ public class RoleBusinessImpl implements RoleBusiness {
             return null;
         }
 
-        List<MenuTreeNodeBO> menuTreeNodeBOList =new ArrayList<>();
-        for (SysMenu sysMenu1:parentMenus){
-            MenuTreeNodeBO menuTreeNodeBO=new MenuTreeNodeBO();
-            BeanUtils.copyProperties(sysMenu1,menuTreeNodeBO);
-            if(ids.contains(sysMenu1.getId())){
+        List<MenuTreeNodeBO> menuTreeNodeBOList = new ArrayList<>();
+        for (SysMenu sysMenu1 : parentMenus) {
+            MenuTreeNodeBO menuTreeNodeBO = new MenuTreeNodeBO();
+            BeanUtils.copyProperties(sysMenu1, menuTreeNodeBO);
+            if (ids.contains(sysMenu1.getId())) {
                 menuTreeNodeBO.setCheck(true);
-            }else {
-                if(clearNoCheck){
+            } else {
+                if (clearNoCheck) {
                     continue;
                 }
             }
 
-            SysMenu sysMenuChild=new SysMenu();
+            SysMenu sysMenuChild = new SysMenu();
             sysMenuChild.setParentId(sysMenu1.getId());
             List<SysMenu> childrenList = menuService.findList(sysMenuChild);
-            if(CollectionUtils.isEmpty(childrenList)){
+            if (CollectionUtils.isEmpty(childrenList)) {
                 menuTreeNodeBOList.add(menuTreeNodeBO);
                 continue;
             }
 
-            List<MenuTreeNodeBO> childMenuTreeNodeBOList =new ArrayList<>(childrenList.size());
-            for (SysMenu sysMenuTemp: childrenList) {
-                MenuTreeNodeBO menuTreeNodeBOChild=new MenuTreeNodeBO();
-                BeanUtils.copyProperties(sysMenuTemp,menuTreeNodeBOChild);
-                if(ids.contains(sysMenuTemp.getId())){
+            List<MenuTreeNodeBO> childMenuTreeNodeBOList = new ArrayList<>(childrenList.size());
+            for (SysMenu sysMenuTemp : childrenList) {
+                MenuTreeNodeBO menuTreeNodeBOChild = new MenuTreeNodeBO();
+                BeanUtils.copyProperties(sysMenuTemp, menuTreeNodeBOChild);
+                if (ids.contains(sysMenuTemp.getId())) {
                     menuTreeNodeBOChild.setCheck(true);
-                }else {
-                    if(clearNoCheck){
+                } else {
+                    if (clearNoCheck) {
                         continue;
                     }
                 }

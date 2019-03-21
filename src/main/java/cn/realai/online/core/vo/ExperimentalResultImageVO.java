@@ -7,24 +7,24 @@ import io.swagger.annotations.ApiModelProperty;
 public class ExperimentalResultImageVO {
 
     //roc图片地址
-    @ApiModelProperty(value = "rocTestImageUrl",name = "roc测试图片地址")
+    @ApiModelProperty(value = "rocTestImageUrl", name = "roc测试图片地址")
     private String rocTestImageUrl;
 
-    @ApiModelProperty(value = "rosTrainImageUrl",name = "roc训练图片地址")
+    @ApiModelProperty(value = "rosTrainImageUrl", name = "roc训练图片地址")
     private String rocTrainImageUrl;
 
-    @ApiModelProperty(value = "rosValidateImageUrl",name = "roc验证图片地址")
+    @ApiModelProperty(value = "rosValidateImageUrl", name = "roc验证图片地址")
     private String rocValidateImageUrl;
 
 
     //roc图片地址
-    @ApiModelProperty(value = "ksTestImageUrl",name = "ks测试图片地址")
+    @ApiModelProperty(value = "ksTestImageUrl", name = "ks测试图片地址")
     private String ksTestImageUrl;
 
-    @ApiModelProperty(value = "ksTrainImageUrl",name = "ks训练图片地址")
+    @ApiModelProperty(value = "ksTrainImageUrl", name = "ks训练图片地址")
     private String ksTrainImageUrl;
 
-    @ApiModelProperty(value = "ksValidateImageUrl",name = "ks验证图片地址")
+    @ApiModelProperty(value = "ksValidateImageUrl", name = "ks验证图片地址")
     private String ksValidateImageUrl;
 
     public String getRocTestImageUrl() {

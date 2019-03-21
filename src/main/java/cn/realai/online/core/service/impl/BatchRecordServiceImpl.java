@@ -10,18 +10,18 @@ import cn.realai.online.core.service.BatchRecordService;
 @Service
 public class BatchRecordServiceImpl implements BatchRecordService {
 
-	@Autowired
-	private BatchRecordDao batchRecordDao;
-	
-	@Override
-	public Long insert(BatchRecord batchRecord) {
-		batchRecord.setCreateTime(System.currentTimeMillis());
-		return batchRecordDao.insert(batchRecord);
-	}
+    @Autowired
+    private BatchRecordDao batchRecordDao;
 
-	@Override
-	public BatchRecord getByEntity(BatchRecord batchRecord) {
-		return batchRecordDao.getByEntity(batchRecord);
-	}
+    @Override
+    public Long insert(BatchRecord batchRecord) {
+        batchRecord.setCreateTime(System.currentTimeMillis());
+        return batchRecordDao.insert(batchRecord);
+    }
+
+    @Override
+    public BatchRecord getByEntity(BatchRecord batchRecord) {
+        return batchRecordDao.getByEntity(batchRecord);
+    }
 
 }

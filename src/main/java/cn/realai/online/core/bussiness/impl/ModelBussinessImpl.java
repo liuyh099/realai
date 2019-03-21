@@ -1,10 +1,10 @@
 package cn.realai.online.core.bussiness.impl;
 
 import cn.realai.online.common.page.PageBO;
+import cn.realai.online.core.bo.ModelBO;
 import cn.realai.online.core.bo.ModelDetailBO;
 import cn.realai.online.core.bo.ModelListBO;
 import cn.realai.online.core.bussiness.ModelBussiness;
-import cn.realai.online.core.dao.ModelPerfomanceDao;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.ModelPerformance;
 import cn.realai.online.core.query.ModelListQuery;
@@ -16,6 +16,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class ModelBussinessImpl implements ModelBussiness {
         //处理查询结果
         List<ModelListVO> voList = new ArrayList<>();
         if (list != null && !list.isEmpty()) {
-            for (ModelListBO item:list) {
+            for (ModelListBO item : list) {
                 ModelListVO voItem = new ModelListVO();
                 BeanUtils.copyProperties(item, voItem);
                 voList.add(voItem);
@@ -67,7 +68,7 @@ public class ModelBussinessImpl implements ModelBussiness {
         List<ModelPerformance> performanceList = modelPerformanceService.selectList(modelId);
         if (performanceList != null && !performanceList.isEmpty()) {
             List<ModelPerformanceVO> performanceVOList = new ArrayList<>();
-            for (ModelPerformance item:performanceList) {
+            for (ModelPerformance item : performanceList) {
                 ModelPerformanceVO itemVO = new ModelPerformanceVO();
                 BeanUtils.copyProperties(item, itemVO);
                 performanceVOList.add(itemVO);
@@ -129,6 +130,27 @@ public class ModelBussinessImpl implements ModelBussiness {
             selectVO.setModelList(list);
         }
         return null;
+    }
+
+    @Override
+    public Boolean checkName(String name) {
+
+        Model model = new Model();
+        model.setName(name);
+        List<Model> models = modelService.findList(model);
+        if (CollectionUtils.isEmpty(models)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int publish(ModelBO modelBO) {
+
+        //TODO 查询服务的ID 和处理服务上下线细节
+        modelBO.setCreateTime(System.currentTimeMillis());
+        int count = modelService.insert(modelBO);
+        return count;
     }
 
 }

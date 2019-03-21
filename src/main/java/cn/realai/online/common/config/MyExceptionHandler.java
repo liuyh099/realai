@@ -38,7 +38,7 @@ public class MyExceptionHandler implements HandlerExceptionResolver {
                     out.close();
                 }
             }
-        }else {
+        } else {
             attributes.put("code", "1000003");
             attributes.put("msg", ex.getMessage());
             view.setAttributesMap(attributes);

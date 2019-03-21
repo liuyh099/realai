@@ -27,9 +27,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.executable.ValidateOnExecution;
 import java.util.List;
 
 @RestController
@@ -49,10 +47,15 @@ public class ExperimentalTrainController {
     @GetMapping
     @ApiOperation(value = "查询实验训练列表")
     @ResponseBody
-    public Result<PageBO<ExperimentalTrainVO>> list(ExperimentalTrainQuery experimentalTrainQuery) {
+    public Result<PageBO<ExperimentalTrainVO>> list(ExperimentalTrainQuery query) {
         try {
-            PageBO<ExperimentalTrainVO> page = experimentalTrainBussiness.pageList(experimentalTrainQuery);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), page);
+            PageBO<ExperimentBO> page = experimentalTrainBussiness.pageList(query);
+            if (page == null) {
+                return null;
+            }
+            List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), ExperimentalTrainVO.class);
+            PageBO<ExperimentalTrainVO> pageBO = new PageBO<ExperimentalTrainVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
             logger.error("查询实验列表异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
@@ -247,7 +250,7 @@ public class ExperimentalTrainController {
         }
     }
 
-    private Result updateParam(ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo,Integer status) {
+    private Result updateParam(ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo, Integer status) {
         ExperimentBO experimentBO = new ExperimentBO();
         BeanUtils.copyProperties(experimentalTrainSelectParamVo, experimentBO);
         experimentBO.setStatus(status);
@@ -289,7 +292,7 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result createModelDelete(@RequestBody @Validated ExperimentalTrainCreateModelVO experimentalTrainCreateModelVo) {
         try {
-            experimentalTrainBussiness.deleteVariableData(experimentalTrainCreateModelVo.getId(),experimentalTrainCreateModelVo.getIds());
+            experimentalTrainBussiness.deleteVariableData(experimentalTrainCreateModelVo.getId(), experimentalTrainCreateModelVo.getIds());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             logger.error("新增实验-生成模型-删除同质或者异质量数据异常", e);
@@ -303,11 +306,11 @@ public class ExperimentalTrainController {
     public Result<PageBO<ExperimentalTrainCreateModelDataVO>> createModelGetData(@RequestBody @Validated ExperimentalTrainCreateModelDataQuery query) {
         try {
             PageBO<VariableDataBO> page = experimentalTrainBussiness.pageHomOrHemeList(query);
-            if(page==null){
+            if (page == null) {
                 return null;
             }
             List<ExperimentalTrainCreateModelDataVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), ExperimentalTrainCreateModelDataVO.class);
-            PageBO<ExperimentalTrainCreateModelDataVO> pageBO= new PageBO<ExperimentalTrainCreateModelDataVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
+            PageBO<ExperimentalTrainCreateModelDataVO> pageBO = new PageBO<ExperimentalTrainCreateModelDataVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
             logger.error("新增实验-生成模型-一获取同质异质数据异常", e);
@@ -326,12 +329,17 @@ public class ExperimentalTrainController {
     @ApiOperation(value = "新增实验-生成模型-一键建立模型")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result createModel(@PathVariable long trainId) {
-        int ret = experimentalTrainBussiness.train(trainId);
-        if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("有其他实验正在训练中，请稍后重试"), null);
+    public Result createModel(@PathVariable Long trainId) {
+        try {
+        	int ret = experimentalTrainBussiness.train(trainId);
+        	if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
+        		return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("有其他实验正在训练中，请稍后重试"), null);
+        	}
+        	return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
+        } catch (Exception e) {
+        	e.printStackTrace();
         }
-        return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
+        return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
 
     @PutMapping("/doubleCreate")
