@@ -11,6 +11,7 @@ import cn.realai.online.core.bussiness.ModelBussiness;
 import cn.realai.online.core.vo.*;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +84,20 @@ public class ExperimentalPublishController {
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         } catch (Exception e) {
             logger.error("实验发布异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+
+        }
+    }
+
+    @ApiOperation("实验发布检查实验名称 true:表示检查通过")
+    @PutMapping("/checkName/{name}")
+    @ApiImplicitParam(name = "name", value = "名称", required = true, dataType = "String", paramType = "path")
+    public Result checkName(@PathVariable String name) {
+        try {
+            Boolean flag = modelBussiness.checkName(name);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), flag);
+        } catch (Exception e) {
+            logger.error("实验发布检查实验名称", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
 
         }
