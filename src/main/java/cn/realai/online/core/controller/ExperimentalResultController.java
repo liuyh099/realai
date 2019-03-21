@@ -7,6 +7,7 @@ import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.*;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
+import cn.realai.online.core.bussiness.SampleWeightBussiness;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.PersonalHomoResultSet;
 import cn.realai.online.core.query.ExperimentalResultWhileBoxQuery;
@@ -15,6 +16,8 @@ import cn.realai.online.core.query.GlobalVariableQuery;
 import cn.realai.online.core.query.IdQuery;
 import cn.realai.online.core.vo.*;
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +41,8 @@ public class ExperimentalResultController {
 
     @Autowired
     private ExperimentalTrainBussiness experimentalTrainBusiness;
+
+    private SampleWeightBussiness sampleWeightBussiness;
 
     @GetMapping("/group/{trainId}")
     @ApiOperation(value = "实验结果-根据实验ID活得组集合(传实验的id)")
@@ -123,12 +128,13 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-白盒决策")
     public Result<PageBO<WhileBoxScoreCardVO>> whiledecision(@Validated ExperimentalResultWhileBoxQuery experimentalResultWhileBoxQuery) {
         try {
+            PageBO<WhileBoxScoreCardVO> pageBO = sampleWeightBussiness.pageBO(experimentalResultWhileBoxQuery);
 
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
             logger.error("实验评估-图片异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
     @GetMapping("globalVariable")
@@ -136,11 +142,13 @@ public class ExperimentalResultController {
     public Result<PageBO<WhileBoxScoreCardVO>> globalVariable(@Validated GlobalVariableQuery globalVariableQuery) {
         try {
 
+            PageBO<WhileBoxScoreCardVO> pageBO = sampleWeightBussiness.pageBO(globalVariableQuery);
+
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
             logger.error("实验评估-图片异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
     //从实验来
