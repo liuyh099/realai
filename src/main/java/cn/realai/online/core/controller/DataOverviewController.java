@@ -73,7 +73,7 @@ public class DataOverviewController {
             List<EchartsDataVo> result = null;
             ExperimentBO experiment = experimentalTrainBussiness.getPublishExperimentByServerId(idVO.getId());
             if (experiment != null) {
-                List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBussiness.getGroupOptionName(experiment.getId());
+                List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBussiness.getGroupOptionName(experiment.getId(), true);
                 if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
                     result = new ArrayList<>();
                     for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {

@@ -168,7 +168,7 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-千人千面 获取echarts 数据")
     public Result<List<EchartsDataVo>> echartsData(@Validated IdVO idVo) {
         try {
-            List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId());
+            List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId(), false);
             List<EchartsDataVo> result = null;
             if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
                 for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {
