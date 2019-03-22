@@ -1,6 +1,7 @@
 package cn.realai.online.userandperm.dao;
 
 import cn.realai.online.userandperm.entity.SysRole;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public interface SysRoleDao {
      * @param delete
      * @return
      */
-    Integer delete(List<Long> delete);
+    Integer delete(@Param("ids") List<Long> delete);
 
     /**
      * 根据Id查询角色信息

@@ -23,6 +23,9 @@
 		select * 
 		from sample_grouping
 		where experiment_id = #{experimentId}
+        <if test="isExceptionGroup==false">
+            and group_name != '异常组'
+        </if>
 	</select>
 
 </mapper>

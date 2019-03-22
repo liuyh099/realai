@@ -7,10 +7,7 @@ import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
 import cn.realai.online.userandperm.bo.MenuTreeNodeBO;
 import cn.realai.online.userandperm.business.RoleBusiness;
 import cn.realai.online.userandperm.business.UserOptionBusiness;
-import cn.realai.online.userandperm.vo.ChangePwdVO;
-import cn.realai.online.userandperm.vo.ForgetVo;
-import cn.realai.online.userandperm.vo.IndexMenuTreeNodeVo;
-import cn.realai.online.userandperm.vo.UserLoginVo;
+import cn.realai.online.userandperm.vo.*;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @RestController
@@ -45,12 +43,15 @@ public class UserOptionController {
 
     @PostMapping("login")
     @ApiOperation("用户登录Api")
-    public Result login(@RequestBody UserLoginVo userLoginVo) {
+    public Result<MySessionVo> login(@RequestBody UserLoginVo userLoginVo) {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(userLoginVo.getName(), userLoginVo.getPwd());
         try {
             subject.login(token);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), true);
+            Serializable serializable=subject.getSession().getId();
+            MySessionVo sessionVo = new MySessionVo();
+            sessionVo.setSessionId(serializable);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), sessionVo);
         } catch (IncorrectCredentialsException e) {
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.PWD_ERROR.getMsg(), null);
         } catch (LockedAccountException e) {
