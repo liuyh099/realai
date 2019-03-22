@@ -171,7 +171,7 @@
         </where>
     </select>
 
-	<select id="getBatchRecordByEidAndDate" resultMap="BatshRecordMap">
+	<select id="getBatchRecordByEidAndDate" resultMap="BatchRecordMap">
     	select * 
     	from batch_record
     	where experiment_id = #{eid}

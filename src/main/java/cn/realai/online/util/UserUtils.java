@@ -1,6 +1,7 @@
 package cn.realai.online.util;
 
 import cn.realai.online.userandperm.entity.User;
+import cn.realai.online.userandperm.entity.UserRole;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.session.InvalidSessionException;
@@ -11,24 +12,21 @@ import java.security.Principal;
 public class UserUtils {
 
     public static User getUser() {
-        Principal principal = getPrincipal();
-        User user = (User) principal;
-        return user;
+        return getLoginUser();
     }
 
-    private static Principal getPrincipal() {
+    private static User getLoginUser() {
         try {
             Subject subject = SecurityUtils.getSubject();
-            Principal principal = (Principal) subject.getPrincipal();
-            if (principal != null) {
-                return principal;
+            Object object =subject.getPrincipal();
+            if (object != null) {
+                return (User)object;
+            }else {
+                throw new UnavailableSecurityManagerException("未登录");
             }
-        } catch (UnavailableSecurityManagerException e) {
-
-        } catch (InvalidSessionException e) {
+        } finally {
 
         }
-        return null;
     }
 
 }

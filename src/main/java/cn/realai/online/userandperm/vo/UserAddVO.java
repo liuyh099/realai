@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @ApiModel
 public class UserAddVO {
@@ -32,7 +33,7 @@ public class UserAddVO {
     private String group;
 
     @NotBlank(message = "密码不能为空")
-    @Length(min = 8, message = "密码最短8位")
+    @Pattern(regexp = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$",message = "密码至少8位，数字+字母")
     @ApiModelProperty(value = "密码")
     private String pwd;
 
