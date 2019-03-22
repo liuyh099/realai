@@ -125,7 +125,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         int ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
         ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
         
-        //训练
+        //训练  
         trainService.training(experimentBO, 0L, deleteVariableData.getHomoList(), deleteVariableData.getHetroList(), 1);
         return ret;
     }

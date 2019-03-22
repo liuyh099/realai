@@ -47,7 +47,7 @@
         <where>
             id =#{id}
         </where>
-    </update>
+    </update>  
 
     <delete id="delete" parameterType="java.util.List">
         DELETE FROM batch_record
