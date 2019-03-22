@@ -124,7 +124,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         //修改试验状态
         int ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
         ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
-        
+
         //训练    
         trainService.training(experimentBO, 0L, deleteVariableData.getHomoList(), deleteVariableData.getHetroList(), 1);
         return ret;
@@ -408,8 +408,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     }
 
     @Override
-    public List<SampleGroupingBO> getGroupOptionName(Long experimentId) {
-        List<SampleGrouping> sampleGroupings = sampleGroupingService.findListByExperimentId(experimentId);
+    public List<SampleGroupingBO> getGroupOptionName(Long experimentId, boolean isExceptionGroup) {
+        List<SampleGrouping> sampleGroupings = sampleGroupingService.findListByExperimentId(experimentId, isExceptionGroup);
         List<SampleGroupingBO> sampleGroupingBOList = JSON.parseArray(JSON.toJSONString(sampleGroupings), SampleGroupingBO.class);
         return sampleGroupingBOList;
     }
