@@ -208,4 +208,11 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     List<ExperimentBO> findExperimentByServerId(Long serverId);
+
+    /**
+     * 根据服务id查询发布的实验ID
+     * @param id
+     * @return
+     */
+    ExperimentBO getPublishExperimentByServerId(Long id);
 }

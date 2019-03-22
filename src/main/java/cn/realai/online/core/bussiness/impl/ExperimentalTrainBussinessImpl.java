@@ -482,6 +482,21 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         return result;
     }
 
+    @Override
+    public ExperimentBO getPublishExperimentByServerId(Long id) {
+        Experiment experiment = new Experiment();
+        experiment.setServiceId(id);
+        experiment.setReleasStatus(Experiment.RELEAS_YES);
+        List<Experiment> list = experimentService.findList(experiment);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        Experiment experiment1 = list.get(0);
+        ExperimentBO bo = new ExperimentBO();
+        BeanUtils.copyProperties(experiment1, bo);
+        return bo;
+    }
+
 
     private PersonalInformation buildQueryCondition(BatchRecord batchRecord, FaceListDataQuery query) {
         PersonalInformation personal = new PersonalInformation();

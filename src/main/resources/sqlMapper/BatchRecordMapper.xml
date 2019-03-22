@@ -37,7 +37,7 @@
                   AND batch_type =3
               </if>
           </where>
-    </select>
+    </select>  
 
     <update id="update" parameterType="cn.realai.online.core.entity.BatchRecord">
         UPDATE batch_record
