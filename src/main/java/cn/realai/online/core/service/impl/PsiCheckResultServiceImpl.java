@@ -45,4 +45,5 @@ public class PsiCheckResultServiceImpl implements PsiCheckResultService {
 	public int insertList(List<PSICheckResult> list) {
 		return psiCheckResultDao.insertList(list);
 	}
+
 }

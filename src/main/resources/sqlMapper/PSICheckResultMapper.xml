@@ -60,6 +60,7 @@
         </where>
     </select>
 
+
     <resultMap type="cn.realai.online.core.bo.PsiResultBO" id="PsiResultMap">
         <result column="psiId" property="psiId" jdbcType="BIGINT"/>
         <result column="psi" property="psi" jdbcType="DECIMAL"/>
