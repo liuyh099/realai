@@ -95,7 +95,12 @@ public class VariableDataServiceImpl implements VariableDataService {
 		return hahbo;
 	}
 
-	/*
+    @Override
+    public List<VariableData> findDoubleCreateVariableDataList(List<Long> variableIdList) {
+        return variableDataDao.findDoubleCreateVariableDataList(variableIdList);
+    }
+
+    /*
 	 * 将传入的VariableData数组分解成同住和异质数组
 	 */
 	private Map<String, List<VariableData>> breakDownList(List<VariableData> vdList) {

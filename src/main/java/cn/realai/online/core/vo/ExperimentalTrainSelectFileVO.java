@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @ApiModel
 public class ExperimentalTrainSelectFileVO {
@@ -24,20 +25,24 @@ public class ExperimentalTrainSelectFileVO {
 
     @ApiModelProperty(value = "y表数据源", required = true)
     @NotBlank(message = "y表数据源不能为空")
+    @Pattern( regexp = "/^(.)+\\.csv$/",message = "文件格式不正确")
     private String ytableDataSource;
 
     //x表同质数据源
     @ApiModelProperty(value = "模型X表同质数据源")
     @SimultaneousNotNull(checkCount = 2, message = "模型X表同质数据源和模型X表异质数据源必须选择一个")
+    @Pattern( regexp = "/^(.)+\\.csv$/",message = "文件格式不正确")
     private String xtableHomogeneousDataSource;
 
     //x表异质数据源
     @ApiModelProperty(value = "模型X表异质数据源")
     @SimultaneousNotNull(checkCount = 2, message = "模型X表同质数据源和模型X表异质数据源必须选择一个")
+    @Pattern( regexp = "/^(.)+\\.csv$/",message = "文件格式不正确")
     private String xtableHeterogeneousDataSource;
 
     //x轴含义（变量名解释）
     @ApiModelProperty(value = "模型X表变量名称映射表")
+    @Pattern( regexp = "/^(.)+\\.csv$/",message = "文件格式不正确")
     private String xtableMeaningDataSource;
 
 

@@ -99,4 +99,10 @@ public interface ExperimentService {
     Integer updateParam(Experiment experiment);
 
 	HashMap findByServiceIdAndReleaseStatus(Long serviceId, Integer releaseStatus);
+
+    /**
+     * 二次创建实验
+     * @param experiment
+     */
+    void doubleCreate(Experiment experiment);
 }

@@ -70,22 +70,25 @@ public class RoleBusinessImpl implements RoleBusiness {
             return false;
         }
 
-        List<Long> menuIds = roleBO.getMenu();
-        if (CollectionUtils.isEmpty(menuIds)) {
-            return true;
+        List<Long> menuIds = roleBO.getHalfMenu();
+        if (!CollectionUtils.isEmpty(menuIds)) {
+            batchInsertRoleMenu(sysRole, menuIds, 2);
         }
-        batchInsertRoleMenu(sysRole, menuIds);
-
+        menuIds = roleBO.getCheckMenu();
+        if (!CollectionUtils.isEmpty(menuIds)) {
+            batchInsertRoleMenu(sysRole, menuIds, 1);
+        }
         return true;
     }
 
-    private void batchInsertRoleMenu(SysRole sysRole, List<Long> menuIds) {
+    private void batchInsertRoleMenu(SysRole sysRole, List<Long> menuIds, Integer type) {
         //不为空的情况下插入角色菜单关系
         List<RoleMenu> roleMenus = new ArrayList<>(menuIds.size());
         for (Long menuId : menuIds) {
             RoleMenu roleMenu = new RoleMenu();
             roleMenu.setRoleId(sysRole.getId());
             roleMenu.setMenuId(menuId);
+            roleMenu.setCheckStatus(type);
         }
         roleMenuService.batchInsert(roleMenus);
     }
@@ -131,11 +134,15 @@ public class RoleBusinessImpl implements RoleBusiness {
         RoleDetailBO roleDetailBO = new RoleDetailBO();
         BeanUtils.copyProperties(sysRole, roleDetailBO);
 
-        List<Long> menuIds = roleMenuService.findIdsByRoleId(sysRole.getId());
-        if (!ObjectUtils.isEmpty(sysRole)) {
-            List<MenuTreeNodeBO> nodeTree = menuTree(menuIds, clearNocheck);
-            roleDetailBO.setMenu(nodeTree);
-        }
+        List<Long> check = roleMenuService.findIdsByRoleIdAndStatus(sysRole.getId(),1);
+        List<Long> half = roleMenuService.findIdsByRoleIdAndStatus(sysRole.getId(),2);
+//        List<Long> menuIds = roleMenuService.findIdsByRoleId(sysRole.getId());
+//        if (!ObjectUtils.isEmpty(sysRole)) {
+//            List<MenuTreeNodeBO> nodeTree = menuTree(menuIds, clearNocheck);
+//            roleDetailBO.setMenu(nodeTree);
+//        }
+        roleDetailBO.setHalfCheck(half);
+        roleDetailBO.setCheck(check);
         return roleDetailBO;
     }
 
@@ -162,14 +169,15 @@ public class RoleBusinessImpl implements RoleBusiness {
         ids.add(sysRole.getId());
         roleMenuService.deleteByRoleIds(ids);
 
-        List<Long> menuIds = roleBO.getMenu();
-        if (CollectionUtils.isEmpty(menuIds)) {
-            return true;
+        List<Long> menuIds = roleBO.getHalfMenu();
+        if (!CollectionUtils.isEmpty(menuIds)) {
+            batchInsertRoleMenu(sysRole, menuIds, 2);
         }
-        batchInsertRoleMenu(sysRole, menuIds);
-
-
-        return false;
+        menuIds = roleBO.getCheckMenu();
+        if (!CollectionUtils.isEmpty(menuIds)) {
+            batchInsertRoleMenu(sysRole, menuIds, 1);
+        }
+        return true;
     }
 
     @Override

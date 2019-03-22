@@ -1,14 +1,24 @@
 package cn.realai.online.userandperm.vo;
 
-public class RoleVO {
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel
+public class RoleVO {
+    @ApiModelProperty(value = "角色ID")
+    private Long id;
     //角色名称
+    @ApiModelProperty(value = "角色名称")
     private String name;
     //创建时间
+
+    @ApiModelProperty(value = "创建时间")
     private Long createTime;
     //创建备注
+    @ApiModelProperty(value = "备注")
     private String notes;
 
+    @ApiModelProperty(value = "用户名称")
     private String createUser;
 
     public String getName() {
@@ -41,5 +51,13 @@ public class RoleVO {
 
     public void setCreateUser(String createUser) {
         this.createUser = createUser;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -33,4 +33,9 @@ public class RoleMenuServiceImpl implements RoleMenuService {
     public List<Long> findIdsByRoleId(Long id) {
         return roleMenuDao.findIdsByRoleId(id);
     }
+
+    @Override
+    public List<Long> findIdsByRoleIdAndStatus(Long id, int i) {
+        return roleMenuDao.findIdsByRoleIdAndStatus(id,i);
+    }
 }
