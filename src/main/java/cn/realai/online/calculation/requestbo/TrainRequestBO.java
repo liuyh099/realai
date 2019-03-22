@@ -8,13 +8,14 @@ public class TrainRequestBO {
 	private long experimentId;
 	
 	//如果是而此实验，这个字段为原实验id
-	private Long oldExperimentId;
+	private Long oldExperimentId;   
     
 	//命令
-	private String command;
-    
-	//样本切分类型
-	private int sampleSplitType;
+	private final String command = "train";
+	
+	private Integer validSampleType = 1;
+	
+	private Integer testSampleType = 1;
 	
 	//训练比例
     private Integer trainRatio;
@@ -32,35 +33,23 @@ public class TrainRequestBO {
     private List<String> needColumnsHomo;
     
     //异质删除列
-    private List<String> deleteColumnsHetero;
+    private List<String> deleteHetero;
     
     //同质删除列
-    private List<String> deleteColumnsHomo;
+    private List<String> deleteHomo;
     
 	public long getExperimentId() {
 		return experimentId;
 	}
-	
+
 	public void setExperimentId(long experimentId) {
 		this.experimentId = experimentId;
 	}
-	
+
 	public String getCommand() {
 		return command;
 	}
-	
-	public void setCommand(String command) {
-		this.command = command;
-	}
-	
-	public int getSampleSplitType() {
-		return sampleSplitType;
-	}
 
-	public void setSampleSplitType(int sampleSplitType) {
-		this.sampleSplitType = sampleSplitType;
-	}
-	
 	public Integer getTrainRatio() {
 		return trainRatio;
 	}
@@ -101,20 +90,20 @@ public class TrainRequestBO {
 		this.needColumnsHomo = needColumnsHomo;
 	}
 	
-	public List<String> getDeleteColumnsHetero() {
-		return deleteColumnsHetero;
+	public List<String> getDeleteHetero() {
+		return deleteHetero;
 	}
-	
-	public void setDeleteColumnsHetero(List<String> deleteColumnsHetero) {
-		this.deleteColumnsHetero = deleteColumnsHetero;
+
+	public void setDeleteHetero(List<String> deleteHetero) {
+		this.deleteHetero = deleteHetero;
 	}
-	
-	public List<String> getDeleteColumnsHomo() {
-		return deleteColumnsHomo;
+
+	public List<String> getDeleteHomo() {
+		return deleteHomo;
 	}
-	
-	public void setDeleteColumnsHomo(List<String> deleteColumnsHomo) {
-		this.deleteColumnsHomo = deleteColumnsHomo;
+
+	public void setDeleteHomo(List<String> deleteHomo) {
+		this.deleteHomo = deleteHomo;
 	}
 
 	public Long getOldExperimentId() {
@@ -123,6 +112,22 @@ public class TrainRequestBO {
 
 	public void setOldExperimentId(Long oldExperimentId) {
 		this.oldExperimentId = oldExperimentId;
+	}
+
+	public Integer getValidSampleType() {
+		return validSampleType;
+	}
+
+	public void setValidSampleType(Integer validSampleType) {
+		this.validSampleType = validSampleType;
+	}
+
+	public Integer getTestSampleType() {
+		return testSampleType;
+	}
+
+	public void setTestSampleType(Integer testSampleType) {
+		this.testSampleType = testSampleType;
 	}
 	
 }

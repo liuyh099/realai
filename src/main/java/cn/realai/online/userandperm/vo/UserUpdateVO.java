@@ -37,7 +37,11 @@ public class UserUpdateVO {
 
     @Length(max = 100, message = "备注最大为100个字节")
     @ApiModelProperty(value = "备注")
-    private String notes;
+    private String note;
+
+    public String getNotes(){
+        return this.note;
+    }
 
     public Long getId() {
         return id;
@@ -87,11 +91,11 @@ public class UserUpdateVO {
         this.group = group;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getNote() {
+        return note;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setNote(String note) {
+        this.note = note;
     }
 }

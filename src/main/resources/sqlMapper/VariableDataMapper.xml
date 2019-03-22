@@ -5,7 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="meaning" property="meaning" jdbcType="INTEGER"/>
+        <result column="meaning" property="meaning" jdbcType="VARCHAR"/>
         <result column="data_type" property="dataType" jdbcType="INTEGER"/>
         <result column="count" property="count" jdbcType="INTEGER"/>
         <result column="max" property="max" jdbcType="VARCHAR"/>
@@ -26,13 +26,20 @@
 
     <insert id="insertList">
         insert into variable_data(experiment_id, name, meaning, data_type, count, max,
-        min, mean, median, percent25, percent75, variable_type, recommended_delete, delete, create_time)
+        	min, mean, median, percent25, percent75, variable_type, recommended_delete, `delete` ,create_time)
+        values
         <foreach collection="vdList" item="vd" index="index" separator=",">
             (#{vd.experimentId}, #{vd.name}, #{vd.meaning}, #{vd.dataType}, #{vd.count}, #{vd.max},
             #{vd.min}, #{vd.mean}, #{vd.median}, #{vd.percent25} ,#{vd.percent75}, #{vd.variableType},
             #{vd.recommendedDelete}, #{vd.delete}, #{vd.createTime})
         </foreach>
     </insert>
+
+    <select id="getById" resultMap="VariableDataMap" parameterType="java.lang.Long">
+        select *
+		from variable_data
+		where id =#{id}
+    </select>
 
     <select id="findListByExperimentId" resultMap="VariableDataMap">
 		select *
@@ -91,5 +98,5 @@
             </if>
         </where>
     </update>
-
+  
 </mapper> 

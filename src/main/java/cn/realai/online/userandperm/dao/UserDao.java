@@ -1,6 +1,7 @@
 package cn.realai.online.userandperm.dao;
 
 import cn.realai.online.userandperm.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface UserDao {
      * @param ids
      * @return
      */
-    Integer delete(List<Long> ids);
+    Integer delete(@Param("ids") List<Long> ids);
 
     /**
      * 获得用户详情

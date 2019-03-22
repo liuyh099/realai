@@ -105,4 +105,11 @@ public interface ExperimentService {
      * @param experiment
      */
     void doubleCreate(Experiment experiment);
+
+    /**
+     * 获得发布的实验根据服务ID
+     * @param id
+     * @return
+     */
+    Experiment getPublishExperimentByServerId(Long id);
 }

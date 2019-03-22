@@ -40,7 +40,7 @@
                 AND a.name =#{name}
             </if>
             <if test="phoneNumber!=null and phoneNumber !='' ">
-                AND a.phoneNumber =#{phoneNumber}
+                AND a.phone_number =#{phoneNumber}
             </if>
             <if test="forget!=null and forget ==1 ">
                 AND a.id IN (SELECT user_id FROM sys_forget_notice)

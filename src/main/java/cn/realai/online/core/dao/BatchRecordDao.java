@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface BatchRecordDao {
 
-	Integer insert(BatchRecord batchRecord);
+	Integer insert(@Param("batchRecord")BatchRecord batchRecord);
 
 	Integer delete(List<Long> idList);
 
@@ -19,7 +19,7 @@ public interface BatchRecordDao {
      * 必须传入ID
      *
      * @param batchRecord
-     * @return
+     * @return  
      */
     BatchRecord getByEntity(BatchRecord batchRecord);
 
@@ -36,4 +36,9 @@ public interface BatchRecordDao {
 	 * @return
 	 */
     List<BatchRecord> findBatchRecordList(BatchRecordBO batchRecordBO, boolean isTranFlag);
+    
+	BatchRecord getBatchRecordByEidAndDate(@Param("eid")long eid, 
+			@Param("date")String date, 
+			@Param("batchType")int batchType);
+
 }

@@ -24,7 +24,7 @@ public class BatchRecord {
 	private Long serviceId;
 
 	//创建时间
-	private Long createTime;
+	private Long createTime;  
 	
 	//结果下载路径
 	private String downUrl;
@@ -118,18 +118,6 @@ public class BatchRecord {
 		this.batchType = batchType;
 	}
 
-	public static int getBatchTypeOffline() {
-		return BATCH_TYPE_OFFLINE;
-	}
-
-	public static int getBatchTypeDaily() {
-		return BATCH_TYPE_DAILY;
-	}
-
-	public static int getBatchTypeTrain() {
-		return BATCH_TYPE_TRAIN;
-	}
-
 	public String getBatchName() {
 		return batchName;
 	}
@@ -153,4 +141,6 @@ public class BatchRecord {
 	public void setOfflineTimes(Integer offlineTimes) {
 		this.offlineTimes = offlineTimes;
 	}
+
+	
 }

@@ -19,10 +19,10 @@ public class PersonalComboResultSet {
     private String personalId;
 
     //实验id
-    private long experimentId;
+    private Long experimentId;
 
     //变量id
-    private long variableId1;
+    private Long variableId1;
 
     //变量名字1
     private String variableName1;
@@ -31,7 +31,7 @@ public class PersonalComboResultSet {
     private String value1;
 
     //变量id2
-    private long variableId2;
+    private Long variableId2;
 
     //变量名字2
     private String variableName2;
@@ -40,7 +40,7 @@ public class PersonalComboResultSet {
     private String value2;
 
     //变量id3
-    private long variableId3;
+    private Long variableId3;
 
     //变量名字3
     private String variableName3;
@@ -54,10 +54,6 @@ public class PersonalComboResultSet {
     //python返回的批次标记字段，只做解析不需要入库
     private String batchStr;
 
-
-    public String getBatchStr() {
-        return batchStr;
-    }
 
     public Long getId() {
         return id;
@@ -91,19 +87,19 @@ public class PersonalComboResultSet {
         this.personalId = personalId;
     }
 
-    public long getExperimentId() {
+    public Long getExperimentId() {
         return experimentId;
     }
 
-    public void setExperimentId(long experimentId) {
+    public void setExperimentId(Long experimentId) {
         this.experimentId = experimentId;
     }
 
-    public long getVariableId1() {
+    public Long getVariableId1() {
         return variableId1;
     }
 
-    public void setVariableId1(long variableId1) {
+    public void setVariableId1(Long variableId1) {
         this.variableId1 = variableId1;
     }
 
@@ -123,11 +119,11 @@ public class PersonalComboResultSet {
         this.value1 = value1;
     }
 
-    public long getVariableId2() {
+    public Long getVariableId2() {
         return variableId2;
     }
 
-    public void setVariableId2(long variableId2) {
+    public void setVariableId2(Long variableId2) {
         this.variableId2 = variableId2;
     }
 
@@ -147,11 +143,11 @@ public class PersonalComboResultSet {
         this.value2 = value2;
     }
 
-    public long getVariableId3() {
+    public Long getVariableId3() {
         return variableId3;
     }
 
-    public void setVariableId3(long variableId3) {
+    public void setVariableId3(Long variableId3) {
         this.variableId3 = variableId3;
     }
 
@@ -179,8 +175,11 @@ public class PersonalComboResultSet {
         this.weight = weight;
     }
 
+    public String getBatchStr() {
+        return batchStr;
+    }
+
     public void setBatchStr(String batchStr) {
         this.batchStr = batchStr;
     }
-
 }

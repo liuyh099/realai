@@ -2,7 +2,8 @@ package cn.realai.online.core.service.impl;
 
 import cn.realai.online.core.bo.PsiResultBO;
 import cn.realai.online.core.dao.PSICheckResultDao;
-import cn.realai.online.core.service.PsiChekcResultService;
+import cn.realai.online.core.entity.PSICheckResult;
+import cn.realai.online.core.service.PsiCheckResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * @create 2019-03-20 11:35
  */
 @Service
-public class PsiCheckResultServiceImpl implements PsiChekcResultService {
+public class PsiCheckResultServiceImpl implements PsiCheckResultService {
 
     @Autowired
     private PSICheckResultDao psiCheckResultDao;
@@ -29,4 +30,20 @@ public class PsiCheckResultServiceImpl implements PsiChekcResultService {
     public Double selectMaxPsi(long modelId) {
         return psiCheckResultDao.selectMaxPsi(modelId);
     }
+    
+    @Override
+    public Integer findMaxPsiTotal() {
+        return psiCheckResultDao.findMaxPsiTotal();
+    }
+
+	@Override
+	public int deletePSIByExperimentId(Long experimentId) {
+		return psiCheckResultDao.deletePSIByExperimentId(experimentId);
+	}
+
+	@Override
+	public int insertList(List<PSICheckResult> list) {
+		return psiCheckResultDao.insertList(list);
+	}
+
 }

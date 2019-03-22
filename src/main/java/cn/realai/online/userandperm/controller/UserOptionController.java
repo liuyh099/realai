@@ -3,6 +3,7 @@ package cn.realai.online.userandperm.controller;
 import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
+import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
 import cn.realai.online.userandperm.bo.MenuTreeNodeBO;
 import cn.realai.online.userandperm.business.RoleBusiness;
 import cn.realai.online.userandperm.business.UserOptionBusiness;
@@ -38,6 +39,8 @@ public class UserOptionController {
     private UserOptionBusiness userOptionBusiness;
     @Autowired
     private RoleBusiness roleBusiness;
+    @Autowired
+    private PsiCheckResultBussiness psiCheckResultBussiness;
 
 
     @PostMapping("login")
@@ -149,9 +152,10 @@ public class UserOptionController {
 
     @GetMapping("psiCheckNotice")
     @ApiOperation(value = "psi检测提醒接口")
-    public Result<Integer> psiCheckNotice() {
+    public Result<Boolean> psiCheckNotice() {
         try {
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            Boolean flag=psiCheckResultBussiness.psiCheckNotice();
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), flag);
         } catch (Exception e) {
             logger.error("psi检测提醒接口", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);

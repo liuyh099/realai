@@ -58,4 +58,11 @@ public interface VariableDataService {
      * @return
      */
     List<VariableData> findDoubleCreateVariableDataList(List<Long> variableIdList);
+
+    /**
+     * 获得变量名称
+     * @param variableId
+     * @return
+     */
+    VariableData getById(Long variableId);
 }

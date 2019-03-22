@@ -10,4 +10,10 @@ public interface PsiCheckResultBussiness {
     List<PsiResultVO> selectList(Long modelId);
 
     PsiCheckVO checkPsi(Long modelId);
+
+    /**
+     * psi检查
+     * @return
+     */
+    boolean psiCheckNotice();
 }

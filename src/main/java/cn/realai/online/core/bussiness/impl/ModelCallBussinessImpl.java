@@ -9,19 +9,26 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
+import cn.realai.online.core.bo.BatchRequestStructure;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
+import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.VariableData;
+import cn.realai.online.core.service.BatchRecordService;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.VariableDataService;
-import cn.realai.online.tool.modelcallthreadpool.BatchTask;
-import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
-import cn.realai.online.tool.modelcallthreadpool.TrainTask;
+import cn.realai.online.tool.modelcallthreadpool.BaseBatchTask;
+import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfCombo;
+import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfHetro;
+import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfHomo;
+import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfPSI;
+import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfPersonalInfo;
 import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
 import cn.realai.online.tool.modelcallthreadpool.TrainTask;
 import cn.realai.online.tool.redis.RedisClientTemplate;
+import cn.realai.online.util.SpringContextUtils;
 
 /**
  * @author lyh
@@ -44,9 +51,68 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
      * 处理每日跑批任务
      */
     @Override
-    public void runBatchDaily(Long experimentId, String redisKey, String type) {
-        BatchTask batchDailyTask = new BatchTask(experimentId, redisKey, type);
-        ModelCallPool.modelCallPool.execute(batchDailyTask);
+    public void runBatchDaily(Long experimentId, String redisKey, String type, String batchStr) {
+    	Long batchId = getBatchId(experimentId, batchStr);
+    	//读取预处理结果配置文件
+        BaseBatchTask bbt;
+        
+        if (BatchRequestStructure.TYPE_PERSONALCOMBORESULTSET.equals(type)) {
+        	bbt = new BatchTaskOfCombo(experimentId, batchId, redisKey);
+        } else if (BatchRequestStructure.TYPE_PERSONALHETRORESULTSET.equals(type)) {
+        	bbt = new BatchTaskOfHetro(experimentId,batchId, redisKey);
+        } else if (BatchRequestStructure.TYPE_PERSONALHOMORESULTSET.equals(type)) {
+        	bbt = new BatchTaskOfHomo(experimentId,batchId, redisKey);
+        } else if (BatchRequestStructure.TYPE_PERSONALINFORMATION.equals(type)) {
+        	bbt = new BatchTaskOfPersonalInfo(experimentId,batchId, redisKey);
+        } else if (BatchRequestStructure.TYPE_PSICHECKRESULT.equals(type)) {
+        	bbt = new BatchTaskOfPSI(experimentId,batchId, redisKey);
+        } else {
+        	logger.error("BatchTask run. 跑批数据类型不能识别. type{}, experimentId{}", type, experimentId);
+        	return ;
+        }
+        
+        ModelCallPool.modelCallPool.execute(bbt);
+    }
+    
+    private Long getBatchId(Long experimentId, String batchStr) {
+		String[] eidAndDate = batchStr.split("+");
+		long eid = Long.parseLong(eidAndDate[0]);
+		String date = eidAndDate[1];
+		
+		if (eid != experimentId.longValue()) {
+			throw new RuntimeException("BatchTask getBatchId. 实验id不相等. experimentId = " + experimentId + " , eid{} + = " + eid);
+		}
+		
+		BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
+		
+        BatchRecord batchRecord = batchRecordService.getBatchRecordOfDaily(eid, date, BatchRecord.BATCH_TYPE_DAILY);
+        if (batchRecord == null) {
+        	throw new RuntimeException("batchRecord getBatchId. 批次创建错误. eid = " + eid + " date =+ " + date);
+        }
+		return batchRecord.getId();
+	}
+    
+    @Override
+	public void runBatchOffline(Long experimentId, String redisKey, String type, String downUrl, Long batchId) {
+    	BaseBatchTask bbt;
+    	if (BatchRequestStructure.TYPE_PERSONALCOMBORESULTSET.equals(type)) {
+        	bbt = new BatchTaskOfCombo(experimentId,batchId, redisKey);
+        } else if (BatchRequestStructure.TYPE_PERSONALHETRORESULTSET.equals(type)) {
+        	bbt = new BatchTaskOfHetro(experimentId,batchId, redisKey);
+        } else if (BatchRequestStructure.TYPE_PERSONALHOMORESULTSET.equals(type)) {
+        	bbt = new BatchTaskOfHomo(experimentId,batchId, redisKey);
+        } else if (BatchRequestStructure.TYPE_PERSONALINFORMATION.equals(type)) {
+        	bbt = new BatchTaskOfPersonalInfo(experimentId,batchId, redisKey);
+        } else {
+        	logger.error("BatchTask run. 跑批数据类型不能识别. type{}, experimentId{}", type, experimentId);
+        	return ;
+        }
+    	
+    	ModelCallPool.modelCallPool.execute(bbt);
+    	
+    	if (downUrl != null && "".equals(downUrl)) {
+    		
+    	}
     }
 
     /*
@@ -72,6 +138,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
                         experimentId, redisKey, JSON.toJSONString(vd));
                 throw new RuntimeException("");
             }
+            vd.setDelete(VariableData.DELETE_NO);
         }
 
         int ret = variableDataService.insertVariableDataList(vdList);
@@ -79,7 +146,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
         //修改实验的预处理状态
         ret = experimentService.updatePreprocessStatus(experimentId, Experiment.PREFINISH_YES);
 
-        redisClientTemplate.delete(redisKey);
+        //redisClientTemplate.delete(redisKey);
 
         return ret;
     }

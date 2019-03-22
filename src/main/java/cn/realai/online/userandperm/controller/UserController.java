@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +44,6 @@ public class UserController {
 
     @GetMapping()
     @ApiOperation(value = "查询用户列表")
-    @RequiresPermissions("permission:user:list")
     public Result<PageBO<UserVO>> list(UserPageQuery pageQuery) {
         try {
             PageBO<UserBO> pageBO = userBusiness.list(pageQuery);
@@ -61,7 +61,6 @@ public class UserController {
     @GetMapping("checkName/{name}")
     @ApiOperation(value = "检查用户名（true表示检查通过）")
     @ApiImplicitParam(name = "name", value = "用户名", required = true, type = "path")
-    @RequiresPermissions("permission:user:checkName")
     public Result<Boolean> checkName(@PathVariable String name) {
         try {
             Boolean flag = userBusiness.checkUserName(name);
@@ -87,10 +86,11 @@ public class UserController {
 
     @PostMapping()
     @ApiOperation(value = "新增用户")
-    public Result<PageBO<UserVO>> add(UserAddVO userAddVO) {
+    public Result add(@Validated @RequestBody UserAddVO userAddVO) {
         try {
             UserBO userBO = new UserBO();
             BeanUtils.copyProperties(userAddVO, userBO);
+            userBO.setRoleId(userAddVO.getGroup());
             if (userBusiness.insert(userBO)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             } else {
@@ -138,7 +138,7 @@ public class UserController {
 
     @GetMapping("detail")
     @ApiOperation(value = "获得用户详情")
-    public Result<UserDetailVO> detail(IdVO idVO) {
+    public Result<UserDetailVO> detail(@Validated IdVO idVO) {
         try {
             UserBO userBO = userBusiness.detail(idVO.getId());
             UserDetailVO userDetailVO = new UserDetailVO();
@@ -153,7 +153,7 @@ public class UserController {
 
     @PutMapping()
     @ApiOperation(value = "更新用户")
-    public Result update(@RequestBody UserUpdateVO userUpdateVO) {
+    public Result update(@Validated @RequestBody UserUpdateVO userUpdateVO) {
         try {
             UserBO userbo = new UserBO();
             BeanUtils.copyProperties(userUpdateVO, userbo);
@@ -170,7 +170,7 @@ public class UserController {
 
     @PutMapping("updatePwd")
     @ApiOperation(value = "更新用户密码")
-    public Result updatePwd(@RequestBody UserUpdatePwdVO userUpdatePwdVO) {
+    public Result updatePwd(@Validated @RequestBody UserUpdatePwdVO userUpdatePwdVO) {
         try {
             UserBO userbo = new UserBO();
             BeanUtils.copyProperties(userUpdatePwdVO, userbo);
