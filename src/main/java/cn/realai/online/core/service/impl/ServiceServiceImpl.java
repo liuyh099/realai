@@ -14,6 +14,7 @@ import cn.realai.online.core.service.ServiceService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,7 +31,10 @@ public class ServiceServiceImpl implements ServiceService {
 
 	@Autowired
 	private DataCipherHandler dataCipherHandler;
-	
+
+	@Autowired
+	private ServiceLicenseInfoSource serviceLicenseInfoSource;
+
 	@Override
 	public cn.realai.online.core.entity.Service get(Long serviceId) {
 		return serviceDao.get(serviceId);
@@ -46,6 +50,7 @@ public class ServiceServiceImpl implements ServiceService {
 		BeanUtils.copyProperties(service, serviceBO);
 		return serviceBO;
 	}
+
 
 	@Override
 	public List<cn.realai.online.core.entity.Service> list(cn.realai.online.core.entity.Service service) {
@@ -68,12 +73,16 @@ public class ServiceServiceImpl implements ServiceService {
 			logger.error("服务名称已存在！");
 			throw new RuntimeException("服务名称已存在！");
 		}
+
+		searchService = new cn.realai.online.core.entity.Service();
 		searchService.setSecretKey(service.getSecretKey());
 		old = list(searchService);
 		if(old != null && old.size() > 0) {
 			logger.error("服务秘钥已被使用！");
 			throw new RuntimeException("服务秘钥已被使用！");
 		}
+
+		searchService = new cn.realai.online.core.entity.Service();
 		searchService.setTuningSecretKey(service.getTuningSecretKey());
 		old = list(searchService);
 		if(old != null && old.size() > 0) {
@@ -83,7 +92,10 @@ public class ServiceServiceImpl implements ServiceService {
 
 		ServiceDetail detail = new ServiceDetail();
 		detail.setDeployUseTimes("0");
-		service.setDetail(new DataCipherHandler().encryptData(detail, service.getSecretKey()));
+		service.setDetail(dataCipherHandler.encryptData(detail, service.getSecretKey()));
+		FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(service.getSecretKey());
+		service.setCreateTime(new Date().getTime());
+		service.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
 		return serviceDao.insert(service);
 	}
 
@@ -116,8 +128,8 @@ public class ServiceServiceImpl implements ServiceService {
 			try {
 				FileLicenseInfo fileLicenseInfo = serviceLicenseCheck.checkServiceLic(secretKey);
 				fileLicenseInfo.getRangeTimeLower();
-				service.setExpireDate(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), DateUtil.ymd));
-				service.setStartTime(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeLower(), DateUtil.ymd));
+				service.setExpireDate(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), LicenseConstants.DATE_FORMART));
+				service.setStartTime(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeLower(), LicenseConstants.DATE_FORMART));
 				service.setDeployTimesUpper(Integer.parseInt(fileLicenseInfo.getDeployTimesUpper()));
 			} catch (LicenseException e) {
 				logger.error("非法秘钥 secretKey："+secretKey, e);

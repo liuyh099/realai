@@ -7,9 +7,7 @@ import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.bussiness.ServiceBussiness;
 import cn.realai.online.core.entity.Service;
-import cn.realai.online.core.query.service.AddServiceQuery;
-import cn.realai.online.core.query.service.EditServiceQuery;
-import cn.realai.online.core.query.service.GetServiceDetailsQuery;
+import cn.realai.online.core.query.service.*;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.ServerNameSelectVO;
 import cn.realai.online.core.vo.service.*;
@@ -72,14 +70,14 @@ public class ServiceController {
     @ApiOperation(value="新增服务")
     public Result addService(@RequestBody AddServiceQuery addServiceQuery){
         ServiceBO serviceBO = new ServiceBO();
-        BeanUtils.copyProperties(addServiceQuery, serviceBO);
         try {
+            BeanUtils.copyProperties(addServiceQuery, serviceBO);
             if(!serviceBussiness.addService(serviceBO)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
-        } catch (LicenseException e) {
+        } catch (Exception e) {
             logger.error("新增服务异常！", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg()+e.getMessage(), null);
         }
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
     }
@@ -89,8 +87,14 @@ public class ServiceController {
     public Result editService(@RequestBody EditServiceQuery editServiceQuery){
         ServiceBO serviceBO = new ServiceBO();
         BeanUtils.copyProperties(editServiceQuery, serviceBO);
-        if(!serviceBussiness.editService(serviceBO)) {
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        try {
+            serviceBO.setId(editServiceQuery.getServiceId());
+            if(!serviceBussiness.editService(serviceBO)) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            }
+        } catch (Exception e) {
+            logger.error("编辑服务异常！", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg()+e.getMessage(), null);
         }
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
     }
@@ -101,29 +105,47 @@ public class ServiceController {
         ServiceBO serviceBO = new ServiceBO();
         ServiceVO serviceVO = new ServiceVO();
         try {
-            BeanUtils.copyProperties(getServiceDetailsQuery, serviceBO);
+            serviceBO.setId(getServiceDetailsQuery.getServiceId());
             serviceBO = serviceBussiness.getServiceDetails(serviceBO);
             BeanUtils.copyProperties(serviceBO, serviceVO);
         }catch (Exception e) {
             logger.error("获取服务详情异常！", e);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
         }
 
-        return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), serviceVO);
+        return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), serviceVO);
     }
+
+
+    @GetMapping("/list")
+    @ApiOperation(value="获取服务列表")
+    public Result<List<ServiceVO>> getServiceList(GetServiceListQuery getServiceListQuery){
+        ServiceBO serviceBO = new ServiceBO();
+        List<ServiceVO> serviceVOs = null;
+        try {
+            BeanUtils.copyProperties(getServiceListQuery, serviceBO);
+            serviceVOs = serviceBussiness.getServiceList(serviceBO);
+        }catch (Exception e) {
+            logger.error("获取服务详情异常！", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+        }
+
+        return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), serviceVOs);
+    }
+
 
     @PostMapping("/list/key")
     @ApiOperation(value="获取秘钥信息")
-    public Result<SecretKeyInfoVO> getSecretKeyInfo(@PathVariable String serviceKey){
+    public Result<SecretKeyInfoVO> getSecretKeyInfo(@RequestBody GetSecretKeyInfoQuery getSecretKeyInfoQuery){
         SecretKeyInfoVO secretKeyInfoVO = new SecretKeyInfoVO();
         try {
-            secretKeyInfoVO = serviceBussiness.getSecretKeyInfo(serviceKey);
+            secretKeyInfoVO = serviceBussiness.getSecretKeyInfo(getSecretKeyInfoQuery.getServiceKey());
         }catch (Exception e) {
             logger.error("获取服务详情异常！", e);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
         }
 
-        return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), secretKeyInfoVO);
+        return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),secretKeyInfoVO);
     }
 
 }

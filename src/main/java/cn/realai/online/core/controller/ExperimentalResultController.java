@@ -166,14 +166,24 @@ public class ExperimentalResultController {
 
     @GetMapping("thousandsFace/echartsData")
     @ApiOperation(value = "实验-千人千面 获取echarts 数据")
-    public Result echartsData(@Validated IdVO idVo) {
+    public Result<List<EchartsDataVo>> echartsData(@Validated IdVO idVo) {
         try {
-
+            List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId());
+            List<EchartsDataVo> result = null;
+            if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
+                for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {
+                    EchartsDataVo data = new EchartsDataVo();
+                    data.setName(sampleGroupingBO.getGroupName());
+                    data.setRate(sampleGroupingBO.getPositiveRatio());
+                    data.setTotal(sampleGroupingBO.getCount());
+                    result.add(data);
+                }
+            }
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
-            logger.error("实验评估-图片异常", e);
+            logger.error("实验-千人千面 获取echarts 数据异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
-        return null;
     }
 
     @GetMapping("thousandsFace/list")
@@ -245,7 +255,7 @@ public class ExperimentalResultController {
                 List<List<Double>> data = new ArrayList<>(list.size());
                 for (PersonalHomoResultSetBO tmp : list) {
                     x.add(tmp.getK());
-                    y.add(tmp.getVariableId());
+                    y.add(tmp.getVariableName());
                     List<Double> dataItem = new ArrayList<>(1);
                     dataItem.add(tmp.getWeight());
                     data.add(dataItem);

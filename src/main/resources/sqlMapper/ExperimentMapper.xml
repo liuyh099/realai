@@ -13,7 +13,8 @@
         <result column="x_table_heter" property="xtableHeterogeneousDataSource" jdbcType="VARCHAR"/>
         <result column="x_table_meaning" property="xtableMeaningDataSource" jdbcType="VARCHAR"/>
         <result column="verification_set" property="verificationSet" jdbcType="INTEGER"/>
-        <result column="sample_type" property="sampleSplitType" jdbcType="INTEGER"/>
+        <result column="valid_sample_type" property="validSampleType" jdbcType="INTEGER"/>
+        <result column="test_sample_type" property="testSampleType" jdbcType="INTEGER"/>
         <result column="train_ratio" property="trainRatio" jdbcType="INTEGER"/>
         <result column="test_ratio" property="testRatio" jdbcType="INTEGER"/>
         <result column="valid_ratio" property="validRatio" jdbcType="INTEGER"/>
@@ -35,7 +36,6 @@
         <result column="ks_validate_image_url" property="ksValidateImageUrl" jdbcType="VARCHAR"/>
         <result column="pre_finish" property="preFinish" jdbcType="INTEGER"/>
     </resultMap>
-
 
     <sql id="Base_Column_List">
 
@@ -77,7 +77,8 @@
     <update id="updateParam" parameterType="cn.realai.online.core.entity.Experiment">
         UPDATE experiment SET
         verification_set=#{verificationSet},
-        sample_type=#{sampleSplitType},
+        valid_sample_type=#{validSampleType},
+        test_sample_type=#{testSampleType},
         train_ratio=#{trainRatio},
         test_ratio=#{testRatio},
         valid_ratio=#{validRatio}
@@ -104,6 +105,7 @@
 		set status = #{status} 
 		where id = #{experimentId}
 	</update>
+
 
 
     <select id="findList" resultMap="ExperimentMap" parameterType="cn.realai.online.core.entity.Experiment">

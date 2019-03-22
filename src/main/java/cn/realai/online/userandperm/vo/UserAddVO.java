@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @ApiModel
 public class UserAddVO {
@@ -27,18 +29,18 @@ public class UserAddVO {
     private String phoneNumber;
     //角色名称
 
-    @NotBlank(message = "角色不能为空")
+    @NotNull(message = "角色不能为空")
     @ApiModelProperty(value = "角色ID")
-    private String group;
+    private Long group;
 
     @NotBlank(message = "密码不能为空")
-    @Length(min = 8, message = "密码最短8位")
+    @Pattern(regexp = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$",message = "密码至少8位，数字+字母")
     @ApiModelProperty(value = "密码")
     private String pwd;
 
     @Length(max = 100, message = "备注最大为100个字节")
     @ApiModelProperty(value = "备注")
-    private String notes;
+    private String note;
 
 
     public String getName() {
@@ -73,11 +75,11 @@ public class UserAddVO {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getGroup() {
+    public Long getGroup() {
         return group;
     }
 
-    public void setGroup(String group) {
+    public void setGroup(Long group) {
         this.group = group;
     }
 
@@ -89,11 +91,11 @@ public class UserAddVO {
         this.pwd = pwd;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getNote() {
+        return note;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setNote(String note) {
+        this.note = note;
     }
 }

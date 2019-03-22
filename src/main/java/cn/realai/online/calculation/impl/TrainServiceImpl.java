@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 
 import cn.realai.online.calculation.TrainService;
+import cn.realai.online.calculation.requestbo.DeleteExperimentRequestBO;
+import cn.realai.online.calculation.requestbo.DeployRequestBO;
 import cn.realai.online.calculation.requestbo.PreprocessRequestBO;
 import cn.realai.online.calculation.requestbo.TrainRequestBO;
-import cn.realai.online.common.Constant;
 import cn.realai.online.common.config.Config;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.VariableData;
@@ -29,10 +30,10 @@ public class TrainServiceImpl implements TrainService {
      */
     @Override
     public void preprocess(Experiment experiment) {
-        PreprocessRequestBO prbo = new PreprocessRequestBO(Constant.TASK_PREPROCESS);
+        PreprocessRequestBO prbo = new PreprocessRequestBO();
         ConvertJavaBean.convertJavaBean(prbo, experiment);
         String url = config.getUrl();
-        String ret = HttpUtil.postRequest(url, JSON.toJSONString(prbo), String.class);
+        String ret = HttpUtil.postRequest(url, JSON.toJSONString(prbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(prbo));
         }
@@ -42,18 +43,25 @@ public class TrainServiceImpl implements TrainService {
 	 * 训练
 	 */
 	@Override
-	public int training(Experiment experiment, Long oldEid, List<VariableData> homoList, List<VariableData> hetroList) {
+	public int training(Experiment experiment, Long oldEid, List<VariableData> homoList, 
+			List<VariableData> hetroList, int delOrAdd) {
 		TrainRequestBO trbo = new TrainRequestBO();
 		ConvertJavaBean.convertJavaBean(trbo, experiment);
 		trbo.setOldExperimentId(oldEid);
-		trbo.setDeleteColumnsHomo(getVariableDataName(homoList));
-		trbo.setDeleteColumnsHetero(getVariableDataName(hetroList));
+		trbo.setExperimentId(experiment.getId());
+		if (delOrAdd == 1) {
+			trbo.setDeleteHomo(getVariableDataName(homoList));
+			trbo.setDeleteHetero(getVariableDataName(hetroList));
+		} else if (delOrAdd == 2) {
+			trbo.setNeedColumnsHomo(getVariableDataName(homoList));
+			trbo.setNeedColumnsHetero(getVariableDataName(hetroList));
+		}
 		String url = config.getUrl();
-		/*String ret = HttpUtil.postRequest(url, JSON.toJSONString(trbo), String.class);
+		String ret = HttpUtil.postRequest(url, JSON.toJSONString(trbo));
 		if (ret == null) {
 			throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(trbo));
-		}*/
-		return 0;
+		}
+		return 1;
 	}
 	
 	private List<String> getVariableDataName(List<VariableData> list) {
@@ -65,5 +73,35 @@ public class TrainServiceImpl implements TrainService {
 			strList.add(vd.getName());
 		}
 		return strList;
+	}
+
+	@Override
+	public int experimentDeploy(Long experimentId) {
+		DeployRequestBO drbo = new DeployRequestBO();
+		drbo.setExperimentId(experimentId);
+        String url = config.getUrl();
+        String ret = HttpUtil.postRequest(url, experimentId + "");
+        if (ret == null) {
+            throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(drbo));
+        }
+        return 1;
+	}
+
+	@Override
+	public int runBatchOfOffline() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteExperiment(Long experimentId) {
+		DeleteExperimentRequestBO derbo = new DeleteExperimentRequestBO();
+		derbo.setExperimentId(experimentId);
+        String url = config.getUrl();
+        String ret = HttpUtil.postRequest(url, experimentId + "");
+        if (ret == null) {
+            throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(derbo));
+        }
+		return 1;
 	}
 }

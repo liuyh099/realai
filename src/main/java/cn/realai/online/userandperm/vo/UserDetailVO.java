@@ -29,7 +29,7 @@ public class UserDetailVO {
     private String group;
 
     @ApiModelProperty(value = "备注")
-    private String notes;
+    private String note;
 
 
     public String getName() {
@@ -80,11 +80,14 @@ public class UserDetailVO {
         this.group = group;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getNote() {
+        return note;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setNote(String note) {
+        this.note = note;
+    }
+    public String getNotes(){
+        return this.note;
     }
 }

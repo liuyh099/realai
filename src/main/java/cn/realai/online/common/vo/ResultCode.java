@@ -4,6 +4,8 @@ public enum ResultCode {
 
     SUCCESS(0),
 
+    PYTHON_SUCCESS(200),
+    
     BLENDING_ERROR(201),
 
     PARAM_ERROR(400),

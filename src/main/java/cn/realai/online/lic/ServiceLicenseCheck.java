@@ -4,6 +4,8 @@ import cn.realai.online.core.entity.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Description: 服务秘钥检查相关接口
  * <br>
@@ -40,6 +42,7 @@ public class ServiceLicenseCheck {
     public FileLicenseInfo checkServiceLic(String secretKey) throws LicenseException {
         return serviceLicenseInfoSource.checkSource(secretKey);
     }
+
 
     /**
      * 服务使用(强制调优)

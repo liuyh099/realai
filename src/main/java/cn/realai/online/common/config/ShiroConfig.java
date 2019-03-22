@@ -82,7 +82,7 @@ public class ShiroConfig {
     }
 
 
-    @Bean
+    @Bean("myRedisCacheManager")
     public RedisCacheManager cacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());

@@ -124,7 +124,9 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         //修改试验状态
         int ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
         ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
-        trainService.training(experimentBO, 0L, deleteVariableData.getHomoList(), deleteVariableData.getHetroList());
+        
+        //训练    
+        trainService.training(experimentBO, 0L, deleteVariableData.getHomoList(), deleteVariableData.getHetroList(), 1);
         return ret;
     }
 
@@ -311,6 +313,17 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         query.setPid(id);
         List<PersonalComboResultSet> list = personalComboResultSetService.findList(query);
         List<PersonalComboResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalComboResultSetBO.class);
+        for (PersonalComboResultSetBO boTep : result) {
+            VariableData variableData = variableDataService.getById(boTep.getVariableId1());
+            boTep.setVariableName1(variableData.getName());
+            boTep.setVariableMeaning1(variableData.getMeaning());
+            VariableData variableData2 = variableDataService.getById(boTep.getVariableId2());
+            boTep.setVariableName2(variableData2.getName());
+            boTep.setVariableMeaning2(variableData2.getMeaning());
+            VariableData variableData3 = variableDataService.getById(boTep.getVariableId3());
+            boTep.setVariableName3(variableData3.getName());
+            boTep.setVariableMeaning3(variableData3.getMeaning());
+        }
         return result;
     }
 
@@ -321,7 +334,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         PageHelper.startPage(1, 10);
         List<PersonalHetroResultSet> list = personalHetroResultSetService.findList(query);
         List<PersonalHetroResultSetBO> bo = JSON.parseArray(JSON.toJSONString(list), PersonalHetroResultSetBO.class);
-        //TODO 去关联变量表数据
+        for (PersonalHetroResultSetBO boTep : bo) {
+            VariableData variableData = variableDataService.getById(boTep.getVariableId());
+            boTep.setVariableName(variableData.getName());
+            boTep.setVariableMeaning(variableData.getMeaning());
+        }
         return bo;
     }
 
@@ -332,8 +349,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         Page page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<PersonalHetroResultSet> list = personalHetroResultSetService.findList(queryCondition);
         List<PersonalHetroResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalHetroResultSetBO.class);
-        //TODO 去关联变量表数据
-
+        for (PersonalHetroResultSetBO boTep : result) {
+            VariableData variableData = variableDataService.getById(boTep.getVariableId());
+            boTep.setVariableName(variableData.getName());
+            boTep.setVariableMeaning(variableData.getMeaning());
+        }
         PageBO<PersonalHetroResultSetBO> pageBO = new PageBO<PersonalHetroResultSetBO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
         return pageBO;
     }
@@ -345,7 +365,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         Page page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<PersonalHomoResultSet> list = personalHomoResultSetService.findList(queryCondition);
         List<PersonalHomoResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalHomoResultSetBO.class);
-        //TODO 去关联变量表数据
+        for (PersonalHomoResultSetBO boTep : result) {
+            VariableData variableData = variableDataService.getById(boTep.getVariableId());
+            boTep.setVariableName(variableData.getName());
+            boTep.setVariableMeaning(variableData.getMeaning());
+        }
 
         PageBO<PersonalHomoResultSetBO> pageBO = new PageBO<PersonalHomoResultSetBO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
         return pageBO;
@@ -356,6 +380,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public List<PersonalHomoResultSetBO> listDataDetailSameCharts(Long id) {
         List<PersonalHomoResultSet> list = personalHomoResultSetService.listCharts(id);
         List<PersonalHomoResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalHomoResultSetBO.class);
+        for (PersonalHomoResultSetBO boTep : result) {
+            VariableData variableData = variableDataService.getById(boTep.getVariableId());
+            boTep.setVariableName(variableData.getName());
+            boTep.setVariableMeaning(variableData.getMeaning());
+        }
         return result;
     }
 
@@ -451,6 +480,21 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         List<Experiment> list = experimentService.findList(experiment);
         List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
         return result;
+    }
+
+    @Override
+    public ExperimentBO getPublishExperimentByServerId(Long id) {
+        Experiment experiment = new Experiment();
+        experiment.setServiceId(id);
+        experiment.setReleasStatus(Experiment.RELEAS_YES);
+        List<Experiment> list = experimentService.findList(experiment);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        Experiment experiment1 = list.get(0);
+        ExperimentBO bo = new ExperimentBO();
+        BeanUtils.copyProperties(experiment1, bo);
+        return bo;
     }
 
 
