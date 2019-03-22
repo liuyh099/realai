@@ -9,8 +9,8 @@ import javax.validation.constraints.NotNull;
 public class FaceListDataQuery extends PageQuery {
 
     @ApiModelProperty(value = "实验id")
-    @NotNull(message = "请先选择实验")
-    private Long trainId;
+    @NotNull(message = "id不能为空")
+    private Long id;
 
     @ApiModelProperty(value = "分组")
     private Long groupId;
@@ -25,7 +25,7 @@ public class FaceListDataQuery extends PageQuery {
     private String phone;
 
     @ApiModelProperty(value = "ID")
-    private String id;
+    private String personalId;
 
     @ApiModelProperty(value = "进件开始日期(时间戳毫秒)")
     private Long inputStartDate;
@@ -33,12 +33,32 @@ public class FaceListDataQuery extends PageQuery {
     @ApiModelProperty(value = "进件结束日期(时间戳毫秒)")
     private Long inputStartEnd;
 
-    public Long getTrainId() {
-        return trainId;
+    @ApiModelProperty(value = "批次Id")
+    private Long batchId;
+
+    public Long getBatchId() {
+        return batchId;
     }
 
-    public void setTrainId(Long trainId) {
-        this.trainId = trainId;
+    public void setBatchId(Long batchId) {
+        this.batchId = batchId;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPersonalId() {
+        return personalId;
+    }
+
+    public void setPersonalId(String personalId) {
+        this.personalId = personalId;
     }
 
     public Long getGroupId() {
@@ -73,13 +93,6 @@ public class FaceListDataQuery extends PageQuery {
         this.phone = phone;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Long getInputStartDate() {
         return inputStartDate;

@@ -62,10 +62,12 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Autowired
     private PersonalHomoResultSetService personalHomoResultSetService;
-    
+
     @Autowired
     private ModelPerformanceService modelPerformanceService;
 
+    @Autowired
+    private SampleGroupingService sampleGroupingService;
 
 
     /**
@@ -110,7 +112,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     @Transactional(readOnly = false)
     public int train(long experimentId) {
-    	//获取训练锁
+        //获取训练锁
         MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
         if (!mlock.tryLock()) {
             return -1;
@@ -118,7 +120,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
         //查询需要删除的列
         HomoAndHetroBO deleteVariableData = variableDataService.selectDeleteByExperimentId(experimentId);
-        
+
         //修改试验状态
         int ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
         ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
@@ -272,7 +274,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     public PageBO<PersonalInformationBO> personalInformationPage(FaceListDataQuery query, Integer batchType) {
 
-        BatchRecord batchRecord = getBatchRecord(query.getTrainId(), batchType);
+        BatchRecord batchRecord = getBatchRecord(query, batchType);
         if (ObjectUtils.isEmpty(batchRecord)) {
             return new PageBO<PersonalInformationBO>(query);
         }
@@ -286,10 +288,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         return pageBO;
     }
 
-    private BatchRecord getBatchRecord(Long trainId, Integer batchType) {
+    private BatchRecord getBatchRecord(FaceListDataQuery query, Integer batchType) {
         BatchRecord batchRecord = new BatchRecord();
-        batchRecord.setExperimentId(trainId);
+        batchRecord.setExperimentId(query.getId());
         batchRecord.setBatchType(batchType);
+        batchRecord.setId(query.getBatchId());
         batchRecord = batchRecordService.getByEntity(batchRecord);
         return batchRecord;
     }
@@ -377,6 +380,16 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Override
     public List<SampleGroupingBO> getGroupOptionName(Long experimentId) {
+        List<SampleGrouping> sampleGroupings = sampleGroupingService.findListByExperimentId(experimentId);
+        List<SampleGroupingBO> sampleGroupingBOList = JSON.parseArray(JSON.toJSONString(sampleGroupings), SampleGroupingBO.class);
+        return sampleGroupingBOList;
+    }
+
+    @Override
+    public List<BatchRecordBO> findBatchRecordBOList(BatchRecordBO batchRecordBO, boolean isTranFlag) {
+
+        List<BatchRecord> batchRecords = batchRecordService.findBatchRecordList(batchRecordBO, isTranFlag);
+
         return null;
     }
 
@@ -389,7 +402,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         personal.setPersonalName(query.getName());
         personal.setPersonalCardId(query.getIdCard());
         personal.setPhoneNum(query.getPhone());
-        personal.setPersonalId(query.getId());
+        personal.setPersonalId(query.getPersonalId());
         personal.setInputStartDate(query.getInputStartDate());
         personal.setInputEndDate(query.getInputStartEnd());
         return personal;

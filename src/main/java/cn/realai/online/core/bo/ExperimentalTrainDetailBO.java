@@ -1,7 +1,5 @@
 package cn.realai.online.core.bo;
 
-import cn.realai.online.common.page.PageBO;
-import cn.realai.online.core.vo.VariableDataVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

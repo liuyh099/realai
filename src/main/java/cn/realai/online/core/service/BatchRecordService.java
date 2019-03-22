@@ -1,6 +1,7 @@
 package cn.realai.online.core.service;
 
 import cn.realai.online.core.bo.BatchListBO;
+import cn.realai.online.core.bo.BatchRecordBO;
 import cn.realai.online.core.entity.BatchRecord;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +24,11 @@ public interface BatchRecordService {
 	//查询离线跑批列表
 	List<BatchListBO> selectList(@Param("batchListBO") BatchListBO batchListBO, @Param("minTime") Long minTime, @Param("maxTime") Long maxTime);
 
+	/**
+	 * 查询批次数据
+	 * @param batchRecordBO
+	 * @param isTranFlag
+	 * @return
+	 */
+    List<BatchRecord> findBatchRecordList(BatchRecordBO batchRecordBO, boolean isTranFlag);
 }
