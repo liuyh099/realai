@@ -6,6 +6,7 @@ import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
+import cn.realai.online.core.bo.ExperimentalTrainDoubleCreateBO;
 import cn.realai.online.core.bo.VariableDataBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.bussiness.SSHBusinness;
@@ -356,12 +357,18 @@ public class ExperimentalTrainController {
     @PutMapping("/doubleCreate")
     @ApiOperation(value = "二次创建实验")
     @ResponseBody
-    public Result doubleCreate(@RequestBody ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo) {
-        return null;
+    public Result doubleCreate(@Validated ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo) {
+        try {
+            ExperimentalTrainDoubleCreateBO bo =JSON.parseObject(JSON.toJSONString(experimentalTrainDoubleCreateVo), ExperimentalTrainDoubleCreateBO.class);
+            experimentalTrainBussiness.doubleCreate(bo);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
+        } catch (Exception e) {
+            logger.error("二次创建实验异常",e);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
+        }
     }
 
     @PutMapping("/testPreprocess/{experimentId}")
-    @ApiOperation(value = "二次创建实验")
     @ResponseBody
     public Result testPreprocess(@PathVariable long experimentId) {
         try {

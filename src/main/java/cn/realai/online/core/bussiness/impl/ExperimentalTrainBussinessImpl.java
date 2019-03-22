@@ -10,7 +10,7 @@ import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.IdQuery;
 import cn.realai.online.core.service.*;
-
+import cn.realai.online.util.UserUtils;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -389,6 +389,41 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public List<BatchRecordBO> findBatchRecordBOList(BatchRecordBO batchRecordBO, boolean isTranFlag) {
 
         List<BatchRecord> batchRecords = batchRecordService.findBatchRecordList(batchRecordBO, isTranFlag);
+
+        return null;
+    }
+
+    @Override
+    public Boolean doubleCreate(ExperimentalTrainDoubleCreateBO bo) {
+        Experiment experiment = experimentService.selectExperimentById(bo.getTrainId());
+        if(experiment==null){
+            return false;
+        }
+        experiment.setId(null);
+        experiment.setName(experiment.getName()+"-01");
+        experiment.setStatus(Experiment.STATUS_PARAM);
+        experiment.setReleasStatus(Experiment.RELEAS_NO);
+        experiment.setCreateTime(System.currentTimeMillis());
+        experiment.setTrainingTime(null);
+        experiment.setReleaseTime(null);
+        experiment.setTuningCount(0);
+        experiment.setCreateUserId(UserUtils.getUser().getId());
+        experiment.setRemark(null);
+        experiment.setSampleReview(null);
+        experiment.setModelUrl(null);
+        experiment.setSegmentationStatisticsImageUrl(null);
+        experiment.setBadTopCountImageUrl(null);
+        experiment.setRocTestImageUrl(null);
+        experiment.setRocTrainImageUrl(null);
+        experiment.setRocValidateImageUrl(null);
+        experiment.setKsTestImageUrl(null);
+        experiment.setKsTrainImageUrl(null);
+        experiment.setKsValidateImageUrl(null);
+        experiment.setPreFinish(1);
+
+        //构建参数
+//        Valida
+//        variableDataService.findList()；
 
         return null;
     }
