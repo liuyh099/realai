@@ -27,7 +27,12 @@ public class ServiceServiceImpl implements ServiceService {
 
 	@Autowired
 	private ServiceLicenseCheck serviceLicenseCheck;
-	
+
+	@Override
+	public cn.realai.online.core.entity.Service get(Long serviceId) {
+		return serviceDao.get(serviceId);
+	}
+
 	@Override
 	public ServiceBO selectServiceById(long serviceId) {
 		cn.realai.online.core.entity.Service service = serviceDao.get(serviceId);

@@ -14,6 +14,7 @@ import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.ServerNameSelectVO;
 import cn.realai.online.core.vo.service.*;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,10 +40,15 @@ public class ServiceController {
 
     @GetMapping("/select")
     @ApiOperation(value="查询服务下拉选项")
-    public Result<List<ServerNameSelectVO>> getSelect(){
+    @ApiImplicitParam(name = "status", value = "服务状态 1:上线 2：下线", required = false, dataType = "Integer", paramType = "query")
+    public Result<List<ServerNameSelectVO>> getSelect(@RequestParam(value="status", required = false) Integer status){
         List<ServerNameSelectVO> serverNameSelectVOs = new ArrayList<>();
         try {
-            List<Service> services = serviceService.list(new Service());
+            Service service = new Service();
+            if (status != null) {
+                service.setStatus(status);
+            }
+            List<Service> services = serviceService.list(service);
             if(services != null && services.size() > 0) {
                 for (Service s : services) {
                     ServerNameSelectVO sv = new ServerNameSelectVO();
@@ -54,13 +60,12 @@ public class ServiceController {
             }
         }catch (Exception e) {
             logger.error("查询服务下拉选项异常！", e);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
         }
 
 
-        return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), serverNameSelectVOs);
+        return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), serverNameSelectVOs);
     }
-
 
     @PostMapping("/service/list")
     @ApiOperation(value="新增服务")

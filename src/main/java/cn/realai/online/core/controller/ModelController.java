@@ -129,7 +129,7 @@ public class ModelController {
 
 
     @GetMapping("/checkPsi/{modelId}")
-    @ApiOperation(value = "模型调优-检测PSI")
+    @ApiOperation(value = "模型调优-检测PSI是否可以点击")
     @ApiImplicitParam(name = "modelId", value = "模型ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
     public Result<PsiCheckVO> checkPsi(@PathVariable Long modelId) {
@@ -143,7 +143,7 @@ public class ModelController {
     }
 
     @GetMapping("/selectPsiList/{modelId}")
-    @ApiOperation(value = "根据模型ID获取PSI结果集")
+    @ApiOperation(value = "模型调优-点击检测PSI获取PSI结果集")
     @ApiImplicitParam(name = "modelId", value = "模型ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
     public Result<List<PsiResultVO>> selectPsiList(@PathVariable Long modelId) {

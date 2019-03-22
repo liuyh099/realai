@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface ServiceService {
 
+	Service get(Long serviceId);
+
 	ServiceBO selectServiceById(long serviceId);
 
 	List<Service> list(Service service);

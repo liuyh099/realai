@@ -8,6 +8,7 @@ import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.query.OfflineBatchListQuery;
 import cn.realai.online.core.service.BatchRecordService;
 import cn.realai.online.core.service.ExperimentService;
+import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.OfflineBatchCreateVO;
 import cn.realai.online.core.vo.OfflineBatchListVO;
 import cn.realai.online.util.DateUtil;
@@ -42,6 +43,8 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
     private BatchRecordService batchRecordService;
     @Autowired
     private ExperimentService experimentService;
+    @Autowired
+    private ServiceService serviceService;
 
 
     @Override
@@ -108,9 +111,11 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
             }
         }
         batchRecordService.insert(record);
-        log.warn("新增的recordId:" + record.getId());
-        //todo 更新服务跑批次数
 
+        //todo 更新服务离线跑批次数
+        cn.realai.online.core.entity.Service service = serviceService.get(createVO.getServiceId());
+        service.setBatchTimes(service.getBatchTimes() + 1);
+        serviceService.update(service);
         return record.getId();
     }
 }
