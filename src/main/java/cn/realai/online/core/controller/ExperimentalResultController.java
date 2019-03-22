@@ -245,7 +245,7 @@ public class ExperimentalResultController {
                 List<List<Double>> data = new ArrayList<>(list.size());
                 for (PersonalHomoResultSetBO tmp : list) {
                     x.add(tmp.getK());
-                    y.add(tmp.getVariableId());
+                    y.add(tmp.getVariableName());
                     List<Double> dataItem = new ArrayList<>(1);
                     dataItem.add(tmp.getWeight());
                     data.add(dataItem);

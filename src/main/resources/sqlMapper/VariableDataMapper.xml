@@ -34,6 +34,12 @@
         </foreach>
     </insert>
 
+    <select id="getById" resultMap="VariableDataMap" parameterType="java.lang.Long">
+        select *
+		from variable_data
+		where id =#{id}
+    </select>
+
     <select id="findListByExperimentId" resultMap="VariableDataMap">
 		select *
 		from variable_data

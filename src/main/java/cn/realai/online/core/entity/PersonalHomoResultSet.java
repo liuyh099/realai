@@ -24,7 +24,7 @@ public class PersonalHomoResultSet {
     private String personalId;
 
     //变量名(Y轴)
-    private String variableId;
+    private Long variableId;
 
     //值
     private String value;
@@ -83,11 +83,11 @@ public class PersonalHomoResultSet {
         this.personalId = personalId;
     }
 
-    public String getVariableId() {
+    public Long getVariableId() {
         return variableId;
     }
 
-    public void setVariableId(String variableId) {
+    public void setVariableId(Long variableId) {
         this.variableId = variableId;
     }
 
