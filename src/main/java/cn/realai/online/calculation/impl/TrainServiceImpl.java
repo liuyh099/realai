@@ -43,13 +43,19 @@ public class TrainServiceImpl implements TrainService {
 	 * 训练
 	 */
 	@Override
-	public int training(Experiment experiment, Long oldEid, List<VariableData> homoList, List<VariableData> hetroList) {
+	public int training(Experiment experiment, Long oldEid, List<VariableData> homoList, 
+			List<VariableData> hetroList, int delOrAdd) {
 		TrainRequestBO trbo = new TrainRequestBO();
 		ConvertJavaBean.convertJavaBean(trbo, experiment);
 		trbo.setOldExperimentId(oldEid);
 		trbo.setExperimentId(experiment.getId());
-		trbo.setDeleteHomo(getVariableDataName(homoList));
-		trbo.setDeleteHetero(getVariableDataName(hetroList));
+		if (delOrAdd == 1) {
+			trbo.setDeleteHomo(getVariableDataName(homoList));
+			trbo.setDeleteHetero(getVariableDataName(hetroList));
+		} else if (delOrAdd == 2) {
+			trbo.setNeedColumnsHomo(getVariableDataName(homoList));
+			trbo.setNeedColumnsHetero(getVariableDataName(hetroList));
+		}
 		String url = config.getUrl();
 		String ret = HttpUtil.postRequest(url, JSON.toJSONString(trbo));
 		if (ret == null) {

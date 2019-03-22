@@ -32,6 +32,7 @@ public class BatchTaskOfHetro extends BaseBatchTask {
     	
     	PersonalHetroResultSetService personalHetroResultSetService = SpringContextUtils.getBean(PersonalHetroResultSetService.class);
     	personalHetroResultSetService.insertList(list);
+    	redisClientTemplate.delete(redisKey);
 	}
 
 }
