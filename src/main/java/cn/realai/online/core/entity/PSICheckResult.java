@@ -13,24 +13,19 @@ public class PSICheckResult {
     private double psi;
 
     //变量Id
-    private String variableId;
+    private Long variableId;
+    
+    //变量类型
+    private int variableType;
+    
+    //变量名称
+    private String variableName;
 
     private long experimentId;
 
     //预警标志
     private int aler; //1.不预警 2.预警
     
-    //python返回的批次标记字段，只做解析不需要入库
-    private String batchStr;
-
-    public String getBatchStr() {
-        return batchStr;
-    }
-
-    public void setBatchStr(String batchStr) {
-        this.batchStr = batchStr;
-    }
-
     public static enum STATUS {
         YES(1, "不预警"),
         NO(2, "不预警");
@@ -69,15 +64,15 @@ public class PSICheckResult {
         this.psi = psi;
     }
 
-    public String getVariableId() {
-        return variableId;
-    }
+    public Long getVariableId() {
+		return variableId;
+	}
 
-    public void setVariableId(String variableId) {
-        this.variableId = variableId;
-    }
+	public void setVariableId(Long variableId) {
+		this.variableId = variableId;
+	}
 
-    public long getExperimentId() {
+	public long getExperimentId() {
         return experimentId;
     }
 
@@ -85,11 +80,28 @@ public class PSICheckResult {
         this.experimentId = experimentId;
     }
 
-    public int getAler() {
+    public String getVariableName() {
+		return variableName;
+	}
+
+	public void setVariableName(String variableName) {
+		this.variableName = variableName;
+	}
+
+	public int getAler() {
         return aler;
     }
 
     public void setAler(int aler) {
         this.aler = aler;
     }
+
+	public int getVariableType() {
+		return variableType;
+	}
+
+	public void setVariableType(int variableType) {
+		this.variableType = variableType;
+	}
+    
 }

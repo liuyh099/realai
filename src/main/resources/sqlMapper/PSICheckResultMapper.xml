@@ -14,6 +14,19 @@
         VALUE (#{psi},#{variableId},#{experimentId},#{aler})
     </insert>
 
+	<insert id="insertList">
+		INSERT INTO psi_check_result (psi,variable_id,experiment_id,aler)
+		values
+		<foreach collection="list" open="(" close=")" separator="," item="psi">
+			#{psi.psi}, #{psi.variable_id}, #{psi.experiment_id}, #{psi.aler}
+		</foreach>
+	</insert>
+
+	<delete id="deletePSIByExperimentId">
+		delete 
+		from psi_check_result 
+		where experiment_id = #{experimentId}
+	</delete>
 
     <update id="update" parameterType="cn.realai.online.core.entity.PSICheckResult">
         UPDATE psi_check_result
@@ -25,7 +38,6 @@
             id =#{id}
         </where>
     </update>
-
 
     <select id="get" resultMap="PSICheckResultMap" parameterType="java.lang.Long">
         SELECT * from psi_check_result
@@ -48,6 +60,7 @@
         </where>
     </select>
 
+
     <resultMap type="cn.realai.online.core.bo.PsiResultBO" id="PsiResultMap">
         <result column="psiId" property="psiId" jdbcType="BIGINT"/>
         <result column="psi" property="psi" jdbcType="DECIMAL"/>
@@ -65,6 +78,5 @@
         </where>
         order by psi.id
     </select>
-
 
 </mapper>

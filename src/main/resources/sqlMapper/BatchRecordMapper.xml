@@ -171,5 +171,13 @@
         </where>
     </select>
 
+	<select id="getBatchRecordByEidAndDate" resultMap="BatshRecordMap">
+    	select * 
+    	from batch_record
+    	where experiment_id = #{eid}
+		and FROM_UNIXTIME(create_time/1000,'%Y%m%d') = #{date}
+		and batchType = #{batchType}
+    </select>
+
 
 </mapper>

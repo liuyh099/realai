@@ -1,5 +1,7 @@
 package cn.realai.online.calculation.requestbo;
 
+import cn.realai.online.common.Constant;
+
 /**
  * 预测类请求实体
  *
@@ -11,7 +13,7 @@ public class PreprocessRequestBO {
     private long id;
 
     //命令
-    private String command;
+    private final String command = Constant.COMMAND_PREPROCESS;
 
     //x表异质数据源
     private String xtableHeterogeneousDataSource;
@@ -25,10 +27,6 @@ public class PreprocessRequestBO {
     //x表含义对照数据源
     private String xtableMeaningDataSource;
 
-    public PreprocessRequestBO(String command) {
-        this.command = command;
-    }
-
     public long getId() {
         return id;
     }
@@ -40,10 +38,6 @@ public class PreprocessRequestBO {
 
     public String getCommand() {
         return command;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
     }
 
     public String getXtableHeterogeneousDataSource() {
