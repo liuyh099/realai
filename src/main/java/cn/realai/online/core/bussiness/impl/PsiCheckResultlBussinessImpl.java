@@ -49,4 +49,13 @@ public class PsiCheckResultlBussinessImpl implements PsiCheckResultBussiness {
         checkVO.setFlag(maxPsi > 0.1);
         return checkVO;
     }
+
+    @Override
+    public boolean psiCheckNotice() {
+        Integer result = psiChekcResultService.findMaxPsiTotal();
+        if (result > 0) {
+            return true;
+        }
+        return false;
+    }
 }

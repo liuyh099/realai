@@ -46,6 +46,12 @@
         </where>
     </select>
 
+    <select id="findMaxPsiTotal" resultType="java.lang.Integer">
+        SELECT Count(0) FROM psi_check_result
+        where
+        psi>0.1
+    </select>
+
     <select id="selectMaxPsi" resultType="double" parameterType="java.lang.Long">
         select ifnull(max(psi), 0) from psi_check_result as psi
         join model as m on psi.experiment_id = m.experiment_id

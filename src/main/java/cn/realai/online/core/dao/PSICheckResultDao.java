@@ -26,4 +26,9 @@ public interface PSICheckResultDao {
 
 	int insertList(@Param("list")List<PSICheckResult> list);
 
+	/**
+     * 查询有没有PSi 大于0.1
+     * @return
+     */
+    Integer findMaxPsiTotal();
 }
