@@ -29,4 +29,9 @@ public class PsiCheckResultServiceImpl implements PsiChekcResultService {
     public Double selectMaxPsi(long modelId) {
         return psiCheckResultDao.selectMaxPsi(modelId);
     }
+
+    @Override
+    public Integer findMaxPsiTotal() {
+        return psiCheckResultDao.findMaxPsiTotal();
+    }
 }

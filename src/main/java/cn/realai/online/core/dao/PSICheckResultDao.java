@@ -22,4 +22,9 @@ public interface PSICheckResultDao {
     //查询PSI列表
     List<PsiResultBO> selectList(@Param("modelId") Long modelId);
 
+    /**
+     * 查询有没有PSi 大于0.1
+     * @return
+     */
+    Integer findMaxPsiTotal();
 }
