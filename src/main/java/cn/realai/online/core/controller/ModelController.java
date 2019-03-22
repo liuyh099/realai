@@ -11,6 +11,7 @@ import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.query.ModelListQuery;
 import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.vo.*;
+import cn.realai.online.lic.ServiceLicenseCheck;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -43,6 +44,8 @@ public class ModelController {
     private ModelService modelService;
     @Autowired
     private PsiCheckResultBussiness psiCheckResultBusiness;
+    @Autowired
+    private ServiceLicenseCheck serviceLicenseCheck;
 
     @GetMapping("/list")
     @ApiOperation(value = "查询模型列表")
@@ -153,12 +156,18 @@ public class ModelController {
         }
     }
 
-    @PostMapping("/forceUpdateModel")
-    @ApiOperation(value = "模型调优-强制调优")
+    @PostMapping("/checkSecurityKey")
+    @ApiOperation(value = "模型调优-强制调优校验密钥")
     @ApiImplicitParam(name = "pkstr", value = "密钥串", required = true, dataType = "String", paramType = "query")
     @ResponseBody
-    public Result<Void> forceUpdateModel(@RequestParam String pkstr) {
-        return null;
+    public Result<Void> checkSecurityKey(@RequestParam String pkstr) {
+        try {
+            serviceLicenseCheck.checkServiceLic(pkstr);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+        } catch (Exception e) {
+            log.error("根据模型ID获取PSI结果集异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
+        }
     }
 
 

@@ -149,7 +149,8 @@
 		ep.id as experimentId,
 		ep.name as experimentName,
 		sv.id as serviceId,
-		sv.name as serviceName
+		sv.name as serviceName,
+        sv.batch_times as batchTimes
 		from service as sv
 		left join experiment as ep on ep.service_id = sv.id and ep.releas_status = #{releaseStatus}
 		<where>

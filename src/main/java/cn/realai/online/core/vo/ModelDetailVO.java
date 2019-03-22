@@ -29,9 +29,6 @@ public class ModelDetailVO {
     @ApiModelProperty(value = "来源实验名称")
     private String experimentName;
 
-    @ApiModelProperty(value = "Y的定义")
-    private String ydefine;
-
     @ApiModelProperty(value = "服务类型")
     private String serviceType;
 
@@ -85,14 +82,6 @@ public class ModelDetailVO {
 
     public void setExperimentName(String experimentName) {
         this.experimentName = experimentName;
-    }
-
-    public String getYdefine() {
-        return ydefine;
-    }
-
-    public void setYdefine(String ydefine) {
-        this.ydefine = ydefine;
     }
 
     public String getServiceType() {

@@ -39,8 +39,11 @@ public class OfflineBatchListVO {
     @ApiModelProperty(value="服务名称")
     private String serviceName;
 
-    @ApiModelProperty(value="跑批次数")
+    @ApiModelProperty(value="服务跑批总次数")
     private Integer batchTimes;
+
+    @ApiModelProperty(value="离线跑批第几次")
+    private Integer offlineTimes;
 
     @ApiModelProperty(value="下载结果")
     private String downUrl;
@@ -126,6 +129,14 @@ public class OfflineBatchListVO {
 
     public void setBatchTimes(Integer batchTimes) {
         this.batchTimes = batchTimes;
+    }
+
+    public Integer getOfflineTimes() {
+        return offlineTimes;
+    }
+
+    public void setOfflineTimes(Integer offlineTimes) {
+        this.offlineTimes = offlineTimes;
     }
 
     public String getDownUrl() {

@@ -1,16 +1,16 @@
-package cn.realai.online.core.vo.service;
+package cn.realai.online.core.query.service;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Description: 添加服务
+ * Description: 编辑服务
  * <br>
  * <br>Author:  Shunping.Fu
  * <br>Date: 2019/3/20
  */
-@ApiModel(description = "添加服务")
-public class AddServiceVO {
+@ApiModel(description = "编辑服务")
+public class EditServiceQuery {
 
     @ApiModelProperty(value = "服务名称")
     private String name;

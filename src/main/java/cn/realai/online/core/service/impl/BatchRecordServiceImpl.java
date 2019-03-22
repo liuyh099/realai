@@ -1,5 +1,6 @@
 package cn.realai.online.core.service.impl;
 
+import cn.realai.online.core.bo.BatchDetailBO;
 import cn.realai.online.core.bo.BatchListBO;
 import cn.realai.online.core.bo.BatchRecordBO;
 import org.apache.ibatis.annotations.Param;
@@ -40,6 +41,11 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 	@Override
 	public List<BatchListBO> selectList(@Param("batchListBO") BatchListBO batchListBO, @Param("minTime") Long minTime, @Param("maxTime") Long maxTime) {
 		return batchRecordDao.selectList(batchListBO, minTime, maxTime);
+	}
+
+	@Override
+	public BatchDetailBO selectDetail(Long batchId) {
+		return batchRecordDao.selectDetail(batchId);
 	}
 
 	@Override

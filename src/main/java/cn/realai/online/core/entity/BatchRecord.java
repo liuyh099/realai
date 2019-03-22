@@ -22,7 +22,7 @@ public class BatchRecord {
 	
 	//服务id
 	private Long serviceId;
-	
+
 	//创建时间
 	private Long createTime;
 	
@@ -42,6 +42,9 @@ public class BatchRecord {
 	private String batchName;
 
 	private String remark;
+
+	//第几次离线跑批
+	private Integer offlineTimes;
 
 	public Long getId() {
 		return id;
@@ -141,5 +144,13 @@ public class BatchRecord {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public Integer getOfflineTimes() {
+		return offlineTimes;
+	}
+
+	public void setOfflineTimes(Integer offlineTimes) {
+		this.offlineTimes = offlineTimes;
 	}
 }
