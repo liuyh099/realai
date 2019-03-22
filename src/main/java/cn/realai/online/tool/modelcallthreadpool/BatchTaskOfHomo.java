@@ -36,6 +36,7 @@ public class BatchTaskOfHomo extends BaseBatchTask {
     	}
 		PersonalHomoResultSetService personalHomoResultSetService = SpringContextUtils.getBean(PersonalHomoResultSetService.class);
 		personalHomoResultSetService.insertList(list);
+		redisClientTemplate.delete(redisKey);
 	}
 
 }

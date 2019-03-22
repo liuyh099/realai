@@ -45,6 +45,7 @@ public class BatchTaskOfPSI extends BaseBatchTask {
 			psi.setVariableId(vdMap.get(psi.getVariableName() + psi.getVariableType()));
 		}
 		psiCheckResultService.insertList(list);
+		redisClientTemplate.delete(redisKey);
 	}
 
 }

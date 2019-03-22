@@ -8,7 +8,7 @@ import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.IdQuery;
 import cn.realai.online.core.vo.ExperimentalTrainDoubleCreateVO;
-import cn.realai.online.core.vo.ExperimentalTrainVO;
+import cn.realai.online.core.vo.ExperimentalTrainVO;  
 
 import java.util.List;
 
@@ -213,7 +213,11 @@ public interface ExperimentalTrainBussiness {
     /**
      * 根据服务id查询发布的实验ID
      * @param id
+<<<<<<< HEAD
+     * @return  
+=======
      * @return
+>>>>>>> branch 'master' of https://github.com/liuyh099/realai.git
      */
     ExperimentBO getPublishExperimentByServerId(Long id);
 }

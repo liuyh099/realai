@@ -32,6 +32,7 @@ public class BatchTaskOfCombo extends BaseBatchTask {
     	
     	PersonalComboResultSetService personalComboResultSeService = SpringContextUtils.getBean(PersonalComboResultSetService.class);
     	personalComboResultSeService.insertList(list);
+    	redisClientTemplate.delete(redisKey);
 	}
 
 }

@@ -37,7 +37,7 @@
                   AND batch_type =3
               </if>
           </where>
-    </select>
+    </select>  
 
     <update id="update" parameterType="cn.realai.online.core.entity.BatchRecord">
         UPDATE batch_record
@@ -47,7 +47,7 @@
         <where>
             id =#{id}
         </where>
-    </update>
+    </update>  
 
     <delete id="delete" parameterType="java.util.List">
         DELETE FROM batch_record
@@ -55,7 +55,7 @@
         <foreach item="id" collection="list" open="(" close=")" separator=",">
             #{id}
         </foreach>
-    </delete>
+    </delete>  
 
     <select id="get" resultMap="BatchRecordMap" parameterType="java.lang.Long">
         SELECT * from batch_record

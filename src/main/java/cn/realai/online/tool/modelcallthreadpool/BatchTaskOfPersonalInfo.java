@@ -32,6 +32,7 @@ public class BatchTaskOfPersonalInfo extends BaseBatchTask {
     	
 		PersonalInformationService personalInformationService = SpringContextUtils.getBean(PersonalInformationService.class);
 		personalInformationService.insertList(list);
+		redisClientTemplate.delete(redisKey);
 	}
 
 }
