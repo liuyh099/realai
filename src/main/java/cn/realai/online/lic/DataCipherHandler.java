@@ -44,6 +44,16 @@ public class DataCipherHandler {
         }
     }
 
+    public String encryptData(ServiceDetail serviceDetail, String secretKey) throws LicenseException {
+        FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(secretKey);
+        try {
+            return RSAUtils.encryptByPublicKey(JSONObject.toJSONString(serviceDetail), fileLicenseInfo.getSecretPublicKey());
+        } catch (Exception e) {
+            log.error("数据加密失败", e);
+            throw new LicenseException("数据加密失败!");
+        }
+    }
+
     /**
      * 数据解密
      *
