@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -87,7 +88,7 @@ public class UserController {
 
     @PostMapping()
     @ApiOperation(value = "新增用户")
-    public Result<PageBO<UserVO>> add(UserAddVO userAddVO) {
+    public Result<PageBO<UserVO>> add(@Validated @RequestBody UserAddVO userAddVO) {
         try {
             UserBO userBO = new UserBO();
             BeanUtils.copyProperties(userAddVO, userBO);

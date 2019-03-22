@@ -55,7 +55,7 @@
         <foreach item="id" collection="list" open="(" close=")" separator=",">
             #{id}
         </foreach>
-    </delete>
+    </delete>  
 
     <select id="get" resultMap="BatchRecordMap" parameterType="java.lang.Long">
         SELECT * from batch_record

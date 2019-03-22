@@ -80,4 +80,11 @@ public interface ExperimentDao {
      * @param experiment
      */
     void doubleCreate(Experiment experiment);
+
+    /**
+     * 根据服务ID查询发布的训练
+     * @param id
+     * @return
+     */
+    Experiment getPublishExperimentByServerId(Long id);
 }
