@@ -65,23 +65,23 @@ public class MyShiroRealm extends AuthorizingRealm {
             return null;
         }
         byte[] salt = HexUtils.fromHexString(user.getPwd().substring(0, 16));
-        String pwd1 = EncodingPasswordUtils.encodingPassword(pwd, salt);
-        if (username.equals(user.getName()) && pwd1.equals(user.getPwd())) {
-            SessionsSecurityManager securityManager = (SessionsSecurityManager) SecurityUtils.getSecurityManager();
-            DefaultSessionManager sessionManager = (DefaultSessionManager) securityManager.getSessionManager();
-            // 获取所有session
-            Collection<Session> sessions = redisSessionDAO.getActiveSessions();
-            for (Session session : sessions) {
-                String userId = (String) session.getAttribute("userId");
-                // 如果session里面有当前登陆的，则证明是重复登陆的，则将其剔除
-                if (userId != null && !"".equals(userId)) {
-                    if (userId.equals(user.getId() + "")) {
-                        session.setTimeout(0);
-                        sessionManager.getSessionDAO().delete(session);
-                    }
-                }
-            }
-        }
+//        String pwd1 = EncodingPasswordUtils.encodingPassword(pwd, salt);
+//        if (username.equals(user.getName()) && pwd1.equals(user.getPwd())) {
+//            SessionsSecurityManager securityManager = (SessionsSecurityManager) SecurityUtils.getSecurityManager();
+//            DefaultSessionManager sessionManager = (DefaultSessionManager) securityManager.getSessionManager();
+//            // 获取所有session
+//            Collection<Session> sessions = redisSessionDAO.getActiveSessions();
+//            for (Session session : sessions) {
+//                String userId = (String) session.getAttribute("userId");
+//                // 如果session里面有当前登陆的，则证明是重复登陆的，则将其剔除
+//                if (userId != null && !"".equals(userId)) {
+//                    if (userId.equals(user.getId() + "")) {
+//                        session.setTimeout(0);
+//                        sessionManager.getSessionDAO().delete(session);
+//                    }
+//                }
+//            }
+//        }
 
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user, //用户名

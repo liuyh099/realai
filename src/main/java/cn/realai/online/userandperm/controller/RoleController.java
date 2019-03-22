@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -83,7 +84,7 @@ public class RoleController {
 
     @PostMapping
     @ApiOperation("增加角色")
-    public Result add(@RequestBody RoleAddVO roleAddVO) {
+    public Result add(@Validated @RequestBody RoleAddVO roleAddVO) {
         try {
             //RoleBO roleBO = new RoleBO();
             RoleBO roleBO =JSON.parseObject(JSON.toJSONString(roleAddVO),RoleBO.class);
@@ -141,7 +142,7 @@ public class RoleController {
 
     @PutMapping()
     @ApiOperation("更新角色")
-    public Result update(@RequestBody RoleEditVO editVO) {
+    public Result update(@Validated @RequestBody RoleEditVO editVO) {
         try {
             RoleBO roleBo =JSON.parseObject(JSON.toJSONString(editVO),RoleBO.class);
             if (!roleBusiness.update(roleBo)) {
