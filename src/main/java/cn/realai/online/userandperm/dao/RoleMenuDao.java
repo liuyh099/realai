@@ -1,6 +1,7 @@
 package cn.realai.online.userandperm.dao;
 
 import cn.realai.online.userandperm.entity.RoleMenu;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -26,4 +27,12 @@ public interface RoleMenuDao {
      * @return
      */
     List<Long> findIdsByRoleId(Long id);
+
+    /**
+     * 根基状态和角色id查询menu
+     * @param id
+     * @param i
+     * @return
+     */
+    List<Long> findIdsByRoleIdAndStatus(@Param("id") Long id, @Param("status")int i);
 }

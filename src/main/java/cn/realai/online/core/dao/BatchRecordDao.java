@@ -2,6 +2,7 @@ package cn.realai.online.core.dao;
 
 import cn.realai.online.core.bo.BatchDetailBO;
 import cn.realai.online.core.bo.BatchListBO;
+import cn.realai.online.core.bo.BatchRecordBO;
 import org.apache.ibatis.annotations.Param;
 
 import cn.realai.online.core.entity.BatchRecord;
@@ -28,4 +29,11 @@ public interface BatchRecordDao {
 	//查询离线跑批详细
 	BatchDetailBO selectDetail(Long batchId);
 
+	/**
+	 *
+	 * @param batchRecordBO
+	 * @param isTranFlag
+	 * @return
+	 */
+    List<BatchRecord> findBatchRecordList(BatchRecordBO batchRecordBO, boolean isTranFlag);
 }

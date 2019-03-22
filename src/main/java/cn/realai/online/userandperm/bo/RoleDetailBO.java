@@ -13,7 +13,25 @@ public class RoleDetailBO {
 
     private String createUser;
 
-    private List<MenuTreeNodeBO> menu;
+    private List<Long> halfCheck;
+
+    private List<Long> check;
+
+    public List<Long> getHalfCheck() {
+        return halfCheck;
+    }
+
+    public void setHalfCheck(List<Long> halfCheck) {
+        this.halfCheck = halfCheck;
+    }
+
+    public List<Long> getCheck() {
+        return check;
+    }
+
+    public void setCheck(List<Long> check) {
+        this.check = check;
+    }
 
     public String getName() {
         return name;
@@ -47,11 +65,4 @@ public class RoleDetailBO {
         this.createUser = createUser;
     }
 
-    public List<MenuTreeNodeBO> getMenu() {
-        return menu;
-    }
-
-    public void setMenu(List<MenuTreeNodeBO> menu) {
-        this.menu = menu;
-    }
 }

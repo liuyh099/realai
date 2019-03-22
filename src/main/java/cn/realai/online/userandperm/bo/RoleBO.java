@@ -1,6 +1,7 @@
 package cn.realai.online.userandperm.bo;
 
 import cn.realai.online.userandperm.entity.SysRole;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
@@ -8,7 +9,9 @@ public class RoleBO extends SysRole {
 
     private String createUser;
 
-    private List<Long> menu;
+    private List<Long> halfMenu;
+
+    private List<Long> checkMenu;
 
     public String getCreateUser() {
         return createUser;
@@ -18,11 +21,19 @@ public class RoleBO extends SysRole {
         this.createUser = createUser;
     }
 
-    public List<Long> getMenu() {
-        return menu;
+    public List<Long> getHalfMenu() {
+        return halfMenu;
     }
 
-    public void setMenu(List<Long> menu) {
-        this.menu = menu;
+    public void setHalfMenu(List<Long> halfMenu) {
+        this.halfMenu = halfMenu;
+    }
+
+    public List<Long> getCheckMenu() {
+        return checkMenu;
+    }
+
+    public void setCheckMenu(List<Long> checkMenu) {
+        this.checkMenu = checkMenu;
     }
 }

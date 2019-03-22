@@ -4,9 +4,9 @@
 
 
     <insert id="batchInsert" parameterType="cn.realai.online.userandperm.entity.RoleMenu">
-        INSERT INTO sys_role_menu (role_id,menu_id) values
+        INSERT INTO sys_role_menu (role_id,menu_id,check_status) values
         <foreach collection="roleMeuns" open="(" close=")" separator="," item="item">
-            #{item.roleId}, #{item.menuId}
+            #{item.roleId}, #{item.menuId},#{checkStatus}
         </foreach>
     </insert>
 
@@ -30,6 +30,13 @@
         SELECT menu_id FROM sys_role_menu
         <where>
             role_id = #{id}
+        </where>
+    </select>
+
+    <select id="findIdsByRoleIdAndStatus"  resultType="java.lang.Long">
+        SELECT menu_id FROM sys_role_menu
+        <where>
+            role_id = #{id} AND check_status = #{status}
         </where>
     </select>
 

@@ -1,25 +1,19 @@
 package cn.realai.online.userandperm.bo;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import java.util.List;
 
 public class MenuTreeNodeBO {
-    @ApiModelProperty(value = "id")
+
     private Long id;
 
-    @ApiModelProperty(value = "name")
     private String name;
 
-    @ApiModelProperty(value = "icon")
     private String icon;
 
-    @ApiModelProperty(value = "url")
     private String url;
 
     private Boolean check;
 
-    @ApiModelProperty(value = "children")
     private List<MenuTreeNodeBO> children;
 
     public Boolean getCheck() {

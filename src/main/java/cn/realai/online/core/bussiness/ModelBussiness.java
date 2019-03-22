@@ -2,6 +2,7 @@ package cn.realai.online.core.bussiness;
 
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.ModelBO;
+import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.query.ModelListQuery;
 import cn.realai.online.core.vo.ModelDetailVO;
 import cn.realai.online.core.vo.ModelListVO;
@@ -32,4 +33,11 @@ public interface ModelBussiness {
      * @return
      */
     int publish(ModelBO modelBO);
+
+    /**
+     * 根据模型ID查询实验ID
+     * @param id
+     * @return
+     */
+    Model getTrainByModelId(Long id);
 }

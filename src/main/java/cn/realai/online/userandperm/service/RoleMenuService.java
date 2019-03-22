@@ -28,4 +28,12 @@ public interface RoleMenuService {
      * @return
      */
     List<Long> findIdsByRoleId(Long id);
+
+    /**
+     * 获得权限菜单ID
+     * @param id
+     * @param i
+     * @return
+     */
+    List<Long> findIdsByRoleIdAndStatus(Long id, int i);
 }

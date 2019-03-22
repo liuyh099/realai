@@ -178,4 +178,19 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     List<ModelPerformanceBO> findModelPerformance(Long id);
+
+    /**
+     * 查询组名
+     * @param experimentId
+     * @return
+     */
+    List<SampleGroupingBO> getGroupOptionName(Long experimentId);
+
+    /**
+     *
+     * @param batchRecordBO
+     * @param isTranFlag 是否是训练
+     * @return
+     */
+    List<BatchRecordBO> findBatchRecordBOList(BatchRecordBO batchRecordBO, boolean isTranFlag);
 }

@@ -23,6 +23,22 @@
         	#{createTime},#{downUrl},#{batchType},#{batchName}, #{offlineTimes}, #{remark})
     </insert>
 
+    <select id="findBatchRecordList" resultMap="BatchRecordMap">
+          SELECT * FROM batch_record
+          <where>
+              1=1
+              <if test="experimentId!=null">
+                 AND experiment_id = #{experiment_id}
+              </if>
+              <if test="isTranFlag==true">
+                  AND batch_type in (1,2)
+              </if>
+              <if test="isTranFlag==false">
+                  AND batch_type =3
+              </if>
+          </where>
+    </select>
+
     <update id="update" parameterType="cn.realai.online.core.entity.BatchRecord">
         UPDATE batch_record
         <trim prefix="set" suffixOverrides=",">
@@ -37,7 +53,7 @@
         DELETE FROM batch_record
         where id in
         <foreach item="id" collection="list" open="(" close=")" separator=",">
-          #{id}
+            #{id}
         </foreach>
     </delete>
 
@@ -98,6 +114,7 @@
         </where>
         order by br.create_time desc
     </select>
+
 
     <select id="getByEntity" resultMap="BatchRecordMap" parameterType="cn.realai.online.core.entity.BatchRecord">
         SELECT * FROM batch_record
