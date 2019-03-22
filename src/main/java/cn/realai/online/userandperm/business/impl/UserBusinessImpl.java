@@ -42,6 +42,7 @@ public class UserBusinessImpl implements UserBusiness {
         if (checkUserNameOrPhoneNumber(userBO)) return false;
         User user = new User();
         BeanUtils.copyProperties(userBO, user);
+        user.setCreateTime(System.currentTimeMillis());
         if (userService.insert(user) <= 0) {
             return false;
         }
