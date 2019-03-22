@@ -13,13 +13,13 @@ import io.swagger.annotations.ApiModelProperty;
 public class GetServiceDetailsQuery {
 
     @ApiModelProperty(value = "服务ID")
-    private String serviceId;
+    private long serviceId;
 
-    public String getServiceId() {
+    public long getServiceId() {
         return serviceId;
     }
 
-    public void setServiceId(String serviceId) {
+    public void setServiceId(long serviceId) {
         this.serviceId = serviceId;
     }
 }
