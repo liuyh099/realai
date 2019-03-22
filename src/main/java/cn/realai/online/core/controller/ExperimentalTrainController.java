@@ -6,8 +6,10 @@ import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
+import cn.realai.online.core.bo.ExperimentalTrainDoubleCreateBO;
 import cn.realai.online.core.bo.VariableDataBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
+import cn.realai.online.core.bussiness.SSHBusinness;
 import cn.realai.online.core.bussiness.VariableDataBussiness;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
@@ -42,6 +44,9 @@ public class ExperimentalTrainController {
 
     @Autowired
     private VariableDataBussiness variableDataBusiness;
+
+    @Autowired
+    private SSHBusinness sSHBusinness;
 
 
     @GetMapping
@@ -122,8 +127,15 @@ public class ExperimentalTrainController {
     @ApiOperation(value = "根据服务id活得实验名称列表")
     @ApiImplicitParam(name = "serverId", value = "服务ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<TrainNameSelectVO> getSelect() {
-        return null;
+    public Result<List<TrainNameSelectVO>> getSelect(@PathVariable Long serverId) {
+        try {
+            List<ExperimentBO> experimentBOS = experimentalTrainBussiness.findExperimentByServerId(serverId);
+            List<TrainNameSelectVO> result = JSON.parseArray(JSON.toJSONString(experimentBOS), TrainNameSelectVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("根据服务id活得实验名称列表异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
 
@@ -156,8 +168,14 @@ public class ExperimentalTrainController {
     @ApiOperation(value = "新增实验-选择文件-获得文件地址")
     @ResponseBody
     public Result<FileTreeVo> getFilePath() {
+        try {
+            Object o = sSHBusinness.getFilePath();
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), o);
+        } catch (Exception e) {
+            logger.error("新增实验-选择文件-获得文件地址异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
 
-        return null;
+        }
     }
 
 
@@ -331,13 +349,13 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result createModel(@PathVariable Long trainId) {
         try {
-        	int ret = experimentalTrainBussiness.train(trainId);
-        	if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
-        		return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("有其他实验正在训练中，请稍后重试"), null);
-        	}
-        	return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
+            int ret = experimentalTrainBussiness.train(trainId);
+            if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("有其他实验正在训练中，请稍后重试"), null);
+            }
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
@@ -345,12 +363,21 @@ public class ExperimentalTrainController {
     @PutMapping("/doubleCreate")
     @ApiOperation(value = "二次创建实验")
     @ResponseBody
-    public Result doubleCreate(@RequestBody ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo) {
-        return null;
+    public Result doubleCreate(@Validated ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo) {
+        try {
+            ExperimentalTrainDoubleCreateBO bo = JSON.parseObject(JSON.toJSONString(experimentalTrainDoubleCreateVo), ExperimentalTrainDoubleCreateBO.class);
+            boolean flag = experimentalTrainBussiness.doubleCreate(bo);
+            if (flag) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
+            }
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), 1);
+        } catch (Exception e) {
+            logger.error("二次创建实验异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), 1);
+        }
     }
 
     @PutMapping("/testPreprocess/{experimentId}")
-    @ApiOperation(value = "二次创建实验")
     @ResponseBody
     public Result testPreprocess(@PathVariable long experimentId) {
         try {

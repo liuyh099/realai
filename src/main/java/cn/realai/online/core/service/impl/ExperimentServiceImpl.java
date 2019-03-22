@@ -155,4 +155,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     public HashMap findByServiceIdAndReleaseStatus(Long serviceId, Integer releaseStatus) {
         return experimentDao.findByServiceIdAndReleaseStatus(serviceId, releaseStatus);
     }
+
+    @Override
+    public void doubleCreate(Experiment experiment) {
+       experimentDao.doubleCreate(experiment);
+    }
 }

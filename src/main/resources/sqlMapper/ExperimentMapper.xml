@@ -51,6 +51,18 @@
         (#{name},#{serviceId},#{status},#{algorithmType},#{releasStatus},#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},#{xtableMeaningDataSource},#{createTime})
     </insert>
 
+    <insert id="doubleCreate" parameterType="cn.realai.online.core.entity.Experiment">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        INSERT INTO experiment
+        (name,service_id,status,algorithm_type,releas_status,y_table,x_table_homo,x_table_heter,x_table_meaning,create_time,
+        verification_set,sample_type,train_ratio,test_ratio,valid_ratio)
+        VALUE
+        (#{name},#{serviceId},#{status},#{algorithmType},#{releasStatus},#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},#{xtableMeaningDataSource},#{createTime},
+        #{verificationSet},#{sampleSplitType},#{trainRatio},#{testRatio},#{validRatio})
+    </insert>
+
     <update id="selectFileUpdate" parameterType="cn.realai.online.core.entity.Experiment">
 		UPDATE experiment SET
 		name=#{name},
@@ -106,6 +118,9 @@
             </if>
             <if test="releasStatus!=null">
                 AND releas_status= #{releasStatus}
+            </if>
+            <if test="serviceId!=null">
+                AND service_id= #{serviceId}
             </if>
         </where>
     </select>
