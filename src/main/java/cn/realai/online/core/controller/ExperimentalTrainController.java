@@ -127,9 +127,15 @@ public class ExperimentalTrainController {
     @ApiOperation(value = "根据服务id活得实验名称列表")
     @ApiImplicitParam(name = "serverId", value = "服务ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<TrainNameSelectVO> getSelect() {
-
-        return null;
+    public Result<List<TrainNameSelectVO>> getSelect(@PathVariable Long serverId) {
+        try {
+            List<ExperimentBO> experimentBOS = experimentalTrainBussiness.findExperimentByServerId(serverId);
+            List<TrainNameSelectVO> result = JSON.parseArray(JSON.toJSONString(experimentBOS), TrainNameSelectVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("根据服务id活得实验名称列表异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
 
@@ -359,12 +365,15 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result doubleCreate(@Validated ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo) {
         try {
-            ExperimentalTrainDoubleCreateBO bo =JSON.parseObject(JSON.toJSONString(experimentalTrainDoubleCreateVo), ExperimentalTrainDoubleCreateBO.class);
-            experimentalTrainBussiness.doubleCreate(bo);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
+            ExperimentalTrainDoubleCreateBO bo = JSON.parseObject(JSON.toJSONString(experimentalTrainDoubleCreateVo), ExperimentalTrainDoubleCreateBO.class);
+            boolean flag = experimentalTrainBussiness.doubleCreate(bo);
+            if (flag) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
+            }
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), 1);
         } catch (Exception e) {
-            logger.error("二次创建实验异常",e);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
+            logger.error("二次创建实验异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), 1);
         }
     }
 

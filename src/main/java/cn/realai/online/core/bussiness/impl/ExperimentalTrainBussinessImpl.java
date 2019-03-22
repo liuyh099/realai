@@ -394,13 +394,14 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Boolean doubleCreate(ExperimentalTrainDoubleCreateBO bo) {
         Experiment experiment = experimentService.selectExperimentById(bo.getTrainId());
-        if(experiment==null){
+        if (experiment == null) {
             return false;
         }
         experiment.setId(null);
-        experiment.setName(experiment.getName()+"-01");
+        experiment.setName(experiment.getName() + "-01");
         experiment.setStatus(Experiment.STATUS_PARAM);
         experiment.setReleasStatus(Experiment.RELEAS_NO);
         experiment.setCreateTime(System.currentTimeMillis());
@@ -420,12 +421,36 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setKsTrainImageUrl(null);
         experiment.setKsValidateImageUrl(null);
         experiment.setPreFinish(1);
+        experimentService.doubleCreate(experiment);
+
+        if (experiment.getId() == null) {
+            return null;
+        }
 
         //构建参数
-//        Valida
-//        variableDataService.findList()；
+        if (!CollectionUtils.isEmpty(bo.getVariableIdList())) {
+            List<VariableData> list = variableDataService.findDoubleCreateVariableDataList(bo.getVariableIdList());
+            if (!CollectionUtils.isEmpty(list)) {
+                for (VariableData v :
+                        list) {
+                    v.setId(null);
+                    v.setExperimentId(experiment.getId());
+                    v.setCreateTime(System.currentTimeMillis());
+                }
 
-        return null;
+                variableDataService.insertVariableDataList(list);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public List<ExperimentBO> findExperimentByServerId(Long serverId) {
+        Experiment experiment = new Experiment();
+        experiment.setServiceId(serverId);
+        List<Experiment> list = experimentService.findList(experiment);
+        List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
+        return result;
     }
 
 

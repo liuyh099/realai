@@ -201,4 +201,11 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     Boolean doubleCreate(ExperimentalTrainDoubleCreateBO bo);
+
+    /**
+     * 根据服务ID获取实验
+     * @param serverId
+     * @return
+     */
+    List<ExperimentBO> findExperimentByServerId(Long serverId);
 }
