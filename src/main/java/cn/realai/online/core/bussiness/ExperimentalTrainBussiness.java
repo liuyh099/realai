@@ -2,6 +2,7 @@ package cn.realai.online.core.bussiness;
 
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.*;
+import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
@@ -208,4 +209,11 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     List<ExperimentBO> findExperimentByServerId(Long serverId);
+
+    /**
+     * 根据服务id查询发布的实验ID
+     * @param id
+     * @return
+     */
+    ExperimentBO getPublishExperimentByServerId(Long id);
 }

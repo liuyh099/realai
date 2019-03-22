@@ -160,4 +160,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     public void doubleCreate(Experiment experiment) {
        experimentDao.doubleCreate(experiment);
     }
+
+    @Override
+    public Experiment getPublishExperimentByServerId(Long id) {
+        return experimentDao.getPublishExperimentByServerId(id);
+    }
 }
