@@ -114,7 +114,7 @@ public class ModelController {
 
 
     @GetMapping("/selectRecentModelNameList")
-    @ApiOperation(value = "根据服务ID或者最近一次发布的模型对应的服务下的模型集合")
+    @ApiOperation(value = "根据模型ID或者最近一次发布的模型对应的服务下的模型集合")
     @ApiImplicitParam(name = "modelId", value = "模型ID", required = false, dataType = "Long", paramType = "query")
     @ResponseBody
     public Result<ModelSelectVO> selectRecentModelNameList(@RequestParam(name = "modelId", required = false) Long modelId) {
