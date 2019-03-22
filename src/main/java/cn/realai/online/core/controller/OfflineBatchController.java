@@ -25,6 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -92,12 +97,40 @@ public class OfflineBatchController {
     @ApiOperation(value = "下载离线跑批运算结果")
     @ApiImplicitParam(name = "batchId", value = "离线跑批Id", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public void download(@PathVariable("batchId") Long batchId){
+    public Result<Void> download(@PathVariable("batchId") Long batchId, HttpServletRequest request, HttpServletResponse response) {
         try {
+            BatchRecord record = new BatchRecord();
+            record.setId(batchId);
+            record = batchRecordService.getByEntity(record);
+            Assert.notNull(record, "跑批记录不存在");
+            Assert.hasLength(record.getDownUrl(), "跑批记录尚未生成下载结果");
+            String filename = new File(record.getDownUrl()).getName();
 
+            URL path = new URL(record.getDownUrl());
+            HttpURLConnection conn = (HttpURLConnection) path.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5 * 1000);
+            BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
+            BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
+
+            response.addHeader("Content-Disposition","attachment;filename="+ new String(filename.getBytes("UTF-8"),"ISO8859_1"));
+            response.addHeader("Content-Length", "" + bis.available());
+            response.setContentType("application/octet-stream");
+
+            byte[] bytes = new byte[1024];
+            int length;
+            while ((length = bis.read(bytes)) > 0) {
+                out.write(bytes, 0, length);
+            }
+            bis.close();
+            out.flush();
+            out.close();
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
-            log.error("下载离线跑批结果异常", e);
+            log.error("下载离线跑批结果异常:", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
+
     }
 
     @GetMapping("/getComplete/{batchId}")

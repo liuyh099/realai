@@ -1,9 +1,8 @@
 package cn.realai.online.core.service.impl;
 
 import cn.realai.online.core.dao.ServiceDao;
-import cn.realai.online.lic.FileLicenseInfo;
-import cn.realai.online.lic.LicenseException;
-import cn.realai.online.lic.ServiceLicenseCheck;
+import cn.realai.online.lic.*;
+import cn.realai.online.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +13,7 @@ import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.service.ServiceService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,12 +27,21 @@ public class ServiceServiceImpl implements ServiceService {
 
 	@Autowired
 	private ServiceLicenseCheck serviceLicenseCheck;
+
+	@Autowired
+	private DataCipherHandler dataCipherHandler;
 	
+	@Override
+	public cn.realai.online.core.entity.Service get(Long serviceId) {
+		return serviceDao.get(serviceId);
+	}
+
 	@Override
 	public ServiceBO selectServiceById(long serviceId) {
 		cn.realai.online.core.entity.Service service = serviceDao.get(serviceId);
 		if(service == null) return null;
 
+		convertData(service);
 		ServiceBO serviceBO = new ServiceBO();
 		BeanUtils.copyProperties(service, serviceBO);
 		return serviceBO;
@@ -40,12 +49,18 @@ public class ServiceServiceImpl implements ServiceService {
 
 	@Override
 	public List<cn.realai.online.core.entity.Service> list(cn.realai.online.core.entity.Service service) {
-		return serviceDao.findList(service);
+		List<cn.realai.online.core.entity.Service> services = serviceDao.findList(service);
+		if(services != null && !services.isEmpty()) {
+			for (cn.realai.online.core.entity.Service s : services) {
+				convertData(s);
+			}
+		}
+		return services;
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public Integer insert(cn.realai.online.core.entity.Service service) {
+	public Integer insert(cn.realai.online.core.entity.Service service) throws LicenseException {
 		cn.realai.online.core.entity.Service searchService = new cn.realai.online.core.entity.Service();
 		searchService.setName(service.getName());
 		List old = list(searchService);
@@ -66,6 +81,9 @@ public class ServiceServiceImpl implements ServiceService {
 			throw new RuntimeException("调优秘钥已被使用！");
 		}
 
+		ServiceDetail detail = new ServiceDetail();
+		detail.setDeployUseTimes("0");
+		service.setDetail(new DataCipherHandler().encryptData(detail, service.getSecretKey()));
 		return serviceDao.insert(service);
 	}
 
@@ -85,16 +103,22 @@ public class ServiceServiceImpl implements ServiceService {
 	}
 
 
-	public cn.realai.online.core.entity.Service convertData(long serviceId) {
-		cn.realai.online.core.entity.Service service = selectServiceById(serviceId);
+
+	public cn.realai.online.core.entity.Service convertData(cn.realai.online.core.entity.Service service) {
 		String secretKey =  service.getSecretKey();
-//		service.setReleaseCount(fileLicenseInfo.ge);
+		try {
+			int releaseCount = Integer.parseInt(dataCipherHandler.getDateJsonByCiphertext(service.getDetail()).getDeployUseTimes());
+			service.setReleaseCount(releaseCount);
+		} catch (LicenseException e) {
+			logger.error("读取解密信息失败！", e);
+		}
 		if(secretKey != null) {
 			try {
 				FileLicenseInfo fileLicenseInfo = serviceLicenseCheck.checkServiceLic(secretKey);
 				fileLicenseInfo.getRangeTimeLower();
-//				service.setExpireDate(fileLicenseInfo.getRangeTimeUpper());
-				
+				service.setExpireDate(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), DateUtil.ymd));
+				service.setStartTime(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeLower(), DateUtil.ymd));
+				service.setDeployTimesUpper(Integer.parseInt(fileLicenseInfo.getDeployTimesUpper()));
 			} catch (LicenseException e) {
 				logger.error("非法秘钥 secretKey："+secretKey, e);
 			}

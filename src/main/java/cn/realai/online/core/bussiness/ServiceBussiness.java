@@ -3,6 +3,7 @@ package cn.realai.online.core.bussiness;
 import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.entity.Service;
 import cn.realai.online.core.vo.service.SecretKeyInfoVO;
+import cn.realai.online.lic.LicenseException;
 
 /**
  * Description:
@@ -14,7 +15,7 @@ import cn.realai.online.core.vo.service.SecretKeyInfoVO;
 public interface ServiceBussiness {
 
 
-    boolean addService(ServiceBO serviceBO);
+    boolean addService(ServiceBO serviceBO) throws LicenseException;
 
     boolean editService(ServiceBO serviceBO);
 

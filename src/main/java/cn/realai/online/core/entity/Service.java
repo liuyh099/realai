@@ -55,12 +55,23 @@ public class Service {
 	
 	//发布次数
 	private int releaseCount;
+
+	//调优次数上限
+	private int deployTimesUpper;
 	
 	//上线实验
 	private long onlineExperiment;
 
 	//离线跑批次数
 	private long batchTimes;
+
+	public int getDeployTimesUpper() {
+		return deployTimesUpper;
+	}
+
+	public void setDeployTimesUpper(int deployTimesUpper) {
+		this.deployTimesUpper = deployTimesUpper;
+	}
 
 	public String getDetail() {
 		return detail;
