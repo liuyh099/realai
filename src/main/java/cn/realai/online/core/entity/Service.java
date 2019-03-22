@@ -10,13 +10,13 @@ public class Service {
 	private long id;
 	
 	//服务类型
-	private int type;
+	private Integer type;
 	
 	//服务名称
 	private String name;
 	
 	//状态
-	private int status;
+	private Integer status;
 	
 	public static final int STATUS_ONLINE = 1; //上线
 	
@@ -105,14 +105,6 @@ public class Service {
 		this.id = id;
 	}
 
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
-	}
-
 	public long getStartTime() {
 		return startTime;
 	}
@@ -169,14 +161,6 @@ public class Service {
 		this.onlineExperiment = onlineExperiment;
 	}
 
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
 	public int getBusinessType() {
 		return businessType;
 	}
@@ -191,5 +175,21 @@ public class Service {
 
 	public void setTuningSecretKey(String tuningSecretKey) {
 		this.tuningSecretKey = tuningSecretKey;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 }

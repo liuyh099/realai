@@ -12,6 +12,9 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "服务信息")
 public class ServiceVO {
 
+    @ApiModelProperty(value = "服务ID")
+    private long id;
+
     @ApiModelProperty(value = "秘钥起始时间")
     private long startTime;
 
@@ -26,6 +29,36 @@ public class ServiceVO {
 
     @ApiModelProperty(value = "服务类型", example = "1:风控 2:营销")
     private int type;
+
+    @ApiModelProperty(value = "是否可续期", example = "true: 可续期 false: 不可续期")
+    private boolean renewable;
+
+    @ApiModelProperty(value = "发布次数上限")
+    private int deployTimesUpper;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public int getDeployTimesUpper() {
+        return deployTimesUpper;
+    }
+
+    public void setDeployTimesUpper(int deployTimesUpper) {
+        this.deployTimesUpper = deployTimesUpper;
+    }
+
+    public boolean isRenewable() {
+        return renewable;
+    }
+
+    public void setRenewable(boolean renewable) {
+        this.renewable = renewable;
+    }
 
     public long getStartTime() {
         return startTime;

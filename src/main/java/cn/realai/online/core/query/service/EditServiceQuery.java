@@ -12,11 +12,22 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "编辑服务")
 public class EditServiceQuery {
 
+    @ApiModelProperty(value = "服务ID")
+    private long serviceId;
+
     @ApiModelProperty(value = "服务名称")
     private String name;
 
     @ApiModelProperty(value = "服务秘钥")
     private String secretKey;
+
+    public long getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(long serviceId) {
+        this.serviceId = serviceId;
+    }
 
     public String getName() {
         return name;

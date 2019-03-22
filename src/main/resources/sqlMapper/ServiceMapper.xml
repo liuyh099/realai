@@ -27,7 +27,7 @@
         SELECT a.*  FROM service a
         <where>
             1=1
-            <if test="id!=null">
+            <if test="id!=0">
                 AND   a.id =#{id}
             </if>
             <if test="status!=null">
