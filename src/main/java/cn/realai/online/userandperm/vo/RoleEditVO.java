@@ -24,8 +24,27 @@ public class RoleEditVO {
     @ApiModelProperty(value = "备注")
     private String notes;
 
-    @ApiModelProperty(value = "选择的菜单ID集合")
-    private List<Long> menu;
+    @ApiModelProperty(value = "半选的菜单ID集合")
+    private List<Long> halfMenu;
+
+    @ApiModelProperty(value = "全选的菜单ID集合")
+    private List<Long> checkMenu;
+
+    public List<Long> getHalfMenu() {
+        return halfMenu;
+    }
+
+    public void setHalfMenu(List<Long> halfMenu) {
+        this.halfMenu = halfMenu;
+    }
+
+    public List<Long> getCheckMenu() {
+        return checkMenu;
+    }
+
+    public void setCheckMenu(List<Long> checkMenu) {
+        this.checkMenu = checkMenu;
+    }
 
     public Long getId() {
         return id;
@@ -51,11 +70,4 @@ public class RoleEditVO {
         this.notes = notes;
     }
 
-    public List<Long> getMenu() {
-        return menu;
-    }
-
-    public void setMenu(List<Long> menu) {
-        this.menu = menu;
-    }
 }

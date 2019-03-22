@@ -39,7 +39,6 @@
         </where>
     </update>
 
-
     <select id="get" resultMap="PSICheckResultMap" parameterType="java.lang.Long">
         SELECT * from psi_check_result
         <where>

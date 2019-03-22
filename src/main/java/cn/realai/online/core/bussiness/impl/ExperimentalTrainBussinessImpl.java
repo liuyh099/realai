@@ -10,7 +10,7 @@ import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.IdQuery;
 import cn.realai.online.core.service.*;
-
+import cn.realai.online.util.UserUtils;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -62,9 +62,13 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Autowired
     private PersonalHomoResultSetService personalHomoResultSetService;
-    
+
     @Autowired
     private ModelPerformanceService modelPerformanceService;
+
+    @Autowired
+    private SampleGroupingService sampleGroupingService;
+
 
     /**
      * 根据实验名称和状态等分页查询实验列表
@@ -108,7 +112,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     @Transactional(readOnly = false)
     public int train(long experimentId) {
-    	//获取训练锁
+        //获取训练锁
         MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
         if (!mlock.tryLock()) {
             return -1;
@@ -116,7 +120,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
         //查询需要删除的列
         HomoAndHetroBO deleteVariableData = variableDataService.selectDeleteByExperimentId(experimentId);
-        
+
         //修改试验状态
         int ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
         ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
@@ -270,7 +274,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     public PageBO<PersonalInformationBO> personalInformationPage(FaceListDataQuery query, Integer batchType) {
 
-        BatchRecord batchRecord = getBatchRecord(query.getTrainId(), batchType);
+        BatchRecord batchRecord = getBatchRecord(query, batchType);
         if (ObjectUtils.isEmpty(batchRecord)) {
             return new PageBO<PersonalInformationBO>(query);
         }
@@ -284,10 +288,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         return pageBO;
     }
 
-    private BatchRecord getBatchRecord(Long trainId, Integer batchType) {
+    private BatchRecord getBatchRecord(FaceListDataQuery query, Integer batchType) {
         BatchRecord batchRecord = new BatchRecord();
-        batchRecord.setExperimentId(trainId);
+        batchRecord.setExperimentId(query.getId());
         batchRecord.setBatchType(batchType);
+        batchRecord.setId(query.getBatchId());
         batchRecord = batchRecordService.getByEntity(batchRecord);
         return batchRecord;
     }
@@ -306,6 +311,17 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         query.setPid(id);
         List<PersonalComboResultSet> list = personalComboResultSetService.findList(query);
         List<PersonalComboResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalComboResultSetBO.class);
+        for (PersonalComboResultSetBO boTep : result) {
+            VariableData variableData = variableDataService.getById(boTep.getVariableId1());
+            boTep.setVariableName1(variableData.getName());
+            boTep.setVariableMeaning1(variableData.getMeaning());
+            VariableData variableData2 = variableDataService.getById(boTep.getVariableId2());
+            boTep.setVariableName2(variableData2.getName());
+            boTep.setVariableMeaning2(variableData2.getMeaning());
+            VariableData variableData3 = variableDataService.getById(boTep.getVariableId3());
+            boTep.setVariableName3(variableData3.getName());
+            boTep.setVariableMeaning3(variableData3.getMeaning());
+        }
         return result;
     }
 
@@ -316,7 +332,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         PageHelper.startPage(1, 10);
         List<PersonalHetroResultSet> list = personalHetroResultSetService.findList(query);
         List<PersonalHetroResultSetBO> bo = JSON.parseArray(JSON.toJSONString(list), PersonalHetroResultSetBO.class);
-        //TODO 去关联变量表数据
+        for (PersonalHetroResultSetBO boTep : bo) {
+            VariableData variableData = variableDataService.getById(boTep.getVariableId());
+            boTep.setVariableName(variableData.getName());
+            boTep.setVariableMeaning(variableData.getMeaning());
+        }
         return bo;
     }
 
@@ -327,8 +347,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         Page page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<PersonalHetroResultSet> list = personalHetroResultSetService.findList(queryCondition);
         List<PersonalHetroResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalHetroResultSetBO.class);
-        //TODO 去关联变量表数据
-
+        for (PersonalHetroResultSetBO boTep : result) {
+            VariableData variableData = variableDataService.getById(boTep.getVariableId());
+            boTep.setVariableName(variableData.getName());
+            boTep.setVariableMeaning(variableData.getMeaning());
+        }
         PageBO<PersonalHetroResultSetBO> pageBO = new PageBO<PersonalHetroResultSetBO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
         return pageBO;
     }
@@ -340,7 +363,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         Page page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<PersonalHomoResultSet> list = personalHomoResultSetService.findList(queryCondition);
         List<PersonalHomoResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalHomoResultSetBO.class);
-        //TODO 去关联变量表数据
+        for (PersonalHomoResultSetBO boTep : result) {
+            VariableData variableData = variableDataService.getById(boTep.getVariableId());
+            boTep.setVariableName(variableData.getName());
+            boTep.setVariableMeaning(variableData.getMeaning());
+        }
 
         PageBO<PersonalHomoResultSetBO> pageBO = new PageBO<PersonalHomoResultSetBO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
         return pageBO;
@@ -351,6 +378,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public List<PersonalHomoResultSetBO> listDataDetailSameCharts(Long id) {
         List<PersonalHomoResultSet> list = personalHomoResultSetService.listCharts(id);
         List<PersonalHomoResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalHomoResultSetBO.class);
+        for (PersonalHomoResultSetBO boTep : result) {
+            VariableData variableData = variableDataService.getById(boTep.getVariableId());
+            boTep.setVariableName(variableData.getName());
+            boTep.setVariableMeaning(variableData.getMeaning());
+        }
         return result;
     }
 
@@ -373,6 +405,81 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         return result;
     }
 
+    @Override
+    public List<SampleGroupingBO> getGroupOptionName(Long experimentId) {
+        List<SampleGrouping> sampleGroupings = sampleGroupingService.findListByExperimentId(experimentId);
+        List<SampleGroupingBO> sampleGroupingBOList = JSON.parseArray(JSON.toJSONString(sampleGroupings), SampleGroupingBO.class);
+        return sampleGroupingBOList;
+    }
+
+    @Override
+    public List<BatchRecordBO> findBatchRecordBOList(BatchRecordBO batchRecordBO, boolean isTranFlag) {
+
+        List<BatchRecord> batchRecords = batchRecordService.findBatchRecordList(batchRecordBO, isTranFlag);
+
+        return null;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Boolean doubleCreate(ExperimentalTrainDoubleCreateBO bo) {
+        Experiment experiment = experimentService.selectExperimentById(bo.getTrainId());
+        if (experiment == null) {
+            return false;
+        }
+        experiment.setId(null);
+        experiment.setName(experiment.getName() + "-01");
+        experiment.setStatus(Experiment.STATUS_PARAM);
+        experiment.setReleasStatus(Experiment.RELEAS_NO);
+        experiment.setCreateTime(System.currentTimeMillis());
+        experiment.setTrainingTime(null);
+        experiment.setReleaseTime(null);
+        experiment.setTuningCount(0);
+        experiment.setCreateUserId(UserUtils.getUser().getId());
+        experiment.setRemark(null);
+        experiment.setSampleReview(null);
+        experiment.setModelUrl(null);
+        experiment.setSegmentationStatisticsImageUrl(null);
+        experiment.setBadTopCountImageUrl(null);
+        experiment.setRocTestImageUrl(null);
+        experiment.setRocTrainImageUrl(null);
+        experiment.setRocValidateImageUrl(null);
+        experiment.setKsTestImageUrl(null);
+        experiment.setKsTrainImageUrl(null);
+        experiment.setKsValidateImageUrl(null);
+        experiment.setPreFinish(1);
+        experimentService.doubleCreate(experiment);
+
+        if (experiment.getId() == null) {
+            return null;
+        }
+
+        //构建参数
+        if (!CollectionUtils.isEmpty(bo.getVariableIdList())) {
+            List<VariableData> list = variableDataService.findDoubleCreateVariableDataList(bo.getVariableIdList());
+            if (!CollectionUtils.isEmpty(list)) {
+                for (VariableData v :
+                        list) {
+                    v.setId(null);
+                    v.setExperimentId(experiment.getId());
+                    v.setCreateTime(System.currentTimeMillis());
+                }
+
+                variableDataService.insertVariableDataList(list);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public List<ExperimentBO> findExperimentByServerId(Long serverId) {
+        Experiment experiment = new Experiment();
+        experiment.setServiceId(serverId);
+        List<Experiment> list = experimentService.findList(experiment);
+        List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
+        return result;
+    }
+
 
     private PersonalInformation buildQueryCondition(BatchRecord batchRecord, FaceListDataQuery query) {
         PersonalInformation personal = new PersonalInformation();
@@ -382,7 +489,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         personal.setPersonalName(query.getName());
         personal.setPersonalCardId(query.getIdCard());
         personal.setPhoneNum(query.getPhone());
-        personal.setPersonalId(query.getId());
+        personal.setPersonalId(query.getPersonalId());
         personal.setInputStartDate(query.getInputStartDate());
         personal.setInputEndDate(query.getInputStartEnd());
         return personal;

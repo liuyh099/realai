@@ -19,10 +19,9 @@ public interface BatchRecordDao {
      * 必须传入ID
      *
      * @param batchRecord
-     * @return
+     * @return  
      */
     BatchRecord getByEntity(BatchRecord batchRecord);
-
 
 	//查询离线跑批列表
 	List<BatchListBO> selectList(@Param("batchListBO") BatchListBO batchListBO, @Param("minTime") Long minTime, @Param("maxTime") Long maxTime);
@@ -41,4 +40,5 @@ public interface BatchRecordDao {
 	BatchRecord getBatchRecordByEidAndDate(@Param("eid")long eid, 
 			@Param("date")String date, 
 			@Param("batchType")int batchType);
+
 }

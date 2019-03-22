@@ -51,6 +51,7 @@
         </where>
     </select>
     
+    
     <select id="getBatchRecordByEidAndDate" resultMap="BatshRecordMap">
     	select * 
     	from batch_record

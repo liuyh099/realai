@@ -51,4 +51,18 @@ public interface VariableDataService {
 	 * @return
 	 */
 	HomoAndHetroBO selectDeleteByExperimentId(Long experimentId);
+
+    /**
+     * 获得二次创建实验的参数
+     * @param variableIdList
+     * @return
+     */
+    List<VariableData> findDoubleCreateVariableDataList(List<Long> variableIdList);
+
+    /**
+     * 获得变量名称
+     * @param variableId
+     * @return
+     */
+    VariableData getById(Long variableId);
 }

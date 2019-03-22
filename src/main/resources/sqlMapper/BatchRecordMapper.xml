@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.core.dao.BatchRecordDao">
+    <resultMap type="cn.realai.online.core.entity.BatchRecord" id="BatchRecordMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="y_table" property="ytableDataSource" jdbcType="VARCHAR"/>
+        <result column="x_table_homo" property="xtableHomogeneousDataSource" jdbcType="VARCHAR"/>
+        <result column="x_table_heter" property="xtableHeterogeneousDataSource" jdbcType="VARCHAR"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+        <result column="service_id" property="serviceId" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" jdbcType="BIGINT"/>
+        <result column="down_url" property="downUrl" jdbcType="VARCHAR"/>
+        <result column="batch_type" property="batchType" jdbcType="INTEGER"/>
+        <result column="batch_name" property="batchName" jdbcType="VARCHAR"/>
+        <result column="offline_times" property="offlineTimes" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO batch_record (y_table , x_table_homo, x_table_heter, experiment_id, service_id,
+        	create_time, down_url, batch_type, batch_name, offline_times, remark)
+        VALUE (#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},#{experimentId},#{serviceId},
+        	#{createTime},#{downUrl},#{batchType},#{batchName}, #{offlineTimes}, #{remark})
+    </insert>
+
+    <select id="findBatchRecordList" resultMap="BatchRecordMap">
+          SELECT * FROM batch_record
+          <where>
+              1=1
+              <if test="experimentId!=null">
+                 AND experiment_id = #{experiment_id}
+              </if>
+              <if test="isTranFlag==true">
+                  AND batch_type in (1,2)
+              </if>
+              <if test="isTranFlag==false">
+                  AND batch_type =3
+              </if>
+          </where>
+    </select>
+
+    <update id="update" parameterType="cn.realai.online.core.entity.BatchRecord">
+        UPDATE batch_record
+        <trim prefix="set" suffixOverrides=",">
+            <if test="downUrl!=null">down_url=#{downUrl},</if>
+        </trim>
+        <where>
+            id =#{id}
+        </where>
+    </update>
+
+    <delete id="delete" parameterType="java.util.List">
+        DELETE FROM batch_record
+        where id in
+        <foreach item="id" collection="list" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="get" resultMap="BatchRecordMap" parameterType="java.lang.Long">
+        SELECT * from batch_record
+        <where>
+            id =#{id}
+        </where>
+    </select>
+
+
+    <resultMap type="cn.realai.online.core.bo.BatchListBO" id="BatchListMap">
+        <result column="batchId" property="batchId" jdbcType="BIGINT"/>
+        <result column="modelId" property="modelId" jdbcType="BIGINT"/>
+        <result column="modelName" property="modelName" jdbcType="VARCHAR"/>
+        <result column="experimentId" property="experimentId" jdbcType="BIGINT"/>
+        <result column="experimentName" property="experimentName" jdbcType="VARCHAR"/>
+        <result column="releaseTime" property="releaseTime" jdbcType="BIGINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="serviceId" property="serviceId" jdbcType="BIGINT"/>
+        <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
+        <result column="batchTimes" property="batchTimes" jdbcType="INTEGER"/>
+        <result column="offlineTimes" property="offlineTimes" jdbcType="INTEGER"/>
+        <result column="downUrl" property="downUrl" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="selectList" resultMap="BatchListMap">
+        select br.id as batchId,
+        m.id as modelId,
+        m.name as modelName,
+        ep.id as experimentId,
+        ep.name as experimentName,
+        ep.release_time as releaseTime,
+        ep.status as status,
+        s.id as serviceId,
+        s.name as serviceName,
+        s.batch_times as batchTimes,
+        br.offline_times as offlineTimes,
+        br.down_url as downUrl,
+        br.remark as remark
+        from batch_record as br
+        join service as s on br.service_id = s.id
+        join experiment as ep on br.experiment_id = ep.id
+        join model as m on br.experiment_id = m.experiment_id
+        <where>
+            <if test="batchListBO!=null and batchListBO.modelName!=null">
+                and m.name like '%${batchListBO.modelName}%'
+            </if>
+            <if test="batchListBO!=null and batchListBO.status!=null">
+                and ep.status = #{batchListBO.status}
+            </if>
+            <if test="minTime!=null">
+                and <![CDATA[ ep.release_time >= #{minTime} ]]>
+            </if>
+            <if test="maxTime!=null">
+                and <![CDATA[ ep.release_time <= #{maxTime} ]]>
+            </if>
+        </where>
+        order by br.create_time desc
+    </select>
+
+
+    <select id="getByEntity" resultMap="BatchRecordMap" parameterType="cn.realai.online.core.entity.BatchRecord">
+        SELECT * FROM batch_record
+        <where>
+            1=1
+            <if test="experimentId!=null">
+                AND experiment_id = #{experimentId}
+            </if>
+            <if test="batchType!=null">
+                AND batch_type = #{batchType}
+            </if>
+            <if test="batchName!=null">
+                AND batch_name = #{batchName}
+            </if>
+            <if test="id!=null">
+                AND id = #{id}
+            </if>
+            <if test="serviceId!=null">
+                AND service_id = #{serviceId}
+            </if>
+        </where>
+    </select>
+
+    <resultMap type="cn.realai.online.core.bo.BatchDetailBO" id="BatchDetailMap">
+        <result column="batchId" property="batchId" jdbcType="BIGINT"/>
+        <result column="serviceId" property="serviceId" jdbcType="BIGINT"/>
+        <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
+        <result column="experimentId" property="experimentId" jdbcType="BIGINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="offlineTimes" property="offlineTimes" jdbcType="INTEGER"/>
+        <result column="xtabaleHeter" property="xtabaleHeter" jdbcType="VARCHAR"/>
+        <result column="xtableHomo" property="xtableHomo" jdbcType="VARCHAR"/>
+        <result column="ytable" property="ytable" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="BIGINT"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="selectDetail" resultMap="BatchDetailMap">
+        select br.id as batchId,
+        br.service_id as serviceId,
+        sv.name as serviceName,
+        br.experiment_id as experimentId,
+        ep.status,
+        br.offline_times as offlineTimes,
+        br.x_table_heter as xtabaleHeter,
+        br.x_table_homo as xtableHomo,
+        br.y_table as ytable,
+        br.create_time as createTime,
+        br.remark as remark
+        from batch_record as br
+        join service as sv on br.service_id = sv.id
+        left join experiment as ep on br.experiment_id = ep.id
+        <where>
+            br.id = #{batchId}
+        </where>
+    </select>
+
+
+</mapper>

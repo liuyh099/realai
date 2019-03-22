@@ -34,4 +34,18 @@ public interface VariableDataDao {
 	 * @return
 	 */
 	List<VariableData> selectDeleteListByExperimentId(@Param("experimentId")Long experimentId);
+
+    /**
+     * 创建doubleCreate的参数
+     * @param variableIdList
+     * @return
+     */
+    List<VariableData> findDoubleCreateVariableDataList(@Param("ids") List<Long> variableIdList);
+
+    /**
+     * 查询variable
+     * @param variableId
+     * @return
+     */
+    VariableData getById(@Param("id") Long variableId);
 }

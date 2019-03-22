@@ -153,4 +153,9 @@ public class ModelBussinessImpl implements ModelBussiness {
         return count;
     }
 
+    @Override
+    public Model getTrainByModelId(Long id) {
+        return modelService.get(id);
+    }
+
 }

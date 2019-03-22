@@ -2,22 +2,24 @@ package cn.realai.online.core.service;
 
 import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.entity.Service;
+import cn.realai.online.lic.LicenseException;
 
 import java.util.List;
 
 public interface ServiceService {
 
-    ServiceBO selectServiceById(long serviceId);
+	Service get(Long serviceId);
 
-    List<Service> list(Service service);
+	ServiceBO selectServiceById(long serviceId);
 
-    Integer insert(Service service);
+	List<Service> list(Service service);
 
-    Integer delete(List<Long> ids);
+	Integer insert(Service service) throws LicenseException;
 
-    Integer update(Service service);
+	Integer delete(List<Long> ids);
 
-    Service get(Long id);
+	Integer update(Service service);
+
 
 
 }

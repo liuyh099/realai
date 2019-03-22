@@ -2,164 +2,194 @@ package cn.realai.online.core.entity;
 
 /**
  * 服务（我的服务）
- *
  * @author lyh
  */
 public class Service {
 
-    //主键
-    private long id;
+	//主键
+	private long id;
+	
+	//服务类型
+	private int type;
+	
+	//服务名称
+	private String name;
+	
+	//状态
+	private int status;
+	
+	public static final int STATUS_ONLINE = 1; //上线
+	
+	public static final int STATUS_OFFLINE = 2; //下线
+	
+	private int businessType;
+	
+	public static final int BUSINESSTYPE_WIND = 1; //风控
+	
+	public static final int BUSINESSTYPE_MARKETING = 2; //营销
+	
+	//部署类型
+	private String deploymentType;
+	
+	public static final int DEPLOYMENT_TYPE_ONLINE = 1; //在线部署
+	
+	public static final int DEPLOYMENT_TYPE_OFFLINE = 2; //离线部署
+	
+	//创建时间
+	private long createTime;
+	
+	//起始时间
+	private long startTime;
+	
+	//到期时间
+	private long expireDate;
 
-    //服务类型
-    private int type;
+	//受控信息
+	private String detail;
 
-    //服务名称
-    private String name;
+	//调优秘钥
+	private String tuningSecretKey;
 
-    //状态
-    private int status;
+	//秘钥
+	private String secretKey;
+	
+	//发布次数
+	private int releaseCount;
 
-    public static final int STATUS_ONLINE = 1; //上线
+	//调优次数上限
+	private int deployTimesUpper;
+	
+	//上线实验
+	private long onlineExperiment;
 
-    public static final int STATUS_OFFLINE = 2; //下线
+	//离线跑批次数
+	private long batchTimes;
 
-    private int businessType;
+	public int getDeployTimesUpper() {
+		return deployTimesUpper;
+	}
 
-    public static final int BUSINESSTYPE_WIND = 1; //风控
+	public void setDeployTimesUpper(int deployTimesUpper) {
+		this.deployTimesUpper = deployTimesUpper;
+	}
 
-    public static final int BUSINESSTYPE_MARKETING = 2; //营销
+	public String getDetail() {
+		return detail;
+	}
 
-    //部署类型
-    private String deploymentType;
+	public void setDetail(String detail) {
+		this.detail = detail;
+	}
 
-    public static final int DEPLOYMENT_TYPE_ONLINE = 1; //在线部署
+	public long getBatchTimes() {
+		return batchTimes;
+	}
 
-    public static final int DEPLOYMENT_TYPE_OFFLINE = 2; //离线部署
+	public void setBatchTimes(long batchTimes) {
+		this.batchTimes = batchTimes;
+	}
 
-    //创建时间
-    private long createTime;
+	public String getDeploymentType() {
+		return deploymentType;
+	}
 
-    //起始时间
-    private long startTime;
+	public void setDeploymentType(String deploymentType) {
+		this.deploymentType = deploymentType;
+	}
 
-    //到期时间
-    private long expireDate;
+	public long getId() {
+		return id;
+	}
 
-    //秘钥
-    private String secretKey;
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    //发布次数
-    private int releaseCount;
+	public int getType() {
+		return type;
+	}
 
-    //上线实验
-    private long onlineExperiment;
+	public void setType(int type) {
+		this.type = type;
+	}
 
-    //离线跑批次数
-    private long batchTimes;
+	public long getStartTime() {
+		return startTime;
+	}
 
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
 
-    public long getBatchTimes() {
-        return batchTimes;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setBatchTimes(long batchTimes) {
-        this.batchTimes = batchTimes;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getDeploymentType() {
-        return deploymentType;
-    }
+	public long getCreateTime() {
+		return createTime;
+	}
 
-    public void setDeploymentType(String deploymentType) {
-        this.deploymentType = deploymentType;
-    }
+	public void setCreateTime(long createTime) {
+		this.createTime = createTime;
+	}
 
-    public long getId() {
-        return id;
-    }
+	public int getReleaseCount() {
+		return releaseCount;
+	}
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	public void setReleaseCount(int releaseCount) {
+		this.releaseCount = releaseCount;
+	}
 
-    public int getType() {
-        return type;
-    }
+	public long getExpireDate() {
+		return expireDate;
+	}
 
-    public void setType(int type) {
-        this.type = type;
-    }
+	public void setExpireDate(long expireDate) {
+		this.expireDate = expireDate;
+	}
 
-    public long getStartTime() {
-        return startTime;
-    }
+	public String getSecretKey() {
+		return secretKey;
+	}
 
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
-    }
+	public void setSecretKey(String secretKey) {
+		this.secretKey = secretKey;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public long getOnlineExperiment() {
+		return onlineExperiment;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setOnlineExperiment(long onlineExperiment) {
+		this.onlineExperiment = onlineExperiment;
+	}
 
-    public long getCreateTime() {
-        return createTime;
-    }
+	public int getStatus() {
+		return status;
+	}
 
-    public void setCreateTime(long createTime) {
-        this.createTime = createTime;
-    }
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
-    public int getReleaseCount() {
-        return releaseCount;
-    }
+	public int getBusinessType() {
+		return businessType;
+	}
 
-    public void setReleaseCount(int releaseCount) {
-        this.releaseCount = releaseCount;
-    }
+	public void setBusinessType(int businessType) {
+		this.businessType = businessType;
+	}
 
-    public long getExpireDate() {
-        return expireDate;
-    }
+	public String getTuningSecretKey() {
+		return tuningSecretKey;
+	}
 
-    public void setExpireDate(long expireDate) {
-        this.expireDate = expireDate;
-    }
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
-
-    public long getOnlineExperiment() {
-        return onlineExperiment;
-    }
-
-    public void setOnlineExperiment(long onlineExperiment) {
-        this.onlineExperiment = onlineExperiment;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public int getBusinessType() {
-        return businessType;
-    }
-
-    public void setBusinessType(int businessType) {
-        this.businessType = businessType;
-    }
-
+	public void setTuningSecretKey(String tuningSecretKey) {
+		this.tuningSecretKey = tuningSecretKey;
+	}
 }

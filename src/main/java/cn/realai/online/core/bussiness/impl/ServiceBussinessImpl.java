@@ -5,6 +5,7 @@ import cn.realai.online.core.bussiness.ServiceBussiness;
 import cn.realai.online.core.entity.Service;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.service.SecretKeyInfoVO;
+import cn.realai.online.lic.LicenseException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,7 +23,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
     private ServiceService serviceService;
 
     @Override
-    public boolean addService(ServiceBO serviceBO) {
+    public boolean addService(ServiceBO serviceBO) throws LicenseException {
         Service service = new Service();
         BeanUtils.copyProperties(serviceBO, service);
         if (serviceService.insert(service) <= 0) {

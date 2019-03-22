@@ -11,6 +11,17 @@ public class RoleMenu {
     // 菜单ID
     private Long menuId;
 
+    //1:全选 2:半选
+    private Integer checkStatus;
+
+
+    public Integer getCheckStatus() {
+        return checkStatus;
+    }
+
+    public void setCheckStatus(Integer checkStatus) {
+        this.checkStatus = checkStatus;
+    }
 
     public Long getRoleId() {
         return roleId;

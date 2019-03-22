@@ -37,7 +37,6 @@
         <result column="pre_finish" property="preFinish" jdbcType="INTEGER"/>
     </resultMap>
 
-
     <sql id="Base_Column_List">
 
     </sql>

@@ -1,6 +1,10 @@
 package cn.realai.online.core.service.impl;
 
 import org.redisson.api.RLock;
+import cn.realai.online.core.bo.BatchDetailBO;
+import cn.realai.online.core.bo.BatchListBO;
+import cn.realai.online.core.bo.BatchRecordBO;  
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,8 +23,14 @@ import java.util.List;
 @Service
 public class BatchRecordServiceImpl implements BatchRecordService {
 
-    @Autowired
-    private BatchRecordDao batchRecordDao;
+	@Autowired
+	private BatchRecordDao batchRecordDao;
+	
+	@Override
+	public Integer insert(BatchRecord batchRecord) {
+		batchRecord.setCreateTime(System.currentTimeMillis());
+		return batchRecordDao.insert(batchRecord);
+	}
 
     @Autowired
     private RedissonLock redissonLock;
@@ -36,6 +46,12 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 	@Override
 	public BatchDetailBO selectDetail(Long batchId) {
 		return batchRecordDao.selectDetail(batchId);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public Integer delete(List<Long> idList) {
+		return batchRecordDao.delete(idList);
 	}
 
     @Override
@@ -64,7 +80,7 @@ public class BatchRecordServiceImpl implements BatchRecordService {
         			batchRecord.setCreateTime(System.currentTimeMillis());
         			batchRecord.setBatchName(Constant.BATCH_DAILY_NAME_PREFIX + e.getName() + "_" + date);
         			batchRecord.setBatchType(BatchRecord.BATCH_TYPE_DAILY);
-        			batchRecord.setId(batchRecordDao.insert(batchRecord));
+        			batchRecord.setId((long)batchRecordDao.insert(batchRecord));
         		}
         	} catch (Exception e) {
         		e.printStackTrace();
@@ -75,5 +91,9 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 		return batchRecord;
 	}
 
+	@Override
+	public BatchRecord getByEntity(BatchRecord batchRecord) {
+		return batchRecordDao.getByEntity(batchRecord);
+	}
 
 }

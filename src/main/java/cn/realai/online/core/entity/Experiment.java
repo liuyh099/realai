@@ -16,7 +16,7 @@ public class Experiment {
     //验证集类型
 	private Integer validSampleType;
 	
-	//测试机类型
+	//测试机类型  
 	private Integer testSampleType;
 	
 	//时间

@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 
 import cn.realai.online.core.entity.Experiment;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface ExperimentDao {
@@ -71,4 +72,12 @@ public interface ExperimentDao {
      * @return
      */
     Integer updateParam(Experiment experiment);
+
+	HashMap findByServiceIdAndReleaseStatus(@Param("serviceId") Long serviceId, @Param("releaseStatus") Integer releaseStatus);
+
+    /**
+     * 二次创建实验
+     * @param experiment
+     */
+    void doubleCreate(Experiment experiment);
 }

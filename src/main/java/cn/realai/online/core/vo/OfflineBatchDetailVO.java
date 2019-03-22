@@ -13,51 +13,43 @@ import java.util.List;
  */
 @ApiModel
 public class OfflineBatchDetailVO {
-
     @ApiModelProperty(value = "跑批ID")
-    private long batchId;
-
-    @ApiModelProperty(value = "模型名称")
-    private String modelName;
-
-    @ApiModelProperty(value = "服务名称")
+    private Long batchId;
+    @ApiModelProperty(value="服务ID")
+    private Long  serviceId;
+    @ApiModelProperty(value="服务名称")
     private String serviceName;
-
-    @ApiModelProperty(value = "训练状态")
-    private String trainStatusName;
-
-    @ApiModelProperty(value = "跑批次数")
-    private String batchNum;
-
-    @ApiModelProperty(value = "模型Y表数据源")
-    private String YDataSource;
-
-    @ApiModelProperty(value = "模型X表同质数据源")
-    private String XHomoDataSource;
-
-    @ApiModelProperty(value = "模型X表异质数据源")
-    private String XHeteroDataSource;
-
-    @ApiModelProperty(value = "跑批时间")
-    private String runTime;
-
-    @ApiModelProperty(value = "备注")
+    @ApiModelProperty(value="实验ID")
+    private Long experimentId;
+    @ApiModelProperty(value="实验状态")
+    private Integer status;
+    @ApiModelProperty(value="离线跑批次数")
+    private Integer offlineTimes;
+    @ApiModelProperty(value="X表异质数据源")
+    private String xtabaleHeter;
+    @ApiModelProperty(value="X表同质数据源")
+    private String xtableHomo;
+    @ApiModelProperty(value="Y表数据源")
+    private String ytable;
+    @ApiModelProperty(value="创建时间")
+    private Long createTime;
+    @ApiModelProperty(value="备注")
     private String remark;
 
-    public long getBatchId() {
+    public Long getBatchId() {
         return batchId;
     }
 
-    public void setBatchId(long batchId) {
+    public void setBatchId(Long batchId) {
         this.batchId = batchId;
     }
 
-    public String getModelName() {
-        return modelName;
+    public Long getServiceId() {
+        return serviceId;
     }
 
-    public void setModelName(String modelName) {
-        this.modelName = modelName;
+    public void setServiceId(Long serviceId) {
+        this.serviceId = serviceId;
     }
 
     public String getServiceName() {
@@ -68,52 +60,60 @@ public class OfflineBatchDetailVO {
         this.serviceName = serviceName;
     }
 
-    public String getTrainStatusName() {
-        return trainStatusName;
+    public Long getExperimentId() {
+        return experimentId;
     }
 
-    public void setTrainStatusName(String trainStatusName) {
-        this.trainStatusName = trainStatusName;
+    public void setExperimentId(Long experimentId) {
+        this.experimentId = experimentId;
     }
 
-    public String getBatchNum() {
-        return batchNum;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setBatchNum(String batchNum) {
-        this.batchNum = batchNum;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
-    public String getYDataSource() {
-        return YDataSource;
+    public Integer getOfflineTimes() {
+        return offlineTimes;
     }
 
-    public void setYDataSource(String YDataSource) {
-        this.YDataSource = YDataSource;
+    public void setOfflineTimes(Integer offlineTimes) {
+        this.offlineTimes = offlineTimes;
     }
 
-    public String getXHomoDataSource() {
-        return XHomoDataSource;
+    public String getXtabaleHeter() {
+        return xtabaleHeter;
     }
 
-    public void setXHomoDataSource(String XHomoDataSource) {
-        this.XHomoDataSource = XHomoDataSource;
+    public void setXtabaleHeter(String xtabaleHeter) {
+        this.xtabaleHeter = xtabaleHeter;
     }
 
-    public String getXHeteroDataSource() {
-        return XHeteroDataSource;
+    public String getXtableHomo() {
+        return xtableHomo;
     }
 
-    public void setXHeteroDataSource(String XHeteroDataSource) {
-        this.XHeteroDataSource = XHeteroDataSource;
+    public void setXtableHomo(String xtableHomo) {
+        this.xtableHomo = xtableHomo;
     }
 
-    public String getRunTime() {
-        return runTime;
+    public String getYtable() {
+        return ytable;
     }
 
-    public void setRunTime(String runTime) {
-        this.runTime = runTime;
+    public void setYtable(String ytable) {
+        this.ytable = ytable;
+    }
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
     }
 
     public String getRemark() {

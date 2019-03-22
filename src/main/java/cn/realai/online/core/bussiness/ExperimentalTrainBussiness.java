@@ -6,6 +6,7 @@ import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.IdQuery;
+import cn.realai.online.core.vo.ExperimentalTrainDoubleCreateVO;
 import cn.realai.online.core.vo.ExperimentalTrainVO;
 
 import java.util.List;
@@ -178,4 +179,33 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     List<ModelPerformanceBO> findModelPerformance(Long id);
+
+    /**
+     * 查询组名
+     * @param experimentId
+     * @return
+     */
+    List<SampleGroupingBO> getGroupOptionName(Long experimentId);
+
+    /**
+     *
+     * @param batchRecordBO
+     * @param isTranFlag 是否是训练
+     * @return
+     */
+    List<BatchRecordBO> findBatchRecordBOList(BatchRecordBO batchRecordBO, boolean isTranFlag);
+
+    /**
+     * 二次创建实验
+     * @param bo
+     * @return
+     */
+    Boolean doubleCreate(ExperimentalTrainDoubleCreateBO bo);
+
+    /**
+     * 根据服务ID获取实验
+     * @param serverId
+     * @return
+     */
+    List<ExperimentBO> findExperimentByServerId(Long serverId);
 }
