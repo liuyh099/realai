@@ -80,7 +80,7 @@ public class BatchRecordServiceImpl implements BatchRecordService {
         			batchRecord.setCreateTime(System.currentTimeMillis());
         			batchRecord.setBatchName(Constant.BATCH_DAILY_NAME_PREFIX + e.getName() + "_" + date);
         			batchRecord.setBatchType(BatchRecord.BATCH_TYPE_DAILY);
-        			batchRecord.setId((long)batchRecordDao.insert(batchRecord));
+        			batchRecordDao.insert(batchRecord);
         		}
         	} catch (Exception e) {
         		e.printStackTrace();
