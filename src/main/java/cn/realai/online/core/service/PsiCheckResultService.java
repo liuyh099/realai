@@ -26,4 +26,6 @@ public interface PsiCheckResultService {
 	//批量插入psi记录
 	int insertList(List<PSICheckResult> list);
 	
+	Integer findMaxPsiTotal();
+	
 }
