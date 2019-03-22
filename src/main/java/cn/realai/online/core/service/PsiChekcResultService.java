@@ -18,4 +18,10 @@ public interface PsiChekcResultService {
 
     //获取最大Psi
     Double selectMaxPsi(long modelId);
+
+    /**
+     * 查询有没有psi大于0.1
+     * @return
+     */
+    Integer findMaxPsiTotal();
 }
