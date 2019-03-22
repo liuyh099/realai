@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -42,19 +43,26 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
     public Integer createTuningRecord(Long modelId, String securityKey) {
         Assert.notNull(modelId, "模型ID不能为空");
         PsiCheckVO checkVO = psiCheckResultBussiness.checkPsi(modelId);
-        Assert.isTrue(checkVO != null && checkVO.isFlag(), "该模型PSI未达标不允许调优");
+        Assert.isTrue(checkVO != null && checkVO.isFlag(), "该模型不存在或PSI未达标不允许调优");
         Model model = modelService.get(modelId);
         Assert.notNull(model, "该模型没有对应服务");
 
         if (!StringUtils.isNotEmpty(securityKey)) {
             //Psi调优更新其他记录状态
             TuningRecord item = new TuningRecord();
+            item.setStatus(TuningRecord.STATUS.INVALID.value);
             item.setServiceId(model.getServiceId());
             item.setType(TuningRecord.TYPE.PSI.value);
             tuningRecordService.updateByServiceIdAndType(item);
         } else {
-            //todo 校验密钥串是否可用
-
+            //校验密钥串是否可用并绑定
+            serviceBussiness.bindTuningSecretKey(model.getServiceId(), securityKey);
+            //密钥调优更新其他记录状态
+            TuningRecord item = new TuningRecord();
+            item.setStatus(TuningRecord.STATUS.INVALID.value);
+            item.setServiceId(model.getServiceId());
+            item.setType(TuningRecord.TYPE.KEY.value);
+            tuningRecordService.updateByServiceIdAndType(item);
         }
 
         //创建新的调优记录
@@ -67,9 +75,29 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
         } else {
             record.setType(TuningRecord.TYPE.PSI.value);
         }
+        record.setMaxPsi(checkVO.getMaxPsi());
         record.setSecuriyKey(securityKey);
         record.setModelId(modelId);
         record.setServiceId(model.getServiceId());
         return tuningRecordService.insert(record);
+    }
+
+    @Override
+    public TuningRecord selectValidTuningRecord(Long serviceId) {
+        Assert.notNull(serviceId, "调优服务ID不能为空");
+        TuningRecord record = new TuningRecord();
+        record.setServiceId(serviceId);
+        record.setStatus(TuningRecord.STATUS.VALID.value);
+        List<TuningRecord> records = tuningRecordService.findList(record);
+        if (records == null || records.isEmpty()) {
+            return null;
+        }
+        records.sort((TuningRecord r1, TuningRecord r2) -> {
+            if (r1.getType() != null && r2.getType() != null) {
+                return r1.getType().compareTo(r2.getType());
+            }
+            return 0;
+        });
+        return records.get(0);
     }
 }

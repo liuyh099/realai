@@ -3,6 +3,8 @@ package cn.realai.online.core.service;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.TuningRecord;
 
+import java.util.List;
+
 /**
  * 功能描述：TODO
  *
@@ -17,8 +19,8 @@ public interface TuningRecordService {
 
     Integer updateByServiceIdAndType(TuningRecord record);
 
-    BatchRecord get(Long id);
+    TuningRecord get(Long id);
 
-    BatchRecord findList(TuningRecord record);
+    List<TuningRecord> findList(TuningRecord record);
 
 }

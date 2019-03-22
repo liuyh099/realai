@@ -1,7 +1,8 @@
 package cn.realai.online.core.dao;
 
-import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.TuningRecord;
+
+import java.util.List;
 
 public interface TuningRecordDao {
 
@@ -11,7 +12,7 @@ public interface TuningRecordDao {
 
     Integer updateByServiceIdAndType(TuningRecord record);
 
-    BatchRecord get(Long id);
+    TuningRecord get(Long id);
 
-    BatchRecord findList(TuningRecord record);
+    List<TuningRecord> findList(TuningRecord record);
 }

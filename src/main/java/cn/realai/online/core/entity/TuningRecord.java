@@ -36,6 +36,9 @@ public class TuningRecord {
 		}
 	}
 
+	//最大psi值
+	private Double maxPsi;
+
 	//强制调优密钥串
 	private String securiyKey;
 
@@ -102,6 +105,14 @@ public class TuningRecord {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public Double getMaxPsi() {
+		return maxPsi;
+	}
+
+	public void setMaxPsi(Double maxPsi) {
+		this.maxPsi = maxPsi;
 	}
 
 	public String getSecuriyKey() {

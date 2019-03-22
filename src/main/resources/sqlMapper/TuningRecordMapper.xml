@@ -8,13 +8,14 @@
         <result column="model_id" property="modelId" jdbcType="BIGINT"/>
         <result column="service_id" property="serviceId" jdbcType="BIGINT"/>
         <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="max_psi" property="maxPsi" jdbcType="DECIMAL"/>
         <result column="securiy_key" property="securiyKey" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        INSERT INTO tuning_record (create_time , update_time, model_id, service_id, type, securiy_key, status)
-        VALUE (#{createTime},#{updateTime},#{modelId},#{serviceId},#{type},#{securiyKey},#{status})
+        INSERT INTO tuning_record (create_time , update_time, model_id, service_id, type, max_psi, securiy_key, status)
+        VALUE (#{createTime},#{updateTime},#{modelId},#{serviceId},#{type},#{maxPsi},#{securiyKey},#{status})
     </insert>
 
     <update id="update" parameterType="cn.realai.online.core.entity.TuningRecord">
