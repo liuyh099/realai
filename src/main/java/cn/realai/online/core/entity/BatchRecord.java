@@ -42,6 +42,11 @@ public class BatchRecord {
     //批次名称
     private String batchName;
 
+    private String remark;
+
+	//第几次离线跑批
+	private Integer offlineTimes;
+    
     public Long getId() {
         return id;
     }
@@ -121,5 +126,21 @@ public class BatchRecord {
     public void setBatchName(String batchName) {
         this.batchName = batchName;
     }
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Integer getOfflineTimes() {
+		return offlineTimes;
+	}
+
+	public void setOfflineTimes(Integer offlineTimes) {
+		this.offlineTimes = offlineTimes;
+	}
 
 }

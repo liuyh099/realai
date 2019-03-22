@@ -14,6 +14,8 @@ import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.service.BatchRecordService;
 import cn.realai.online.tool.lock.RedissonLock;
 
+import java.util.List;
+
 @Service
 public class BatchRecordServiceImpl implements BatchRecordService {
 
@@ -26,17 +28,21 @@ public class BatchRecordServiceImpl implements BatchRecordService {
     @Autowired
     private ExperimentDao experimentDao;
     
-    @Override
-    public Long insert(BatchRecord batchRecord) {
-        batchRecord.setCreateTime(System.currentTimeMillis());
-        return batchRecordDao.insert(batchRecord);
-    }
+	@Override
+	public List<BatchListBO> selectList(@Param("batchListBO") BatchListBO batchListBO, @Param("minTime") Long minTime, @Param("maxTime") Long maxTime) {
+		return batchRecordDao.selectList(batchListBO, minTime, maxTime);
+	}
+
+	@Override
+	public BatchDetailBO selectDetail(Long batchId) {
+		return batchRecordDao.selectDetail(batchId);
+	}
 
     @Override
-    public BatchRecord getByEntity(BatchRecord batchRecord) {
-        return batchRecordDao.getByEntity(batchRecord);
-    }
-
+	public List<BatchRecord> findBatchRecordList(BatchRecordBO batchRecordBO, boolean isTranFlag) {
+		return batchRecordDao.findBatchRecordList(batchRecordBO,isTranFlag);
+	}
+    
     /**
      * 获取每日定时跑批的批次记录，如果没有查询到则创建
      * 方法的事务为REQUIRES_NEW，业务方法总是会为自己发起一个新的事务,如果方法已运行在一个事务中,则原有事务被挂起,新的事务被创建,直到方法结束,新事务才结束,原先的事务才会恢复执行.

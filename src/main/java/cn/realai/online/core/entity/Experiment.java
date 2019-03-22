@@ -94,19 +94,19 @@ public class Experiment {
     public static final int DATA_SET_VALID = 3;
 
     //创建时间
-    private long createTime;
+    private Long createTime;
 
     //训练时间
-    private long trainingTime;
+    private Long trainingTime;
 
     //发布时间
-    private long releaseTime;
+    private Long releaseTime;
 
     //调优次数
     private Integer tuningCount;
 
     //创建人
-    private Integer createUserId;
+    private Long createUserId;
 
     //备注
     private String remark;
@@ -280,27 +280,27 @@ public class Experiment {
         this.validRatio = validRatio;
     }
 
-    public long getCreateTime() {
+    public Long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
 
-    public long getTrainingTime() {
+    public Long getTrainingTime() {
         return trainingTime;
     }
 
-    public void setTrainingTime(long trainingTime) {
+    public void setTrainingTime(Long trainingTime) {
         this.trainingTime = trainingTime;
     }
 
-    public long getReleaseTime() {
+    public Long getReleaseTime() {
         return releaseTime;
     }
 
-    public void setReleaseTime(long releaseTime) {
+    public void setReleaseTime(Long releaseTime) {
         this.releaseTime = releaseTime;
     }
 
@@ -312,11 +312,11 @@ public class Experiment {
         this.tuningCount = tuningCount;
     }
 
-    public Integer getCreateUserId() {
+    public Long getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(Integer createUserId) {
+    public void setCreateUserId(Long createUserId) {
         this.createUserId = createUserId;
     }
 

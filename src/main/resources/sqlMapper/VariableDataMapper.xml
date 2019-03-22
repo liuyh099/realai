@@ -35,11 +35,29 @@
         </foreach>
     </insert>
 
+    <select id="getById" resultMap="VariableDataMap" parameterType="java.lang.Long">
+        select *
+		from variable_data
+		where id =#{id}
+    </select>
+
     <select id="findListByExperimentId" resultMap="VariableDataMap">
 		select *
 		from variable_data
 		where experiment_id = #{experimentId}
 	</select>
+
+    <select id="findDoubleCreateVariableDataList" parameterType="java.lang.Long">
+        select *
+        from variable_data
+        <where>
+            <if test="ids!=null and ids.size()>0">
+                <foreach collection="ids" open="id in (" close=")" separator="," item="id">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </select>
 
 	<select id="selectDeleteListByExperimentId" resultMap="VariableDataMap">
 		select *
