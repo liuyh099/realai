@@ -22,4 +22,8 @@ public interface PSICheckResultDao {
     //查询PSI列表
     List<PsiResultBO> selectList(@Param("modelId") Long modelId);
 
+	int deletePSIByExperimentId(@Param("experimentId")Long experimentId);
+
+	int insertList(@Param("list")List<PSICheckResult> list);
+
 }

@@ -4,8 +4,8 @@
     <resultMap type="cn.realai.online.core.entity.PSICheckResult" id="PSICheckResultMap">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="psi" property="psi" jdbcType="DECIMAL"/>
-        <result column="variableId" property="variable_d" jdbcType="BIGINT"/>
-        <result column="experimentId" property="experiment_id" jdbcType="BIGINT"/>
+        <result column="variable_id" property="variableId" jdbcType="BIGINT"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
         <result column="aler" property="aler" jdbcType="TINYINT"/>
     </resultMap>
 
@@ -14,6 +14,19 @@
         VALUE (#{psi},#{variableId},#{experimentId},#{aler})
     </insert>
 
+	<insert id="insertList">
+		INSERT INTO psi_check_result (psi,variable_id,experiment_id,aler)
+		values
+		<foreach collection="list" open="(" close=")" separator="," item="psi">
+			#{psi.psi}, #{psi.variable_id}, #{psi.experiment_id}, #{psi.aler}
+		</foreach>
+	</insert>
+
+	<delete id="deletePSIByExperimentId">
+		delete 
+		from psi_check_result 
+		where experiment_id = #{experimentId}
+	</delete>
 
     <update id="update" parameterType="cn.realai.online.core.entity.PSICheckResult">
         UPDATE psi_check_result

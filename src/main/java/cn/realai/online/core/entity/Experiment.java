@@ -13,8 +13,11 @@ public class Experiment {
     //训练名称
     private String name;
 
-	//样本选择类型
-	private int sampleSplitType;
+    //验证集类型
+	private Integer validSampleType;
+	
+	//测试机类型
+	private Integer testSampleType;
 	
 	//时间
 	public static final int SAMPLE_SPLIT_TYPE_TIME = 1;
@@ -237,15 +240,23 @@ public class Experiment {
         this.verificationSet = verificationSet;
     }
 
-    public int getSampleSplitType() {
-        return sampleSplitType;
-    }
+    public Integer getValidSampleType() {
+		return validSampleType;
+	}
 
-    public void setSampleSplitType(int sampleSplitType) {
-        this.sampleSplitType = sampleSplitType;
-    }
+	public void setValidSampleType(Integer validSampleType) {
+		this.validSampleType = validSampleType;
+	}
 
-    public Integer getTrainRatio() {
+	public Integer getTestSampleType() {
+		return testSampleType;
+	}
+
+	public void setTestSampleType(Integer testSampleType) {
+		this.testSampleType = testSampleType;
+	}
+
+	public Integer getTrainRatio() {
         return trainRatio;
     }
 

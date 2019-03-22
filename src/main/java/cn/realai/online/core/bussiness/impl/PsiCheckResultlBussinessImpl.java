@@ -3,7 +3,7 @@ package cn.realai.online.core.bussiness.impl;
 import cn.realai.online.core.bo.PsiResultBO;
 import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
 import cn.realai.online.core.entity.PSICheckResult;
-import cn.realai.online.core.service.PsiChekcResultService;
+import cn.realai.online.core.service.PsiCheckResultService;
 import cn.realai.online.core.vo.PsiCheckVO;
 import cn.realai.online.core.vo.PsiResultVO;
 import org.springframework.beans.BeanUtils;
@@ -23,7 +23,7 @@ import java.util.List;
 public class PsiCheckResultlBussinessImpl implements PsiCheckResultBussiness {
 
     @Autowired
-    private PsiChekcResultService psiChekcResultService;
+    private PsiCheckResultService psiChekcResultService;
 
     @Override
     public List<PsiResultVO> selectList(Long modelId) {

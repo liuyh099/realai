@@ -26,7 +26,7 @@ public class BatchRecord {
 
     //创建时间
     private Long createTime;
-
+    
     //结果下载路径
     private String downUrl;
 
@@ -121,4 +121,5 @@ public class BatchRecord {
     public void setBatchName(String batchName) {
         this.batchName = batchName;
     }
+
 }

@@ -13,6 +13,28 @@ public interface TrainService {
 	 */
 	void preprocess(Experiment experiment);
 	
+	/**
+	 * 训练
+	 * @param experiment
+	 * @param oldEid
+	 * @param homoList
+	 * @param hetroList
+	 * @return
+	 */
 	int training(Experiment experiment, Long oldEid, List<VariableData> homoList, List<VariableData> hetroList);
 
+	/**
+	 * 部署
+	 */
+	int experimentDeploy(Long experimentId);
+	
+	/**
+	 * 离线跑批
+	 */
+	int runBatchOfOffline();
+	
+	/**
+	 * 删除实验
+	 */
+	int deleteExperiment(Long experimentId);
 }

@@ -13,4 +13,7 @@ public interface BatchRecordService {
      * @return
      */
     BatchRecord getByEntity(BatchRecord batchRecord);
+
+	BatchRecord getBatchRecordOfDaily(long eid, String date, int batchTypeDaily);
+
 }

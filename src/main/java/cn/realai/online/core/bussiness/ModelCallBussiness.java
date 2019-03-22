@@ -1,17 +1,20 @@
 package cn.realai.online.core.bussiness;
 
-import java.util.List;
-
 import cn.realai.online.core.bo.TrainResultRedisKey;
 
 public interface ModelCallBussiness {
 
     /*
      * 每日跑批
-     * @param experimentId
-     * @param fileAddress
+     * @param brs 
      */
-    void runBatchDaily(Long experimentId, String redisKey, String type);
+    void runBatchDaily(Long experimentId, String redisKey, String type, String batchStr);
+    
+    /*
+     * 离线跑批
+     * @param brs 
+     */
+    void runBatchOffline(Long experimentId, String redisKey, String type, String downUrl, Long batchId);
 
     /*
      * 预处理回调处理

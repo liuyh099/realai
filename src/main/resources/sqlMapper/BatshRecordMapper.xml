@@ -19,7 +19,7 @@
             SELECT LAST_INSERT_ID() AS id
         </selectKey>
         INSERT INTO batch_record (y_table , x_table_homo, x_table_Heter, experiment_id, service_id,
-        create_time, down_url, batch_type, batch_name)
+        create_time, down_url, batch_type, batch_name, date)
         VALUE (#{batchRecord.ytableDataSource},#{batchRecord.xtableHomogeneousDataSource},
         #{batchRecord.xtableHeterogeneousDataSource},#{batchRecord.experimentId},#{batchRecord.serviceId},
         #{batchRecord.createTime},#{batchRecord.downUrl},#{batchRecord.batchType},#{batchRecord.batchName})
@@ -49,6 +49,14 @@
                 AND service_id = #{serviceId}
             </if>
         </where>
+    </select>
+    
+    <select id="getBatchRecordByEidAndDate" resultMap="BatshRecordMap">
+    	select * 
+    	from batch_record
+    	where experiment_id = #{eid}
+		and FROM_UNIXTIME(create_time/1000,'%Y%m%d') = #{date}
+		and batchType = #{batchType}
     </select>
 
 </mapper>

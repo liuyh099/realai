@@ -15,4 +15,8 @@ public interface BatchRecordDao {
      * @return
      */
     BatchRecord getByEntity(BatchRecord batchRecord);
+
+	BatchRecord getBatchRecordByEidAndDate(@Param("eid")long eid, 
+			@Param("date")String date, 
+			@Param("batchType")int batchType);
 }
