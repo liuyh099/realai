@@ -103,7 +103,7 @@ public class StringPathToTreeUtils {
         for (Map.Entry<String, List<FileClassifyBO>> entry : entries) {
             FileTreeVo fileTreeVo = new FileTreeVo();
             String key = entry.getKey();
-            fileTreeVo.setTitle(key);
+            fileTreeVo.setName(key);
             fileTreeVo.setKey(key);
             List<FileClassifyBO> list = entry.getValue();
             for (FileClassifyBO fileClassify : list) {

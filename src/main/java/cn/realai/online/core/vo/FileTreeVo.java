@@ -6,16 +6,23 @@ public class FileTreeVo {
 
     private String key;
 
-    private String title;
+    private String name;
 
     private List<FileTreeVo> children;
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean getDir(){
+        if(this.children!=null){
+            return true;
+        }
+        return false;
     }
 
     public String getKey() {

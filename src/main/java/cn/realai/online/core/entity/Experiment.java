@@ -14,25 +14,25 @@ public class Experiment {
     private String name;
 
     //验证集类型
-	private Integer validSampleType;
-	
-	//测试机类型  
-	private Integer testSampleType;
-	
-	//时间
-	public static final int SAMPLE_SPLIT_TYPE_TIME = 1;
-	
-	//随机
-	public static final int SAMPLE_SPLIT_TYPE_RANDOM = 2;
-	
-	//训练比例  trainRatio + trainTest + trainValid = 10
-	private Integer trainRatio;
-	
-	//测试比例
-	private Integer testRatio;
-	
-	//验证比例
-	private Integer validRatio;
+    private Integer validSampleType;
+
+    //测试机类型
+    private Integer testSampleType;
+
+    //时间
+    public static final int SAMPLE_SPLIT_TYPE_TIME = 1;
+
+    //随机
+    public static final int SAMPLE_SPLIT_TYPE_RANDOM = 2;
+
+    //训练比例  trainRatio + trainTest + trainValid = 10
+    private Integer trainRatio;
+
+    //测试比例
+    private Integer testRatio;
+
+    //验证比例
+    private Integer validRatio;
     //服务id
     private Long serviceId;
 
@@ -140,6 +140,18 @@ public class Experiment {
 
     private Integer preFinish;
 
+
+    private String serviceName;
+
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
     public static final int PREFINISH_NO = 1; // 预处理未完成
 
     public static final int PREFINISH_YES = 2; //预处理完成
@@ -241,22 +253,22 @@ public class Experiment {
     }
 
     public Integer getValidSampleType() {
-		return validSampleType;
-	}
+        return validSampleType;
+    }
 
-	public void setValidSampleType(Integer validSampleType) {
-		this.validSampleType = validSampleType;
-	}
+    public void setValidSampleType(Integer validSampleType) {
+        this.validSampleType = validSampleType;
+    }
 
-	public Integer getTestSampleType() {
-		return testSampleType;
-	}
+    public Integer getTestSampleType() {
+        return testSampleType;
+    }
 
-	public void setTestSampleType(Integer testSampleType) {
-		this.testSampleType = testSampleType;
-	}
+    public void setTestSampleType(Integer testSampleType) {
+        this.testSampleType = testSampleType;
+    }
 
-	public Integer getTrainRatio() {
+    public Integer getTrainRatio() {
         return trainRatio;
     }
 
