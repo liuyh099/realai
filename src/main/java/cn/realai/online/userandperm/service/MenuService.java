@@ -12,4 +12,10 @@ public interface MenuService {
      * @return
      */
     List<SysMenu> findList(SysMenu sysMenu);
+
+    /**
+     * 获得所有的menuID
+     * @return
+     */
+    List<Long> getAllMenuIds();
 }

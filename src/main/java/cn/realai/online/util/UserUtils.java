@@ -18,10 +18,10 @@ public class UserUtils {
     private static User getLoginUser() {
         try {
             Subject subject = SecurityUtils.getSubject();
-            Object object =subject.getPrincipal();
+            Object object = subject.getPrincipal();
             if (object != null) {
-                return (User)object;
-            }else {
+                return (User) object;
+            } else {
                 throw new UnavailableSecurityManagerException("未登录");
             }
         } finally {
@@ -29,4 +29,17 @@ public class UserUtils {
         }
     }
 
+    public static boolean isAdmin(User user) {
+        if ("admin".equals(user.getName())) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isAdmin() {
+        if ("admin".equals(getUser().getName())) {
+            return true;
+        }
+        return false;
+    }
 }
