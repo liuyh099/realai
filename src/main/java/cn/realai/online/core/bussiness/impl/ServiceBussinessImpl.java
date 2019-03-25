@@ -11,6 +11,7 @@ import cn.realai.online.lic.LicenseConstants;
 import cn.realai.online.lic.LicenseException;
 import cn.realai.online.lic.ServiceLicenseCheck;
 import cn.realai.online.util.DateUtil;
+import cn.realai.online.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +81,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
             }
         }
 
+
         Service service = new Service();
         BeanUtils.copyProperties(serviceBO, service);
         if (serviceService.update(service) <= 0) {
@@ -105,25 +107,24 @@ public class ServiceBussinessImpl implements ServiceBussiness {
         return secretKeyInfoVO;
     }
 
-    @Override
-    public void bindTuningSecretKey(long serviceId, String tuningSecretKey) {
-
-        cn.realai.online.core.entity.Service searchService = new cn.realai.online.core.entity.Service();
-            searchService.setTuningSecretKey(tuningSecretKey);
-            List<Service> old = serviceService.list(searchService);
-            if(old != null && old.size() > 0) {
-                if(old.get(0).getId() != serviceId) {
-                    logger.error("调优秘钥已被使用！");
-                    throw new RuntimeException("调优秘钥已被使用！");
-                }
-            }
-
-        ServiceBO serviceBO = serviceService.selectServiceById(serviceId);
-        Service service = new Service();
-        BeanUtils.copyProperties(serviceBO, service);
-        service.setTuningSecretKey(tuningSecretKey);
-        serviceService.update(service);
-    }
+//    public void bindTuningSecretKey(long serviceId, String tuningSecretKey) {
+//
+//        cn.realai.online.core.entity.Service searchService = new cn.realai.online.core.entity.Service();
+//            searchService.setTuningSecretKey(tuningSecretKey);
+//            List<Service> old = serviceService.list(searchService);
+//            if(old != null && old.size() > 0) {
+//                if(old.get(0).getId() != serviceId) {
+//                    logger.error("调优秘钥已被使用！");
+//                    throw new RuntimeException("调优秘钥已被使用！");
+//                }
+//            }
+//
+//        ServiceBO serviceBO = serviceService.selectServiceById(serviceId);
+//        Service service = new Service();
+//        BeanUtils.copyProperties(serviceBO, service);
+//        service.setTuningSecretKey(tuningSecretKey);
+//        serviceService.update(service);
+//    }
 
     @Override
     public List<ServiceVO> getServiceList(ServiceBO serviceBO) {
@@ -142,6 +143,11 @@ public class ServiceBussinessImpl implements ServiceBussiness {
             }
         }
         return serviceVos;
+    }
+
+    @Override
+    public void renewalService(ServiceBO serviceBO) {
+        editService(serviceBO);
     }
 
     /**

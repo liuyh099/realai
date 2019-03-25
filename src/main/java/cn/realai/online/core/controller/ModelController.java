@@ -7,6 +7,7 @@ import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bussiness.ModelBussiness;
 import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
+import cn.realai.online.core.bussiness.TuningRecordBussiness;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.query.ModelListQuery;
 import cn.realai.online.core.service.ModelService;
@@ -46,6 +47,8 @@ public class ModelController {
     private PsiCheckResultBussiness psiCheckResultBusiness;
     @Autowired
     private ServiceLicenseCheck serviceLicenseCheck;
+    @Autowired
+    private TuningRecordBussiness tuningRecordBussiness;
 
     @GetMapping("/list")
     @ApiOperation(value = "查询模型列表")
@@ -56,7 +59,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), page);
         } catch (Exception e) {
             log.error("查询模型列表异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -71,7 +74,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             log.error("查询模型详情异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -94,7 +97,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             log.error("查询模型详情异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -108,7 +111,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             log.error("查询服务下的已发布模型集合", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -123,7 +126,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             log.error("根据服务ID或者最近一次发布的模型对应的服务下的模型集合", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -138,7 +141,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             log.error("模型调优-检测PSI查询异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -152,7 +155,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), list);
         } catch (Exception e) {
             log.error("根据模型ID获取PSI结果集异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -170,5 +173,35 @@ public class ModelController {
         }
     }
 
+    @PostMapping("/psiTuning")
+    @ApiOperation(value = "模型调优-PSI调优")
+    @ApiImplicitParam(name = "modelId", value = "调优模型ID", required = true, dataType = "Long", paramType = "query")
+    @ResponseBody
+    public Result<Void> psiTuning(@RequestParam Long modelId) {
+        try {
+            tuningRecordBussiness.createTuningRecord(modelId, null);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+        } catch (Exception e) {
+            log.error("模型调优-PSI调优异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
+        }
+    }
+
+    @PostMapping("/forceTuning")
+    @ApiOperation(value = "模型调优-强制调优")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "modelId", value = "调优模型ID", required = true, dataType = "Long", paramType = "query"),
+        @ApiImplicitParam(name = "pkstr", value = "密钥串", required = true, dataType = "String", paramType = "query")
+    })
+    @ResponseBody
+    public Result<Void> forceTuning(@RequestParam Long modelId, @RequestParam String pkstr) {
+        try {
+            tuningRecordBussiness.createTuningRecord(modelId, pkstr);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+        } catch (Exception e) {
+            log.error("模型调优-强制调优异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
+        }
+    }
 
 }
