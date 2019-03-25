@@ -34,7 +34,7 @@ public class Experiment {
 	//验证比例
 	private Integer validRatio;
     //服务id
-    private long serviceId;
+    private Long serviceId;
 
     //状态
     private Integer status;
@@ -168,11 +168,11 @@ public class Experiment {
         this.name = name;
     }
 
-    public long getServiceId() {
+    public Long getServiceId() {
         return serviceId;
     }
 
-    public void setServiceId(long serviceId) {
+    public void setServiceId(Long serviceId) {
         this.serviceId = serviceId;
     }
 

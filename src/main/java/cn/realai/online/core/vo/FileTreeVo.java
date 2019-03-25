@@ -1,20 +1,29 @@
 package cn.realai.online.core.vo;
 
-import cn.realai.online.util.StringPathToTreeUtils;
-
 import java.util.List;
 
 public class FileTreeVo {
-    private String name;
+
+    private String key;
+
+    private String title;
 
     private List<FileTreeVo> children;
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public List<FileTreeVo> getChildren() {
