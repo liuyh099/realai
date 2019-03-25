@@ -164,7 +164,7 @@ public class ExperimentalTrainController {
         }
     }
 
-        @GetMapping("/getFilePath")
+    @GetMapping("/getFilePath")
     @ApiOperation(value = "新增实验-选择文件-获得文件地址")
     @ResponseBody
     public Result<FileTreeVo> getFilePath() {
