@@ -122,7 +122,7 @@ public class ExperimentalResultController {
     public Result<List<ExperimentalResultSummaryVO>> summary(@Validated IdVO idVo) {
         try {
             List<SampleSummaryBO> bo = experimentalTrainBusiness.summary(idVo.getId());
-            ExperimentalResultSummaryVO result = JSON.parseObject(JSON.toJSONString(bo), ExperimentalResultSummaryVO.class);
+            List<ExperimentalResultSummaryVO> result = JSON.parseArray(JSON.toJSONString(bo), ExperimentalResultSummaryVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("实验评估-摘要异常", e);
@@ -178,6 +178,7 @@ public class ExperimentalResultController {
             List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId(), false);
             List<EchartsDataVo> result = null;
             if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
+                result =new ArrayList<>();
                 for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {
                     EchartsDataVo data = new EchartsDataVo();
                     data.setName(sampleGroupingBO.getGroupName());

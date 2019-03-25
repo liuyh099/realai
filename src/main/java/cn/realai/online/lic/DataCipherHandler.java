@@ -34,7 +34,7 @@ public class DataCipherHandler {
      */
     public String getDataCiphertext(long serviceId, ServiceDetail serviceDetail) throws LicenseException {
 
-        String secretPublicKey = serviceLicenseInfoSource.getServiceLicInfo(serviceId, SecretKeyType.TUNING).getSecretPublicKey();
+        String secretPublicKey = serviceLicenseInfoSource.getServiceLicInfo(serviceId).getSecretPublicKey();
 
         try {
             return RSAUtils.encryptByPublicKey(JSONObject.toJSONString(serviceDetail), secretPublicKey);

@@ -43,8 +43,8 @@ public class ServiceLicenseInfoSource {
      * @return
      * @throws LicenseException
      */
-    public FileLicenseInfo getServiceLicInfo(long serviceId, SecretKeyType secretKeyType) throws LicenseException {
-        String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId,secretKeyType);
+    public FileLicenseInfo getServiceLicInfo(long serviceId) throws LicenseException {
+        String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId,SecretKeyType.COMMON);
         FileLicenseInfo licenseInfo = servicLicDecrypt(serviceCiphertext);
         return licenseInfo;
     }
