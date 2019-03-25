@@ -26,7 +26,7 @@
     </insert>
 
 
-    <select id="findList" resultType="cn.realai.online.core.entity.TopSort"
+    <select id="findList" resultMap="TopSortMap"
             parameterType="cn.realai.online.core.entity.TopSort">
         SELECT * FROM top_sort
         <where>
