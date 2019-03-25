@@ -26,13 +26,12 @@ public interface ServiceBussiness {
 
     SecretKeyInfoVO getSecretKeyInfo(String serviceKey) throws LicenseException;
 
-    /**
-     * 绑定服务对应的调优秘钥
-     *
-     * @param ServiceId
-     * @param tuningSecretKey
-     */
-    void bindTuningSecretKey(long ServiceId, String tuningSecretKey);
-
     List<ServiceVO> getServiceList(ServiceBO serviceBO);
+
+    /**
+     * 服务续期
+     *
+     * @param serviceBO
+     */
+    void renewalService(ServiceBO serviceBO);
 }
