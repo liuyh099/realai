@@ -6,7 +6,7 @@ public class FileTreeVo {
 
     private String key;
 
-    private String name;
+    private String name; 
 
     private List<FileTreeVo> children;
 

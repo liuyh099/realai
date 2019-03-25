@@ -104,6 +104,7 @@ public class StringPathToTreeUtils {
             FileTreeVo fileTreeVo = new FileTreeVo();
             String key = entry.getKey();
             fileTreeVo.setName(key);
+            fileTreeVo.setKey(key);
             List<FileClassifyBO> list = entry.getValue();
             for (FileClassifyBO fileClassify : list) {
                 if (StringUtils.isNotBlank(fileClassify.getChild())) {

@@ -55,7 +55,7 @@ public class ExperimentalResultController {
 
     @GetMapping("assessment/image")
     @ApiOperation(value = "实验评估-图片(传实验的id)")
-    public Result<ExperimentalResultImageVO> assessment(@RequestBody @Validated IdVO idVo) {
+    public Result<ExperimentalResultImageVO> assessment(@Validated IdVO idVo) {
         try {
             ExperimentBO experimentBO = experimentalTrainBusiness.selectById(idVo.getId());
             ExperimentalResultImageVO experimentalResultImageVO = new ExperimentalResultImageVO();
