@@ -35,6 +35,9 @@ public class SSHBusinnessImpl implements SSHBusinness {
     @Value("${management.shell.auth.rootDir}")
     private String rootDir;
 
+    @Value("${management.shell.auth.port}")
+    private Integer port;
+
 
     @Override
     public Object getFilePath() throws Exception {
@@ -44,11 +47,11 @@ public class SSHBusinnessImpl implements SSHBusinness {
                 || StringUtils.isBlank(shellPath)
                 || StringUtils.isBlank(rootDir)
         ) {
-            logger.error("未设置远程机器配置");
-            return null;
+            logger.error("未设置远程机器配置"); 
+            return null; 
         }
 
-        RemoteShellExecutor executor = new RemoteShellExecutor(ip, remoteUser, password);
+        RemoteShellExecutor executor = new RemoteShellExecutor(ip, remoteUser, password,port);
         // 执行myTest.sh 参数为java Know dummy
         String command = "sh " + shellPath + " " + rootDir;
         String filePath = executor.exec(command);

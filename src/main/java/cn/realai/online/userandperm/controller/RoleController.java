@@ -105,6 +105,11 @@ public class RoleController {
     public Result<MenuTreeNodeVo> menuTree() {
         try {
             List<MenuTreeNodeBO> resultBO = roleBusiness.menuTree();
+            for (MenuTreeNodeBO menuTreeNodeBO:resultBO){
+                if(menuTreeNodeBO.getId().equals(12L)){
+                    resultBO.remove(menuTreeNodeBO);
+                }
+            }
             List<MenuTreeNodeVo> result = JSON.parseArray(JSON.toJSONString(resultBO), MenuTreeNodeVo.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
