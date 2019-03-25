@@ -34,6 +34,15 @@
     </select>
 
 
+    <select id="get" resultMap="PersonalInformationMap" parameterType="java.lang.Long">
+         select *
+        FROM personal_information
+        <where>
+            id =#{id}
+        </where>
+    </select>
+
+
     <select id="findList" resultMap="PersonalInformationMap"
             parameterType="cn.realai.online.core.entity.PersonalInformation">
         select *

@@ -298,7 +298,7 @@ public class ExperimentalResultController {
 
     @GetMapping("thousandsFace/list/same")
     @ApiOperation(value = "实验-千人千面列表数据-详情-所有同质数据(传数据id))")
-    public Result<List<PersonalHomoResultSetVO>> listSame(@RequestBody IdQuery query) {
+    public Result<List<PersonalHomoResultSetVO>> listSame(@Validated IdQuery query) {
         try {
             PageBO<PersonalHomoResultSetBO> page = experimentalTrainBusiness.listPersonalHomoResultSet(query);
             if (page == null) {
