@@ -1,6 +1,7 @@
 package cn.realai.online.lic;
 
 import cn.realai.online.core.entity.Service;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,8 +30,8 @@ public class ServiceLicenseCheck {
      *
      * @param serviceId
      */
-   public void checkServiceLic(long serviceId, SecretKeyType secretKeyType) throws LicenseException {
-       String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId,secretKeyType);
+   public void checkServiceLic(long serviceId) throws LicenseException {
+       String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId, SecretKeyType.COMMON);
        serviceLicenseInfoSource.checkSource(serviceCiphertext);
     }
 
@@ -49,15 +50,32 @@ public class ServiceLicenseCheck {
      *
      * @param serviceId
      */
-    public void applyService(long serviceId) throws LicenseException {
-        String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId, SecretKeyType.TUNING);
-        FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(serviceCiphertext);
-        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(fileLicenseInfo, serviceId);
+    public void applyService(long serviceId, String tuningSecretKey) throws LicenseException {
+        String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId, SecretKeyType.COMMON);
+        FileLicenseInfo tuningLicInfo = checkServiceLic(tuningSecretKey);
+        checkLic(serviceCiphertext, tuningSecretKey);
+        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(tuningLicInfo, serviceId);
         String dataCiphertext = dataCipherHandler.getDataCiphertext(serviceId, serviceDetail);
-        licenseCheckHandler.updateServiceDetail(serviceId, dataCiphertext);
+        licenseCheckHandler.updateServiceDetail(serviceId, dataCiphertext, tuningSecretKey);
+
+        licenseCheckHandler.clearTuningKey(serviceId, serviceLicenseInfoSource);
     }
 
+    /**
+     * 检查服务秘钥与调优秘钥是否匹配
+     *
+     * @param secretKey
+     * @param tuningSecretKey
+     * @return
+     * @throws LicenseException
+     */
+    public void checkLic(String secretKey, String tuningSecretKey) throws LicenseException {
+        FileLicenseInfo serviceLicInfo = serviceLicenseInfoSource.checkSource(secretKey);
+        FileLicenseInfo tuningLicInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
+        if(!StringUtils.equals(serviceLicInfo.getServiceName(), tuningLicInfo.getServiceName())) {
+            throw new LicenseException("服务秘钥与调优秘钥不匹配！");
+        }
 
-
+    }
 
 }

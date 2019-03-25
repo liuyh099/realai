@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/experimental/train")
@@ -166,14 +168,16 @@ public class ExperimentalTrainController {
 
     @GetMapping("/getFilePath")
     @ApiOperation(value = "新增实验-选择文件-获得文件地址")
+    @ApiImplicitParam(name = "type", value = "文件地址类别[experiment：实验，offline：离线跑批 默认是实验]", required = false, dataType = "String", paramType = "query")
     @ResponseBody
-    public Result<FileTreeVo> getFilePath() {
+    public Result<FileTreeVo> getFilePath(@RequestParam(name="type", required = false) String type) {
         try {
-            Object o = sSHBusinness.getFilePath();
+            type = StringUtils.isEmpty(type) ? "experiment":type;
+            Object o = sSHBusinness.getFilePath(type);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), o);
         } catch (Exception e) {
             logger.error("新增实验-选择文件-获得文件地址异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
 
         }
     }

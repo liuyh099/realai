@@ -148,4 +148,20 @@ public class ServiceController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),secretKeyInfoVO);
     }
 
+
+    @PostMapping("/list")
+    @ApiOperation(value="服务续期")
+    public Result renewalService(@RequestBody RenewalServiceQuery renewalServiceQuery){
+        ServiceBO serviceBO = new ServiceBO();
+        try {
+            BeanUtils.copyProperties(renewalServiceQuery, serviceBO);
+            serviceBussiness.renewalService(serviceBO);
+        } catch (Exception e) {
+            logger.error("服务续期异常！", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg()+e.getMessage(), null);
+        }
+        return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
+    }
+
+
 }

@@ -31,7 +31,16 @@ public interface LicenseCheckHandler {
      * 更新授权服务信息（部署次数..）
      *
      * @param dataCiphertext
+     * @param tuningSecretKey
      */
-    void updateServiceDetail(long serviceId, String dataCiphertext);
+    void updateServiceDetail(long serviceId, String dataCiphertext, String tuningSecretKey) throws LicenseException;
+
+
+    /**
+     * 清除过期调优秘钥
+     *
+     * @param serviceId
+     */
+    void clearTuningKey(long serviceId, ServiceLicenseInfoSource serviceLicenseInfoSource);
 
 }
