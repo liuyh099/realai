@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface BatchRecordService {
 
-	Long insert(BatchRecord batchRecord);
+	Integer insert(BatchRecord batchRecord);
 
 	Integer delete(List<Long> idList);  
 
