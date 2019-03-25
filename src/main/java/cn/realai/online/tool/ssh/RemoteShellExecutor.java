@@ -132,9 +132,9 @@ public class RemoteShellExecutor {
     }
 
     public static void main(String args[]) throws Exception {
-    	RemoteShellExecutor executor = new RemoteShellExecutor("10.0.7.201", "root", "123456",null);
+    	RemoteShellExecutor executor = new RemoteShellExecutor("47.105.113.171", "root", "Realai2018", 2822);
         // 执行myTest.sh 参数为java Know dummy
-        String filePath = executor.exec("sh /home/tomcat1/testDir.sh /mnt/xljr/web/");
+        String filePath = executor.exec("sh home/shell/testDir.sh /home/file/");
 
         String[] list = filePath.split("\n");
         List<String> aab = new ArrayList<>(list.length);
@@ -147,7 +147,6 @@ public class RemoteShellExecutor {
 
         }
         System.out.println(JSON.toJSONString(StringPathToTreeUtils.listPathToTree(aab)));
-
     }
 
 }
