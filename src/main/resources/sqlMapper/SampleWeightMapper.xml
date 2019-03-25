@@ -13,12 +13,12 @@
     </resultMap>
 
     <insert id="insertList">
-        INSERT INTO sample_grouping (experiment_id,group_id,variable_weight,variable_id,variable_type,
+        INSERT INTO sample_weight (experiment_id,group_id,variable_weight,variable_id,variable_type,
         box_beans,img_url)
         VALUES
-        <foreach collection="swList" open="(" close=")" separator="," item="sw">
-            #{sw.experimentId},#{sw.groupId},#{sw.variableWeight},#{sw.variableId},#{sw.variableType},
-            #{sw.boxBeans},#{sw.imgUrl}
+        <foreach collection="swList" separator="," item="sw">
+            (#{sw.experimentId},#{sw.groupId},#{sw.variableWeight},#{sw.variableId},#{sw.variableType},
+            #{sw.boxBeans},#{sw.imgUrl})
         </foreach>
     </insert>
 
