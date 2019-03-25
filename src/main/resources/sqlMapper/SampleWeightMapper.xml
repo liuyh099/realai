@@ -27,8 +27,8 @@
         from sample_weight
         <where>
             1=1
-            <if test="trainId!=null">
-                AND	train_id = #{trainId}
+            <if test="experimentId!=null">
+                AND	experiment_id = #{experimentId}
             </if>
             <if test="groupName!=null and groupName!=''">
                 AND	group_name = #{groupName}

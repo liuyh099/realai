@@ -8,7 +8,7 @@ public class ExperimentalResultSummaryVO {
 
     //实验类型
     @ApiModelProperty(value = "数据集类型", example = "1:训练集 2:测试集 3:验证集")
-    private int dataSetType;
+    private Integer dataSetType;
 
     //样本描述
     @ApiModelProperty(value = "样本描述")
@@ -16,11 +16,11 @@ public class ExperimentalResultSummaryVO {
 
     //样本数量
     @ApiModelProperty(value = "样本数")
-    private int sampleCount;
+    private Integer sampleCount;
 
     //样本用户数
     @ApiModelProperty(value = "标签用户数")
-    private int numberOfLabelUsers;
+    private Integer numberOfLabelUsers;
 
     //标签样本比例
     @ApiModelProperty(value = "标签样本比例")
@@ -39,11 +39,11 @@ public class ExperimentalResultSummaryVO {
     private String mean;
 
 
-    public int getDataSetType() {
+    public Integer getDataSetType() {
         return dataSetType;
     }
 
-    public void setDataSetType(int dataSetType) {
+    public void setDataSetType(Integer dataSetType) {
         this.dataSetType = dataSetType;
     }
 
@@ -55,19 +55,19 @@ public class ExperimentalResultSummaryVO {
         this.sampleDesc = sampleDesc;
     }
 
-    public int getSampleCount() {
+    public Integer getSampleCount() {
         return sampleCount;
     }
 
-    public void setSampleCount(int sampleCount) {
+    public void setSampleCount(Integer sampleCount) {
         this.sampleCount = sampleCount;
     }
 
-    public int getNumberOfLabelUsers() {
+    public Integer getNumberOfLabelUsers() {
         return numberOfLabelUsers;
     }
 
-    public void setNumberOfLabelUsers(int numberOfLabelUsers) {
+    public void setNumberOfLabelUsers(Integer numberOfLabelUsers) {
         this.numberOfLabelUsers = numberOfLabelUsers;
     }
 

@@ -59,7 +59,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), page);
         } catch (Exception e) {
             log.error("查询模型列表异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -74,7 +74,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             log.error("查询模型详情异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -97,7 +97,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             log.error("查询模型详情异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -111,7 +111,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             log.error("查询服务下的已发布模型集合", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -126,7 +126,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             log.error("根据服务ID或者最近一次发布的模型对应的服务下的模型集合", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -141,7 +141,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             log.error("模型调优-检测PSI查询异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
@@ -155,7 +155,7 @@ public class ModelController {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), list);
         } catch (Exception e) {
             log.error("根据模型ID获取PSI结果集异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 

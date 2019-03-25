@@ -149,7 +149,7 @@ public class ServiceController {
     }
 
 
-    @PostMapping("/list")
+    @PostMapping("/list/renewal")
     @ApiOperation(value="服务续期")
     public Result renewalService(@RequestBody RenewalServiceQuery renewalServiceQuery){
         ServiceBO serviceBO = new ServiceBO();
