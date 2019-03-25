@@ -108,7 +108,7 @@ public class RemoteShellExecutor {
             }
         } finally {
             if (conn != null) {
-                conn.close();
+                conn.close(); 
             }
             IOUtils.closeQuietly(stdOut);
             IOUtils.closeQuietly(stdErr);
