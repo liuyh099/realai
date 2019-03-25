@@ -24,5 +24,5 @@ public interface PersonalHomoResultSetDao {
      * @param id
      * @return
      */
-    List<PersonalHomoResultSet> listCharts(Long id);
+    List<PersonalHomoResultSet> listCharts(@Param("id") Long id);
 }

@@ -38,8 +38,8 @@
         SELECT *,ABS(weight) AS `absWeight` FROM personal_homo
         <where>
             1=1
-            <if test="pid!=null">
-                AND pid = #{pid}
+            <if test="id!=null">
+                AND pid = #{id}
             </if>
         </where>
         ORDER BY k ASC
