@@ -14,9 +14,9 @@
     <insert id="insertList">
         INSERT INTO personal_hetro(experiment_id,batch_id,pid,variable_id,value,weight)
         VALUES
-        <foreach collection="hetroList" open="(" close=")" separator="," item="hetro">
-            #{hetro.experimentId},#{hetro.batchId},#{hetro.pid},#{hetro.variableId},
-            #{hetro.value},#{hetro.weight}
+        <foreach collection="hetroList" separator="," item="hetro">
+            (#{hetro.experimentId},#{hetro.batchId},#{hetro.pid},#{hetro.variableId},
+            #{hetro.value},#{hetro.weight})
         </foreach>
     </insert>
 

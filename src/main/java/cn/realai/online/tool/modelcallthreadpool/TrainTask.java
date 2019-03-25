@@ -129,7 +129,7 @@ public class TrainTask implements Runnable {
 
         //解析千人千面同质和异质结果
         analysisPersonalResultSet(redisClientTemplate.get(redisKey.getPersonalHomoResultSet()),
-                redisClientTemplate.get(redisKey.getPersonalHetroResultSet()), piMap, batchRecordId);
+                redisClientTemplate.get(redisKey.getPersonalHetroResultSet()), piMap, vdMap, batchRecordId);
         //redisClientTemplate.delete(redisKey.getPersonalHetroResultSet());
         
         //解析千人千面聚合信息
@@ -305,7 +305,7 @@ public class TrainTask implements Runnable {
      * @param piMap
      * @param batchRecordId
      */
-    private void analysisPersonalResultSet(String homoValue, String HetroValue, Map<String, Long> piMap, Long batchRecordId) {
+    private void analysisPersonalResultSet(String homoValue, String HetroValue, Map<String, Long> piMap, Map<String, Long> vdMap, Long batchRecordId) {
         if ((homoValue == null || "".equals(homoValue)) && (HetroValue == null || "".equals(HetroValue))) {
             logger.error("TrainTask analysisPersonalResultSet. 训练结果没有千人千面同质和异质信息数据. experimentId{}", experimentId);
             throw new RuntimeException("训练结果没有千人千面同质和异质信息数据experimentId = " + experimentId);
@@ -318,6 +318,9 @@ public class TrainTask implements Runnable {
                     logger.error("TrainTask analysisPersonalResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, phrs.getPersonalId());
                     throw new RuntimeException("训练结果数据错误,千人千面信息不存在.");
                 }
+                
+                Long vId = vdMap.get(phrs.getVariableName() + VariableData.SCHEMA_TYPE_HOMO);
+                phrs.setVariableId(vId);
                 phrs.setPid(piId);
                 phrs.setBatchId(batchRecordId);
                 phrs.setExperimentId(experimentId);
@@ -333,6 +336,8 @@ public class TrainTask implements Runnable {
                     logger.error("TrainTask analysisPersonalResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, phrs.getPersonalId());
                     throw new RuntimeException("训练结果数据错误,千人千面信息不存在.");
                 }
+                Long vId = vdMap.get(phrs.getVariableName() + VariableData.SCHEMA_TYPE_HETERO);
+                phrs.setVariableId(vId);
                 phrs.setPid(piId);
                 phrs.setBatchId(batchRecordId);
                 phrs.setExperimentId(experimentId);
@@ -348,10 +353,9 @@ public class TrainTask implements Runnable {
      */
     private void analysisPersonalComboResultSet(String redisValue, Map<String, Long> piMap, Map<String, Long> vdMap, Long batchRecordId) {
         if (redisValue == null || "".equals(redisValue)) {
-            logger.error("TrainTask analysisPersonalComboResultSet. 训练结果没有千人千面人员聚合信息数据. experimentId{}", experimentId);
-            throw new RuntimeException("训练结果没有千人千面人员聚合信息数据experimentId = " + experimentId);
+        	return;
         }
-        List<PersonalComboResultSet> comboList = JSON.parseArray(redisValue, PersonalComboResultSet.class);
+    	List<PersonalComboResultSet> comboList = JSON.parseArray(redisValue, PersonalComboResultSet.class);
         for (PersonalComboResultSet pcrs : comboList) {
             Long piId = piMap.get(pcrs.getPersonalId());
             if (piId == null) {

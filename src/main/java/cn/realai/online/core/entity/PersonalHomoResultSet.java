@@ -29,6 +29,8 @@ public class PersonalHomoResultSet {
     //值
     private String value;
 
+    private String variableName;
+    
     //权重(显示值)
     private double weight;
 
@@ -114,4 +116,13 @@ public class PersonalHomoResultSet {
     public void setBatchStr(String batchStr) {
         this.batchStr = batchStr;
     }
+
+	public String getVariableName() {
+		return variableName;
+	}
+
+	public void setVariableName(String variableName) {
+		this.variableName = variableName;
+	}
+    
 }
