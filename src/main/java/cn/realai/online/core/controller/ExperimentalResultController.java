@@ -178,6 +178,7 @@ public class ExperimentalResultController {
             List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId(), false);
             List<EchartsDataVo> result = null;
             if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
+                result =new ArrayList<>();
                 for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {
                     EchartsDataVo data = new EchartsDataVo();
                     data.setName(sampleGroupingBO.getGroupName());

@@ -37,7 +37,7 @@
     <select id="findList" resultMap="PersonalInformationMap"
             parameterType="cn.realai.online.core.entity.PersonalInformation">
         select *
-        form personal_information
+        FROM personal_information
         <where>
             1=1
             <if test="id!=null">
