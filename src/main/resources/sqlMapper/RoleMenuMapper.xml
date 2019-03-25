@@ -5,8 +5,8 @@
 
     <insert id="batchInsert" parameterType="cn.realai.online.userandperm.entity.RoleMenu">
         INSERT INTO sys_role_menu (role_id,menu_id,check_status) values
-        <foreach collection="roleMeuns" open="(" close=")" separator="," item="item">
-            #{item.roleId}, #{item.menuId},#{checkStatus}
+        <foreach collection="roleMenus" separator="," item="item">
+            (#{item.roleId},#{item.menuId},#{item.checkStatus})
         </foreach>
     </insert>
 
