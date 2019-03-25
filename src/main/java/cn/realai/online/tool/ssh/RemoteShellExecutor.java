@@ -134,7 +134,7 @@ public class RemoteShellExecutor {
     public static void main(String args[]) throws Exception {
     	RemoteShellExecutor executor = new RemoteShellExecutor("47.105.113.171", "root", "Realai2018", 2822);
         // 执行myTest.sh 参数为java Know dummy
-        String filePath = executor.exec("sh home/shell/testDir.sh /home/file/");
+        String filePath = executor.exec("sh /home/shell/testDir.sh /home/file/");
 
         String[] list = filePath.split("\n");
         List<String> aab = new ArrayList<>(list.length);
