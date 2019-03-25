@@ -15,7 +15,7 @@
         <result column="order_date" property="orderDate" jdbcType="VARCHAR"/>
         <result column="label" property="label" jdbcType="INTEGER"/>
         <result column="probability" property="probability" jdbcType="DOUBLE"/>
-    </resultMap>
+    </resultMap> 
 
     <insert id="insertList">
         INSERT INTO personal_information(experiment_id,group_id,batch_id,personal_name,stage,personal_card_id,
