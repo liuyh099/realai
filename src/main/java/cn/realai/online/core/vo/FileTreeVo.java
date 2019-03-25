@@ -1,7 +1,5 @@
 package cn.realai.online.core.vo;
 
-import cn.realai.online.util.StringPathToTreeUtils;
-
 import java.util.List;
 
 public class FileTreeVo {
@@ -24,4 +22,5 @@ public class FileTreeVo {
     public void setChildren(List<FileTreeVo> children) {
         this.children = children;
     }
+
 }
