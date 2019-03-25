@@ -8,6 +8,8 @@ import cn.realai.online.core.entity.TuningRecord;
 import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.service.TuningRecordService;
 import cn.realai.online.core.vo.PsiCheckVO;
+import cn.realai.online.lic.LicenseException;
+import cn.realai.online.lic.ServiceLicenseCheck;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,12 +37,12 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
     @Autowired
     private ModelService modelService;
     @Autowired
-    private ServiceBussiness serviceBussiness;
+    private ServiceLicenseCheck serviceLicenseCheck;
 
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Integer createTuningRecord(Long modelId, String securityKey) {
+    public Integer createTuningRecord(Long modelId, String securityKey) throws LicenseException {
         Assert.notNull(modelId, "模型ID不能为空");
         PsiCheckVO checkVO = psiCheckResultBussiness.checkPsi(modelId);
         Assert.isTrue(checkVO != null && checkVO.isFlag(), "该模型不存在或PSI未达标不允许调优");
@@ -55,8 +57,8 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
             item.setType(TuningRecord.TYPE.PSI.value);
             tuningRecordService.updateByServiceIdAndType(item);
         } else {
-            //校验密钥串是否可用并绑定
-            serviceBussiness.bindTuningSecretKey(model.getServiceId(), securityKey);
+            //校验密钥串是否可用
+            serviceLicenseCheck.checkServiceLic(securityKey);
             //密钥调优更新其他记录状态
             TuningRecord item = new TuningRecord();
             item.setStatus(TuningRecord.STATUS.INVALID.value);
