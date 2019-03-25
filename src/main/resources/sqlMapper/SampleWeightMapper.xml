@@ -30,8 +30,8 @@
             <if test="experimentId!=null">
                 AND	experiment_id = #{experimentId}
             </if>
-            <if test="groupName!=null and groupName!=''">
-                AND	group_name = #{groupName}
+            <if test="groupId!=null">
+                AND	group_id = #{groupId}
             </if>
             <if test="variableType!=null">
                 AND	variable_type= #{variableType}

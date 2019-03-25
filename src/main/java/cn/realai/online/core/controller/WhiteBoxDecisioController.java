@@ -36,9 +36,11 @@ public class WhiteBoxDecisioController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private ModelBussiness modelBussiness;
+
     @Autowired
     private ExperimentalTrainBussiness experimentalTrainBussiness;
 
+    @Autowired
     private SampleWeightBussiness sampleWeightBussiness;
 
     @GetMapping("whiteBoxDecisio/getGroupOption")
