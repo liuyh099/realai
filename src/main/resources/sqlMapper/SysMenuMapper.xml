@@ -24,4 +24,8 @@
         ORDER BY sort ASC
     </select>
 
+    <select id="getAllMenuIds" resultType="java.lang.Long">
+        SELECT id FROM sys_menu ORDER BY sort ASC
+    </select>
+
 </mapper>

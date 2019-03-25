@@ -20,4 +20,9 @@ public class MenuServiceImpl implements MenuService {
     public List<SysMenu> findList(SysMenu sysMenu) {
         return sysMenuDao.findList(sysMenu);
     }
+
+    @Override
+    public List<Long> getAllMenuIds() {
+        return sysMenuDao.getAllMenuIds();
+    }
 }

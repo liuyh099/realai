@@ -14,8 +14,8 @@
     <insert id="insertList">
         INSERT INTO sample_grouping (experiment_id,group_name,create_time,count,percentage,positive_ratio)
         VALUES
-        <foreach collection="sgList" open="(" close=")" separator="," item="sg">
-            #{sg.experimentId},#{sg.groupName},#{sg.createTime},#{sg.count},#{sg.percentage},#{sg.positiveRatio}
+        <foreach collection="sgList" separator="," item="sg">
+            (#{sg.experimentId},#{sg.groupName},#{sg.createTime},#{sg.count},#{sg.percentage},#{sg.positiveRatio})
         </foreach>
     </insert>
 
@@ -23,6 +23,9 @@
 		select * 
 		from sample_grouping
 		where experiment_id = #{experimentId}
+        <if test="isExceptionGroup==false">
+            and group_name != '异常组'
+        </if>
 	</select>
 
 </mapper>

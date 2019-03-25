@@ -15,7 +15,6 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -88,6 +87,9 @@ public class UserController {
     @ApiOperation(value = "新增用户")
     public Result add(@Validated @RequestBody UserAddVO userAddVO) {
         try {
+            if ("admin".equals(userAddVO.getName())) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), "不能增加超级用户", null);
+            }
             UserBO userBO = new UserBO();
             BeanUtils.copyProperties(userAddVO, userBO);
             userBO.setRoleId(userAddVO.getGroup());
@@ -120,6 +122,9 @@ public class UserController {
     @ApiOperation(value = "删除用户")
     public Result delete(@RequestBody List<Long> ids) {
         try {
+            if (ids.contains(1L)) {
+                ids.remove(1L);
+            }
             if (CollectionUtils.isEmpty(ids)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
@@ -155,6 +160,9 @@ public class UserController {
     @ApiOperation(value = "更新用户")
     public Result update(@Validated @RequestBody UserUpdateVO userUpdateVO) {
         try {
+            if (userUpdateVO.getId().equals(1L)) {
+                userUpdateVO.setName("admin");
+            }
             UserBO userbo = new UserBO();
             BeanUtils.copyProperties(userUpdateVO, userbo);
             if (!userBusiness.update(userbo)) {

@@ -53,7 +53,7 @@ public class TrainTask implements Runnable {
     private Long experimentId;
 
     private TrainResultRedisKey redisKey;
-    
+
     public TrainTask(Long experimentId, TrainResultRedisKey redisKey) {
         this.experimentId = experimentId;
         this.redisKey = redisKey;
@@ -74,20 +74,20 @@ public class TrainTask implements Runnable {
 
         //解析模型表现
         analysisModelPerformance(redisClientTemplate.get(redisKey.getModelperformance()));
-        redisClientTemplate.delete(redisKey.getModelperformance());
-        
+        //redisClientTemplate.delete(redisKey.getModelperformance());
+
         //解析top排序
         analysisTopSort(redisClientTemplate.get(redisKey.getTopsort()));
-        redisClientTemplate.delete(redisKey.getTopsort());
-        
+        //redisClientTemplate.delete(redisKey.getTopsort());
+
         //样本摘要
         analysisSampleSummary(redisClientTemplate.get(redisKey.getSampleSummary()));
-        redisClientTemplate.delete(redisKey.getSampleSummary());
-        
+        //redisClientTemplate.delete(redisKey.getSampleSummary());
+
         //样本分组
         List<SampleGrouping> sampleGroupingList = analysisSampleGrouping(redisClientTemplate.get(redisKey.getSampleGrouping()));
-        redisClientTemplate.delete(redisKey.getSampleGrouping());
-        
+        //redisClientTemplate.delete(redisKey.getSampleGrouping());
+
         Map<String, Long> sgMap = new HashMap<String, Long>();
         for (SampleGrouping sg : sampleGroupingList) {
             sgMap.put(sg.getGroupName(), sg.getId());
@@ -102,8 +102,8 @@ public class TrainTask implements Runnable {
 
         //样本权重
         analysisSampleWeight(redisClientTemplate.get(redisKey.getSampleWeight()), sgMap, vdMap);
-        redisClientTemplate.delete(redisKey.getSampleWeight());
-        
+        //redisClientTemplate.delete(redisKey.getSampleWeight());
+
         //千人千面人员信息
         List<PersonalInformation> personalInformationList = analysisPersonalInformation(redisClientTemplate.get(redisKey.getPersonalInformation()), sgMap);
 
@@ -122,19 +122,22 @@ public class TrainTask implements Runnable {
         batchRecord.setExperimentId(experiment.getId());
         batchRecord.setBatchName(experiment.getName() + "训练结果批次数据");
         BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
-		batchRecordService.insert(batchRecord);
+        batchRecordService.insert(batchRecord);
         Long batchRecordId = batchRecord.getId();
 
         //解析千人千面同质和异质结果
         analysisPersonalResultSet(redisClientTemplate.get(redisKey.getPersonalHomoResultSet()),
                 redisClientTemplate.get(redisKey.getPersonalHetroResultSet()), piMap, batchRecordId);
-
+        //redisClientTemplate.delete(redisKey.getPersonalHetroResultSet());
+        
         //解析千人千面聚合信息
         analysisPersonalComboResultSet(redisClientTemplate.get(redisKey.getPersonalComboResultSet()), piMap, vdMap, batchRecordId);
-
+        //redisClientTemplate.delete(redisKey.getPersonalComboResultSet());
+        
         //解析实验结果集 风控或营销
         analysisExperimentResultSet(redisClientTemplate.get(redisKey.getExperimentResultSet()));
-
+        //redisClientTemplate.delete(redisKey.getExperimentResultSet());
+        
         //样本综述
         String sampleReview = redisClientTemplate.get(redisKey.getSampleReview());
 
@@ -184,10 +187,7 @@ public class TrainTask implements Runnable {
         }
         List<ModelPerformance> mpList = JSON.parseArray(redisValue, ModelPerformance.class);
         for (ModelPerformance mp : mpList) {
-            if (mp.getExperimentId() != experimentId.longValue()) {
-                logger.error("TrainTask analysisModelPerformance. 训练结果数据错误,训练实验id的结果实验id不相等. experimentId{}, resultId{}", experimentId, mp.getExperimentId());
-                throw new RuntimeException("训练结果数据错误,训练实验id的结果实验id不相等.");
-            }
+        	mp.setExperimentId(experimentId);
         }
         ModelPerformanceService modelPerformanceService = SpringContextUtils.getBean(ModelPerformanceService.class);
         modelPerformanceService.insertList(mpList);
@@ -203,10 +203,7 @@ public class TrainTask implements Runnable {
         }
         List<TopSort> tsList = JSON.parseArray(redisValue, TopSort.class);
         for (TopSort ts : tsList) {
-            if (ts.getExperimentId() != experimentId.longValue()) {
-                logger.error("TrainTask analysisModelPerformance. 训练结果数据错误,训练实验id的结果实验id不相等. experimentId{}, resultId{}", experimentId, ts.getExperimentId());
-                throw new RuntimeException("训练结果数据错误,训练实验id的结果实验id不相等.");
-            }
+        	ts.setExperimentId(experimentId);
         }
         TopSortService topSortService = SpringContextUtils.getBean(TopSortService.class);
         topSortService.insertList(tsList);
@@ -222,10 +219,7 @@ public class TrainTask implements Runnable {
         }
         List<SampleSummary> ssList = JSON.parseArray(redisValue, SampleSummary.class);
         for (SampleSummary ss : ssList) {
-            if (ss.getExperimentId() != experimentId.longValue()) {
-                logger.error("TrainTask analysisModelPerformance. 训练结果数据错误,训练实验id的结果实验id不相等. experimentId{}, resultId{}", experimentId, ss.getExperimentId());
-                throw new RuntimeException("训练结果数据错误,训练实验id的结果实验id不相等.");
-            }
+        	ss.setExperimentId(experimentId);
         }
         SampleSummaryService sampleSummaryService = SpringContextUtils.getBean(SampleSummaryService.class);
         sampleSummaryService.insertList(ssList);
@@ -241,14 +235,12 @@ public class TrainTask implements Runnable {
         }
         List<SampleGrouping> sgList = JSON.parseArray(redisValue, SampleGrouping.class);
         for (SampleGrouping sg : sgList) {
-            if (sg.getExperimentId() != experimentId.longValue()) {
-                logger.error("TrainTask analysisModelPerformance. 训练结果数据错误,训练实验id的结果实验id不相等. experimentId{}, resultId{}", experimentId, sg.getExperimentId());
-                throw new RuntimeException("训练结果数据错误,训练实验id的结果实验id不相等.");
-            }
+        	sg.setExperimentId(experimentId);
+        	sg.setCreateTime(System.currentTimeMillis());
         }
         SampleGroupingService sampleGroupingService = SpringContextUtils.getBean(SampleGroupingService.class);
         sampleGroupingService.insertList(sgList);
-        sgList = sampleGroupingService.findListByExperimentId(experimentId);
+        sgList = sampleGroupingService.findListByExperimentId(experimentId, false);
         return sgList;
     }
 
@@ -262,10 +254,7 @@ public class TrainTask implements Runnable {
         }
         List<SampleWeight> swList = JSON.parseArray(redisValue, SampleWeight.class);
         for (SampleWeight sw : swList) {
-            if (sw.getExperimentId() != experimentId.longValue()) {
-                logger.error("TrainTask analysisSampleWeight. 训练结果数据错误,训练实验id的结果实验id不相等. experimentId{}, resultId{}", experimentId, sw.getExperimentId());
-                throw new RuntimeException("训练结果数据错误,训练实验id的结果实验id不相等.");
-            }
+            sw.setExperimentId(experimentId);
             Long sgId = sgMap.get(sw.getGroupName());
             if (sgId == null) {
                 logger.error("TrainTask analysisSampleWeight. 训练结果数据错误,分组名称不存在. experimentId{}, groupName{}", experimentId, sw.getGroupName());
@@ -293,10 +282,7 @@ public class TrainTask implements Runnable {
         }
         List<PersonalInformation> piList = JSON.parseArray(redisValue, PersonalInformation.class);
         for (PersonalInformation pi : piList) {
-            if (pi.getExperimentId() != experimentId.longValue()) {
-                logger.error("TrainTask analysisModelPerformance. 训练结果数据错误,训练实验id的结果实验id不相等. experimentId{}, resultId{}", experimentId, pi.getExperimentId());
-                throw new RuntimeException("训练结果数据错误,训练实验id的结果实验id不相等.");
-            }
+            pi.setExperimentId(experimentId);
             Long sgId = sgMap.get(pi.getGroupName());
             if (sgId == null) {
                 logger.error("TrainTask analysisPersonalInformation. 训练结果数据错误,分组名称不存在. experimentId{}, groupName{}", experimentId, pi.getGroupName());

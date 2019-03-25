@@ -10,9 +10,9 @@ public class ExperimentalResultWhileBoxQuery extends PageQuery {
     private long trainId;
     @ApiModelProperty(value = "组id")
     private String groupName;
-    @ApiModelProperty(value = "变量类型", example = "1:同质 2:异质 为空表示查询所有")
+    @ApiModelProperty(value = "变量类型 1:同质 2:异质 为空表示查询所有", example = "1:同质 2:异质 为空表示查询所有")
     private int sampleType;
-    @ApiModelProperty(value = "请求类型", example = "image:请求图片 normal:普通请求")
+    @ApiModelProperty(value = "请求类型 image:请求图片 normal:普通请求", example = "image:请求图片 normal:普通请求")
     private String type;
 
 

@@ -42,20 +42,27 @@ public class ExperimentalResultController {
     @Autowired
     private ExperimentalTrainBussiness experimentalTrainBusiness;
 
+    @Autowired
     private SampleWeightBussiness sampleWeightBussiness;
 
     @GetMapping("/group/{trainId}")
     @ApiOperation(value = "实验结果-根据实验ID活得组集合(传实验的id)")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
-    public Result<List<GroupSelectNameVO>> group() {
-
-        return null;
+    public Result<List<GroupSelectNameVO>> group(@PathVariable Long trainId) {
+        try {
+            List<SampleGroupingBO> list = experimentalTrainBusiness.getGroupOptionName(trainId, true);
+            List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("实验结果-根据实验ID活得组集合异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
     }
 
 
     @GetMapping("assessment/image")
     @ApiOperation(value = "实验评估-图片(传实验的id)")
-    public Result<ExperimentalResultImageVO> assessment(@RequestBody @Validated IdVO idVo) {
+    public Result<ExperimentalResultImageVO> assessment(@Validated IdVO idVo) {
         try {
             ExperimentBO experimentBO = experimentalTrainBusiness.selectById(idVo.getId());
             ExperimentalResultImageVO experimentalResultImageVO = new ExperimentalResultImageVO();
@@ -168,7 +175,7 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-千人千面 获取echarts 数据")
     public Result<List<EchartsDataVo>> echartsData(@Validated IdVO idVo) {
         try {
-            List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId());
+            List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId(), false);
             List<EchartsDataVo> result = null;
             if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
                 for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {

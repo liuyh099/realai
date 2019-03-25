@@ -199,8 +199,8 @@ public class ThousandsFacesController {
             if (ObjectUtils.isEmpty(model)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
-            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId());
-            List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list),GroupSelectNameVO.class);
+            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId(), false);
+            List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("发布管理-千人千面-获得下拉组选项异常", e);
@@ -217,10 +217,10 @@ public class ThousandsFacesController {
             if (ObjectUtils.isEmpty(model)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
-            BatchRecordBO batchRecordBO =new BatchRecordBO();
+            BatchRecordBO batchRecordBO = new BatchRecordBO();
             batchRecordBO.setExperimentId(model.getExperimentId());
-            List<BatchRecordBO> batchList = experimentalTrainBussiness.findBatchRecordBOList(batchRecordBO,false);
-            List<BatchSelectNameVO> result = JSON.parseArray(JSON.toJSONString(batchList),BatchSelectNameVO.class);
+            List<BatchRecordBO> batchList = experimentalTrainBussiness.findBatchRecordBOList(batchRecordBO, false);
+            List<BatchSelectNameVO> result = JSON.parseArray(JSON.toJSONString(batchList), BatchSelectNameVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("发布管理-千人千面-获得下拉批次选项异常", e);

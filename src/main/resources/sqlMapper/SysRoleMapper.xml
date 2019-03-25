@@ -13,7 +13,7 @@
     <select id="get" resultMap="SysRoleMap" parameterType="java.lang.Long">
         SELECT a.* ,b.name AS create_user FROM sys_role a LEFT JOIN sys_user b ON a.create_user_id = b.id
         <where>
-            id =#{id}
+            a.id =#{id}
         </where>
     </select>
 
@@ -22,17 +22,17 @@
         <where>
             1=1
             <if test="id!=null">
-                AND id =#{id}
+                AND a.id =#{id}
             </if>
             <if test="name!=null and name !='' ">
-                AND name =#{name}
+                AND a.`name` =#{name}
             </if>
         </where>
     </select>
 
     <insert id="insert" parameterType="cn.realai.online.userandperm.entity.SysRole">
         <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
-            select last_insert_rowid() as id
+            select last_insert_id() as id
         </selectKey>
         INSERT INTO sys_role (name,create_time,create_user_id,notes) VALUE
         (#{name},#{createTime},#{createUserId},#{notes})
@@ -57,7 +57,7 @@
 
     <update id="update" parameterType="cn.realai.online.userandperm.entity.SysRole">
         UPDATE sys_role SET
-        name=#{name},
+        `name`=#{name},
         notes=#{notes}
         <where>
             id=#{id}

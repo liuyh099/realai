@@ -18,9 +18,9 @@
         INSERT INTO sample_summary (experiment_id,data_set_type,sample_desc,sample_count,number_of_label_users,
         label_sample_ratio,min,max,mean)
         VALUES
-        <foreach collection="ssList" open="(" close=")" separator="," item="ss">
-            #{ss.experimentId},#{ss.dataSetType},#{ss.sampleDesc},#{ss.sampleCount},#{ss.numberOfLabelUsers},
-            #{ss.labelSampleRatio},#{ss.min},#{ss.max},#{ss.mean}
+        <foreach collection="ssList" separator="," item="ss">
+            (#{ss.experimentId},#{ss.dataSetType},#{ss.sampleDesc},#{ss.sampleCount},#{ss.numberOfLabelUsers},
+            #{ss.labelSampleRatio},#{ss.min},#{ss.max},#{ss.mean})
         </foreach>
     </insert>
 

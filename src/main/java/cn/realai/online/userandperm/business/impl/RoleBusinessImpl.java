@@ -65,6 +65,8 @@ public class RoleBusinessImpl implements RoleBusiness {
         BeanUtils.copyProperties(roleBO, sysRole);
 
         //插入角色
+        sysRole.setCreateTime(System.currentTimeMillis());
+        sysRole.setCreateUserId(UserUtils.getUser().getId());
         Integer count = roleService.insert(sysRole);
         if (count <= 0) {
             return false;
@@ -89,6 +91,7 @@ public class RoleBusinessImpl implements RoleBusiness {
             roleMenu.setRoleId(sysRole.getId());
             roleMenu.setMenuId(menuId);
             roleMenu.setCheckStatus(type);
+            roleMenus.add(roleMenu);
         }
         roleMenuService.batchInsert(roleMenus);
     }
@@ -134,8 +137,8 @@ public class RoleBusinessImpl implements RoleBusiness {
         RoleDetailBO roleDetailBO = new RoleDetailBO();
         BeanUtils.copyProperties(sysRole, roleDetailBO);
 
-        List<Long> check = roleMenuService.findIdsByRoleIdAndStatus(sysRole.getId(),1);
-        List<Long> half = roleMenuService.findIdsByRoleIdAndStatus(sysRole.getId(),2);
+        List<Long> check = roleMenuService.findIdsByRoleIdAndStatus(sysRole.getId(), 1);
+        List<Long> half = roleMenuService.findIdsByRoleIdAndStatus(sysRole.getId(), 2);
 //        List<Long> menuIds = roleMenuService.findIdsByRoleId(sysRole.getId());
 //        if (!ObjectUtils.isEmpty(sysRole)) {
 //            List<MenuTreeNodeBO> nodeTree = menuTree(menuIds, clearNocheck);
@@ -187,7 +190,14 @@ public class RoleBusinessImpl implements RoleBusiness {
             return null;
         }
         user = userService.get(user.getId());
-        List<Long> menuIds = roleMenuService.findIdsByRoleId(user.getRoleId());
+        List<Long> menuIds = null;
+        if (UserUtils.isAdmin(user)) {
+            //admin 获得所有的菜单
+             menuIds = menuService.getAllMenuIds();
+        } else {
+            menuIds = roleMenuService.findIdsByRoleId(user.getRoleId());
+        }
+
         return menuTree(menuIds, true);
     }
 
@@ -219,7 +229,7 @@ public class RoleBusinessImpl implements RoleBusiness {
         for (SysMenu sysMenu1 : parentMenus) {
             MenuTreeNodeBO menuTreeNodeBO = new MenuTreeNodeBO();
             BeanUtils.copyProperties(sysMenu1, menuTreeNodeBO);
-            if (ids.contains(sysMenu1.getId())) {
+            if (ids != null && ids.contains(sysMenu1.getId())) {
                 menuTreeNodeBO.setCheck(true);
             } else {
                 if (clearNoCheck) {
@@ -239,7 +249,7 @@ public class RoleBusinessImpl implements RoleBusiness {
             for (SysMenu sysMenuTemp : childrenList) {
                 MenuTreeNodeBO menuTreeNodeBOChild = new MenuTreeNodeBO();
                 BeanUtils.copyProperties(sysMenuTemp, menuTreeNodeBOChild);
-                if (ids.contains(sysMenuTemp.getId())) {
+                if (ids != null && ids.contains(sysMenuTemp.getId())) {
                     menuTreeNodeBOChild.setCheck(true);
                 } else {
                     if (clearNoCheck) {

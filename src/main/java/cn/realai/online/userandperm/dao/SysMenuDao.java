@@ -16,4 +16,10 @@ public interface SysMenuDao {
      * @return
      */
     List<SysMenu> findList(SysMenu sysMenu);
+
+    /**
+     * 查询所有的菜单列表ID
+     * @return
+     */
+    List<Long> getAllMenuIds();
 }

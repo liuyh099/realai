@@ -35,6 +35,7 @@
         <result column="ks_train_image_url" property="ksTrainImageUrl" jdbcType="VARCHAR"/>
         <result column="ks_validate_image_url" property="ksValidateImageUrl" jdbcType="VARCHAR"/>
         <result column="pre_finish" property="preFinish" jdbcType="INTEGER"/>
+        <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -109,20 +110,20 @@
 
 
     <select id="findList" resultMap="ExperimentMap" parameterType="cn.realai.online.core.entity.Experiment">
-        SELECT * FROM experiment
+        SELECT *,b.name AS "serviceName" FROM experiment a LEFT JOIN service b ON a.service_id = b.id
         <where>
             1=1
             <if test="name!=null and name!=''">
-                AND name LIKE CONCAT('%',#{name},'%')
+                AND a.name LIKE CONCAT('%',#{name},'%')
             </if>
             <if test="status!=null">
-                AND status= #{status}
+                AND a.status= #{status}
             </if>
             <if test="releasStatus!=null">
-                AND releas_status= #{releasStatus}
+                AND a.releas_status= #{releasStatus}
             </if>
             <if test="serviceId!=null">
-                AND service_id= #{serviceId}
+                AND a.service_id= #{serviceId}
             </if>
         </where>
     </select>

@@ -8,7 +8,7 @@ import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.IdQuery;
 import cn.realai.online.core.vo.ExperimentalTrainDoubleCreateVO;
-import cn.realai.online.core.vo.ExperimentalTrainVO;  
+import cn.realai.online.core.vo.ExperimentalTrainVO;
 
 import java.util.List;
 
@@ -170,12 +170,14 @@ public interface ExperimentalTrainBussiness {
 
     /**
      * 获得可发布实验列表
+     *
      * @return
      */
     List<ExperimentBO> getCanPublishTrain();
 
     /**
      * 获得模型表现
+     *
      * @param id
      * @return
      */
@@ -186,18 +188,26 @@ public interface ExperimentalTrainBussiness {
      * @param experimentId
      * @return
      */
-    List<SampleGroupingBO> getGroupOptionName(Long experimentId);
 
     /**
+     * 查询组名
      *
+     * @param experimentId
+     * @param isExceptionGroup 是否返回异常组
+     * @return
+     */
+    List<SampleGroupingBO> getGroupOptionName(Long experimentId, boolean isExceptionGroup);
+
+    /**
      * @param batchRecordBO
-     * @param isTranFlag 是否是训练
+     * @param isTranFlag    是否是训练
      * @return
      */
     List<BatchRecordBO> findBatchRecordBOList(BatchRecordBO batchRecordBO, boolean isTranFlag);
 
     /**
      * 二次创建实验
+     *
      * @param bo
      * @return
      */
@@ -205,6 +215,7 @@ public interface ExperimentalTrainBussiness {
 
     /**
      * 根据服务ID获取实验
+     *
      * @param serverId
      * @return
      */
@@ -212,12 +223,9 @@ public interface ExperimentalTrainBussiness {
 
     /**
      * 根据服务id查询发布的实验ID
+     *
      * @param id
-<<<<<<< HEAD
-     * @return  
-=======
      * @return
->>>>>>> branch 'master' of https://github.com/liuyh099/realai.git
      */
     ExperimentBO getPublishExperimentByServerId(Long id);
 }
