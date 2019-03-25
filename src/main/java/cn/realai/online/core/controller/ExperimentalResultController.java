@@ -182,7 +182,7 @@ public class ExperimentalResultController {
                 for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {
                     EchartsDataVo data = new EchartsDataVo();
                     data.setName(sampleGroupingBO.getGroupName());
-                    data.setValue(sampleGroupingBO.getPositiveRatio());
+                    data.setValue(sampleGroupingBO.getPercentage());
                     result.add(data);
                 }
             }
