@@ -27,7 +27,7 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 	private BatchRecordDao batchRecordDao;
 	
 	@Override
-	public Integer insert(BatchRecord batchRecord) {
+	public Long insert(BatchRecord batchRecord) {
 		batchRecord.setCreateTime(System.currentTimeMillis());
 		return batchRecordDao.insert(batchRecord);
 	}
