@@ -11,14 +11,14 @@ public interface RoleMenuDao {
      *
      * @param roleMenus
      */
-    void batchInsert(List<RoleMenu> roleMenus);
+    void batchInsert(@Param("roleMenus") List<RoleMenu> roleMenus);
 
     /**
      * 根据角色Id 删除角色菜单关系
      *
      * @param ids
      */
-    void deleteByRoleIds(List<Long> ids);
+    void deleteByRoleIds(@Param("ids")List<Long> ids);
 
     /**
      * 根据角色ID 查询菜单ID

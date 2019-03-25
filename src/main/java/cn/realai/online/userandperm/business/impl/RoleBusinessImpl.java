@@ -65,6 +65,8 @@ public class RoleBusinessImpl implements RoleBusiness {
         BeanUtils.copyProperties(roleBO, sysRole);
 
         //插入角色
+        sysRole.setCreateTime(System.currentTimeMillis());
+        sysRole.setCreateUserId(UserUtils.getUser().getId());
         Integer count = roleService.insert(sysRole);
         if (count <= 0) {
             return false;
@@ -89,6 +91,7 @@ public class RoleBusinessImpl implements RoleBusiness {
             roleMenu.setRoleId(sysRole.getId());
             roleMenu.setMenuId(menuId);
             roleMenu.setCheckStatus(type);
+            roleMenus.add(roleMenu);
         }
         roleMenuService.batchInsert(roleMenus);
     }
