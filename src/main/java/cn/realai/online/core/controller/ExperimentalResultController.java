@@ -42,6 +42,7 @@ public class ExperimentalResultController {
     @Autowired
     private ExperimentalTrainBussiness experimentalTrainBusiness;
 
+    @Autowired
     private SampleWeightBussiness sampleWeightBussiness;
 
     @GetMapping("/group/{trainId}")
