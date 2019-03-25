@@ -56,7 +56,7 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
             tuningRecordService.updateByServiceIdAndType(item);
         } else {
             //校验密钥串是否可用并绑定
-            serviceBussiness.bindTuningSecretKey(model.getServiceId(), securityKey);
+           // serviceBussiness.bindTuningSecretKey(model.getServiceId(), securityKey);
             //密钥调优更新其他记录状态
             TuningRecord item = new TuningRecord();
             item.setStatus(TuningRecord.STATUS.INVALID.value);
