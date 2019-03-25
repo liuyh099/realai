@@ -19,9 +19,9 @@
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO batch_record (y_table , x_table_homo, x_table_heter, experiment_id, service_id,
         	create_time, down_url, batch_type, batch_name, offline_times, remark)
-        VALUE (#{batchRecord.ytableDataSource},#{batchRecord.xtableHomogeneousDataSource},#{batchRecord.xtableHeterogeneousDataSource},
-        	#{batchRecord.experimentId},#{batchRecord.serviceId},#{batchRecord.createTime},#{batchRecord.downUrl},#{batchRecord.batchType},
-        	#{batchRecord.batchName}, #{batchRecord.offlineTimes}, #{batchRecord.remark})
+        VALUE (#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},
+        	#{experimentId},#{serviceId},#{createTime},#{downUrl},#{batchType},
+        	#{batchName}, #{offlineTimes}, #{remark})
     </insert>
 
     <select id="findBatchRecordList" resultMap="BatchRecordMap">

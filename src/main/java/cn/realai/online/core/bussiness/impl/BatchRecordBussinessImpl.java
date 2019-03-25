@@ -99,10 +99,11 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
         record.setYtableDataSource(createVO.getyDataSource());
         record.setBatchType(BatchRecord.BATCH_TYPE_OFFLINE);
         record.setBatchName("");
+        //record.setCreateTime(new Date().getTime());
         record.setServiceId(createVO.getServiceId());
         if (releaseMap != null) {
             record.setExperimentId((Long) releaseMap.get("experimentId"));
-            record.setBatchName(String.valueOf(releaseMap.get("serviceName")) + "_" + String.valueOf(record.getCreateTime()) + "_离线跑批");
+            record.setBatchName(String.valueOf(releaseMap.get("serviceName")) + "_" + String.valueOf(DateUtil.formatDateToString(new Date(), "yyyyMMddHHmmss")) + "_离线跑批");
             record.setExperimentId((Long) releaseMap.get("experimentId"));
             if (releaseMap.get("batchTimes") != null) {
                 record.setOfflineTimes((Integer)releaseMap.get("batchTimes") + 1);
