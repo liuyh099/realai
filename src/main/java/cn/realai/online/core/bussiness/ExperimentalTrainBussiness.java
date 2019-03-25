@@ -224,8 +224,8 @@ public interface ExperimentalTrainBussiness {
     /**
      * 根据服务id查询发布的实验ID
      *
-     * @param id <<<<<<< HEAD
-     * @return >>>>>>> branch 'master' of https://github.com/liuyh099/realai.git
+     * @param id
+     * @return
      */
     ExperimentBO getPublishExperimentByServerId(Long id);
 }

@@ -21,7 +21,7 @@
         INSERT INTO personal_information(experiment_id,group_id,batch_id,personal_name,stage,personal_card_id,
         phone_num,personal_id,create_time,order_date,label,probability)
         VALUES
-        <foreach collection="piList" open="(" close=")" separator="," item="pi">
+        <foreach collection="piList" separator="," item="pi">
             (#{pi.experimentId},#{pi.groupId},#{pi.batchId},#{pi.personalName},#{pi.stage},#{pi.personalCardId},#{pi.phoneNum},
             #{pi.personalId},#{pi.createTime},#{pi.orderDate},#{pi.label},#{pi.probability})
         </foreach>
@@ -29,7 +29,7 @@
 
     <select id="findListByExperimentId" resultMap="PersonalInformationMap">
     	select * 
-    	form personal_information
+    	from personal_information
     	where experiment_id = #{experimentId}
     </select>
 

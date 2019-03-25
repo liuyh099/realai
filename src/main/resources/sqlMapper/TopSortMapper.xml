@@ -19,9 +19,9 @@
         (data_set_type,response_type,experiment_id,top,sample_count,customer_overdue_count,overdue_rate,
         total_overdue_rate,create_time)
         VALUE
-        <foreach collection="tsList" open="(" close=")" separator="," item="ts">
-            #{ts.dataSetType},#{ts.responseType},#{ts.experimentId},#{ts.top},#{ts.sampleCount},
-            #{ts.customerOverdueCount},#{ts.overdueRate},#{ts.totalOverdueRate},#{ts.createTime}
+        <foreach collection="tsList" separator="," item="ts">
+            (#{ts.dataSetType},#{ts.responseType},#{ts.experimentId},#{ts.top},#{ts.sampleCount},
+            #{ts.customerOverdueCount},#{ts.overdueRate},#{ts.totalOverdueRate},#{ts.createTime})
         </foreach>
     </insert>
 

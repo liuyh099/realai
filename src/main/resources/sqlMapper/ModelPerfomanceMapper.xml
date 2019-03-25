@@ -12,20 +12,20 @@
     </resultMap>
 
     <insert id="insert" parameterType="cn.realai.online.core.entity.ModelPerformance">
-        INSERT INTO model_perfomance (name,create_time,experiment_id,training_set,test_set,valid_set)
-        VALUE (#{name},#{createTime},#{experimentId},#{trainingSet},#{testSet},#{validSet})
+        INSERT INTO model_performance (metric_name,create_time,experiment_id,training_set,test_set,valid_set)
+        VALUE (#{metricName},#{createTime},#{experimentId},#{trainingSet},#{testSet},#{validSet})
     </insert>
 
     <insert id="insertList">
-        INSERT INTO model_perfomance (name,create_time,experiment_id,training_set,test_set,valid_set)
-        VALUE
-        <foreach collection="modelPerformanceList" open="(" close=")" separator="," item="mp">
-            #{mp.name},#{mp.createTime},#{mp.experimentId},#{mp.trainingSet},#{mp.testSet},#{mp.validSet}
+        INSERT INTO model_performance (metric_name,create_time,experiment_id,training_set,test_set,valid_set)
+        VALUES
+        <foreach collection="modelPerformanceList" separator="," item="mp">
+            (#{mp.metricName},#{mp.createTime},#{mp.experimentId},#{mp.trainingSet},#{mp.testSet},#{mp.validSet})
         </foreach>
     </insert>
 
     <update id="update" parameterType="cn.realai.online.core.entity.ModelPerformance">
-        UPDATE model_perfomance
+        UPDATE model_performance
         <trim prefix="set" suffixOverrides=",">
             <if test="name!=null">name=#{name},</if>
             <if test="trainingSet!=null">training_set=#{trainingSet},</if>
@@ -39,7 +39,7 @@
 
 
     <select id="get" resultMap="ModelPerformanceMap" parameterType="java.lang.Long">
-        SELECT * from model
+        SELECT * from model_performance
         <where>
             id =#{id}
         </where>
