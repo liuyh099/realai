@@ -48,7 +48,7 @@ public class SSHBusinnessImpl implements SSHBusinness {
                 || StringUtils.isBlank(rootDir)
         ) {
             logger.error("未设置远程机器配置");
-            return null;
+            return null; 
         }
 
         RemoteShellExecutor executor = new RemoteShellExecutor(ip, remoteUser, password,port);

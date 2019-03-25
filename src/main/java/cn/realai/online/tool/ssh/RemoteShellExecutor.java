@@ -139,7 +139,7 @@ public class RemoteShellExecutor {
         String[] list = filePath.split("\n");
         List<String> aab = new ArrayList<>(list.length);
         for (String aa : list) {
-            if (aa.startsWith("/")) {
+            if (aa.startsWith("/")) { 
                 aa = aa.substring(1);
             }
             aa = aa.replace("//", "/");
