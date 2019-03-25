@@ -12,7 +12,7 @@
         <result column="absWeight" property="weight" jdbcType="DOUBLE"/>
     </resultMap>
 
-    <insert id="insertList">
+    <insert id="insertList"> 
         INSERT INTO personal_homo(experiment_id,batch_id,k,pid,variable_id,value,weight)
         VALUES
         <foreach collection="homoList" separator="," item="homo">
