@@ -19,10 +19,10 @@ public class SampleSummary {
     private String sampleDesc;
 
     //样本数量
-    private int sampleCount;
+    private Integer sampleCount;
 
     //样本用户数
-    private int numberOfLabelUsers;
+    private Integer numberOfLabelUsers;
 
     //标签样本比例
     private String labelSampleRatio;
@@ -68,19 +68,19 @@ public class SampleSummary {
         this.sampleDesc = sampleDesc;
     }
 
-    public int getSampleCount() {
+    public Integer getSampleCount() {
         return sampleCount;
     }
 
-    public void setSampleCount(int sampleCount) {
+    public void setSampleCount(Integer sampleCount) {
         this.sampleCount = sampleCount;
     }
 
-    public int getNumberOfLabelUsers() {
+    public Integer getNumberOfLabelUsers() {
         return numberOfLabelUsers;
     }
 
-    public void setNumberOfLabelUsers(int numberOfLabelUsers) {
+    public void setNumberOfLabelUsers(Integer numberOfLabelUsers) {
         this.numberOfLabelUsers = numberOfLabelUsers;
     }
 

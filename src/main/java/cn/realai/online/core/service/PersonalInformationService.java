@@ -8,7 +8,7 @@ public interface PersonalInformationService {
 
     void insertList(List<PersonalInformation> piList);
 
-    List<PersonalInformation> findListByExperimentId(Long experimentId);
+    List<PersonalInformation> findListByExperimentIdAndBatchId(Long experimentId, Long batchId);
 
     /**
      * 查询personal信息

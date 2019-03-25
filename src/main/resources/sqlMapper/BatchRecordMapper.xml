@@ -16,7 +16,7 @@
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="batchRecord.id" keyColumn="id">
         INSERT INTO batch_record (y_table , x_table_homo, x_table_heter, experiment_id, service_id,
         	create_time, down_url, batch_type, batch_name, offline_times, remark)
         VALUE (#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},
