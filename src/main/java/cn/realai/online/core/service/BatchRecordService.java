@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface BatchRecordService {
 
-	Integer insert(BatchRecord batchRecord);
+	Long insert(BatchRecord batchRecord);
 
 	Integer delete(List<Long> idList);  
 
@@ -23,7 +23,7 @@ public interface BatchRecordService {
     BatchRecord getByEntity(BatchRecord batchRecord);
 
 	//查询离线跑批列表
-	List<BatchListBO> selectList(@Param("batchListBO") BatchListBO batchListBO, @Param("minTime") Long minTime, @Param("maxTime") Long maxTime);
+	List<BatchListBO> selectList(BatchListBO batchListBO, Long minTime, Long maxTime);
 
 	//查询离线跑批详细
 	BatchDetailBO selectDetail(Long batchId);

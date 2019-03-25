@@ -27,7 +27,7 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 	private BatchRecordDao batchRecordDao;
 	
 	@Override
-	public Integer insert(BatchRecord batchRecord) {
+	public Long insert(BatchRecord batchRecord) {
 		batchRecord.setCreateTime(System.currentTimeMillis());
 		return batchRecordDao.insert(batchRecord);
 	}
@@ -39,7 +39,7 @@ public class BatchRecordServiceImpl implements BatchRecordService {
     private ExperimentDao experimentDao;
     
 	@Override
-	public List<BatchListBO> selectList(@Param("batchListBO") BatchListBO batchListBO, @Param("minTime") Long minTime, @Param("maxTime") Long maxTime) {
+	public List<BatchListBO> selectList(BatchListBO batchListBO, Long minTime, Long maxTime) {
 		return batchRecordDao.selectList(batchListBO, minTime, maxTime);
 	}
 

@@ -105,12 +105,7 @@ public class TrainTask implements Runnable {
         //redisClientTemplate.delete(redisKey.getSampleWeight());
 
         //千人千面人员信息
-        List<PersonalInformation> personalInformationList = analysisPersonalInformation(redisClientTemplate.get(redisKey.getPersonalInformation()), sgMap);
-
-        Map<String, Long> piMap = new HashMap<String, Long>();
-        for (PersonalInformation pi : personalInformationList) {
-            piMap.put(pi.getPersonalId(), pi.getId());
-        }
+        
 
         //生成批次
         BatchRecord batchRecord = new BatchRecord();
@@ -122,8 +117,14 @@ public class TrainTask implements Runnable {
         batchRecord.setExperimentId(experiment.getId());
         batchRecord.setBatchName(experiment.getName() + "训练结果批次数据");
         BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
-        batchRecordService.insert(batchRecord);
-        Long batchRecordId = batchRecord.getId();
+        Long batchRecordId = batchRecordService.insert(batchRecord);
+        
+        List<PersonalInformation> personalInformationList = analysisPersonalInformation(redisClientTemplate.get(redisKey.getPersonalInformation()), sgMap, batchRecordId);
+
+        Map<String, Long> piMap = new HashMap<String, Long>();
+        for (PersonalInformation pi : personalInformationList) {
+            piMap.put(pi.getPersonalId(), pi.getId());
+        }
 
         //解析千人千面同质和异质结果
         analysisPersonalResultSet(redisClientTemplate.get(redisKey.getPersonalHomoResultSet()),
@@ -275,7 +276,7 @@ public class TrainTask implements Runnable {
     /*
      * 千人千面人员信息
      */
-    private List<PersonalInformation> analysisPersonalInformation(String redisValue, Map<String, Long> sgMap) {
+    private List<PersonalInformation> analysisPersonalInformation(String redisValue, Map<String, Long> sgMap, Long batchRecordId) {
         if (redisValue == null || "".equals(redisValue)) {
             logger.error("TrainTask analysisModelPerformance. 训练结果没有千人千面人员信息数据. experimentId{}", experimentId);
             throw new RuntimeException("训练结果没有千人千面人员信息数据experimentId = " + experimentId);
@@ -289,10 +290,11 @@ public class TrainTask implements Runnable {
                 throw new RuntimeException("训练结果数据错误,分组名称不存在.");
             }
             pi.setGroupId(sgId);
+            pi.setBatchId(batchRecordId);
         }
         PersonalInformationService personalInformationService = SpringContextUtils.getBean(PersonalInformationService.class);
         personalInformationService.insertList(piList);
-        return personalInformationService.findListByExperimentId(experimentId);
+        return personalInformationService.findListByExperimentIdAndBatchId(experimentId, batchRecordId);
     }
 
     /*
