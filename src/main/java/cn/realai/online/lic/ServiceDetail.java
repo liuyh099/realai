@@ -9,7 +9,17 @@ package cn.realai.online.lic;
 
 public class ServiceDetail {
 
+    private String serviceName;
+
     private String deployUseTimes;
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
 
     public String getDeployUseTimes() {
         return deployUseTimes;

@@ -11,7 +11,11 @@ import cn.realai.online.core.query.service.*;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.ServerNameSelectVO;
 import cn.realai.online.core.vo.service.*;
+import cn.realai.online.lic.FileLicenseInfo;
+import cn.realai.online.lic.LicenseConstants;
 import cn.realai.online.lic.LicenseException;
+import cn.realai.online.lic.ServiceLicenseCheck;
+import cn.realai.online.util.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -121,10 +125,17 @@ public class ServiceController {
     @ApiOperation(value="获取服务列表")
     public Result<List<ServiceVO>> getServiceList(GetServiceListQuery getServiceListQuery){
         ServiceBO serviceBO = new ServiceBO();
-        List<ServiceVO> serviceVOs = null;
+        List<ServiceVO> serviceVOs = new ArrayList<>();
         try {
             BeanUtils.copyProperties(getServiceListQuery, serviceBO);
-            serviceVOs = serviceBussiness.getServiceList(serviceBO);
+            List<ServiceBO> serviceBOs = serviceBussiness.getServiceList(serviceBO);
+            if(serviceBOs != null && !serviceBOs.isEmpty()) {
+                for (ServiceBO s : serviceBOs) {
+                    ServiceVO vo = new ServiceVO();
+                    BeanUtils.copyProperties(s, vo);
+                    serviceVOs.add(vo);
+                }
+            }
         }catch (Exception e) {
             logger.error("获取服务详情异常！", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
@@ -139,7 +150,10 @@ public class ServiceController {
     public Result<SecretKeyInfoVO> getSecretKeyInfo(@RequestBody GetSecretKeyInfoQuery getSecretKeyInfoQuery){
         SecretKeyInfoVO secretKeyInfoVO = new SecretKeyInfoVO();
         try {
-            secretKeyInfoVO = serviceBussiness.getSecretKeyInfo(getSecretKeyInfoQuery.getServiceKey());
+            FileLicenseInfo fileLicenseInfo = serviceBussiness.getSecretKeyInfo(getSecretKeyInfoQuery.getServiceKey());
+            secretKeyInfoVO.setStartTime(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeLower(), LicenseConstants.DATE_FORMART));
+            secretKeyInfoVO.setExpireDate(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), LicenseConstants.DATE_FORMART));
+            secretKeyInfoVO.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
         }catch (Exception e) {
             logger.error("获取服务详情异常！", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
@@ -163,5 +177,21 @@ public class ServiceController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
     }
 
+
+
+
+    @Autowired
+    ServiceLicenseCheck serviceLicenseCheck;
+
+    @PostMapping("/test/applyService")
+    public Result applyService(@RequestBody ApplyServiceQuery applyServiceQuery){
+        try {
+            serviceLicenseCheck.applyService(applyServiceQuery.getId(), applyServiceQuery.getSecretKey());
+        } catch (Exception e) {
+            logger.error("部署调优异常！", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg()+e.getMessage(), null);
+        }
+        return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
+    }
 
 }
