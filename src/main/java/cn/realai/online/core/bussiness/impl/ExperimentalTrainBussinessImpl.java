@@ -434,8 +434,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     }
 
     @Override
-    public List<SampleGroupingBO> getGroupOptionName(Long experimentId, boolean isExceptionGroup) {
-        List<SampleGrouping> sampleGroupings = sampleGroupingService.findListByExperimentId(experimentId, isExceptionGroup);
+    public List<SampleGroupingBO> getGroupOptionName(Long experimentId, boolean isExceptionGroup,boolean isAllGroup) {
+        List<SampleGrouping> sampleGroupings = sampleGroupingService.findListByExperimentId(experimentId, isExceptionGroup,isAllGroup);
         List<SampleGroupingBO> sampleGroupingBOList = JSON.parseArray(JSON.toJSONString(sampleGroupings), SampleGroupingBO.class);
         return sampleGroupingBOList;
     }

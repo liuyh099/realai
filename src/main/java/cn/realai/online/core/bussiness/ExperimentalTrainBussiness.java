@@ -194,9 +194,10 @@ public interface ExperimentalTrainBussiness {
      *
      * @param experimentId
      * @param isExceptionGroup 是否返回异常组
+     * @param isAllGroup 是否返全部组
      * @return
      */
-    List<SampleGroupingBO> getGroupOptionName(Long experimentId, boolean isExceptionGroup);
+    List<SampleGroupingBO> getGroupOptionName(Long experimentId, boolean isExceptionGroup,boolean isAllGroup);
 
     /**
      * @param batchRecordBO

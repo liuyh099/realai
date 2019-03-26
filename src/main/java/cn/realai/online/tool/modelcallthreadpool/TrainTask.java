@@ -242,7 +242,7 @@ public class TrainTask implements Runnable {
         }
         SampleGroupingService sampleGroupingService = SpringContextUtils.getBean(SampleGroupingService.class);
         sampleGroupingService.insertList(sgList);
-        sgList = sampleGroupingService.findListByExperimentId(experimentId, false);
+        sgList = sampleGroupingService.findListByExperimentId(experimentId, false,true);
         return sgList;
     }
 
