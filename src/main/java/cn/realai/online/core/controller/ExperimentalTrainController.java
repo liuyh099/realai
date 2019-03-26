@@ -367,7 +367,7 @@ public class ExperimentalTrainController {
     @PutMapping("/doubleCreate")
     @ApiOperation(value = "二次创建实验")
     @ResponseBody
-    public Result doubleCreate(@Validated ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo) {
+    public Result doubleCreate(@Validated @RequestBody ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo) {
         try {
             ExperimentalTrainDoubleCreateBO bo = JSON.parseObject(JSON.toJSONString(experimentalTrainDoubleCreateVo), ExperimentalTrainDoubleCreateBO.class);
             boolean flag = experimentalTrainBussiness.doubleCreate(bo);

@@ -7,17 +7,17 @@ package cn.realai.online.core.entity;
  */
 public class SampleWeight {
 
-    private long id;
+    private Long id;
 
-    private long experimentId;
+    private Long experimentId;
 
-    private long groupId;
+    private Long groupId;
 
     //计算后Python的分组名称
     private String groupName;
 
     //变量ID
-    private long variableId;
+    private Long variableId;
 
     //变量来源
     private String variableName;
@@ -26,7 +26,7 @@ public class SampleWeight {
     private Double variableWeight;
 
     //变量类型
-    private int variableType;
+    private Integer variableType;
 
     //同质
     public static final int SAMPLE_TYPE_HOMO = 1;
@@ -41,28 +41,68 @@ public class SampleWeight {
     private String imgUrl;
 
 
-    public long getVariableId() {
-        return variableId;
-    }
-
-    public void setVariableId(long variableId) {
-        this.variableId = variableId;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getGroupId() {
+    public Long getExperimentId() {
+        return experimentId;
+    }
+
+    public void setExperimentId(Long experimentId) {
+        this.experimentId = experimentId;
+    }
+
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(long groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public Long getVariableId() {
+        return variableId;
+    }
+
+    public void setVariableId(Long variableId) {
+        this.variableId = variableId;
+    }
+
+    public String getVariableName() {
+        return variableName;
+    }
+
+    public void setVariableName(String variableName) {
+        this.variableName = variableName;
+    }
+
+    public Double getVariableWeight() {
+        return variableWeight;
+    }
+
+    public void setVariableWeight(Double variableWeight) {
+        this.variableWeight = variableWeight;
+    }
+
+    public Integer getVariableType() {
+        return variableType;
+    }
+
+    public void setVariableType(Integer variableType) {
+        this.variableType = variableType;
     }
 
     public String getBoxBeans() {
@@ -80,46 +120,4 @@ public class SampleWeight {
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
-
-    public long getExperimentId() {
-        return experimentId;
-    }
-
-    public void setExperimentId(long experimentId) {
-        this.experimentId = experimentId;
-    }
-
-    public String getVariableName() {
-        return variableName;
-    }
-
-    public void setVariableName(String variableName) {
-        this.variableName = variableName;
-    }
-
-
-    public Double getVariableWeight() {
-        return variableWeight;
-    }
-
-    public void setVariableWeight(Double variableWeight) {
-        this.variableWeight = variableWeight;
-    }
-
-    public int getVariableType() {
-        return variableType;
-    }
-
-    public void setVariableType(int variableType) {
-        this.variableType = variableType;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
 }

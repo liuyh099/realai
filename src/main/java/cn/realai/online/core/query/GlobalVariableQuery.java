@@ -15,6 +15,15 @@ public class GlobalVariableQuery extends PageQuery {
     @ApiModelProperty(value = "请求类型 image:请求图片 normal:普通请求", example = "image:请求图片 normal:普通请求")
     private String type;
 
+    private Long groupId;
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
 
     public long getTrainId() {
         return trainId;

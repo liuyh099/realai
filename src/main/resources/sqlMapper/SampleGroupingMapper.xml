@@ -19,12 +19,19 @@
         </foreach>
     </insert>
 
+    <select id="getAllGroupIdByTrainId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT id FROM sample_grouping WHERE group_name = '全局' AND experiment_id = #{experimentId}
+    </select>
+
     <select id="findListByExperimentId" resultMap="SampleGroupingMap">
 		select * 
 		from sample_grouping
 		where experiment_id = #{experimentId}
         <if test="isExceptionGroup==false">
             and group_name != '异常点'
+        </if>
+        <if test="isAllGroup == false">
+            and group_name != '全局'
         </if>
 	</select>
 
