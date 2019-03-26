@@ -19,12 +19,12 @@ public class ExperimentalTrainSelectParamVO {
 
 
     //样本选择类型
-    @ApiModelProperty(value = "验证集类型 1:时间顺序 2:随机选择", name="选择样本类型 1:时间顺序 2:随机选择", required = true, example = "1:时间顺序 2:随机选择")
+    @ApiModelProperty(value = "验证集类型 1:时间顺序 2:随机选择", name="选择样本类型 1:时间顺序 2:随机选择", required = true, example = "验证集类型 1:时间顺序 2:随机选择")
     @NotNull(message = "请选择验证集类型")
     private Integer validSampleType;
 
     //样本选择类型
-    @ApiModelProperty(value = "测试集类型 1:时间顺序 2:随机选择", name="选择样本类型 1:时间顺序 2:随机选择", required = true, example = "1:时间顺序 2:随机选择")
+    @ApiModelProperty(value = "测试集类型 1:时间顺序 2:随机选择", name="选择样本类型 1:时间顺序 2:随机选择", required = true, example = "测试集类型 1:时间顺序 2:随机选择")
     @NotNull(message = "请选择测试集类型")
     private Integer testSampleType;
 
