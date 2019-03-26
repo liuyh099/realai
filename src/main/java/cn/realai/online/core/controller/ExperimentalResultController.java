@@ -218,7 +218,7 @@ public class ExperimentalResultController {
         }
     }
 
-    @GetMapping("thousandsFace/list")
+        @GetMapping("thousandsFace/list")
     @ApiOperation(value = "实验-千人千面列表数据")
     public Result<PageBO<PersonalInformationVO>> listData(@Validated FaceListDataQuery query) {
         try {
