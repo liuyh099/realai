@@ -3,6 +3,7 @@ package cn.realai.online.core.service.impl;
 import cn.realai.online.core.dao.ServiceDao;
 import cn.realai.online.lic.*;
 import cn.realai.online.util.DateUtil;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -114,6 +115,12 @@ public class ServiceServiceImpl implements ServiceService {
 		return serviceDao.update(service);
 	}
 
+	@Override
+	public List<ServiceBO> getAlreadyPublishService() {
+		List<cn.realai.online.core.entity.Service> serviceList =serviceDao.getAlreadyPublishService();
+		List<ServiceBO> list = JSON.parseArray(JSON.toJSONString(serviceList),ServiceBO.class);
+		return list;
+	}
 
 
 	public cn.realai.online.core.entity.Service convertData(cn.realai.online.core.entity.Service service) {

@@ -119,6 +119,10 @@
 		where id = #{id}
     </update>
 
+    <select id="getLastServerId" resultType="java.lang.Long">
+        SELECT service_id FROM experiment WHERE releas_status = 2 ORDER BY release_time DESC LIMIT 1
+    </select>
+
 
     <select id="findList" resultMap="ExperimentMap" parameterType="cn.realai.online.core.entity.Experiment">
         SELECT *,b.name AS "serviceName" FROM experiment a LEFT JOIN service b ON a.service_id = b.id
