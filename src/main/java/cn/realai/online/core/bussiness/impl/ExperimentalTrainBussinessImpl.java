@@ -463,7 +463,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         }
         experiment.setId(null);
         experiment.setName(experiment.getName() + "-01");
-        experiment.setStatus(Experiment.STATUS_PARAM);
+        experiment.setStatus(Experiment.STATUS_FILTER);
         experiment.setReleasStatus(Experiment.RELEAS_NO);
         experiment.setCreateTime(System.currentTimeMillis());
         experiment.setTrainingTime(null);
@@ -481,7 +481,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setKsTestImageUrl(null);
         experiment.setKsTrainImageUrl(null);
         experiment.setKsValidateImageUrl(null);
-        experiment.setPreFinish(1);
+        experiment.setPreFinish(Experiment.PREFINISH_YES);
         experimentService.doubleCreate(experiment);
 
         if (experiment.getId() == null) {
@@ -496,7 +496,6 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
                         list) {
                     v.setId(null);
                     v.setExperimentId(experiment.getId());
-                    v.setCreateTime(System.currentTimeMillis());
                 }
 
                 variableDataService.insertVariableDataList(list);
@@ -540,7 +539,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Override
     public Long getLastServerId() {
-        return null;
+        return experimentService.getLastServerId();
     }
 
     @Override
