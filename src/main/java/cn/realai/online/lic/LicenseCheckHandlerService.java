@@ -50,9 +50,14 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
 
     @Override
     @Transactional(readOnly = false)
-    public void updateServiceDetail(long serviceId, String dataCiphertext, String tuningSecretKey) throws LicenseException {
+    public void updateServiceDetail(long serviceId, String dataCiphertext, String tuningSecretKey, ServiceDetail serviceDetail) throws LicenseException {
 
         Service service = serviceService.selectServiceById(serviceId);
+
+        if(!StringUtils.equals(serviceDetail.getServiceName(), service.getName())) {
+            logger.error("调优次数数据异常！");
+            throw new LicenseException("系统异常！数据错误！");
+        }
 
         String tuningKey = service.getTuningSecretKey();
         if(StringUtils.isNotBlank(tuningKey)) {

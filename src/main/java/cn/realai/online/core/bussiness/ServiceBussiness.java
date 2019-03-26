@@ -4,6 +4,7 @@ import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.entity.Service;
 import cn.realai.online.core.vo.service.SecretKeyInfoVO;
 import cn.realai.online.core.vo.service.ServiceVO;
+import cn.realai.online.lic.FileLicenseInfo;
 import cn.realai.online.lic.LicenseException;
 
 import java.util.List;
@@ -24,9 +25,9 @@ public interface ServiceBussiness {
 
     ServiceBO getServiceDetails(ServiceBO serviceBO);
 
-    SecretKeyInfoVO getSecretKeyInfo(String serviceKey) throws LicenseException;
+    FileLicenseInfo getSecretKeyInfo(String serviceKey) throws LicenseException;
 
-    List<ServiceVO> getServiceList(ServiceBO serviceBO);
+    List<ServiceBO> getServiceList(ServiceBO serviceBO);
 
     /**
      * 服务续期
