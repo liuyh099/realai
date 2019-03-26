@@ -14,6 +14,7 @@ import cn.realai.online.calculation.requestbo.DeployRequestBO;
 import cn.realai.online.calculation.requestbo.PreprocessRequestBO;
 import cn.realai.online.calculation.requestbo.TrainRequestBO;
 import cn.realai.online.common.config.Config;
+import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.util.ConvertJavaBean;
@@ -88,8 +89,7 @@ public class TrainServiceImpl implements TrainService {
 	}
 
 	@Override
-	public int runBatchOfOffline() {
-		// TODO Auto-generated method stub
+	public int runBatchOfOffline(BatchRecord batchRecord) {
 		return 0;
 	}
 

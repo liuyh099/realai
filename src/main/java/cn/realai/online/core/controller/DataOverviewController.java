@@ -37,7 +37,7 @@ public class DataOverviewController {
     @ApiModelProperty("获得最近发布模型的服务ID")
     public Result<Long> getLastServerId() {
         try {
-
+            Long id = experimentalTrainBussiness.getLastServerId();
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             logger.error("数据概览Api - 获得最近发布模型的服务ID异常");
