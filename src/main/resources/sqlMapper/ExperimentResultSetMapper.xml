@@ -54,9 +54,6 @@
             <if test="experimentId!=null">
                 AND data_set_type=#{dataSetType}
             </if>
-            <if test="parentId!=null">
-                AND parent_id=#{parentId}
-            </if>
         </where>
         ORDER BY postive_count DESC
     </select>

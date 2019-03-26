@@ -27,17 +27,17 @@
         from sample_weight
         <where>
             1=1
-            <if test="experimentId!=null">
+            <if test="experimentId!=null and experimentId!=0">
                 AND	experiment_id = #{experimentId}
             </if>
-            <if test="groupId!=null">
+            <if test="groupId!=null and groupId!=0">
                 AND	group_id = #{groupId}
             </if>
-            <if test="variableType!=null">
+            <if test="variableType!=null and variableType!=0">
                 AND	variable_type= #{variableType}
             </if>
         </where>
-        ORDER BY create_time ASC
+        ORDER BY id ASC
     </select>
 
 </mapper>

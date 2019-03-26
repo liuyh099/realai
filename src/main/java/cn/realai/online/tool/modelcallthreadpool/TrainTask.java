@@ -268,7 +268,7 @@ public class TrainTask implements Runnable {
                 logger.error("TrainTask analysisSampleWeight. 训练结果数据错误,变量名称不存在. experimentId{}, groupName{}", experimentId, sw.getVariableName());
                 throw new RuntimeException("训练结果数据错误,变量名称不存在.");
             }
-            sw.setGroupId(vdId);
+            sw.setVariableId(vdId);
         }
         SampleWeightService sampleWeightService = SpringContextUtils.getBean(SampleWeightService.class);
         sampleWeightService.insertList(swList);
