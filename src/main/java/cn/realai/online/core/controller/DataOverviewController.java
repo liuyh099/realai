@@ -79,8 +79,7 @@ public class DataOverviewController {
                     for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {
                         EchartsDataVo data = new EchartsDataVo();
                         data.setName(sampleGroupingBO.getGroupName());
-                        data.setRate(sampleGroupingBO.getPositiveRatio());
-                        data.setTotal(sampleGroupingBO.getCount());
+                        data.setValue(sampleGroupingBO.getPercentage());
                         result.add(data);
                     }
                 }

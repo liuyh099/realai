@@ -12,8 +12,6 @@ public class ExperimentResultSet {
     //实验id
     private Long experimentId;
 
-    private Long parentId;
-
     //数据集类型
     private Integer dataSetType;
 
@@ -55,14 +53,6 @@ public class ExperimentResultSet {
 
     //
     private double cumulativePostiveCountInTotalPositiveCount;
-
-    public Long getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
 
     public Long getId() {
         return id;
