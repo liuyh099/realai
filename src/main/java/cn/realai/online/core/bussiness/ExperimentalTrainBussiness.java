@@ -235,4 +235,10 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     List<ExperimentBO> list(ExperimentalTrainQuery query);
+
+    /**
+     * 获得最近发布的服务ID
+     * @return
+     */
+    Long getLastServerId();
 }
