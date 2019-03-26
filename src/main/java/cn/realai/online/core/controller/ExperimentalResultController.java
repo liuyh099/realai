@@ -148,7 +148,13 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-白盒决策")
     public Result<PageBO<WhileBoxScoreCardVO>> whiledecision(@Validated ExperimentalResultWhileBoxQuery experimentalResultWhileBoxQuery) {
         try {
-            PageBO<WhileBoxScoreCardVO> pageBO = sampleWeightBussiness.pageBO(experimentalResultWhileBoxQuery);
+            //开启分页
+            Page page = PageHelper.startPage(experimentalResultWhileBoxQuery.getPageNum(), experimentalResultWhileBoxQuery.getPageSize());
+
+            List<SampleWeightBO> boList = sampleWeightBussiness.getSampleWeightList(experimentalResultWhileBoxQuery);
+            //处理查询结果
+            List<WhileBoxScoreCardVO> result = JSON.parseArray(JSON.toJSONString(boList), WhileBoxScoreCardVO.class);
+            PageBO<WhileBoxScoreCardVO> pageBO = new PageBO<WhileBoxScoreCardVO>(result, experimentalResultWhileBoxQuery.getPageSize(), experimentalResultWhileBoxQuery.getPageNum(), page.getTotal(), page.getPages());
 
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
@@ -161,8 +167,14 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-全局变量")
     public Result<PageBO<WhileBoxScoreCardVO>> globalVariable(@Validated GlobalVariableQuery globalVariableQuery) {
         try {
+            //开启分页
+            Page page = PageHelper.startPage(globalVariableQuery.getPageNum(), globalVariableQuery.getPageSize());
 
-            PageBO<WhileBoxScoreCardVO> pageBO = sampleWeightBussiness.pageBO(globalVariableQuery);
+            List<SampleWeightBO> boList = sampleWeightBussiness.getSampleWeightList(globalVariableQuery);
+
+            //处理查询结果
+            List<WhileBoxScoreCardVO> result = JSON.parseArray(JSON.toJSONString(boList), WhileBoxScoreCardVO.class);
+            PageBO<WhileBoxScoreCardVO> pageBO = new PageBO<WhileBoxScoreCardVO>(result, globalVariableQuery.getPageSize(), globalVariableQuery.getPageNum(), page.getTotal(), page.getPages());
 
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
@@ -191,7 +203,7 @@ public class ExperimentalResultController {
             List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId(), false);
             List<EchartsDataVo> result = null;
             if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
-                result =new ArrayList<>();
+                result = new ArrayList<>();
                 for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {
                     EchartsDataVo data = new EchartsDataVo();
                     data.setName(sampleGroupingBO.getGroupName());

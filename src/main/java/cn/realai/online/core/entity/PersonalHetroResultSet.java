@@ -21,6 +21,8 @@ public class PersonalHetroResultSet {
     //实验id
     private Long experimentId;
 
+    private String variableName;
+    
     //变量id
     private Long variableId;
 
@@ -49,7 +51,15 @@ public class PersonalHetroResultSet {
         this.batchId = batchId;
     }
 
-    public Long getPid() {
+    public String getVariableName() {
+		return variableName;
+	}
+
+	public void setVariableName(String variableName) {
+		this.variableName = variableName;
+	}
+
+	public Long getPid() {
         return pid;
     }
 

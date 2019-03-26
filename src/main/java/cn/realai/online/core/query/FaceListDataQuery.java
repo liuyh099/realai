@@ -8,10 +8,10 @@ import javax.validation.constraints.NotNull;
 @ApiModel
 public class FaceListDataQuery extends PageQuery {
 
-    @ApiModelProperty(value = "实验id")
+    @ApiModelProperty(value = "id")
     @NotNull(message = "id不能为空")
     private Long id;
-
+    
     @ApiModelProperty(value = "分组")
     private Long groupId;
 

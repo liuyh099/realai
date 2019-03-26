@@ -157,36 +157,50 @@
     </select>
 
 
-    <delete id="deleteExperimentByIds" parameterType="java.lang.Long">
-        DELETE FROM experiment
-        <where>
-            <choose>
-                <when test="ids!=null and ids.size()>0">
-                    <foreach collection="ids" item="id" separator="," open="id in(" close=")">
-                        #{id}
-                    </foreach>
-                </when>
-                <otherwise>
-                    1=2
-                </otherwise>
-            </choose>
-        </where>
-    </delete>
+	<delete id="deleteExperimentByIds" parameterType="java.lang.Long">
+		DELETE FROM experiment
+		<where>
+			<choose>
+				<when test="ids!=null and ids.size()>0">
+					<foreach collection="ids" item="id" separator="," open="id in(" close=")">
+						#{id}
+					</foreach>
+				</when>
+				<otherwise>
+					1=2
+				</otherwise>
+			</choose>
+		</where>
+	</delete>
 
-    <select id="findByServiceIdAndReleaseStatus" resultType="java.util.HashMap">
-        select
-        ep.id as experimentId,
-        ep.name as experimentName,
-        sv.id as serviceId,
-        sv.name as serviceName,
+	<select id="findByServiceIdAndReleaseStatus" resultType="java.util.HashMap">
+		select
+		ep.id as experimentId,
+		ep.name as experimentName,
+		sv.id as serviceId,
+		sv.name as serviceName,
         sv.batch_times as batchTimes
-        from service as sv
-        left join experiment as ep on ep.service_id = sv.id and ep.releas_status = #{releaseStatus}
-        <where>
-            sv.id = #{serviceId}
-        </where>
-        limit 1
-    </select>
+		from service as sv
+		left join experiment as ep on ep.service_id = sv.id and ep.releas_status = #{releaseStatus}
+		<where>
+			sv.id = #{serviceId}
+		</where>
+		limit 1
+	</select>
 
+	<update id="trainResultMaintain">
+		update experiment
+		set sample_review = #{sampleReview},
+			model_url = #{modelUrl},
+			seg_image_url = #{segmentationStatisticsImageUrl},
+			bad_image_url = #{badTopCountImageUrl},
+			roc_test_image_url = #{rocTestImageUrl},
+			roc_train_image_url = #{rocTrainImageUrl},
+			roc_validate_image_url = #{rocValidateImageUrl},
+			ks_test_image_url = #{ksTestImageUrl},
+			ks_train_image_url = #{ksTrainImageUrl},
+			ks_validate_image_url = #{ksValidateImageUrl}
+		where id = #{experimentId}
+	</update>
 
 </mapper> 
