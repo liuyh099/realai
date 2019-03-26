@@ -68,7 +68,7 @@ public class ExperimentalPublishController {
     }
 
     @ApiOperation("实验发布")
-    @PutMapping()
+    @PostMapping()
     public Result publish(@Validated @RequestBody ExperimentalPublishVO experimentalPublishVO) {
         try {
             Boolean flag = modelBussiness.checkName(experimentalPublishVO.getName());
@@ -90,7 +90,7 @@ public class ExperimentalPublishController {
     }
 
     @ApiOperation("实验发布检查实验名称 true:表示检查通过")
-    @PutMapping("/checkName/{name}")
+    @GetMapping("/checkName/{name}")
     @ApiImplicitParam(name = "name", value = "名称", required = true, dataType = "String", paramType = "path")
     public Result checkName(@PathVariable String name) {
         try {

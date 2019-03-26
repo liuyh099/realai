@@ -5,9 +5,11 @@ import cn.realai.online.core.bo.ModelBO;
 import cn.realai.online.core.bo.ModelDetailBO;
 import cn.realai.online.core.bo.ModelListBO;
 import cn.realai.online.core.bussiness.ModelBussiness;
+import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.ModelPerformance;
 import cn.realai.online.core.query.ModelListQuery;
+import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.ModelPerformanceService;
 import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.vo.*;
@@ -16,6 +18,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -34,6 +37,8 @@ public class ModelBussinessImpl implements ModelBussiness {
     private ModelService modelService;
     @Autowired
     private ModelPerformanceService modelPerformanceService;
+    @Autowired
+    private ExperimentService experimentService;
 
     @Override
     public PageBO<ModelListVO> pageList(ModelListQuery query) {
@@ -145,8 +150,11 @@ public class ModelBussinessImpl implements ModelBussiness {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public int publish(ModelBO modelBO) {
-
+        Experiment experiment = experimentService.selectExperimentById(modelBO.getExperimentId());
+        experimentService.updateExperimentTrainStatus(modelBO.getExperimentId(), modelBO.getStatus());
+        experimentService.updateExperimentOffline(modelBO.getExperimentId(), experiment.getServiceId(), Experiment.RELEAS_NO);
         //TODO 查询服务的ID 和处理服务上下线细节
         modelBO.setCreateTime(System.currentTimeMillis());
         int count = modelService.insert(modelBO);
