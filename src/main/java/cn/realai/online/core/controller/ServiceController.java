@@ -14,6 +14,7 @@ import cn.realai.online.core.vo.service.*;
 import cn.realai.online.lic.LicenseException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,13 +40,20 @@ public class ServiceController {
 
     @GetMapping("/select")
     @ApiOperation(value="查询服务下拉选项")
-    @ApiImplicitParam(name = "status", value = "服务状态 1:上线 2：下线", required = false, dataType = "Integer", paramType = "query")
-    public Result<List<ServerNameSelectVO>> getSelect(@RequestParam(value="status", required = false) Integer status){
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "status", value = "服务状态 1:上线 2：下线", required = false, dataType = "Integer", paramType = "query"),
+        @ApiImplicitParam(name = "deployType", value = "部署类型 1:在线部署 2：离线部署", required = false, dataType = "Integer", paramType = "query")
+    })
+    public Result<List<ServerNameSelectVO>> getSelect(@RequestParam(value="status", required = false) Integer status,
+                                                      @RequestParam(value="deployType", required = false) Integer deployType){
         List<ServerNameSelectVO> serverNameSelectVOs = new ArrayList<>();
         try {
             Service service = new Service();
             if (status != null) {
                 service.setStatus(status);
+            }
+            if (deployType != null) {
+                service.setDeploymentType(deployType);
             }
             List<Service> services = serviceService.list(service);
             if(services != null && services.size() > 0) {

@@ -185,9 +185,10 @@
 		sv.name as serviceName,
         sv.batch_times as batchTimes
 		from service as sv
-		left join experiment as ep on ep.service_id = sv.id and ep.releas_status = #{releaseStatus}
+		join experiment as ep on ep.service_id = sv.id
 		<where>
 			sv.id = #{serviceId}
+            and ep.releas_status = #{releaseStatus}
 		</where>
 		limit 1
 	</select>
