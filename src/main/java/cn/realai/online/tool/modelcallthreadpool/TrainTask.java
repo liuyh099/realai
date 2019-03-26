@@ -141,34 +141,34 @@ public class TrainTask implements Runnable {
         //redisClientTemplate.delete(redisKey.getExperimentResultSet());
         
         //样本综述
-        String sampleReview = redisClientTemplate.get(redisKey.getSampleReview());
+        String sampleReview = redisKey.getSampleReview();
 
         //模型路径
-        String modelUrl = redisClientTemplate.get(redisKey.getModelUrl());
+        String modelUrl = redisKey.getModelUrl();
 
 
         //分段统计图片地址（千人千面也是他）
-        String segmentationStatisticsImageUrl = redisClientTemplate.get(redisKey.getSegmentationStatisticsImageUrl());
+        String segmentationStatisticsImageUrl = redisKey.getSegmentationStatisticsImageUrl();
 
         //badTop总数图片地址
-        String badTopCountImageUrl = redisClientTemplate.get(redisKey.getBadTopCountImageUrl());
+        String badTopCountImageUrl = redisKey.getBadTopCountImageUrl();
 
         //roc训练图片地址
-        String rocTestImageUrl = redisClientTemplate.get(redisKey.getRocTestImageUrl());
+        String rocTestImageUrl = redisKey.getRocTestImageUrl();
 
         //roc测试图片地址
-        String rocTrainImageUrl = redisClientTemplate.get(redisKey.getRocTrainImageUrl());
+        String rocTrainImageUrl = redisKey.getRocTrainImageUrl();
 
         //roc验证图片地址
-        String rocValidateImageUrl = redisClientTemplate.get(redisKey.getRocValidateImageUrl());
+        String rocValidateImageUrl = redisKey.getRocValidateImageUrl();
 
 
         //ks图片地址
-        String ksTestImageUrl = redisClientTemplate.get(redisKey.getKsTestImageUrl());
+        String ksTestImageUrl = redisKey.getKsTestImageUrl();
 
-        String ksTrainImageUrl = redisClientTemplate.get(redisKey.getKsTrainImageUrl());
+        String ksTrainImageUrl = redisKey.getKsTrainImageUrl();
 
-        String ksValidateImageUrl = redisClientTemplate.get(redisKey.getKsValidateImageUrl());
+        String ksValidateImageUrl = redisKey.getKsValidateImageUrl();
 
         //维护实验训练结果到实验数据
         experimentService.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl, badTopCountImageUrl,
