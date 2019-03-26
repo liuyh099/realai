@@ -7,10 +7,10 @@ import io.swagger.annotations.ApiModelProperty;
 public class GlobalVariableQuery extends PageQuery {
 
     @ApiModelProperty(value = "实验ID")
-    private long trainId;
+    private Long trainId;
 
     @ApiModelProperty(value = "变量类型 1:同质 2:异质 为空表示查询所有", example = "1:同质 2:异质 为空表示查询所有")
-    private int sampleType;
+    private Integer sampleType;
 
     @ApiModelProperty(value = "请求类型 image:请求图片 normal:普通请求", example = "image:请求图片 normal:普通请求")
     private String type;
@@ -21,23 +21,19 @@ public class GlobalVariableQuery extends PageQuery {
         return groupId;
     }
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
-
-    public long getTrainId() {
+    public Long getTrainId() {
         return trainId;
     }
 
-    public void setTrainId(long trainId) {
+    public void setTrainId(Long trainId) {
         this.trainId = trainId;
     }
 
-    public int getSampleType() {
+    public Integer getSampleType() {
         return sampleType;
     }
 
-    public void setSampleType(int sampleType) {
+    public void setSampleType(Integer sampleType) {
         this.sampleType = sampleType;
     }
 
@@ -47,5 +43,9 @@ public class GlobalVariableQuery extends PageQuery {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 }

@@ -180,4 +180,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     public void updateExperimentTrainStatus(Long experimentId, int releasYes) {
         experimentDao.updateExperimentTrainStatus(experimentId,releasYes);
     }
+
+    @Override
+    public Long getLastServerId() {
+        return experimentDao.getLastServerId();
+    }
 }

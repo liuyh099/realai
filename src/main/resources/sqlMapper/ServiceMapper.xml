@@ -56,6 +56,14 @@
         VALUE (#{name},#{type},#{status},#{deploymentType},#{createTime},#{detail},#{tuningSecretKey},#{secretKey},#{onlineExperiment},#{batchTimes})
     </insert>
 
+    <select id="getAlreadyPublishService" resultMap="serviceMap">
+        SELECT a.* FROM service a LEFT JOIN experiment b ON a.id = b.service_id
+        <where>
+            b.releas_status = 2
+        </where>
+        ORDER BY b.release_time DESC
+    </select>
+
     <delete id="delete" parameterType="java.lang.Long">
         DELETE FROM service
         <where>

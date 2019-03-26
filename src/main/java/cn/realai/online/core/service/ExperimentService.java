@@ -127,4 +127,10 @@ public interface ExperimentService {
      * @param releasYes
      */
     void updateExperimentTrainStatus(Long experimentId, int releasYes);
+
+    /**
+     * 获得最近的服务ID
+     * @return
+     */
+    Long getLastServerId();
 }

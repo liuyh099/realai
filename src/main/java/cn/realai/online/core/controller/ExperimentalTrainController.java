@@ -364,7 +364,7 @@ public class ExperimentalTrainController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
 
-    @PutMapping("/doubleCreate")
+    @PostMapping("/doubleCreate")
     @ApiOperation(value = "二次创建实验")
     @ResponseBody
     public Result doubleCreate(@Validated @RequestBody ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo) {

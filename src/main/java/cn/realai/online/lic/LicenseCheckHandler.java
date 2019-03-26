@@ -33,7 +33,7 @@ public interface LicenseCheckHandler {
      * @param dataCiphertext
      * @param tuningSecretKey
      */
-    void updateServiceDetail(long serviceId, String dataCiphertext, String tuningSecretKey) throws LicenseException;
+    void updateServiceDetail(long serviceId, String dataCiphertext, String tuningSecretKey, ServiceDetail serviceDetail) throws LicenseException;
 
 
     /**

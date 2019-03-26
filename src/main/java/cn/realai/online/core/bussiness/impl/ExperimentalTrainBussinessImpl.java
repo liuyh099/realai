@@ -540,7 +540,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Override
     public Long getLastServerId() {
-        return null;
+        return experimentService.getLastServerId();
     }
 
     @Override

@@ -102,4 +102,10 @@ public interface ExperimentDao {
      * @param releasYes
      */
     void updateExperimentTrainStatus(@Param("id")Long experimentId, @Param("status")int releasYes);
+
+    /**
+     * 获得最近发布的服务id
+     * @return
+     */
+    Long getLastServerId();
 }

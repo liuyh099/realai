@@ -58,10 +58,10 @@
         </selectKey>
         INSERT INTO experiment
         (name,service_id,status,algorithm_type,releas_status,y_table,x_table_homo,x_table_heter,x_table_meaning,create_time,
-        verification_set,sample_type,train_ratio,test_ratio,valid_ratio)
+        verification_set,valid_sample_type,test_sample_type,train_ratio,test_ratio,valid_ratio)
         VALUE
         (#{name},#{serviceId},#{status},#{algorithmType},#{releasStatus},#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},#{xtableMeaningDataSource},#{createTime},
-        #{verificationSet},#{sampleSplitType},#{trainRatio},#{testRatio},#{validRatio})
+        #{verificationSet},#{validSampleType},#{testSampleType},#{trainRatio},#{testRatio},#{validRatio})
     </insert>
 
     <update id="selectFileUpdate" parameterType="cn.realai.online.core.entity.Experiment">
@@ -118,6 +118,10 @@
 		set releas_status = #{status}
 		where id = #{id}
     </update>
+
+    <select id="getLastServerId" resultType="java.lang.Long">
+        SELECT service_id FROM experiment WHERE releas_status = 2 ORDER BY release_time DESC LIMIT 1
+    </select>
 
 
     <select id="findList" resultMap="ExperimentMap" parameterType="cn.realai.online.core.entity.Experiment">
