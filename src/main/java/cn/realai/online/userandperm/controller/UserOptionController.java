@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.util.List;
 
@@ -65,7 +66,8 @@ public class UserOptionController {
 
     @GetMapping("/unAuth")
     @ApiOperation("未认证接口(前端不需要关注)")
-    public Result unAuth() {
+    public Result unAuth(HttpServletResponse httpServletResponse) {
+        httpServletResponse.setStatus(403);
         return new Result(ResultCode.NO_PERMISSION.getCode(), ResultMessage.NO_PERMISSION.getMsg(), null);
     }
 
