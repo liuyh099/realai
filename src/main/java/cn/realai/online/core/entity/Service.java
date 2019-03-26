@@ -29,7 +29,7 @@ public class Service {
 	public static final int BUSINESSTYPE_MARKETING = 2; //营销
 	
 	//部署类型
-	private String deploymentType;
+	private Integer deploymentType;
 	
 	public static final int DEPLOYMENT_TYPE_ONLINE = 1; //在线部署
 	
@@ -89,11 +89,11 @@ public class Service {
 		this.batchTimes = batchTimes;
 	}
 
-	public String getDeploymentType() {
+	public Integer getDeploymentType() {
 		return deploymentType;
 	}
 
-	public void setDeploymentType(String deploymentType) {
+	public void setDeploymentType(Integer deploymentType) {
 		this.deploymentType = deploymentType;
 	}
 

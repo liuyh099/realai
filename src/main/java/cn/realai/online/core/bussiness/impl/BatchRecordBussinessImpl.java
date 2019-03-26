@@ -89,8 +89,13 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Long createBatchRecord(OfflineBatchCreateVO createVO) {
+        cn.realai.online.core.entity.Service serviceVO = new cn.realai.online.core.entity.Service();
+        serviceVO.setStatus(cn.realai.online.core.entity.Service.STATUS_ONLINE);
+        serviceVO.setDeploymentType(cn.realai.online.core.entity.Service.DEPLOYMENT_TYPE_OFFLINE);
+        List<cn.realai.online.core.entity.Service> services = serviceService.list(serviceVO);
+        Assert.notEmpty(services, "未找到对应的离线部署上线服务");
         HashMap releaseMap = experimentService.findByServiceIdAndReleaseStatus(createVO.getServiceId(), Experiment.RELEAS_YES);
-        Assert.notNull(releaseMap, "未找到对应服务信息无法创建跑批记录");
+        Assert.notNull(releaseMap, "未找到服务对应的发布实验信息无法创建跑批记录");
 
         //创建跑批记录
         BatchRecord record = new BatchRecord();
@@ -98,18 +103,14 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
         record.setXtableHomogeneousDataSource(createVO.getxHomoDataSource());
         record.setYtableDataSource(createVO.getyDataSource());
         record.setBatchType(BatchRecord.BATCH_TYPE_OFFLINE);
-        record.setBatchName("");
         //record.setCreateTime(new Date().getTime());
         record.setServiceId(createVO.getServiceId());
-        if (releaseMap != null) {
-            record.setExperimentId((Long) releaseMap.get("experimentId"));
-            record.setBatchName(String.valueOf(releaseMap.get("serviceName")) + "_" + String.valueOf(DateUtil.formatDateToString(new Date(), "yyyyMMddHHmmss")) + "_离线跑批");
-            record.setExperimentId((Long) releaseMap.get("experimentId"));
-            if (releaseMap.get("batchTimes") != null) {
-                record.setOfflineTimes((Integer)releaseMap.get("batchTimes") + 1);
-            } else {
-                record.setOfflineTimes(1);
-            }
+        record.setExperimentId((Long) releaseMap.get("experimentId"));
+        record.setBatchName(String.valueOf(releaseMap.get("serviceName")) + "_" + String.valueOf(DateUtil.formatDateToString(new Date(), "yyyyMMddHHmmss")) + "_离线跑批");
+        if (releaseMap.get("batchTimes") != null) {
+            record.setOfflineTimes((Integer)releaseMap.get("batchTimes") + 1);
+        } else {
+            record.setOfflineTimes(1);
         }
         batchRecordService.insert(record);
 

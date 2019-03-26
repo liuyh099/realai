@@ -45,6 +45,9 @@
             <if test="tuningSecretKey !=null and tuningSecretKey !='' ">
                 AND   a.tuning_secret_key =#{tuningSecretKey}
             </if>
+            <if test="deploymentType !=null ">
+                AND   a.deployment_type =#{deploymentType}
+            </if>
         </where>
     </select>
 
