@@ -107,7 +107,7 @@ public class ExperimentalResultController {
     public Result<List<ExperimentalResultQuatoDataVO>> quotaGroup(@PathVariable Long groupId) {
         try {
             List<ExperimentResultSetBO> listBO = experimentalTrainBusiness.quotaGroup(groupId);
-            ExperimentalResultQuatoDataVO experimentalResultQuatoDataVO = JSON.parseObject(JSON.toJSONString(listBO), ExperimentalResultQuatoDataVO.class);
+            List<ExperimentalResultQuatoDataVO> experimentalResultQuatoDataVO = JSON.parseArray(JSON.toJSONString(listBO), ExperimentalResultQuatoDataVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalResultQuatoDataVO);
         } catch (Exception e) {
             logger.error("实实验评估-业务指标查看异常", e);
