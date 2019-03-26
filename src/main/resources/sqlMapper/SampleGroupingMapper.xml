@@ -24,7 +24,7 @@
 		from sample_grouping
 		where experiment_id = #{experimentId}
         <if test="isExceptionGroup==false">
-            and group_name != '异常组'
+            and group_name != '异常点'
         </if>
 	</select>
 

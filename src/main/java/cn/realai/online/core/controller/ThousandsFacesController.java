@@ -137,12 +137,15 @@ public class ThousandsFacesController {
             if (!CollectionUtils.isEmpty(list)) {
                 List<Integer> x = new ArrayList<>(list.size());
                 List<String> y = new ArrayList<>(list.size());
-                List<List<Double>> data = new ArrayList<>(list.size());
-                for (PersonalHomoResultSetBO tmp : list) {
-                    x.add(tmp.getK());
-                    y.add(tmp.getVariableName());
-                    List<Double> dataItem = new ArrayList<>(1);
-                    dataItem.add(tmp.getWeight());
+                List<List<Object>> data = new ArrayList<>(list.size());
+
+                for(int i=0;i<list.size();i++){
+                    x.add(list.get(i).getK());
+                    y.add(list.get(i).getVariableName());
+                    List<Object> dataItem = new ArrayList<>(3);
+                    dataItem.add(x.size()-1);
+                    dataItem.add(y.size()-1);
+                    dataItem.add(list.get(i).getWeight());
                     data.add(dataItem);
                 }
                 result.setX(x);

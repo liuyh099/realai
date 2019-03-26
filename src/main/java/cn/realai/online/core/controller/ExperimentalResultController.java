@@ -9,11 +9,9 @@ import cn.realai.online.core.bo.*;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.bussiness.SampleWeightBussiness;
 import cn.realai.online.core.entity.BatchRecord;
+import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.PersonalHomoResultSet;
-import cn.realai.online.core.query.ExperimentalResultWhileBoxQuery;
-import cn.realai.online.core.query.FaceListDataQuery;
-import cn.realai.online.core.query.GlobalVariableQuery;
-import cn.realai.online.core.query.IdQuery;
+import cn.realai.online.core.query.*;
 import cn.realai.online.core.vo.*;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
@@ -44,6 +42,21 @@ public class ExperimentalResultController {
 
     @Autowired
     private SampleWeightBussiness sampleWeightBussiness;
+
+    @GetMapping("/trainSelect")
+    @ApiOperation(value = "实验结果-下拉实验列表")
+    public Result<List<TrainNameSelectVO>> trainNameSelect() {
+        try {
+            ExperimentalTrainQuery query = new ExperimentalTrainQuery();
+            query.setStatus(Experiment.STATUS_TRAINING_OVER);
+            List<ExperimentBO> list = experimentalTrainBusiness.list(query);
+            List<TrainNameSelectVO> result = JSON.parseArray(JSON.toJSONString(list), TrainNameSelectVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("实验结果-下拉实验列表异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
 
     @GetMapping("/group/{trainId}")
     @ApiOperation(value = "实验结果-根据实验ID活得组集合(传实验的id)")
@@ -259,12 +272,15 @@ public class ExperimentalResultController {
             if (!CollectionUtils.isEmpty(list)) {
                 List<Integer> x = new ArrayList<>(list.size());
                 List<String> y = new ArrayList<>(list.size());
-                List<List<Double>> data = new ArrayList<>(list.size());
-                for (PersonalHomoResultSetBO tmp : list) {
-                    x.add(tmp.getK());
-                    y.add(tmp.getVariableName());
-                    List<Double> dataItem = new ArrayList<>(1);
-                    dataItem.add(tmp.getWeight());
+                List<List<Object>> data = new ArrayList<>(list.size());
+
+                for(int i=0;i<list.size();i++){
+                    x.add(list.get(i).getK());
+                    y.add(list.get(i).getVariableName());
+                    List<Object> dataItem = new ArrayList<>(3);
+                    dataItem.add(x.size()-1);
+                    dataItem.add(y.size()-1);
+                    dataItem.add(list.get(i).getWeight());
                     data.add(dataItem);
                 }
                 result.setX(x);

@@ -70,6 +70,9 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Autowired
     private SampleGroupingService sampleGroupingService;
 
+    @Autowired
+    private ServiceService serviceService;
+
 
     /**
      * 根据实验名称和状态等分页查询实验列表
@@ -234,6 +237,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
         //获得评估的结果集
         Experiment experiment = experimentService.selectExperimentById(experimentId);
+
 
         //TODO 去获取服务
         List<ExperimentResultSetBO> trainResultSetListBO = quotaCommon(Experiment.DATA_SET_TRAIN, experimentId);
@@ -406,7 +410,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public List<ExperimentBO> getCanPublishTrain() {
         Experiment experiment = new Experiment();
         experiment.setStatus(Experiment.STATUS_TRAINING_OVER);
-        experiment.setReleasStatus(Experiment.RELEAS_YES);
+        experiment.setReleasStatus(Experiment.RELEAS_NO);
         List<Experiment> list = experimentService.findList(experiment);
         List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
         return result;
@@ -509,6 +513,15 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         ExperimentBO bo = new ExperimentBO();
         BeanUtils.copyProperties(experiment1, bo);
         return bo;
+    }
+
+    @Override
+    public List<ExperimentBO> list(ExperimentalTrainQuery query) {
+        Experiment experiment = new Experiment();
+        experiment.setStatus(query.getStatus());
+        List<Experiment> list = experimentService.findList(experiment);
+        List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
+        return result;
     }
 
 

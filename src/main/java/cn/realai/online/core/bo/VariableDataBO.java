@@ -6,9 +6,11 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "X轴变量数据")
 public class VariableDataBO {
 
+    private Long id;
+
     //实验id
     @ApiModelProperty(value = "实验id")
-    private long experimentId;
+    private Long experimentId;
 
     //名称
     @ApiModelProperty(value = "名称", example = "名称")
@@ -46,11 +48,19 @@ public class VariableDataBO {
     @ApiModelProperty(value = "模式类型")
     private int variableType;
 
-    public long getExperimentId() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getExperimentId() {
         return experimentId;
     }
 
-    public void setExperimentId(long experimentId) {
+    public void setExperimentId(Long experimentId) {
         this.experimentId = experimentId;
     }
 
