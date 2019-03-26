@@ -11,6 +11,7 @@ import cn.realai.online.core.bussiness.SampleWeightBussiness;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.PersonalHomoResultSet;
+import cn.realai.online.core.entity.SampleSummary;
 import cn.realai.online.core.query.*;
 import cn.realai.online.core.vo.*;
 import com.alibaba.fastjson.JSON;
@@ -63,7 +64,7 @@ public class ExperimentalResultController {
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     public Result<List<GroupSelectNameVO>> group(@PathVariable Long trainId) {
         try {
-            List<SampleGroupingBO> list = experimentalTrainBusiness.getGroupOptionName(trainId, true);
+            List<SampleGroupingBO> list = experimentalTrainBusiness.getGroupOptionName(trainId, true,true);
             List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
@@ -143,6 +144,20 @@ public class ExperimentalResultController {
         }
     }
 
+    @GetMapping("whiledecision/group")
+    @ApiOperation(value = "实验-白盒决策页面-获得组(传实验ID)")
+    public Result<List<GroupSelectNameVO>> whiledecisionGroup(@Validated IdVO idVO) {
+        try {
+            List<SampleGroupingBO> list = experimentalTrainBusiness.getGroupOptionName(idVO.getId(),true,false);
+            //处理查询结果
+            List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("实验-白盒决策页面-获得组", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
+
 
     @GetMapping("whiledecision")
     @ApiOperation(value = "实验-白盒决策")
@@ -150,7 +165,6 @@ public class ExperimentalResultController {
         try {
             //开启分页
             Page page = PageHelper.startPage(experimentalResultWhileBoxQuery.getPageNum(), experimentalResultWhileBoxQuery.getPageSize());
-
             List<SampleWeightBO> boList = sampleWeightBussiness.getSampleWeightList(experimentalResultWhileBoxQuery);
             //处理查询结果
             List<WhileBoxScoreCardVO> result = JSON.parseArray(JSON.toJSONString(boList), WhileBoxScoreCardVO.class);
@@ -200,7 +214,7 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-千人千面 获取echarts 数据")
     public Result<List<EchartsDataVo>> echartsData(@Validated IdVO idVo) {
         try {
-            List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId(), false);
+            List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId(), false,false);
             List<EchartsDataVo> result = null;
             if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
                 result = new ArrayList<>();
