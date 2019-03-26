@@ -156,6 +156,7 @@ public class ModelBussinessImpl implements ModelBussiness {
         experimentService.updateExperimentTrainStatus(modelBO.getExperimentId(), modelBO.getStatus());
         experimentService.updateExperimentOffline(modelBO.getExperimentId(), experiment.getServiceId(), Experiment.RELEAS_NO);
         //TODO 查询服务的ID 和处理服务上下线细节
+        modelBO.setServiceId(experiment.getServiceId());
         modelBO.setCreateTime(System.currentTimeMillis());
         int count = modelService.insert(modelBO);
         return count;
