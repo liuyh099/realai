@@ -107,6 +107,17 @@
 		where id = #{experimentId}
 	</update>
 
+    <update id="updateExperimentOffline">
+        update experiment
+		set releas_status = #{status}
+		where id != #{id} and service_id = #{serviceId}
+    </update>
+
+    <update id="updateExperimentTrainStatus">
+        update experiment
+		set releas_status = #{status}
+		where id = #{id}
+    </update>
 
 
     <select id="findList" resultMap="ExperimentMap" parameterType="cn.realai.online.core.entity.Experiment">
@@ -178,5 +189,19 @@
 		limit 1
 	</select>
 
-  
+	<update id="trainResultMaintain">
+		update experiment
+		set sample_review = #{sampleReview},
+			model_url = #{modelUrl},
+			seg_image_url = #{segmentationStatisticsImageUrl},
+			bad_image_url = #{badTopCountImageUrl},
+			roc_test_image_url = #{rocTestImageUrl},
+			roc_train_image_url = #{rocTrainImageUrl},
+			roc_validate_image_url = #{rocValidateImageUrl},
+			ks_test_image_url = #{ksTestImageUrl},
+			ks_train_image_url = #{ksTrainImageUrl},
+			ks_validate_image_url = #{ksValidateImageUrl}
+		where id = #{experimentId}
+	</update>
+
 </mapper> 

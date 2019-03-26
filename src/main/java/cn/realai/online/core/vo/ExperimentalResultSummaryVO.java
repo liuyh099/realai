@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class ExperimentalResultSummaryVO {
 
     //实验类型
-    @ApiModelProperty(value = "数据集类型", example = "1:训练集 2:测试集 3:验证集")
+    @ApiModelProperty(value = "数据集类型 1:训练集 2:测试集 3:验证集", example = "1:训练集 2:测试集 3:验证集")
     private Integer dataSetType;
 
     //样本描述

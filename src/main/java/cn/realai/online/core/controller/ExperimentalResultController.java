@@ -9,11 +9,9 @@ import cn.realai.online.core.bo.*;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.bussiness.SampleWeightBussiness;
 import cn.realai.online.core.entity.BatchRecord;
+import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.PersonalHomoResultSet;
-import cn.realai.online.core.query.ExperimentalResultWhileBoxQuery;
-import cn.realai.online.core.query.FaceListDataQuery;
-import cn.realai.online.core.query.GlobalVariableQuery;
-import cn.realai.online.core.query.IdQuery;
+import cn.realai.online.core.query.*;
 import cn.realai.online.core.vo.*;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
@@ -44,6 +42,21 @@ public class ExperimentalResultController {
 
     @Autowired
     private SampleWeightBussiness sampleWeightBussiness;
+
+    @GetMapping("/trainSelect")
+    @ApiOperation(value = "实验结果-下拉实验列表")
+    public Result<List<TrainNameSelectVO>> trainNameSelect() {
+        try {
+            ExperimentalTrainQuery query = new ExperimentalTrainQuery();
+            query.setStatus(Experiment.STATUS_TRAINING_OVER);
+            List<ExperimentBO> list = experimentalTrainBusiness.list(query);
+            List<TrainNameSelectVO> result = JSON.parseArray(JSON.toJSONString(list), TrainNameSelectVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("实验结果-下拉实验列表异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
 
     @GetMapping("/group/{trainId}")
     @ApiOperation(value = "实验结果-根据实验ID活得组集合(传实验的id)")
@@ -94,7 +107,7 @@ public class ExperimentalResultController {
     public Result<List<ExperimentalResultQuatoDataVO>> quotaGroup(@PathVariable Long groupId) {
         try {
             List<ExperimentResultSetBO> listBO = experimentalTrainBusiness.quotaGroup(groupId);
-            ExperimentalResultQuatoDataVO experimentalResultQuatoDataVO = JSON.parseObject(JSON.toJSONString(listBO), ExperimentalResultQuatoDataVO.class);
+            List<ExperimentalResultQuatoDataVO> experimentalResultQuatoDataVO = JSON.parseArray(JSON.toJSONString(listBO), ExperimentalResultQuatoDataVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalResultQuatoDataVO);
         } catch (Exception e) {
             logger.error("实实验评估-业务指标查看异常", e);
@@ -135,7 +148,13 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-白盒决策")
     public Result<PageBO<WhileBoxScoreCardVO>> whiledecision(@Validated ExperimentalResultWhileBoxQuery experimentalResultWhileBoxQuery) {
         try {
-            PageBO<WhileBoxScoreCardVO> pageBO = sampleWeightBussiness.pageBO(experimentalResultWhileBoxQuery);
+            //开启分页
+            Page page = PageHelper.startPage(experimentalResultWhileBoxQuery.getPageNum(), experimentalResultWhileBoxQuery.getPageSize());
+
+            List<SampleWeightBO> boList = sampleWeightBussiness.getSampleWeightList(experimentalResultWhileBoxQuery);
+            //处理查询结果
+            List<WhileBoxScoreCardVO> result = JSON.parseArray(JSON.toJSONString(boList), WhileBoxScoreCardVO.class);
+            PageBO<WhileBoxScoreCardVO> pageBO = new PageBO<WhileBoxScoreCardVO>(result, experimentalResultWhileBoxQuery.getPageSize(), experimentalResultWhileBoxQuery.getPageNum(), page.getTotal(), page.getPages());
 
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
@@ -148,8 +167,14 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-全局变量")
     public Result<PageBO<WhileBoxScoreCardVO>> globalVariable(@Validated GlobalVariableQuery globalVariableQuery) {
         try {
+            //开启分页
+            Page page = PageHelper.startPage(globalVariableQuery.getPageNum(), globalVariableQuery.getPageSize());
 
-            PageBO<WhileBoxScoreCardVO> pageBO = sampleWeightBussiness.pageBO(globalVariableQuery);
+            List<SampleWeightBO> boList = sampleWeightBussiness.getSampleWeightList(globalVariableQuery);
+
+            //处理查询结果
+            List<WhileBoxScoreCardVO> result = JSON.parseArray(JSON.toJSONString(boList), WhileBoxScoreCardVO.class);
+            PageBO<WhileBoxScoreCardVO> pageBO = new PageBO<WhileBoxScoreCardVO>(result, globalVariableQuery.getPageSize(), globalVariableQuery.getPageNum(), page.getTotal(), page.getPages());
 
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
@@ -178,7 +203,7 @@ public class ExperimentalResultController {
             List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId(), false);
             List<EchartsDataVo> result = null;
             if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
-                result =new ArrayList<>();
+                result = new ArrayList<>();
                 for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {
                     EchartsDataVo data = new EchartsDataVo();
                     data.setName(sampleGroupingBO.getGroupName());
@@ -193,7 +218,7 @@ public class ExperimentalResultController {
         }
     }
 
-    @GetMapping("thousandsFace/list")
+        @GetMapping("thousandsFace/list")
     @ApiOperation(value = "实验-千人千面列表数据")
     public Result<PageBO<PersonalInformationVO>> listData(@Validated FaceListDataQuery query) {
         try {
@@ -259,12 +284,15 @@ public class ExperimentalResultController {
             if (!CollectionUtils.isEmpty(list)) {
                 List<Integer> x = new ArrayList<>(list.size());
                 List<String> y = new ArrayList<>(list.size());
-                List<List<Double>> data = new ArrayList<>(list.size());
-                for (PersonalHomoResultSetBO tmp : list) {
-                    x.add(tmp.getK());
-                    y.add(tmp.getVariableName());
-                    List<Double> dataItem = new ArrayList<>(1);
-                    dataItem.add(tmp.getWeight());
+                List<List<Object>> data = new ArrayList<>(list.size());
+
+                for(int i=0;i<list.size();i++){
+                    x.add(list.get(i).getK());
+                    y.add(list.get(i).getVariableName());
+                    List<Object> dataItem = new ArrayList<>(3);
+                    dataItem.add(x.size()-1);
+                    dataItem.add(y.size()-1);
+                    dataItem.add(list.get(i).getWeight());
                     data.add(dataItem);
                 }
                 result.setX(x);

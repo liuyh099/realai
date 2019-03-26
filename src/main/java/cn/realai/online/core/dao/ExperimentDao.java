@@ -87,4 +87,19 @@ public interface ExperimentDao {
      * @return
      */
     Experiment getPublishExperimentByServerId(Long id);
+
+    /**
+     * 更新服务下线
+     * @param experimentId
+     * @param serviceId
+     * @param releasNo
+     */
+    void updateExperimentOffline(@Param("id") Long experimentId, @Param("serviceId")Long serviceId, @Param("status")int releasNo);
+
+    /**
+     * 更新服务训练状态
+     * @param experimentId
+     * @param releasYes
+     */
+    void updateExperimentTrainStatus(@Param("id")Long experimentId, @Param("status")int releasYes);
 }
