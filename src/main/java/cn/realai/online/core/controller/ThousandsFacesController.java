@@ -115,7 +115,7 @@ public class ThousandsFacesController {
         }
     }
 
-    @GetMapping("/list/topTen")
+        @GetMapping("/list/topTen")
     @ApiOperation(value = "千人千面-列表数据-详情-异质最强TOP10(传数据id))")
     public Result<List<PersonalHetroResultSetTopTenVO>> listDataDetailTopTen(@Validated IdVO idVo) {
         try {
@@ -182,7 +182,7 @@ public class ThousandsFacesController {
 
     @GetMapping("/list/same")
     @ApiOperation(value = "千人千面-列表数据-详情-所有同质数据(传数据id))")
-    public Result<List<PersonalHomoResultSetVO>> listSame(@RequestBody IdQuery query) {
+    public Result<List<PersonalHomoResultSetVO>> listSame(IdQuery query) {
         try {
             PageBO<PersonalHomoResultSetBO> page = experimentalTrainBussiness.listPersonalHomoResultSet(query);
             if (page == null) {

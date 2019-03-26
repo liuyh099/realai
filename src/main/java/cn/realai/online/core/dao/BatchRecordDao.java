@@ -32,10 +32,9 @@ public interface BatchRecordDao {
 	/**
 	 *
 	 * @param batchRecordBO
-	 * @param isTranFlag
 	 * @return
 	 */
-    List<BatchRecord> findBatchRecordList(BatchRecordBO batchRecordBO, boolean isTranFlag);
+    List<BatchRecord> findBatchRecordList(BatchRecordBO batchRecordBO);
     
 	BatchRecord getBatchRecordByEidAndDate(@Param("eid")long eid, 
 			@Param("date")String date, 

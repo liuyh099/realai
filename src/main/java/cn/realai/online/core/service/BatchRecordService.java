@@ -31,10 +31,9 @@ public interface BatchRecordService {
 	/**
 	 * 查询批次数据
 	 * @param batchRecordBO
-	 * @param isTranFlag
 	 * @return
 	 */
-    List<BatchRecord> findBatchRecordList(BatchRecordBO batchRecordBO, boolean isTranFlag);
+    List<BatchRecord> findBatchRecordList(BatchRecordBO batchRecordBO);
     
 	BatchRecord getBatchRecordOfDaily(long eid, String date, int batchTypeDaily);
 

@@ -15,4 +15,7 @@ public interface TuningRecordDao {
     TuningRecord get(Long id);
 
     List<TuningRecord> findList(TuningRecord record);
+
+    //根据模型ids查询每个模型最近一次的调优记录
+    List<TuningRecord> findLatestListByModelIds(List<Long> modelIds);
 }

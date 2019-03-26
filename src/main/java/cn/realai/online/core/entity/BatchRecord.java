@@ -46,6 +46,17 @@ public class BatchRecord {
 	//第几次离线跑批
 	private Integer offlineTimes;
 
+	private boolean tranFlag;
+
+
+	public boolean getTranFlag() {
+		return tranFlag;
+	}
+
+	public void setTranFlag(boolean tranFlag) {
+		this.tranFlag = tranFlag;
+	}
+
 	public Long getId() {
 		return id;
 	}
