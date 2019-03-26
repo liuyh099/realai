@@ -214,7 +214,7 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-千人千面 获取echarts 数据")
     public Result<List<EchartsDataVo>> echartsData(@Validated IdVO idVo) {
         try {
-            List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId(), false, false);
+            List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId(), true, false);
             List<EchartsDataVo> result = null;
             if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
                 result = new ArrayList<>();
@@ -301,11 +301,15 @@ public class ExperimentalResultController {
                 List<List<Object>> data = new ArrayList<>(list.size());
 
                 for (int i = 0; i < list.size(); i++) {
-                    x.add(list.get(i).getK());
-                    y.add(list.get(i).getVariableName());
+                    if(!x.contains(list.get(i).getK())){
+                        x.add(list.get(i).getK());
+                    }
+                    if(!y.contains(list.get(i).getVariableName())){
+                        y.add(list.get(i).getVariableName());
+                    }
                     List<Object> dataItem = new ArrayList<>(3);
-                    dataItem.add(x.size() - 1);
-                    dataItem.add(y.size() - 1);
+                    dataItem.add(x.indexOf(list.get(i).getK()));
+                    dataItem.add(y.indexOf(list.get(i).getVariableName()));
                     dataItem.add(list.get(i).getWeight());
                     data.add(dataItem);
                 }
