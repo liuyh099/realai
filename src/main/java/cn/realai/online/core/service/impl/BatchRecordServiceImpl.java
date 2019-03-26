@@ -55,8 +55,8 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 	}
 
     @Override
-	public List<BatchRecord> findBatchRecordList(BatchRecordBO batchRecordBO, boolean isTranFlag) {
-		return batchRecordDao.findBatchRecordList(batchRecordBO,isTranFlag);
+	public List<BatchRecord> findBatchRecordList(BatchRecordBO batchRecordBO) {
+		return batchRecordDao.findBatchRecordList(batchRecordBO);
 	}
     
     /**

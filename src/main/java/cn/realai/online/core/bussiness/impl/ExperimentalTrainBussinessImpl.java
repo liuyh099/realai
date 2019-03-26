@@ -448,10 +448,10 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Override
     public List<BatchRecordBO> findBatchRecordBOList(BatchRecordBO batchRecordBO, boolean isTranFlag) {
-
-        List<BatchRecord> batchRecords = batchRecordService.findBatchRecordList(batchRecordBO, isTranFlag);
-
-        return null;
+        batchRecordBO.setTranFlag(isTranFlag);
+        List<BatchRecord> batchRecords = batchRecordService.findBatchRecordList(batchRecordBO);
+        List<BatchRecordBO> result = JSON.parseArray(JSON.toJSONString(batchRecords),BatchRecordBO.class);
+        return result;
     }
 
     @Override
