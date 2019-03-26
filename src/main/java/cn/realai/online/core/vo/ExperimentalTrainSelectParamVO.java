@@ -19,9 +19,14 @@ public class ExperimentalTrainSelectParamVO {
 
 
     //样本选择类型
-    @ApiModelProperty(value = "选择样本类型", name="选择样本类型 1:时间顺序 2:随机选择", required = true, example = "1:时间顺序 2:随机选择")
-    @NotNull(message = "请选择训练集类型")
-    private Integer sampleSplitType;
+    @ApiModelProperty(value = "验证集类型 1:时间顺序 2:随机选择", name="选择样本类型 1:时间顺序 2:随机选择", required = true, example = "1:时间顺序 2:随机选择")
+    @NotNull(message = "请选择验证集类型")
+    private Integer validSampleType;
+
+    //样本选择类型
+    @ApiModelProperty(value = "测试集类型 1:时间顺序 2:随机选择", name="选择样本类型 1:时间顺序 2:随机选择", required = true, example = "1:时间顺序 2:随机选择")
+    @NotNull(message = "请选择测试集类型")
+    private Integer testSampleType;
 
 
     @ApiModelProperty(value = "训练集比例",name = "训练集比例", required = true)
@@ -53,14 +58,6 @@ public class ExperimentalTrainSelectParamVO {
         this.verificationSet = verificationSet;
     }
 
-    public Integer getSampleSplitType() {
-        return sampleSplitType;
-    }
-
-    public void setSampleSplitType(Integer sampleSplitType) {
-        this.sampleSplitType = sampleSplitType;
-    }
-
     public Integer getTrainRatio() {
         return trainRatio;
     }
@@ -83,5 +80,21 @@ public class ExperimentalTrainSelectParamVO {
 
     public void setValidRatio(Integer validRatio) {
         this.validRatio = validRatio;
+    }
+
+    public Integer getValidSampleType() {
+        return validSampleType;
+    }
+
+    public void setValidSampleType(Integer validSampleType) {
+        this.validSampleType = validSampleType;
+    }
+
+    public Integer getTestSampleType() {
+        return testSampleType;
+    }
+
+    public void setTestSampleType(Integer testSampleType) {
+        this.testSampleType = testSampleType;
     }
 }
