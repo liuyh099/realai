@@ -30,7 +30,7 @@ public class ModelListVO {
     private String experementName;
 
     @ApiModelProperty(value = "上线时间")
-    private String releaseTime;
+    private Long releaseTime;
 
     @ApiModelProperty(value = "算法")
     private String algorithm;
@@ -41,11 +41,11 @@ public class ModelListVO {
     @ApiModelProperty(value = "调优原因")
     private String tuningReason;
 
-    @ApiModelProperty(value = "psi喇叭值[0：psi不大于0.1，1：psi大于0.1]", example = "0,1")
-    private int psi;
+    @ApiModelProperty(value = "psi喇叭值")
+    private Double psi;
 
-    @ApiModelProperty(value = "是否预警")
-    private int aler;
+    @ApiModelProperty(value = "是否预警(true: 预警； false：不预警)")
+    private boolean aler;
 
 
     public long getModelId() {
@@ -88,11 +88,11 @@ public class ModelListVO {
         this.experementName = experementName;
     }
 
-    public String getReleaseTime() {
+    public Long getReleaseTime() {
         return releaseTime;
     }
 
-    public void setReleaseTime(String releaseTime) {
+    public void setReleaseTime(Long releaseTime) {
         this.releaseTime = releaseTime;
     }
 
@@ -120,19 +120,19 @@ public class ModelListVO {
         this.tuningReason = tuningReason;
     }
 
-    public int getPsi() {
+    public Double getPsi() {
         return psi;
     }
 
-    public void setPsi(int psi) {
+    public void setPsi(Double psi) {
         this.psi = psi;
     }
 
-    public int getAler() {
+    public boolean getAler() {
         return aler;
     }
 
-    public void setAler(int aler) {
+    public void setAler(boolean aler) {
         this.aler = aler;
     }
 }

@@ -1,5 +1,6 @@
 package cn.realai.online.core.bussiness.impl;
 
+import cn.realai.online.common.Constant;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.ModelBO;
 import cn.realai.online.core.bo.ModelDetailBO;
@@ -8,10 +9,9 @@ import cn.realai.online.core.bussiness.ModelBussiness;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.ModelPerformance;
+import cn.realai.online.core.entity.TuningRecord;
 import cn.realai.online.core.query.ModelListQuery;
-import cn.realai.online.core.service.ExperimentService;
-import cn.realai.online.core.service.ModelPerformanceService;
-import cn.realai.online.core.service.ModelService;
+import cn.realai.online.core.service.*;
 import cn.realai.online.core.vo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -23,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能描述：TODO
@@ -39,6 +40,10 @@ public class ModelBussinessImpl implements ModelBussiness {
     private ModelPerformanceService modelPerformanceService;
     @Autowired
     private ExperimentService experimentService;
+    @Autowired
+    private PsiCheckResultService psiChekcResultService;
+    @Autowired
+    private TuningRecordService tuningRecordService;
 
     @Override
     public PageBO<ModelListVO> pageList(ModelListQuery query) {
@@ -51,9 +56,41 @@ public class ModelBussinessImpl implements ModelBussiness {
         //处理查询结果
         List<ModelListVO> voList = new ArrayList<>();
         if (list != null && !list.isEmpty()) {
+            List<Long> modelIds = new ArrayList<>();
+            list.forEach(item -> {
+                modelIds.add(item.getModelId());
+            });
+            List<Map> modelPsiList = psiChekcResultService.selectMaxPsiList(modelIds);
+            List<TuningRecord> tuningRecords = tuningRecordService.findLatestListByModelIds(modelIds);
             for (ModelListBO item : list) {
                 ModelListVO voItem = new ModelListVO();
                 BeanUtils.copyProperties(item, voItem);
+                voItem.setTuningReason("新建");
+
+                //处理PSI是否足够预警
+                if (modelPsiList != null && !modelPsiList.isEmpty()) {
+                    for (Map psi:modelPsiList) {
+                        if (psi.get("modelId") == item.getModelId()) {
+                            Double maxPsi = (Double)psi.get("maxPsi");
+                            boolean flag = maxPsi > Constant.PSI_ALER_VALUE ? true : false ;
+                            voItem.setPsi(maxPsi);
+                            voItem.setAler(flag);
+                            break;
+                        }
+                    }
+                }
+
+                //设置调优原因
+                if (tuningRecords != null && !tuningRecords.isEmpty()) {
+                    for (TuningRecord record:tuningRecords) {
+                        if (record.getModelId() == item.getModelId()) {
+                            String reason = TuningRecord.TYPE.PSI.value.equals(record.getType()) ? "PSI调优":"强制调优";
+                            voItem.setTuningReason(reason);
+                            break;
+                        }
+                    }
+
+                }
                 voList.add(voItem);
             }
         }

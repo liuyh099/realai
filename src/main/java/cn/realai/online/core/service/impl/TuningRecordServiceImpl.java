@@ -44,4 +44,9 @@ public class TuningRecordServiceImpl implements TuningRecordService {
     public List<TuningRecord> findList(TuningRecord record) {
         return tuningRecordDao.findList(record);
     }
+
+    @Override
+    public List<TuningRecord> findLatestListByModelIds(List<Long> modelIds) {
+        return tuningRecordDao.findLatestListByModelIds(modelIds);
+    }
 }
