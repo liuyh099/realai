@@ -17,7 +17,7 @@ public interface ExperimentalTrainBussiness {
 
     Integer deleteExperimentByIds(List<Long> ids);
 
-    int train(long experimentId);
+    int train(long experimentId, Long relyingId);
 
     void testPreprocess(long experimentId);
 
@@ -212,7 +212,7 @@ public interface ExperimentalTrainBussiness {
      * @param bo
      * @return
      */
-    Boolean doubleCreate(ExperimentalTrainDoubleCreateBO bo);
+    Long doubleCreate(ExperimentalTrainDoubleCreateBO bo);
 
     /**
      * 根据服务ID获取实验

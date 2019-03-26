@@ -85,7 +85,7 @@ public class VariableDataServiceImpl implements VariableDataService {
 
     @Override
     public HomoAndHetroBO selectDeleteByExperimentId(Long experimentId) {
-        List<VariableData> list = variableDataDao.selectDeleteListByExperimentId(experimentId);
+        List<VariableData> list = variableDataDao.selectVariableDataListByExperimentId(experimentId);
         if (list == null) {
             return null;
         }

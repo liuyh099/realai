@@ -10,7 +10,7 @@ import cn.realai.online.common.Constant;
 public class PreprocessRequestBO {
 
     //实验id
-    private long id;
+    private Long experimentId;
 
     //命令
     private final String command = Constant.COMMAND_PREPROCESS;
@@ -27,16 +27,15 @@ public class PreprocessRequestBO {
     //x表含义对照数据源
     private String xtableMeaningDataSource;
 
-    public long getId() {
-        return id;
-    }
+    public Long getExperimentId() {
+		return experimentId;
+	}
 
+	public void setExperimentId(Long experimentId) {
+		this.experimentId = experimentId;
+	}
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getCommand() {
+	public String getCommand() {
         return command;
     }
 

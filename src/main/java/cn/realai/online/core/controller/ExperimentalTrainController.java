@@ -353,7 +353,7 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result createModel(@PathVariable Long trainId) {
         try {
-            int ret = experimentalTrainBussiness.train(trainId);
+            int ret = experimentalTrainBussiness.train(trainId, 0L);
             if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("有其他实验正在训练中，请稍后重试"), null);
             }
@@ -370,11 +370,15 @@ public class ExperimentalTrainController {
     public Result doubleCreate(@Validated @RequestBody ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo) {
         try {
             ExperimentalTrainDoubleCreateBO bo = JSON.parseObject(JSON.toJSONString(experimentalTrainDoubleCreateVo), ExperimentalTrainDoubleCreateBO.class);
-            boolean flag = experimentalTrainBussiness.doubleCreate(bo);
-            if (flag) {
-                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
+            Long newExperimentId = experimentalTrainBussiness.doubleCreate(bo);
+            if (newExperimentId == null) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), 1);
             }
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), 1);
+            int ret = experimentalTrainBussiness.train(newExperimentId, bo.getTrainId());
+            if (ret == 0) {
+            	return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
+            }
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
         } catch (Exception e) {
             logger.error("二次创建实验异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), 1);

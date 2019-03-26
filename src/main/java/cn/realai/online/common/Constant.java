@@ -18,6 +18,9 @@ public class Constant {
     //实验训练
     public static final String COMMAND_TRAIN = "train";
     
+  //实验训练
+    public static final String COMMAND_SECOND_TRAIN = "second_train";
+    
     //实验部署
     public static final String COMMAND_DEPLOY = "deploy";
     
