@@ -47,7 +47,7 @@
 		where experiment_id = #{experimentId}
 	</select>
 
-    <select id="findDoubleCreateVariableDataList" parameterType="java.lang.Long">
+    <select id="findDoubleCreateVariableDataList" parameterType="java.lang.Long" resultMap="VariableDataMap">
         select *
         from variable_data
         <where>
