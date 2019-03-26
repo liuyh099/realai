@@ -15,7 +15,7 @@ public class BatchRequestStructure {
     private String redisKey;
     
     //每日跑批的批次 信息
-    private String batchStr;
+    private String date;
     
     //离线跑批数据下载路径
     private String downUrl;
@@ -63,12 +63,12 @@ public class BatchRequestStructure {
 		this.type = type;
 	}
 
-	public String getBatchStr() {
-		return batchStr;
+	public String getDate() {
+		return date;
 	}
 
-	public void setBatchStr(String batchStr) {
-		this.batchStr = batchStr;
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 }

@@ -2,6 +2,7 @@ package cn.realai.online.calculation;
 
 import java.util.List;
 
+import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.VariableData;
 
@@ -32,7 +33,7 @@ public interface TrainService {
 	/**
 	 * 离线跑批
 	 */
-	int runBatchOfOffline();
+	int runBatchOfOffline(BatchRecord batchRecord);
 	
 	/**
 	 * 删除实验

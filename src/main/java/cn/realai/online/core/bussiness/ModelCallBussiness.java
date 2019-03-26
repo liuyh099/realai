@@ -8,7 +8,7 @@ public interface ModelCallBussiness {
      * 每日跑批
      * @param brs 
      */
-    void runBatchDaily(Long experimentId, String redisKey, String type, String batchStr);
+    void runBatchDaily(Long experimentId, String redisKey, String type, String date);
     
     /*
      * 离线跑批

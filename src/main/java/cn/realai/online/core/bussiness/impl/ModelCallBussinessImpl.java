@@ -51,9 +51,8 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
      * 处理每日跑批任务
      */
     @Override
-    public void runBatchDaily(Long experimentId, String redisKey, String type, String batchStr) {
-    	Long batchId = getBatchId(experimentId, batchStr);
-    	//读取预处理结果配置文件
+    public void runBatchDaily(Long experimentId, String redisKey, String type, String date) {
+    	Long batchId = getBatchId(experimentId, date);
         BaseBatchTask bbt;
         
         if (BatchRequestStructure.TYPE_PERSONALCOMBORESULTSET.equals(type)) {
@@ -74,20 +73,13 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
         ModelCallPool.modelCallPool.execute(bbt);
     }
     
-    private Long getBatchId(Long experimentId, String batchStr) {
-		String[] eidAndDate = batchStr.split("+");
-		long eid = Long.parseLong(eidAndDate[0]);
-		String date = eidAndDate[1];
-		
-		if (eid != experimentId.longValue()) {
-			throw new RuntimeException("BatchTask getBatchId. 实验id不相等. experimentId = " + experimentId + " , eid{} + = " + eid);
-		}
+    private Long getBatchId(Long experimentId, String date) {
 		
 		BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
 		
-        BatchRecord batchRecord = batchRecordService.getBatchRecordOfDaily(eid, date, BatchRecord.BATCH_TYPE_DAILY);
+        BatchRecord batchRecord = batchRecordService.getBatchRecordOfDaily(experimentId, date, BatchRecord.BATCH_TYPE_DAILY);
         if (batchRecord == null) {
-        	throw new RuntimeException("batchRecord getBatchId. 批次创建错误. eid = " + eid + " date =+ " + date);
+        	throw new RuntimeException("batchRecord getBatchId. 批次创建错误. eid = " + experimentId + " date =+ " + date);
         }
 		return batchRecord.getId();
 	}
