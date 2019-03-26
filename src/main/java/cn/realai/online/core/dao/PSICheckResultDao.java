@@ -5,6 +5,7 @@ import cn.realai.online.core.entity.PSICheckResult;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PSICheckResultDao {
     //插入PSI
@@ -18,6 +19,8 @@ public interface PSICheckResultDao {
 
     //获取最大Psi
     Double selectMaxPsi(Long modelId);
+
+    List<Map> selectMaxPsiList(List<Long> modelIds);
 
     //查询PSI列表
     List<PsiResultBO> selectList(@Param("modelId") Long modelId);

@@ -23,4 +23,6 @@ public interface TuningRecordService {
 
     List<TuningRecord> findList(TuningRecord record);
 
+    List<TuningRecord> findLatestListByModelIds(List<Long> modelIds);
+
 }

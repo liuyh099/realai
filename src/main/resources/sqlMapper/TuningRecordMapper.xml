@@ -74,4 +74,16 @@
         </where>
     </select>
 
+    <select id="findLatestListByModelIds" resultMap="TuningRecordMap">
+        select * from tuning_record
+        where id in (
+            select max(id) as id from tuning_record as tr
+            where  tr.model_id in
+            <foreach collection="list" open="(" close=")" separator="," item="modelId">
+                #{modelId}
+            </foreach>
+            group by tr.id
+        )
+    </select>
+
 </mapper>

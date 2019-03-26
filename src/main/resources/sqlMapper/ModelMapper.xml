@@ -63,9 +63,6 @@
         <result column="releaseTime" property="releaseTime" jdbcType="TIMESTAMP"/>
         <result column="algorithmType" property="algorithmType" jdbcType="VARCHAR"/>
         <result column="tuningCount" property="tuningCount" jdbcType="INTEGER"/>
-        <result column="tuningReason" property="tuningReason" jdbcType="VARCHAR"/>
-        <result column="psi" property="psi" jdbcType="DOUBLE"/>
-        <result column="aler" property="aler" jdbcType="TINYINT"/>
     </resultMap>
     <select id="selectList" resultMap="ModelListMap">
         select
@@ -77,14 +74,10 @@
         ep.name as experimentName,
         ep.release_time as releaseTime,
         ep.algorithm_type as algorithmType,
-        ep.tuning_count as tuningCount,
-        '调优原因' as tuningReason,
-        pc.psi as psi,
-        pc.aler as aler
+        ep.tuning_count as tuningCount
         from model as m
         join experiment as ep on m.experiment_id = ep.id
         join service as sv on m.service_id = sv.id
-        left join psi_check_result as pc on ep.id = pc.experiment_id
         <!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错-->
         <where>
             <if test="name!=null and name.trim()!=''">
