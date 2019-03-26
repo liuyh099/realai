@@ -242,4 +242,6 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     Long getLastServerId();
+
+    Long getGroupAllId(long trainId);
 }

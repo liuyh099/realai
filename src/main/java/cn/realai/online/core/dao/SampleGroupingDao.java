@@ -13,4 +13,5 @@ public interface SampleGroupingDao {
     List<SampleGrouping> findListByExperimentId(@Param("experimentId") Long experimentId, 
     		@Param("isExceptionGroup")boolean isExceptionGroup,@Param("isAllGroup")boolean isAllGroup);
 
+    Long getAllGroupIdByTrainId(@Param("experimentId") long trainId);
 }

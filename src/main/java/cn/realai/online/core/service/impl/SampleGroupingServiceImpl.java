@@ -28,4 +28,9 @@ public class SampleGroupingServiceImpl implements SampleGroupingService {
         return SampleGroupingDao.findListByExperimentId(experimentId, isExceptionGroup,isAllGroup);
     }
 
+    @Override
+    public Long getAllGroupIdByTrainId(long trainId) {
+        return SampleGroupingDao.getAllGroupIdByTrainId(trainId);
+    }
+
 }

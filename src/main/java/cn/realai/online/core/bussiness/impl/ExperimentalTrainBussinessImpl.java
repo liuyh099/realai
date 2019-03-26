@@ -543,6 +543,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         return null;
     }
 
+    @Override
+    public Long getGroupAllId(long trainId) {
+        return sampleGroupingService.getAllGroupIdByTrainId(trainId);
+    }
+
 
     private PersonalInformation buildQueryCondition(BatchRecord batchRecord, FaceListDataQuery query) {
         PersonalInformation personal = new PersonalInformation();

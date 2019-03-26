@@ -10,4 +10,5 @@ public interface SampleGroupingService {
 
     List<SampleGrouping> findListByExperimentId(Long experimentId, boolean isExceptionGroup,boolean isAllGroup);
 
+    Long getAllGroupIdByTrainId(long trainId);
 }
