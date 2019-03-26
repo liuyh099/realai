@@ -135,16 +135,20 @@ public class ThousandsFacesController {
             List<PersonalHomoResultSetBO> list = experimentalTrainBussiness.listDataDetailSameCharts(idVo.getId());
             PersonalHomoResultChartsVO result = new PersonalHomoResultChartsVO();
             if (!CollectionUtils.isEmpty(list)) {
-                List<Integer> x = new ArrayList<>(list.size());
-                List<String> y = new ArrayList<>(list.size());
+                List<Integer> x = new ArrayList<>();
+                List<String> y = new ArrayList<>();
                 List<List<Object>> data = new ArrayList<>(list.size());
 
                 for(int i=0;i<list.size();i++){
-                    x.add(list.get(i).getK());
-                    y.add(list.get(i).getVariableName());
+                    if(!x.contains(list.get(i).getK())){
+                        x.add(list.get(i).getK());
+                    }
+                    if(!y.contains(list.get(i).getVariableName())){
+                        y.add(list.get(i).getVariableName());
+                    }
                     List<Object> dataItem = new ArrayList<>(3);
-                    dataItem.add(x.size()-1);
-                    dataItem.add(y.size()-1);
+                    dataItem.add(x.indexOf(list.get(i).getK()));
+                    dataItem.add(y.indexOf(list.get(i).getVariableName()));
                     dataItem.add(list.get(i).getWeight());
                     data.add(dataItem);
                 }
