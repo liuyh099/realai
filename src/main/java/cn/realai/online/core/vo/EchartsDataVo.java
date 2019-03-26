@@ -9,9 +9,8 @@ public class EchartsDataVo {
     @ApiModelProperty(value = "名称")
     private String name;
     @ApiModelProperty(value = "总数")
-    private Integer total;
-    @ApiModelProperty(value = "坏账率")
-    private Double rate;
+    private Double value;
+
 
     public String getName() {
         return name;
@@ -21,19 +20,11 @@ public class EchartsDataVo {
         this.name = name;
     }
 
-    public Integer getTotal() {
-        return total;
+    public Double getValue() {
+        return value;
     }
 
-    public void setTotal(Integer total) {
-        this.total = total;
-    }
-
-    public Double getRate() {
-        return rate;
-    }
-
-    public void setRate(Double rate) {
-        this.rate = rate;
+    public void setValue(Double value) {
+        this.value = value;
     }
 }

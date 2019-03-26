@@ -52,13 +52,13 @@ public class VariableDataServiceImpl implements VariableDataService {
 
 
     @Override
-	public List<VariableData> findListByExperimentId(Long experimentId) {
-    	if (experimentId == null) {
-			return null;
-		}
-		return variableDataDao.findListByExperimentId(experimentId);
-	}
-    
+    public List<VariableData> findListByExperimentId(Long experimentId) {
+        if (experimentId == null) {
+            return null;
+        }
+        return variableDataDao.findListByExperimentId(experimentId);
+    }
+
     /**
      * 根据实验id与模式类型查询变量数据
      *
@@ -82,19 +82,19 @@ public class VariableDataServiceImpl implements VariableDataService {
         variableDataDao.deleteVariableData(experimentId, ids);
     }
 
-    
-	@Override
-	public HomoAndHetroBO selectDeleteByExperimentId(Long experimentId) {
-		List<VariableData> list = variableDataDao.selectDeleteListByExperimentId(experimentId);
-		if (list == null) {
-			return null;
-		}
-		HomoAndHetroBO hahbo = new HomoAndHetroBO(experimentId);
-		Map<String, List<VariableData>> map = breakDownList(list);
-		hahbo.setHetroList(map.get("homo"));
-		hahbo.setHetroList(map.get("hetro"));
-		return hahbo;
-	}
+
+    @Override
+    public HomoAndHetroBO selectDeleteByExperimentId(Long experimentId) {
+        List<VariableData> list = variableDataDao.selectDeleteListByExperimentId(experimentId);
+        if (list == null) {
+            return null;
+        }
+        HomoAndHetroBO hahbo = new HomoAndHetroBO(experimentId);
+        Map<String, List<VariableData>> map = breakDownList(list);
+        hahbo.setHetroList(map.get("homo"));
+        hahbo.setHetroList(map.get("hetro"));
+        return hahbo;
+    }
 
     @Override
     public List<VariableData> findDoubleCreateVariableDataList(List<Long> variableIdList) {
@@ -102,28 +102,32 @@ public class VariableDataServiceImpl implements VariableDataService {
     }
 
     @Override
-    @Cacheable(key ="#variableId", value = "variableData")
+    @Cacheable(key = "#variableId", value = "variableData")
     public VariableData getById(Long variableId) {
-        return variableDataDao.getById(variableId);
+        VariableData variableData = variableDataDao.getById(variableId);
+        if(variableData==null){
+            variableData =new VariableData();
+        }
+        return variableData;
     }
 
     /*
-	 * 将传入的VariableData数组分解成同住和异质数组
-	 */
-	private Map<String, List<VariableData>> breakDownList(List<VariableData> vdList) {
-		Map<String, List<VariableData>> map = new HashMap<String, List<VariableData>>();
-		List<VariableData> homoList = new ArrayList<VariableData>();
-		List<VariableData> hetroList = new ArrayList<VariableData>();
-		for (VariableData vd : vdList) {
-			if (vd.getVariableType() == VariableData.SCHEMA_TYPE_HOMO) {
-				homoList.add(vd);
-			} else {
-				hetroList.add(vd);
-			}
-		}
-		map.put("homo", homoList);
-		map.put("hetro", hetroList);
-		return map;
-	}
+     * 将传入的VariableData数组分解成同住和异质数组
+     */
+    private Map<String, List<VariableData>> breakDownList(List<VariableData> vdList) {
+        Map<String, List<VariableData>> map = new HashMap<String, List<VariableData>>();
+        List<VariableData> homoList = new ArrayList<VariableData>();
+        List<VariableData> hetroList = new ArrayList<VariableData>();
+        for (VariableData vd : vdList) {
+            if (vd.getVariableType() == VariableData.SCHEMA_TYPE_HOMO) {
+                homoList.add(vd);
+            } else {
+                hetroList.add(vd);
+            }
+        }
+        map.put("homo", homoList);
+        map.put("hetro", hetroList);
+        return map;
+    }
 
 }

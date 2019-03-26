@@ -8,6 +8,7 @@ public interface SampleGroupingService {
 
     void insertList(List<SampleGrouping> sgList);
 
-    List<SampleGrouping> findListByExperimentId(Long experimentId, boolean isExceptionGroup);
+    List<SampleGrouping> findListByExperimentId(Long experimentId, boolean isExceptionGroup,boolean isAllGroup);
 
+    Long getAllGroupIdByTrainId(long trainId);
 }

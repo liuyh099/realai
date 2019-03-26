@@ -1,5 +1,7 @@
 package cn.realai.online.core.bussiness.impl;
 
+import cn.realai.online.calculation.TrainService;
+import cn.realai.online.common.RedisKeyPrefix;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.BatchListBO;
 import cn.realai.online.core.bussiness.BatchRecordBussiness;
@@ -11,6 +13,8 @@ import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.OfflineBatchCreateVO;
 import cn.realai.online.core.vo.OfflineBatchListVO;
+import cn.realai.online.tool.lock.RedissonLock;
+import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
 import cn.realai.online.util.DateUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -26,8 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.text.ParseException;
-import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 功能描述：TODO
@@ -45,6 +49,10 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
     private ExperimentService experimentService;
     @Autowired
     private ServiceService serviceService;
+    @Autowired
+    private TrainService trainService;
+    @Autowired
+    private RedissonLock redissonLock;
 
 
     @Override
@@ -89,8 +97,13 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Long createBatchRecord(OfflineBatchCreateVO createVO) {
+        cn.realai.online.core.entity.Service serviceVO = new cn.realai.online.core.entity.Service();
+        serviceVO.setStatus(cn.realai.online.core.entity.Service.STATUS_ONLINE);
+        serviceVO.setDeploymentType(cn.realai.online.core.entity.Service.DEPLOYMENT_TYPE_OFFLINE);
+        List<cn.realai.online.core.entity.Service> services = serviceService.list(serviceVO);
+        Assert.notEmpty(services, "未找到对应的离线部署上线服务");
         HashMap releaseMap = experimentService.findByServiceIdAndReleaseStatus(createVO.getServiceId(), Experiment.RELEAS_YES);
-        Assert.notNull(releaseMap, "未找到对应服务信息无法创建跑批记录");
+        Assert.notNull(releaseMap, "未找到服务对应的发布实验信息无法创建跑批记录");
 
         //创建跑批记录
         BatchRecord record = new BatchRecord();
@@ -98,17 +111,14 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
         record.setXtableHomogeneousDataSource(createVO.getxHomoDataSource());
         record.setYtableDataSource(createVO.getyDataSource());
         record.setBatchType(BatchRecord.BATCH_TYPE_OFFLINE);
-        record.setBatchName("");
+        //record.setCreateTime(new Date().getTime());
         record.setServiceId(createVO.getServiceId());
-        if (releaseMap != null) {
-            record.setExperimentId((Long) releaseMap.get("experimentId"));
-            record.setBatchName(String.valueOf(releaseMap.get("serviceName")) + "_" + String.valueOf(record.getCreateTime()) + "_离线跑批");
-            record.setExperimentId((Long) releaseMap.get("experimentId"));
-            if (releaseMap.get("batchTimes") != null) {
-                record.setOfflineTimes((Integer)releaseMap.get("batchTimes") + 1);
-            } else {
-                record.setOfflineTimes(1);
-            }
+        record.setExperimentId((Long) releaseMap.get("experimentId"));
+        record.setBatchName(String.valueOf(releaseMap.get("serviceName")) + "_" + String.valueOf(DateUtil.formatDateToString(new Date(), "yyyyMMddHHmmss")) + "_离线跑批");
+        if (releaseMap.get("batchTimes") != null) {
+            record.setOfflineTimes((Integer)releaseMap.get("batchTimes") + 1);
+        } else {
+            record.setOfflineTimes(1);
         }
         batchRecordService.insert(record);
 
@@ -117,5 +127,26 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
         service.setBatchTimes(service.getBatchTimes() + 1);
         serviceService.update(service);
         return record.getId();
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void executeBatchRecord(Long recordId) {
+        if (redissonLock.tryLock(RedisKeyPrefix.OFFLINE_BATCH_PREFIX + "CALCULATE", TimeUnit.SECONDS, 5L, 1L)) {
+            try {
+                ModelCallPool.modelCallPool.execute(() -> {
+                    log.warn("开始执行离线跑批记录运算:{}", recordId);
+                    BatchRecord record = new BatchRecord();
+                    record.setId(recordId);
+                    record = batchRecordService.getByEntity(record);
+                    Assert.notNull(record, "未查询到相关跑批记录无法运算");
+                    trainService.runBatchOfOffline(record);
+                    log.warn("离线跑批记录运算完成:{}", recordId);
+                });
+            } finally {
+                redissonLock.unlock(RedisKeyPrefix.EXPERIMENT_PREFIX);
+            }
+        }
     }
 }

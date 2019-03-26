@@ -12,4 +12,7 @@ public interface BatchRecordBussiness {
     //新增离线跑批
     Long createBatchRecord(OfflineBatchCreateVO createVO);
 
+    //执行跑批运算
+    void executeBatchRecord(Long recordId);
+
 }

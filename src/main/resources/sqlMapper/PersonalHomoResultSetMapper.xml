@@ -12,12 +12,12 @@
         <result column="absWeight" property="weight" jdbcType="DOUBLE"/>
     </resultMap>
 
-    <insert id="insertList">
+    <insert id="insertList"> 
         INSERT INTO personal_homo(experiment_id,batch_id,k,pid,variable_id,value,weight)
         VALUES
-        <foreach collection="homoList" open="(" close=")" separator="," item="homo">
-            #{homo.experimentId},#{homo.batchId},#{homo.k},#{homo.pid},#{homo.variableId},
-            #{homo.value},#{homo.weight}
+        <foreach collection="homoList" separator="," item="homo">
+            (#{homo.experimentId},#{homo.batchId},#{homo.k},#{homo.pid},#{homo.variableId},
+            #{homo.value},#{homo.weight})
         </foreach>
     </insert>
 
@@ -38,8 +38,8 @@
         SELECT *,ABS(weight) AS `absWeight` FROM personal_homo
         <where>
             1=1
-            <if test="pid!=null">
-                AND pid = #{pid}
+            <if test="id!=null">
+                AND pid = #{id}
             </if>
         </where>
         ORDER BY k ASC

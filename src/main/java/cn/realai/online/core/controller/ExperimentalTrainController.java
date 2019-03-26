@@ -284,7 +284,7 @@ public class ExperimentalTrainController {
     }
 
     @GetMapping("/createModel/{trainId}")
-    @ApiOperation(value = "新增实验-生成模型")
+    @ApiOperation(value = "新增实验-生成模型（获得实验名称和是否可以建立模型）")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
     public Result<ExperimentalTrainCreateModelCheckVO> createModelQuery(@PathVariable Long trainId) {
@@ -325,11 +325,11 @@ public class ExperimentalTrainController {
     @GetMapping("/createModel/getData")
     @ApiOperation(value = "新增实验-生成模型-一获取同质异质数据")
     @ResponseBody
-    public Result<PageBO<ExperimentalTrainCreateModelDataVO>> createModelGetData(@RequestBody @Validated ExperimentalTrainCreateModelDataQuery query) {
+    public Result<PageBO<ExperimentalTrainCreateModelDataVO>> createModelGetData(@Validated ExperimentalTrainCreateModelDataQuery query) {
         try {
             PageBO<VariableDataBO> page = experimentalTrainBussiness.pageHomOrHemeList(query);
             if (page == null) {
-                return null;
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
             List<ExperimentalTrainCreateModelDataVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), ExperimentalTrainCreateModelDataVO.class);
             PageBO<ExperimentalTrainCreateModelDataVO> pageBO = new PageBO<ExperimentalTrainCreateModelDataVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
@@ -347,7 +347,7 @@ public class ExperimentalTrainController {
      * @param trainId 实验id
      * @return
      */
-    @PutMapping("/createModel/{trainId}")
+    @PostMapping("/createModel/{trainId}")
     @ApiOperation(value = "新增实验-生成模型-一键建立模型")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
@@ -364,10 +364,10 @@ public class ExperimentalTrainController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
 
-    @PutMapping("/doubleCreate")
+    @PostMapping("/doubleCreate")
     @ApiOperation(value = "二次创建实验")
     @ResponseBody
-    public Result doubleCreate(@Validated ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo) {
+    public Result doubleCreate(@Validated @RequestBody ExperimentalTrainDoubleCreateVO experimentalTrainDoubleCreateVo) {
         try {
             ExperimentalTrainDoubleCreateBO bo = JSON.parseObject(JSON.toJSONString(experimentalTrainDoubleCreateVo), ExperimentalTrainDoubleCreateBO.class);
             boolean flag = experimentalTrainBussiness.doubleCreate(bo);

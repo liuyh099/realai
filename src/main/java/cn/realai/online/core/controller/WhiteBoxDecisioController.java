@@ -5,6 +5,7 @@ import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.SampleGroupingBO;
+import cn.realai.online.core.bo.SampleWeightBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.bussiness.ModelBussiness;
 import cn.realai.online.core.bussiness.SampleWeightBussiness;
@@ -14,6 +15,8 @@ import cn.realai.online.core.vo.GroupSelectNameVO;
 import cn.realai.online.core.vo.IdVO;
 import cn.realai.online.core.vo.WhileBoxScoreCardVO;
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +39,11 @@ public class WhiteBoxDecisioController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private ModelBussiness modelBussiness;
+
     @Autowired
     private ExperimentalTrainBussiness experimentalTrainBussiness;
 
+    @Autowired
     private SampleWeightBussiness sampleWeightBussiness;
 
     @GetMapping("whiteBoxDecisio/getGroupOption")
@@ -49,7 +54,7 @@ public class WhiteBoxDecisioController {
             if (ObjectUtils.isEmpty(model)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
-            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId(), false);
+            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId(), false,false);
             List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
@@ -73,7 +78,13 @@ public class WhiteBoxDecisioController {
     @ApiOperation(value = "白盒决策-分组“评分卡")
     public Result<PageBO<WhileBoxScoreCardVO>> groupScoreCard(@Validated ExperimentalResultWhileBoxQuery experimentalResultWhileBoxQuery) {
         try {
-            PageBO<WhileBoxScoreCardVO> pageBO = sampleWeightBussiness.pageBO(experimentalResultWhileBoxQuery);
+            //开启分页
+            Page page = PageHelper.startPage(experimentalResultWhileBoxQuery.getPageNum(), experimentalResultWhileBoxQuery.getPageSize());
+
+            List<SampleWeightBO> boList = sampleWeightBussiness.getSampleWeightList(experimentalResultWhileBoxQuery);
+            //处理查询结果
+            List<WhileBoxScoreCardVO> result = JSON.parseArray(JSON.toJSONString(boList), WhileBoxScoreCardVO.class);
+            PageBO<WhileBoxScoreCardVO> pageBO = new PageBO<WhileBoxScoreCardVO>(result, experimentalResultWhileBoxQuery.getPageSize(), experimentalResultWhileBoxQuery.getPageNum(), page.getTotal(), page.getPages());
 
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {

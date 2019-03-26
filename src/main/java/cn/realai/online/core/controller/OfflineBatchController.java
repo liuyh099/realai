@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,9 +55,10 @@ public class OfflineBatchController {
     @PostMapping("/create")
     @ApiOperation(value="新建离线跑批")
     @ResponseBody
-    public Result<Long> create(OfflineBatchCreateVO createVO){
+    public Result<Long> create(@RequestBody @Validated OfflineBatchCreateVO createVO){
         try {
             Long recordId = batchRecordBussiness.createBatchRecord(createVO);
+            batchRecordBussiness.executeBatchRecord(recordId);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), recordId);
         } catch (Exception e) {
             log.error("新建离线跑批异常", e);

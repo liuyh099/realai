@@ -15,7 +15,7 @@
         <result column="order_date" property="orderDate" jdbcType="VARCHAR"/>
         <result column="label" property="label" jdbcType="INTEGER"/>
         <result column="probability" property="probability" jdbcType="DOUBLE"/>
-    </resultMap>
+    </resultMap> 
 
     <insert id="insertList">
         INSERT INTO personal_information(experiment_id,group_id,batch_id,personal_name,stage,personal_card_id,
@@ -27,10 +27,20 @@
         </foreach>
     </insert>
 
-    <select id="findListByExperimentId" resultMap="PersonalInformationMap">
+    <select id="findListByExperimentIdAndBatchId" resultMap="PersonalInformationMap">
     	select * 
     	from personal_information
     	where experiment_id = #{experimentId}
+    	and batch_id = #{batchId}
+    </select>
+
+
+    <select id="get" resultMap="PersonalInformationMap" parameterType="java.lang.Long">
+         select *
+        FROM personal_information
+        <where>
+            id =#{id}
+        </where>
     </select>
 
 

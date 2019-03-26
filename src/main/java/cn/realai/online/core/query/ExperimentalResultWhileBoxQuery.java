@@ -7,37 +7,36 @@ import io.swagger.annotations.ApiModelProperty;
 public class ExperimentalResultWhileBoxQuery extends PageQuery {
 
     @ApiModelProperty(value = "实验ID")
-    private long trainId;
-    @ApiModelProperty(value = "组id")
-    private String groupName;
+    private long experimentId;
+    @ApiModelProperty(value = "分组ID")
+    private long groupId;
     @ApiModelProperty(value = "变量类型 1:同质 2:异质 为空表示查询所有", example = "1:同质 2:异质 为空表示查询所有")
-    private int sampleType;
+    private int variableType;
     @ApiModelProperty(value = "请求类型 image:请求图片 normal:普通请求", example = "image:请求图片 normal:普通请求")
     private String type;
 
-
-    public long getTrainId() {
-        return trainId;
+    public long getExperimentId() {
+        return experimentId;
     }
 
-    public void setTrainId(long trainId) {
-        this.trainId = trainId;
+    public void setExperimentId(long experimentId) {
+        this.experimentId = experimentId;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public long getGroupId() {
+        return groupId;
     }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
     }
 
-    public int getSampleType() {
-        return sampleType;
+    public int getVariableType() {
+        return variableType;
     }
 
-    public void setSampleType(int sampleType) {
-        this.sampleType = sampleType;
+    public void setVariableType(int variableType) {
+        this.variableType = variableType;
     }
 
     public String getType() {

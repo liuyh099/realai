@@ -58,10 +58,10 @@
         </selectKey>
         INSERT INTO experiment
         (name,service_id,status,algorithm_type,releas_status,y_table,x_table_homo,x_table_heter,x_table_meaning,create_time,
-        verification_set,sample_type,train_ratio,test_ratio,valid_ratio)
+        verification_set,valid_sample_type,test_sample_type,train_ratio,test_ratio,valid_ratio)
         VALUE
         (#{name},#{serviceId},#{status},#{algorithmType},#{releasStatus},#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},#{xtableMeaningDataSource},#{createTime},
-        #{verificationSet},#{sampleSplitType},#{trainRatio},#{testRatio},#{validRatio})
+        #{verificationSet},#{validSampleType},#{testSampleType},#{trainRatio},#{testRatio},#{validRatio})
     </insert>
 
     <update id="selectFileUpdate" parameterType="cn.realai.online.core.entity.Experiment">
@@ -107,6 +107,21 @@
 		where id = #{experimentId}
 	</update>
 
+    <update id="updateExperimentOffline">
+        update experiment
+		set releas_status = #{status}
+		where id != #{id} and service_id = #{serviceId}
+    </update>
+
+    <update id="updateExperimentTrainStatus">
+        update experiment
+		set releas_status = #{status}
+		where id = #{id}
+    </update>
+
+    <select id="getLastServerId" resultType="java.lang.Long">
+        SELECT service_id FROM experiment WHERE releas_status = 2 ORDER BY release_time DESC LIMIT 1
+    </select>
 
 
     <select id="findList" resultMap="ExperimentMap" parameterType="cn.realai.online.core.entity.Experiment">
@@ -170,12 +185,27 @@
 		sv.name as serviceName,
         sv.batch_times as batchTimes
 		from service as sv
-		left join experiment as ep on ep.service_id = sv.id and ep.releas_status = #{releaseStatus}
+		join experiment as ep on ep.service_id = sv.id
 		<where>
 			sv.id = #{serviceId}
+            and ep.releas_status = #{releaseStatus}
 		</where>
 		limit 1
 	</select>
 
-  
+	<update id="trainResultMaintain">
+		update experiment
+		set sample_review = #{sampleReview},
+			model_url = #{modelUrl},
+			seg_image_url = #{segmentationStatisticsImageUrl},
+			bad_image_url = #{badTopCountImageUrl},
+			roc_test_image_url = #{rocTestImageUrl},
+			roc_train_image_url = #{rocTrainImageUrl},
+			roc_validate_image_url = #{rocValidateImageUrl},
+			ks_test_image_url = #{ksTestImageUrl},
+			ks_train_image_url = #{ksTrainImageUrl},
+			ks_validate_image_url = #{ksValidateImageUrl}
+		where id = #{experimentId}
+	</update>
+
 </mapper> 

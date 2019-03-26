@@ -15,7 +15,7 @@ public class PersonalHomoResultChartsVO {
     private List<String> y;
 
     @ApiModelProperty(value = "数据")
-    private List<List<Double>> data;
+    private List<List<Object>> data;
 
 
     public List<Integer> getX() {
@@ -34,11 +34,11 @@ public class PersonalHomoResultChartsVO {
         this.y = y;
     }
 
-    public List<List<Double>> getData() {
+    public List<List<Object>> getData() {
         return data;
     }
 
-    public void setData(List<List<Double>> data) {
+    public void setData(List<List<Object>> data) {
         this.data = data;
     }
 }

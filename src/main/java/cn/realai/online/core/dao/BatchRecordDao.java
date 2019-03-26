@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface BatchRecordDao {
 
-	Integer insert(@Param("batchRecord")BatchRecord batchRecord);
+	Integer insert(BatchRecord batchRecord);
 
 	Integer delete(List<Long> idList);
 

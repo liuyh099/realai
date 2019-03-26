@@ -105,12 +105,7 @@ public class TrainTask implements Runnable {
         //redisClientTemplate.delete(redisKey.getSampleWeight());
 
         //千人千面人员信息
-        List<PersonalInformation> personalInformationList = analysisPersonalInformation(redisClientTemplate.get(redisKey.getPersonalInformation()), sgMap);
-
-        Map<String, Long> piMap = new HashMap<String, Long>();
-        for (PersonalInformation pi : personalInformationList) {
-            piMap.put(pi.getPersonalId(), pi.getId());
-        }
+        
 
         //生成批次
         BatchRecord batchRecord = new BatchRecord();
@@ -124,10 +119,17 @@ public class TrainTask implements Runnable {
         BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
         batchRecordService.insert(batchRecord);
         Long batchRecordId = batchRecord.getId();
+        
+        List<PersonalInformation> personalInformationList = analysisPersonalInformation(redisClientTemplate.get(redisKey.getPersonalInformation()), sgMap, batchRecordId);
+
+        Map<String, Long> piMap = new HashMap<String, Long>();
+        for (PersonalInformation pi : personalInformationList) {
+            piMap.put(pi.getPersonalId(), pi.getId());
+        }
 
         //解析千人千面同质和异质结果
         analysisPersonalResultSet(redisClientTemplate.get(redisKey.getPersonalHomoResultSet()),
-                redisClientTemplate.get(redisKey.getPersonalHetroResultSet()), piMap, batchRecordId);
+                redisClientTemplate.get(redisKey.getPersonalHetroResultSet()), piMap, vdMap, batchRecordId);
         //redisClientTemplate.delete(redisKey.getPersonalHetroResultSet());
         
         //解析千人千面聚合信息
@@ -139,34 +141,34 @@ public class TrainTask implements Runnable {
         //redisClientTemplate.delete(redisKey.getExperimentResultSet());
         
         //样本综述
-        String sampleReview = redisClientTemplate.get(redisKey.getSampleReview());
+        String sampleReview = redisKey.getSampleReview();
 
         //模型路径
-        String modelUrl = redisClientTemplate.get(redisKey.getModelUrl());
+        String modelUrl = redisKey.getModelUrl();
 
 
         //分段统计图片地址（千人千面也是他）
-        String segmentationStatisticsImageUrl = redisClientTemplate.get(redisKey.getSegmentationStatisticsImageUrl());
+        String segmentationStatisticsImageUrl = redisKey.getSegmentationStatisticsImageUrl();
 
         //badTop总数图片地址
-        String badTopCountImageUrl = redisClientTemplate.get(redisKey.getBadTopCountImageUrl());
+        String badTopCountImageUrl = redisKey.getBadTopCountImageUrl();
 
         //roc训练图片地址
-        String rocTestImageUrl = redisClientTemplate.get(redisKey.getRocTestImageUrl());
+        String rocTestImageUrl = redisKey.getRocTestImageUrl();
 
         //roc测试图片地址
-        String rocTrainImageUrl = redisClientTemplate.get(redisKey.getRocTrainImageUrl());
+        String rocTrainImageUrl = redisKey.getRocTrainImageUrl();
 
         //roc验证图片地址
-        String rocValidateImageUrl = redisClientTemplate.get(redisKey.getRocValidateImageUrl());
+        String rocValidateImageUrl = redisKey.getRocValidateImageUrl();
 
 
         //ks图片地址
-        String ksTestImageUrl = redisClientTemplate.get(redisKey.getKsTestImageUrl());
+        String ksTestImageUrl = redisKey.getKsTestImageUrl();
 
-        String ksTrainImageUrl = redisClientTemplate.get(redisKey.getKsTrainImageUrl());
+        String ksTrainImageUrl = redisKey.getKsTrainImageUrl();
 
-        String ksValidateImageUrl = redisClientTemplate.get(redisKey.getKsValidateImageUrl());
+        String ksValidateImageUrl = redisKey.getKsValidateImageUrl();
 
         //维护实验训练结果到实验数据
         experimentService.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl, badTopCountImageUrl,
@@ -240,7 +242,7 @@ public class TrainTask implements Runnable {
         }
         SampleGroupingService sampleGroupingService = SpringContextUtils.getBean(SampleGroupingService.class);
         sampleGroupingService.insertList(sgList);
-        sgList = sampleGroupingService.findListByExperimentId(experimentId, false);
+        sgList = sampleGroupingService.findListByExperimentId(experimentId, true, true);
         return sgList;
     }
 
@@ -266,7 +268,7 @@ public class TrainTask implements Runnable {
                 logger.error("TrainTask analysisSampleWeight. 训练结果数据错误,变量名称不存在. experimentId{}, groupName{}", experimentId, sw.getVariableName());
                 throw new RuntimeException("训练结果数据错误,变量名称不存在.");
             }
-            sw.setGroupId(vdId);
+            sw.setVariableId(vdId);
         }
         SampleWeightService sampleWeightService = SpringContextUtils.getBean(SampleWeightService.class);
         sampleWeightService.insertList(swList);
@@ -275,7 +277,7 @@ public class TrainTask implements Runnable {
     /*
      * 千人千面人员信息
      */
-    private List<PersonalInformation> analysisPersonalInformation(String redisValue, Map<String, Long> sgMap) {
+    private List<PersonalInformation> analysisPersonalInformation(String redisValue, Map<String, Long> sgMap, Long batchRecordId) {
         if (redisValue == null || "".equals(redisValue)) {
             logger.error("TrainTask analysisModelPerformance. 训练结果没有千人千面人员信息数据. experimentId{}", experimentId);
             throw new RuntimeException("训练结果没有千人千面人员信息数据experimentId = " + experimentId);
@@ -289,10 +291,11 @@ public class TrainTask implements Runnable {
                 throw new RuntimeException("训练结果数据错误,分组名称不存在.");
             }
             pi.setGroupId(sgId);
+            pi.setBatchId(batchRecordId);
         }
         PersonalInformationService personalInformationService = SpringContextUtils.getBean(PersonalInformationService.class);
         personalInformationService.insertList(piList);
-        return personalInformationService.findListByExperimentId(experimentId);
+        return personalInformationService.findListByExperimentIdAndBatchId(experimentId, batchRecordId);
     }
 
     /*
@@ -302,7 +305,7 @@ public class TrainTask implements Runnable {
      * @param piMap
      * @param batchRecordId
      */
-    private void analysisPersonalResultSet(String homoValue, String HetroValue, Map<String, Long> piMap, Long batchRecordId) {
+    private void analysisPersonalResultSet(String homoValue, String HetroValue, Map<String, Long> piMap, Map<String, Long> vdMap, Long batchRecordId) {
         if ((homoValue == null || "".equals(homoValue)) && (HetroValue == null || "".equals(HetroValue))) {
             logger.error("TrainTask analysisPersonalResultSet. 训练结果没有千人千面同质和异质信息数据. experimentId{}", experimentId);
             throw new RuntimeException("训练结果没有千人千面同质和异质信息数据experimentId = " + experimentId);
@@ -315,8 +318,12 @@ public class TrainTask implements Runnable {
                     logger.error("TrainTask analysisPersonalResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, phrs.getPersonalId());
                     throw new RuntimeException("训练结果数据错误,千人千面信息不存在.");
                 }
+                
+                Long vId = vdMap.get(phrs.getVariableName() + VariableData.SCHEMA_TYPE_HOMO);
+                phrs.setVariableId(vId);
                 phrs.setPid(piId);
                 phrs.setBatchId(batchRecordId);
+                phrs.setExperimentId(experimentId);
             }
             PersonalHomoResultSetService personalHomoResultSetService = SpringContextUtils.getBean(PersonalHomoResultSetService.class);
             personalHomoResultSetService.insertList(homoList);
@@ -329,8 +336,11 @@ public class TrainTask implements Runnable {
                     logger.error("TrainTask analysisPersonalResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, phrs.getPersonalId());
                     throw new RuntimeException("训练结果数据错误,千人千面信息不存在.");
                 }
+                Long vId = vdMap.get(phrs.getVariableName() + VariableData.SCHEMA_TYPE_HETERO);
+                phrs.setVariableId(vId);
                 phrs.setPid(piId);
                 phrs.setBatchId(batchRecordId);
+                phrs.setExperimentId(experimentId);
             }
             PersonalHetroResultSetService personalHetroResultSetService = SpringContextUtils.getBean(PersonalHetroResultSetService.class);
             personalHetroResultSetService.insertList(hetroList);
@@ -343,10 +353,9 @@ public class TrainTask implements Runnable {
      */
     private void analysisPersonalComboResultSet(String redisValue, Map<String, Long> piMap, Map<String, Long> vdMap, Long batchRecordId) {
         if (redisValue == null || "".equals(redisValue)) {
-            logger.error("TrainTask analysisPersonalComboResultSet. 训练结果没有千人千面人员聚合信息数据. experimentId{}", experimentId);
-            throw new RuntimeException("训练结果没有千人千面人员聚合信息数据experimentId = " + experimentId);
+        	return;
         }
-        List<PersonalComboResultSet> comboList = JSON.parseArray(redisValue, PersonalComboResultSet.class);
+    	List<PersonalComboResultSet> comboList = JSON.parseArray(redisValue, PersonalComboResultSet.class);
         for (PersonalComboResultSet pcrs : comboList) {
             Long piId = piMap.get(pcrs.getPersonalId());
             if (piId == null) {

@@ -109,14 +109,18 @@ public class ExperimentServiceImpl implements ExperimentService {
         List<Experiment> experimentList = experimentDao.checkName(experiment);
         if (CollectionUtils.isEmpty(experimentList)) {
             return true;
-        }
-        if (id != null) {
-            for (Experiment experiment1 : experimentList) {
-                if (!experiment1.getId().equals(id)) {
-                    return false;
+        } else {
+            if (id != null) {
+                for (Experiment experiment1 : experimentList) {
+                    if (!experiment1.getId().equals(id)) {
+                        return false;
+                    }
                 }
+            } else {
+                return false;
             }
         }
+
         return true;
     }
 
@@ -126,11 +130,12 @@ public class ExperimentServiceImpl implements ExperimentService {
         return experiment.getId();
     }
 
-	@Override
-	public MLock getExperimentTrainMLockInstance(long experimentId) {
-		return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId, 
-				Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
-	}
+    @Override
+    public MLock getExperimentTrainMLockInstance(long experimentId) {
+        return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId,
+                Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
+    }
+
     @Override
     public int trainResultMaintain(Long experimentId, String sampleReview, String modelUrl,
                                    String segmentationStatisticsImageUrl, String badTopCountImageUrl, String rocTestImageUrl,
@@ -158,11 +163,26 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Override
     public void doubleCreate(Experiment experiment) {
-       experimentDao.doubleCreate(experiment);
+        experimentDao.doubleCreate(experiment);
     }
 
     @Override
     public Experiment getPublishExperimentByServerId(Long id) {
         return experimentDao.getPublishExperimentByServerId(id);
+    }
+
+    @Override
+    public void updateExperimentOffline(Long experimentId, Long serviceId, int releasNo) {
+        experimentDao.updateExperimentOffline(experimentId,serviceId,releasNo);
+    }
+
+    @Override
+    public void updateExperimentTrainStatus(Long experimentId, int releasYes) {
+        experimentDao.updateExperimentTrainStatus(experimentId,releasYes);
+    }
+
+    @Override
+    public Long getLastServerId() {
+        return experimentDao.getLastServerId();
     }
 }

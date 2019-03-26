@@ -112,4 +112,25 @@ public interface ExperimentService {
      * @return
      */
     Experiment getPublishExperimentByServerId(Long id);
+
+    /**
+     * 更新实验下线
+     * @param experimentId
+     * @param serviceId
+     * @param releasNo
+     */
+    void updateExperimentOffline(Long experimentId, Long serviceId, int releasNo);
+
+    /**
+     * 更新实验上线
+     * @param experimentId
+     * @param releasYes
+     */
+    void updateExperimentTrainStatus(Long experimentId, int releasYes);
+
+    /**
+     * 获得最近的服务ID
+     * @return
+     */
+    Long getLastServerId();
 }

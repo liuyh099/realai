@@ -45,6 +45,9 @@
             <if test="tuningSecretKey !=null and tuningSecretKey !='' ">
                 AND   a.tuning_secret_key =#{tuningSecretKey}
             </if>
+            <if test="deploymentType !=null ">
+                AND   a.deployment_type =#{deploymentType}
+            </if>
         </where>
     </select>
 
@@ -52,6 +55,14 @@
         INSERT INTO service (name,type,status,deployment_type,create_time,detail,tuning_secret_key,secret_key,online_experiment,batch_times)
         VALUE (#{name},#{type},#{status},#{deploymentType},#{createTime},#{detail},#{tuningSecretKey},#{secretKey},#{onlineExperiment},#{batchTimes})
     </insert>
+
+    <select id="getAlreadyPublishService" resultMap="serviceMap">
+        SELECT a.* FROM service a LEFT JOIN experiment b ON a.id = b.service_id
+        <where>
+            b.releas_status = 2
+        </where>
+        ORDER BY b.release_time DESC
+    </select>
 
     <delete id="delete" parameterType="java.lang.Long">
         DELETE FROM service
