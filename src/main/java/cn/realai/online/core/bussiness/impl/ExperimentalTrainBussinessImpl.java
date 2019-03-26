@@ -534,7 +534,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setStatus(query.getStatus());
         List<Experiment> list = experimentService.findList(experiment);
         List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
-        return result;
+        return result; 
     }
 
     @Override
