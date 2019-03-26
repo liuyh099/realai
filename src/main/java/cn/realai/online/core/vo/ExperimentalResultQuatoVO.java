@@ -8,7 +8,8 @@ import java.util.List;
 @ApiModel
 public class ExperimentalResultQuatoVO {
 
-    private String validateTypeName;
+    @ApiModelProperty(value = "1:代表风控 2:代表营销")
+    private Integer model;
 
     @ApiModelProperty(value = "验证结果集", dataType = "List")
     private List<ExperimentalResultQuatoDataVO> validateResultList;
@@ -19,6 +20,14 @@ public class ExperimentalResultQuatoVO {
     @ApiModelProperty(value = "训练结果集", dataType = "List")
     private List<ExperimentalResultQuatoDataVO> trainResultList;
 
+
+    public Integer getModel() {
+        return model;
+    }
+
+    public void setModel(Integer model) {
+        this.model = model;
+    }
 
     public List<ExperimentalResultQuatoDataVO> getValidateResultList() {
         return validateResultList;
@@ -44,11 +53,4 @@ public class ExperimentalResultQuatoVO {
         this.trainResultList = trainResultList;
     }
 
-    public String getValidateTypeName() {
-        return validateTypeName;
-    }
-
-    public void setValidateTypeName(String validateTypeName) {
-        this.validateTypeName = validateTypeName;
-    }
 }

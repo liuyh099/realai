@@ -26,6 +26,9 @@
         <if test="isExceptionGroup==false">
             and group_name != '异常点'
         </if>
+        <if test="isAllGroup == false">
+            and group_name != '全局'
+        </if>
 	</select>
 
 </mapper>

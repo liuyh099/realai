@@ -15,6 +15,7 @@ import cn.realai.online.util.UserUtils;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -235,8 +236,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     public ExperimentalResultQuatoBO quota(Long experimentId) {
 
-        //获得评估的结果集
-        Experiment experiment = experimentService.selectExperimentById(experimentId);
+
 
 
         //TODO 去获取服务
@@ -248,6 +248,12 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experimentalResultQuatoBO.setTestResultList(testResultSetListBO);
         experimentalResultQuatoBO.setTrainResultList(trainResultSetListBO);
         experimentalResultQuatoBO.setValidateResultList(validResultSetListBO);
+
+        //获得评估的结果集
+        Experiment experiment = experimentService.selectExperimentById(experimentId);
+        cn.realai.online.core.entity.Service service=serviceService.selectServiceById(experiment.getServiceId());
+        Integer type=service.getType();
+        experimentalResultQuatoBO.setModel(type);
         return experimentalResultQuatoBO;
     }
 
