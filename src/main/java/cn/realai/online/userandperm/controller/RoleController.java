@@ -108,6 +108,7 @@ public class RoleController {
             for (MenuTreeNodeBO menuTreeNodeBO:resultBO){
                 if(menuTreeNodeBO.getId().equals(12L)){
                     resultBO.remove(menuTreeNodeBO);
+                    break;
                 }
             }
             List<MenuTreeNodeVo> result = JSON.parseArray(JSON.toJSONString(resultBO), MenuTreeNodeVo.class);

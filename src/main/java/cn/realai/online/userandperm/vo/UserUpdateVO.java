@@ -5,12 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @ApiModel
 public class UserUpdateVO {
 
     @ApiModelProperty(value = "用户ID")
-    @NotBlank(message = "用户ID不能为空")
+    @NotNull(message = "用户ID不能为空")
     private Long id;
 
     @ApiModelProperty(value = "用户名")
@@ -31,9 +32,9 @@ public class UserUpdateVO {
     private String phoneNumber;
     //角色名称
 
-    @NotBlank(message = "角色不能为空")
+    @NotNull(message = "角色不能为空")
     @ApiModelProperty(value = "角色ID")
-    private String group;
+    private Long roleId;
 
     @Length(max = 100, message = "备注最大为100个字节")
     @ApiModelProperty(value = "备注")
@@ -83,12 +84,12 @@ public class UserUpdateVO {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getGroup() {
-        return group;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     public String getNote() {
