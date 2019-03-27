@@ -13,10 +13,12 @@ import cn.realai.online.core.query.ModelListQuery;
 import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.vo.*;
 import cn.realai.online.lic.ServiceLicenseCheck;
+import cn.realai.online.util.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,14 +91,15 @@ public class ModelController {
     public Result<Void> update(@RequestParam("modelId") Long modelId, @RequestParam("name") String name,
                                @RequestParam(name = "remark", required = false) String remark) {
         try {
-            Model model = new Model();
-            model.setId(modelId);
+            Assert.hasLength(name, "模型名称不能为空");
+            Model model = modelService.get(modelId);
+            Assert.notNull(model, "待更新模型不存在");
             model.setName(name);
             model.setRemark(remark);
             modelService.update(model);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
-            log.error("查询模型详情异常", e);
+            log.error("模型更新异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }

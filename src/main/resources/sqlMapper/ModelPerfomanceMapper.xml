@@ -56,10 +56,7 @@
     </select>
 
     <select id="selectList" resultMap="ModelPerformanceMap">
-        select mp.metric_name as metricName,
-        training_set as trainingSet,
-        test_set as testSet,
-        valid_set as validSet
+        select mp.*
         from model_performance as mp
         join model as m on mp.experiment_id = mp.experiment_id
         <!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错-->

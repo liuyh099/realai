@@ -100,7 +100,7 @@
         <result column="releaseTime" property="releaseTime" jdbcType="TIMESTAMP"/>
         <result column="algorithmType" property="algorithmType" jdbcType="VARCHAR"/>
         <result column="tuningCount" property="tuningCount" jdbcType="INTEGER"/>
-        <result column="tuningReason" property="tuningReason" jdbcType="VARCHAR"/>
+        <!--<result column="tuningReason" property="tuningReason" jdbcType="VARCHAR"/>-->
         <result column="ydefine" property="ydefine" jdbcType="VARCHAR"/>
         <result column="serviceType" property="serviceType" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
@@ -115,7 +115,7 @@
         ep.release_time as releaseTime,
         ep.algorithm_type as algorithmType,
         ep.tuning_count as tuningCount,
-        '调优原因' as tuningReason,
+        ep.y_table as ydefine,
         sv.type as serviceType,
         m.remark as remark
         from model as m

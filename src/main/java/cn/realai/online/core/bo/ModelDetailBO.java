@@ -1,8 +1,6 @@
 package cn.realai.online.core.bo;
 
 
-import java.sql.Date;
-
 /**
  * 功能描述：TODO
  *
@@ -17,9 +15,10 @@ public class ModelDetailBO {
     private String serviceName;
     private Long experimentId;
     private String experimentName;
-    private Date releaseTime;
+    private Long releaseTime;
     private String algorithmType;
     private int tuningCount;
+    private String ydefine;
     private String tuningReason;
     private String serviceType;
     private String remark;
@@ -72,11 +71,11 @@ public class ModelDetailBO {
         this.experimentName = experimentName;
     }
 
-    public Date getReleaseTime() {
+    public Long getReleaseTime() {
         return releaseTime;
     }
 
-    public void setReleaseTime(Date releaseTime) {
+    public void setReleaseTime(Long releaseTime) {
         this.releaseTime = releaseTime;
     }
 
@@ -94,6 +93,14 @@ public class ModelDetailBO {
 
     public void setTuningCount(int tuningCount) {
         this.tuningCount = tuningCount;
+    }
+
+    public String getYdefine() {
+        return ydefine;
+    }
+
+    public void setYdefine(String ydefine) {
+        this.ydefine = ydefine;
     }
 
     public String getTuningReason() {
