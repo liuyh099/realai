@@ -36,7 +36,7 @@ public class MyExceptionHandler implements HandlerExceptionResolver {
                 Result result = new Result(ResultCode.NO_PERMISSION.getCode(), ResultMessage.NO_PERMISSION.getMsg(), null);
                 out = httpServletResponse.getWriter();
                 out.append(JSON.toJSONString(result));
-                httpServletResponse.setStatus(403);
+               // httpServletResponse.setStatus(403);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
