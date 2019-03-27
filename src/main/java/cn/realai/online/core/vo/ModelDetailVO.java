@@ -21,10 +21,16 @@ public class ModelDetailVO {
     private String modelName;
 
     @ApiModelProperty(value = "上线时间")
-    private String releaseTime;
+    private Long releaseTime;
 
     @ApiModelProperty(value = "调优原因")
     private String tuningReason;
+
+    @ApiModelProperty(value = "调优次数")
+    private Integer tuningCount;
+
+    @ApiModelProperty(value = "Y的定义")
+    private String ydefine;
 
     @ApiModelProperty(value = "来源实验名称")
     private String experimentName;
@@ -60,11 +66,11 @@ public class ModelDetailVO {
         this.modelName = modelName;
     }
 
-    public String getReleaseTime() {
+    public Long getReleaseTime() {
         return releaseTime;
     }
 
-    public void setReleaseTime(String releaseTime) {
+    public void setReleaseTime(Long releaseTime) {
         this.releaseTime = releaseTime;
     }
 
@@ -74,6 +80,22 @@ public class ModelDetailVO {
 
     public void setTuningReason(String tuningReason) {
         this.tuningReason = tuningReason;
+    }
+
+    public Integer getTuningCount() {
+        return tuningCount;
+    }
+
+    public void setTuningCount(Integer tuningCount) {
+        this.tuningCount = tuningCount;
+    }
+
+    public String getYdefine() {
+        return ydefine;
+    }
+
+    public void setYdefine(String ydefine) {
+        this.ydefine = ydefine;
     }
 
     public String getExperimentName() {

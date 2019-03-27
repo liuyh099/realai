@@ -1,6 +1,5 @@
 package cn.realai.online.core.service.impl;
 
-import cn.realai.online.core.bo.ModelBO;
 import cn.realai.online.core.bo.ModelDetailBO;
 import cn.realai.online.core.bo.ModelListBO;
 import cn.realai.online.core.dao.ModelDao;

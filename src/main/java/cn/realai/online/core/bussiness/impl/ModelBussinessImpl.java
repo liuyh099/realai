@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -105,6 +106,13 @@ public class ModelBussinessImpl implements ModelBussiness {
         ModelDetailBO detailBO = modelService.selectDetail(modelId);
         if (detailBO != null) {
             BeanUtils.copyProperties(detailBO, detailVO);
+            //处理调优原因
+            detailVO.setTuningReason("新建");
+            List<TuningRecord> tuningRecords = tuningRecordService.findLatestListByModelIds(Arrays.asList(modelId));
+            if (tuningRecords != null && !tuningRecords.isEmpty()) {
+                String reason = TuningRecord.TYPE.PSI.value.equals(tuningRecords.get(0).getType()) ? "PSI调优":"强制调优";
+                detailVO.setTuningReason(reason);
+            }
         }
         //读取模型表现
         List<ModelPerformance> performanceList = modelPerformanceService.selectList(modelId);
