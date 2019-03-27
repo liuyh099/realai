@@ -39,14 +39,14 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Override
     public ExperimentBO selectExperimentById(long id) {
-        Experiment experiment = redisClientTemplate.get(getExperimentRedisKey(id), ExperimentBO.class);
-        if (experiment == null) {
-            experiment = experimentDao.selectExperimentById(id);
+//        Experiment experiment = redisClientTemplate.get(getExperimentRedisKey(id), ExperimentBO.class);
+//        if (experiment == null) {
+        Experiment experiment = experimentDao.selectExperimentById(id);
             //设置缓存
-        }
-        if (experiment == null) {
-            return null;
-        }
+//        }
+//        if (experiment == null) {
+//            return null;
+//        }
         //封装成BO
         ExperimentBO experimentBO = convertBO(experiment);
         return experimentBO;
@@ -184,5 +184,20 @@ public class ExperimentServiceImpl implements ExperimentService {
     @Override
     public Long getLastServerId() {
         return experimentDao.getLastServerId();
+    }
+
+    @Override
+    public List<Experiment> findPublishByServiceId(Long serviceId) {
+        return experimentDao.findPublishByServiceId(serviceId);
+    }
+
+    @Override
+    public Experiment getById(Long experimentId) {
+        return experimentDao.getById(experimentId);
+    }
+
+    @Override
+    public Integer updateName(Long id, String name) {
+        return experimentDao.updateName(id,name);
     }
 }

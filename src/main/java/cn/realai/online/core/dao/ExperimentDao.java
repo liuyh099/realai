@@ -108,4 +108,15 @@ public interface ExperimentDao {
      * @return
      */
     Long getLastServerId();
+
+    /**
+     * 获得服务发布的实验列表
+     * @param serviceId
+     * @return
+     */
+    List<Experiment> findPublishByServiceId(@Param("serviceId") Long serviceId);
+
+    Experiment getById(@Param("id") Long experimentId);
+
+    Integer updateName(@Param("id") Long id, @Param("name") String name);
 }

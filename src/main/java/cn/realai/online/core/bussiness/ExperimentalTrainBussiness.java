@@ -244,4 +244,6 @@ public interface ExperimentalTrainBussiness {
     Long getLastServerId();
 
     Long getGroupAllId(long trainId);
+
+    Integer updateName(ExperimentBO experimentBO);
 }

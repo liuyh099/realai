@@ -133,4 +133,15 @@ public interface ExperimentService {
      * @return
      */
     Long getLastServerId();
+
+    /**
+     * 获得服务发布的实验
+     * @param serviceId
+     * @return
+     */
+    List<Experiment> findPublishByServiceId(Long serviceId);
+
+    Experiment getById(Long experimentId);
+
+    Integer updateName(Long id, String name);
 }

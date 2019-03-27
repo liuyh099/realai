@@ -30,6 +30,18 @@ public class ExperimentalPublishVO {
     private Integer status;
 
 
+    @ApiModelProperty(value = "调优类型 如果是调优列表进来，需要带这个值 1:代表PSI调优 2:强制调优" )
+    private Integer tuningType;
+
+
+    public Integer getTuningType() {
+        return tuningType;
+    }
+
+    public void setTuningType(Integer tuningType) {
+        this.tuningType = tuningType;
+    }
+
     public Integer getStatus() {
         return status;
     }

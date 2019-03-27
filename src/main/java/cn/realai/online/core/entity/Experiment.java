@@ -143,6 +143,15 @@ public class Experiment {
 
     private String serviceName;
 
+    private Integer publishCount;
+    
+    public Integer getPublishCount() {
+        return publishCount;
+    }
+
+    public void setPublishCount(Integer publishCount) {
+        this.publishCount = publishCount;
+    }
 
     public String getServiceName() {
         return serviceName;

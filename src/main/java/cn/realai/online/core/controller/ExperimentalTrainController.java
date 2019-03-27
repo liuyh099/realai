@@ -204,6 +204,7 @@ public class ExperimentalTrainController {
             ExperimentBO experimentBO = experimentalTrainBussiness.selectById(trainId);
             ExperimentalTrainSelectFileVO experimentalTrainSelectFileVO = new ExperimentalTrainSelectFileVO();
             BeanUtils.copyProperties(experimentBO, experimentalTrainSelectFileVO);
+            experimentalTrainSelectFileVO.setServerId(experimentBO.getServiceId());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalTrainSelectFileVO);
         } catch (Exception e) {
             logger.error("添加实验-选择文件-获得详细异常", e);
@@ -225,9 +226,16 @@ public class ExperimentalTrainController {
             if (!flag) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "实验名称不能重复", null);
             }
+            Integer count;
             ExperimentBO experimentBO = new ExperimentBO();
             BeanUtils.copyProperties(experimentalTrainSelectFileVo, experimentBO);
-            Integer count = experimentalTrainBussiness.selectFileUpdate(experimentBO);
+            experimentBO.setServiceId(experimentalTrainSelectFileVo.getServerId());
+            boolean updateFlag = checkCanUpdate(experimentalTrainSelectFileVo.getId());
+            if(updateFlag){
+                count = experimentalTrainBussiness.selectFileUpdate(experimentBO);
+            }else {
+                count = experimentalTrainBussiness.updateName(experimentBO);
+            }
             if (count != null && count > 0) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
@@ -237,6 +245,14 @@ public class ExperimentalTrainController {
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
 
+    }
+
+    private boolean checkCanUpdate(Long id ) {
+        ExperimentBO experiment = experimentalTrainBussiness.selectById(id);
+        if(experiment.getStatus()== Experiment.STATUS_TRAINING || experiment.getStatus()==Experiment.STATUS_TRAINING_OVER){
+            return false;
+        }
+        return true;
     }
 
     @RequiresPermissions("experimental:train")
@@ -287,6 +303,10 @@ public class ExperimentalTrainController {
 
     @RequiresPermissions("experimental:train")
     private Result updateParam(ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo, Integer status) {
+        boolean updateFlag = checkCanUpdate(experimentalTrainSelectParamVo.getId());
+        if(!updateFlag){
+            return new Result(ResultCode.DATA_ERROR.getCode(), "实验已经完成或者正在进行中，不可以修改实验", null);
+        }
         ExperimentBO experimentBO = new ExperimentBO();
         BeanUtils.copyProperties(experimentalTrainSelectParamVo, experimentBO);
         experimentBO.setStatus(status);
@@ -330,6 +350,10 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result createModelDelete(@RequestBody @Validated ExperimentalTrainCreateModelVO experimentalTrainCreateModelVo) {
         try {
+            boolean updateFlag = checkCanUpdate(experimentalTrainCreateModelVo.getId());
+            if(!updateFlag){
+                return new Result(ResultCode.DATA_ERROR.getCode(), "实验已经完成或者正在进行中，不可以修改实验", null);
+            }
             experimentalTrainBussiness.deleteVariableData(experimentalTrainCreateModelVo.getId(), experimentalTrainCreateModelVo.getIds());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
@@ -371,6 +395,10 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result createModel(@PathVariable Long trainId) {
         try {
+            boolean updateFlag = checkCanUpdate(trainId);
+            if(!updateFlag){
+                return new Result(ResultCode.DATA_ERROR.getCode(), "实验已经完成或者正在进行中，不可以修改实验", null);
+            }
             int ret = experimentalTrainBussiness.train(trainId, 0L);
             if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
             	return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
