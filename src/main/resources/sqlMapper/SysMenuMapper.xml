@@ -28,4 +28,13 @@
         SELECT id FROM sys_menu ORDER BY sort ASC
     </select>
 
+
+    <select id="getAllPermission" resultType="java.lang.String">
+        SELECT perimission FROM sys_menu
+    </select>
+
+    <select id="getPermissionByRoleId" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT perimission FROM sys_menu WHERE id IN (SELECT menu_id FROM sys_role_menu WHERE role_id =#{roleId})
+    </select>
+
 </mapper>

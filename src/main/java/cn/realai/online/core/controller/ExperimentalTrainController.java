@@ -21,6 +21,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -51,6 +52,7 @@ public class ExperimentalTrainController {
     private SSHBusinness sSHBusinness;
 
 
+    @RequiresPermissions("experimental:train")
     @GetMapping
     @ApiOperation(value = "查询实验训练列表")
     @ResponseBody
@@ -70,6 +72,7 @@ public class ExperimentalTrainController {
 
     }
 
+    @RequiresPermissions("experimental:train")
     @DeleteMapping
     @ApiOperation(value = "删除实验训练列表")
     @ResponseBody
@@ -91,6 +94,7 @@ public class ExperimentalTrainController {
     }
 
 
+    @RequiresPermissions("experimental:train")
     @GetMapping("/detail/{trainId}")
     @ApiOperation(value = "实验详情")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
@@ -107,6 +111,7 @@ public class ExperimentalTrainController {
     }
 
 
+    @RequiresPermissions("experimental:train")
     @GetMapping("/detail/variableData")
     @ApiOperation(value = "实验详情-获取同质异质数据schema")
     @ResponseBody
@@ -125,6 +130,7 @@ public class ExperimentalTrainController {
     }
 
 
+    @RequiresPermissions("experimental:train")
     @GetMapping("/select/{serverId}")
     @ApiOperation(value = "根据服务id活得实验名称列表")
     @ApiImplicitParam(name = "serverId", value = "服务ID", required = true, dataType = "Long", paramType = "path")
@@ -140,7 +146,7 @@ public class ExperimentalTrainController {
         }
     }
 
-
+    @RequiresPermissions("experimental:train")
     @PostMapping("/selectFile")
     @ApiOperation(value = "新增实验-选择文件")
     @ResponseBody
@@ -166,6 +172,7 @@ public class ExperimentalTrainController {
         }
     }
 
+    @RequiresPermissions("experimental:train")
     @GetMapping("/getFilePath")
     @ApiOperation(value = "新增实验-选择文件-获得文件地址")
     @ApiImplicitParam(name = "type", value = "文件地址类别[experiment：实验，offline：离线跑批 默认是实验]", required = false, dataType = "String", paramType = "query")
@@ -183,6 +190,7 @@ public class ExperimentalTrainController {
     }
 
 
+    @RequiresPermissions("experimental:train")
     @GetMapping("/selectFile/{trainId}")
     @ApiOperation(value = "活得选择文件的结果")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
@@ -202,6 +210,7 @@ public class ExperimentalTrainController {
         }
     }
 
+    @RequiresPermissions("experimental:train")
     @PutMapping("/selectFile")
     @ApiOperation(value = "更新选择文件内容")
     @ResponseBody
@@ -229,6 +238,7 @@ public class ExperimentalTrainController {
 
     }
 
+    @RequiresPermissions("experimental:train")
     @PostMapping("/selectParam")
     @ApiOperation(value = "新增实验-选择参数")
     @ResponseBody
@@ -241,6 +251,7 @@ public class ExperimentalTrainController {
         }
     }
 
+    @RequiresPermissions("experimental:train")
     @GetMapping("/selectParam/{trainId}")
     @ApiOperation(value = "获得选择参数的结果")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
@@ -260,6 +271,7 @@ public class ExperimentalTrainController {
         }
     }
 
+    @RequiresPermissions("experimental:train")
     @PutMapping("/selectParam")
     @ApiOperation(value = "更新选择参数内容")
     @ResponseBody
@@ -272,6 +284,7 @@ public class ExperimentalTrainController {
         }
     }
 
+    @RequiresPermissions("experimental:train")
     private Result updateParam(ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo, Integer status) {
         ExperimentBO experimentBO = new ExperimentBO();
         BeanUtils.copyProperties(experimentalTrainSelectParamVo, experimentBO);
@@ -283,6 +296,7 @@ public class ExperimentalTrainController {
         return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
     }
 
+    @RequiresPermissions("experimental:train")
     @GetMapping("/createModel/{trainId}")
     @ApiOperation(value = "新增实验-生成模型（获得实验名称和是否可以建立模型）")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
@@ -309,6 +323,7 @@ public class ExperimentalTrainController {
         }
     }
 
+    @RequiresPermissions("experimental:train")
     @DeleteMapping("/createModel")
     @ApiOperation(value = "删除同质或者异质量数据")
     @ResponseBody
@@ -322,6 +337,7 @@ public class ExperimentalTrainController {
         }
     }
 
+    @RequiresPermissions("experimental:train")
     @GetMapping("/createModel/getData")
     @ApiOperation(value = "新增实验-生成模型-一获取同质异质数据")
     @ResponseBody
@@ -347,6 +363,7 @@ public class ExperimentalTrainController {
      * @param trainId 实验id
      * @return
      */
+    @RequiresPermissions("experimental:train")
     @PostMapping("/createModel/{trainId}")
     @ApiOperation(value = "新增实验-生成模型-一键建立模型")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
@@ -364,6 +381,7 @@ public class ExperimentalTrainController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
 
+    @RequiresPermissions("experimental:result")
     @PostMapping("/doubleCreate")
     @ApiOperation(value = "二次创建实验")
     @ResponseBody

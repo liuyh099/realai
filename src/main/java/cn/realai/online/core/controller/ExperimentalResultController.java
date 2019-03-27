@@ -20,6 +20,7 @@ import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -44,6 +45,7 @@ public class ExperimentalResultController {
     @Autowired
     private SampleWeightBussiness sampleWeightBussiness;
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("/trainSelect")
     @ApiOperation(value = "实验结果-下拉实验列表")
     public Result<List<TrainNameSelectVO>> trainNameSelect() {
@@ -59,6 +61,7 @@ public class ExperimentalResultController {
         }
     }
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("/group/{trainId}")
     @ApiOperation(value = "实验结果-根据实验ID活得组集合(传实验的id)")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
@@ -73,7 +76,7 @@ public class ExperimentalResultController {
         }
     }
 
-
+    @RequiresPermissions("experimental:result")
     @GetMapping("assessment/image")
     @ApiOperation(value = "实验评估-图片(传实验的id)")
     public Result<ExperimentalResultImageVO> assessment(@Validated IdVO idVo) {
@@ -88,6 +91,7 @@ public class ExperimentalResultController {
         }
     }
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("assessment/quota")
     @ApiOperation(value = "实验评估-业务指标(传实验的id)")
     public Result<ExperimentalResultQuatoVO> quota(@Validated IdVO idVo) {
@@ -101,7 +105,7 @@ public class ExperimentalResultController {
         }
     }
 
-
+    @RequiresPermissions("experimental:result")
     @GetMapping("assessment/quota/{groupId}")
     @ApiOperation(value = "实验评估-业务指标查看")
     @ApiImplicitParam(name = "groupId", value = "实验组ID", required = true, dataType = "Long", paramType = "path")
@@ -116,7 +120,7 @@ public class ExperimentalResultController {
         }
     }
 
-
+    @RequiresPermissions("experimental:result")
     @GetMapping("assessment/top")
     @ApiOperation(value = "实验评估-TOP(传实验的id)")
     public Result<ExperimentalResultTopVO> quotaTopGroup(@Validated IdVO idVo) {
@@ -130,7 +134,7 @@ public class ExperimentalResultController {
         }
     }
 
-
+    @RequiresPermissions("experimental:result")
     @GetMapping("assessment/summary")
     @ApiOperation(value = "实验评估-摘要-(传实验的id)")
     public Result<List<ExperimentalResultSummaryVO>> summary(@Validated IdVO idVo) {
@@ -144,6 +148,7 @@ public class ExperimentalResultController {
         }
     }
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("whiledecision/group")
     @ApiOperation(value = "实验-白盒决策页面-获得组(传实验ID)")
     public Result<List<GroupSelectNameVO>> whiledecisionGroup(@Validated IdVO idVO) {
@@ -158,7 +163,7 @@ public class ExperimentalResultController {
         }
     }
 
-
+    @RequiresPermissions("experimental:result")
     @GetMapping("whiledecision")
     @ApiOperation(value = "实验-白盒决策")
     public Result<PageBO<WhileBoxScoreCardVO>> whiledecision(@Validated ExperimentalResultWhileBoxQuery experimentalResultWhileBoxQuery) {
@@ -177,6 +182,7 @@ public class ExperimentalResultController {
         }
     }
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("globalVariable")
     @ApiOperation(value = "实验-全局变量")
     public Result<PageBO<WhileBoxScoreCardVO>> globalVariable(@Validated GlobalVariableQuery globalVariableQuery) {
@@ -198,6 +204,7 @@ public class ExperimentalResultController {
     }
 
     //从实验来
+    @RequiresPermissions("experimental:result")
     @GetMapping("thousandsFace/image")
     @ApiOperation(value = "实验-千人千面获取图片(传实验的id)")
     public Result<String> thousandsFace(@Validated IdVO idVo) {
@@ -210,6 +217,7 @@ public class ExperimentalResultController {
         }
     }
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("thousandsFace/echartsData")
     @ApiOperation(value = "实验-千人千面 获取echarts 数据")
     public Result<List<EchartsDataVo>> echartsData(@Validated IdVO idVo) {
@@ -232,6 +240,7 @@ public class ExperimentalResultController {
         }
     }
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("thousandsFace/list/group")
     @ApiOperation(value = "实验-千人千面列表-组-数据")
     public Result<List<GroupSelectNameVO>> group(@Validated IdVO idVO) {
@@ -245,7 +254,7 @@ public class ExperimentalResultController {
         }
     }
 
-
+    @RequiresPermissions("experimental:result")
     @GetMapping("thousandsFace/list")
     @ApiOperation(value = "实验-千人千面列表数据")
     public Result<PageBO<PersonalInformationVO>> listData(@Validated FaceListDataQuery query) {
@@ -263,6 +272,7 @@ public class ExperimentalResultController {
         }
     }
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("thousandsFace/list/detail")
     @ApiOperation(value = "实验-千人千面列表数据-详情(传数据列表的id(不是ID字段))")
     public Result<PersonalInformationDetailVO> listDataDetail(@Validated IdVO idVo) {
@@ -277,6 +287,7 @@ public class ExperimentalResultController {
         }
     }
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("thousandsFace/list/topGroup")
     @ApiOperation(value = "实验-千人千面列表数据-详情-异质最强组合特征(传数据id))")
     public Result<List<PersonalComboResultSetVO>> listDataDetailTopGroup(@Validated IdVO idVo) {
@@ -290,6 +301,7 @@ public class ExperimentalResultController {
         }
     }
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("thousandsFace/list/topTen")
     @ApiOperation(value = "实验-千人千面列表数据-详情-异质最强TOP10(传数据id))")
     public Result<List<PersonalHetroResultSetTopTenVO>> listDataDetailTopTen(@Validated IdVO idVo) {
@@ -303,6 +315,7 @@ public class ExperimentalResultController {
         }
     }
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("thousandsFace/list/sameCharts")
     @ApiOperation(value = "实验-千人千面列表数据-详情-同质特征数据(echarts)(传数据id))")
     public Result<PersonalHomoResultChartsVO> listDataDetailSameCharts(@Validated IdVO idVo) {
@@ -338,6 +351,7 @@ public class ExperimentalResultController {
         }
     }
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("thousandsFace/list/diff")
     @ApiOperation(value = "实验-千人千面列表数据-详情-所有异质数据(传数据id))")
     public Result<PageBO<PersonalHetroResultSetTopTenVO>> listDiff(@Validated IdQuery query) {
@@ -355,6 +369,7 @@ public class ExperimentalResultController {
         }
     }
 
+    @RequiresPermissions("experimental:result")
     @GetMapping("thousandsFace/list/same")
     @ApiOperation(value = "实验-千人千面列表数据-详情-所有同质数据(传数据id))")
     public Result<List<PersonalHomoResultSetVO>> listSame(@Validated IdQuery query) {

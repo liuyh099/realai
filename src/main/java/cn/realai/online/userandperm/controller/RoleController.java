@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +37,7 @@ public class RoleController {
     @Autowired
     private RoleBusiness roleBusiness;
 
+    @RequiresPermissions("permission:role")
     @GetMapping
     @ApiOperation("获得角色列表")
     public Result<PageBO<RoleVO>> list(PageQuery pageQuery) {
@@ -50,6 +52,7 @@ public class RoleController {
         }
     }
 
+    @RequiresPermissions("permission:role")
     @GetMapping("/checkName/{roleName}")
     @ApiOperation("检查角色名称")
     @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, type = "path")
@@ -63,6 +66,7 @@ public class RoleController {
         }
     }
 
+    @RequiresPermissions("permission:role")
     @DeleteMapping()
     @ApiOperation("删除角色")
     public Result delete(@RequestBody List<Long> ids) {
@@ -81,7 +85,7 @@ public class RoleController {
         }
     }
 
-
+    @RequiresPermissions("permission:role")
     @PostMapping
     @ApiOperation("增加角色")
     public Result add(@Validated @RequestBody RoleAddVO roleAddVO) {
@@ -100,6 +104,7 @@ public class RoleController {
         }
     }
 
+    @RequiresPermissions("permission:role")
     @GetMapping("menuTree")
     @ApiOperation("获得所有的菜单权限")
     public Result<MenuTreeNodeVo> menuTree() {
@@ -119,7 +124,7 @@ public class RoleController {
         }
     }
 
-
+    @RequiresPermissions("permission:role")
     @GetMapping("detail")
     @ApiOperation("获得角色详情")
     public Result<RoleDetailVo> detail(IdVO idVO) {
@@ -132,7 +137,7 @@ public class RoleController {
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }
-
+    @RequiresPermissions("permission:role")
     @GetMapping("edit")
     @ApiOperation("获得编辑角色详情")
     public Result<RoleDetailVo> edit(IdVO idVO) {
@@ -145,7 +150,7 @@ public class RoleController {
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }
-
+    @RequiresPermissions("permission:role")
     @PutMapping()
     @ApiOperation("更新角色")
     public Result update(@Validated @RequestBody RoleEditVO editVO) {

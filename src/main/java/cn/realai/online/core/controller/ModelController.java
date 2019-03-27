@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,7 @@ public class ModelController {
     @Autowired
     private TuningRecordBussiness tuningRecordBussiness;
 
+    @RequiresPermissions("model:list")
     @GetMapping("/list")
     @ApiOperation(value = "查询模型列表")
     @ResponseBody
@@ -63,6 +65,7 @@ public class ModelController {
         }
     }
 
+    @RequiresPermissions("model:list")
     @GetMapping("/detail/{modelId}")
     @ApiOperation(value = "模型详情")
     @ApiImplicitParam(name = "modelId", value = "模型ID", required = true, dataType = "Long", paramType = "path")
@@ -78,6 +81,7 @@ public class ModelController {
         }
     }
 
+    @RequiresPermissions("model:list")
     @PostMapping("/update")
     @ApiOperation(value = "模型详情编辑")
     @ApiImplicitParams({
@@ -130,7 +134,7 @@ public class ModelController {
         }
     }
 
-
+    @RequiresPermissions("model:better")
     @GetMapping("/checkPsi/{modelId}")
     @ApiOperation(value = "模型调优-检测PSI是否可以点击")
     @ApiImplicitParam(name = "modelId", value = "模型ID", required = true, dataType = "Long", paramType = "path")
@@ -145,6 +149,7 @@ public class ModelController {
         }
     }
 
+    @RequiresPermissions("model:better")
     @GetMapping("/selectPsiList/{modelId}")
     @ApiOperation(value = "模型调优-点击检测PSI获取PSI结果集")
     @ApiImplicitParam(name = "modelId", value = "模型ID", required = true, dataType = "Long", paramType = "path")
@@ -159,6 +164,7 @@ public class ModelController {
         }
     }
 
+    @RequiresPermissions("model:better")
     @PostMapping("/checkSecurityKey")
     @ApiOperation(value = "模型调优-强制调优校验密钥")
     @ApiImplicitParam(name = "pkstr", value = "密钥串", required = true, dataType = "String", paramType = "query")
@@ -173,6 +179,7 @@ public class ModelController {
         }
     }
 
+    @RequiresPermissions("model:better")
     @PostMapping("/psiTuning")
     @ApiOperation(value = "模型调优-PSI调优")
     @ApiImplicitParam(name = "modelId", value = "调优模型ID", required = true, dataType = "Long", paramType = "query")
@@ -187,6 +194,7 @@ public class ModelController {
         }
     }
 
+    @RequiresPermissions("model:better")
     @PostMapping("/forceTuning")
     @ApiOperation(value = "模型调优-强制调优")
     @ApiImplicitParams({

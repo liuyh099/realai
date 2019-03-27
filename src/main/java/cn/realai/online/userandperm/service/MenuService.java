@@ -18,4 +18,17 @@ public interface MenuService {
      * @return
      */
     List<Long> getAllMenuIds();
+
+    /**
+     * 查询所有的权限
+     * @return
+     */
+    List<String> getAllPermission();
+
+    /**
+     * 根据角色ID获得权限
+     * @param roleId
+     * @return
+     */
+    List<String> getPermissionByRoleId(Long roleId);
 }

@@ -1,6 +1,7 @@
 package cn.realai.online.userandperm.dao;
 
 import cn.realai.online.userandperm.entity.SysMenu;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,4 +23,17 @@ public interface SysMenuDao {
      * @return
      */
     List<Long> getAllMenuIds();
+
+    /**
+     * 查询所有的权限
+     * @return
+     */
+    List<String> getAllPermission();
+
+    /**
+     * 根据角色ID获得权限
+     * @param roleId
+     * @return
+     */
+    List<String> getPermissionByRoleId(@Param("roleId") Long roleId);
 }

@@ -20,6 +20,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -78,6 +79,7 @@ public class ServiceController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), serverNameSelectVOs);
     }
 
+    @RequiresPermissions("service")
     @PostMapping("/list")
     @ApiOperation(value="新增服务")
     public Result addService(@RequestBody AddServiceQuery addServiceQuery){
@@ -94,6 +96,7 @@ public class ServiceController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
     }
 
+    @RequiresPermissions("service")
     @PutMapping("/list")
     @ApiOperation(value="编辑服务")
     public Result editService(@RequestBody EditServiceQuery editServiceQuery){
@@ -111,6 +114,7 @@ public class ServiceController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
     }
 
+    @RequiresPermissions("service")
     @GetMapping("/list/item")
     @ApiOperation(value="获取服务详情")
     public Result<ServiceVO> getServiceDetails(GetServiceDetailsQuery getServiceDetailsQuery){
@@ -128,7 +132,7 @@ public class ServiceController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), serviceVO);
     }
 
-
+    @RequiresPermissions("service")
     @GetMapping("/list")
     @ApiOperation(value="获取服务列表")
     public Result<List<ServiceVO>> getServiceList(GetServiceListQuery getServiceListQuery){
@@ -152,7 +156,7 @@ public class ServiceController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), serviceVOs);
     }
 
-
+    @RequiresPermissions("service")
     @PostMapping("/list/key")
     @ApiOperation(value="获取秘钥信息")
     public Result<SecretKeyInfoVO> getSecretKeyInfo(@RequestBody GetSecretKeyInfoQuery getSecretKeyInfoQuery){
@@ -170,7 +174,7 @@ public class ServiceController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),secretKeyInfoVO);
     }
 
-
+    @RequiresPermissions("service")
     @PostMapping("/list/renewal")
     @ApiOperation(value="服务续期")
     public Result renewalService(@RequestBody RenewalServiceQuery renewalServiceQuery){

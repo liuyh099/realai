@@ -16,6 +16,7 @@ import cn.realai.online.core.vo.*;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -66,6 +67,7 @@ public class ThousandsFacesController {
 //        }
 //    }
 
+    @RequiresPermissions("info:all")
     @GetMapping()
     @ApiOperation("获得千人千面数据 传入模型ID")
     public Result<PageBO<PersonalInformationVO>> getModelOptionName(@Validated FaceListDataQuery query) {
@@ -88,6 +90,7 @@ public class ThousandsFacesController {
         }
     }
 
+    @RequiresPermissions("info:all")
     @GetMapping("/list/detail")
     @ApiOperation(value = "千人千面-列表数据-详情(传数据列表的id(不是ID字段))")
     public Result<PersonalInformationDetailVO> listDataDetail(@Validated IdVO idVo) {
@@ -102,6 +105,7 @@ public class ThousandsFacesController {
         }
     }
 
+    @RequiresPermissions("info:all")
     @GetMapping("/list/topGroup")
     @ApiOperation(value = "千人千面-列表数据-详情-异质最强组合特征(传数据id))")
     public Result<List<PersonalComboResultSetVO>> listDataDetailTopGroup(@Validated IdVO idVo) {
@@ -115,7 +119,8 @@ public class ThousandsFacesController {
         }
     }
 
-        @GetMapping("/list/topTen")
+    @RequiresPermissions("info:all")
+    @GetMapping("/list/topTen")
     @ApiOperation(value = "千人千面-列表数据-详情-异质最强TOP10(传数据id))")
     public Result<List<PersonalHetroResultSetTopTenVO>> listDataDetailTopTen(@Validated IdVO idVo) {
         try {
@@ -128,6 +133,7 @@ public class ThousandsFacesController {
         }
     }
 
+    @RequiresPermissions("info:all")
     @GetMapping("/list/sameCharts")
     @ApiOperation(value = "千人千面-列表数据-详情-同质特征数据(echarts)(传数据id))")
     public Result<PersonalHomoResultChartsVO> listDataDetailSameCharts(@Validated IdVO idVo) {
@@ -163,6 +169,7 @@ public class ThousandsFacesController {
         }
     }
 
+    @RequiresPermissions("info:all")
     @GetMapping("/list/diff")
     @ApiOperation(value = "千人千面-列表数据-详情-所有异质数据(传数据id))")
     public Result<PageBO<PersonalHetroResultSetTopTenVO>> listDiff(@Validated IdQuery query) {
@@ -180,6 +187,7 @@ public class ThousandsFacesController {
         }
     }
 
+    @RequiresPermissions("info:all")
     @GetMapping("/list/same")
     @ApiOperation(value = "千人千面-列表数据-详情-所有同质数据(传数据id))")
     public Result<List<PersonalHomoResultSetVO>> listSame(IdQuery query) {
@@ -198,6 +206,7 @@ public class ThousandsFacesController {
         }
     }
 
+    @RequiresPermissions("info:all")
     @GetMapping("getGroupOption")
     @ApiOperation("获得下拉组选项 传入模型ID")
     public Result<List<GroupSelectNameVO>> getGroupOptionName(@Validated IdVO idVO) {
@@ -215,7 +224,7 @@ public class ThousandsFacesController {
         }
     }
 
-
+    @RequiresPermissions("info:all")
     @GetMapping("getBatchOption")
     @ApiOperation("获得下拉批次选项 传入模型ID")
     public Result<List<BatchSelectNameVO>> getBatchOption(@Validated IdVO idVO) {

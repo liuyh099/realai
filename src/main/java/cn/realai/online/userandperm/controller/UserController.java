@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -41,6 +42,7 @@ public class UserController {
     @Autowired
     private RoleBusiness roleBusiness;
 
+    @RequiresPermissions("permission:user")
     @GetMapping()
     @ApiOperation(value = "查询用户列表")
     public Result<PageBO<UserVO>> list(UserPageQuery pageQuery) {
@@ -56,7 +58,7 @@ public class UserController {
 
     }
 
-
+    @RequiresPermissions("permission:user")
     @GetMapping("checkName/{name}")
     @ApiOperation(value = "检查用户名（true表示检查通过）")
     @ApiImplicitParam(name = "name", value = "用户名", required = true, type = "path")
@@ -70,6 +72,7 @@ public class UserController {
         }
     }
 
+    @RequiresPermissions("permission:user")
     @GetMapping("checkPhoneNumber/{phoneNumber}")
     @ApiOperation(value = "检查手机号码（true表示检查通过）")
     @ApiImplicitParam(name = "phoneNumber", value = "手机号码", required = true, type = "path")
@@ -83,6 +86,7 @@ public class UserController {
         }
     }
 
+    @RequiresPermissions("permission:user")
     @PostMapping()
     @ApiOperation(value = "新增用户")
     public Result add(@Validated @RequestBody UserAddVO userAddVO) {
@@ -103,6 +107,7 @@ public class UserController {
         }
     }
 
+    @RequiresPermissions("permission:user")
     @GetMapping("roles")
     @ApiOperation(value = "获得所有的角色选项")
     public Result<List<RoleSelectVO>> roles() {
@@ -117,6 +122,7 @@ public class UserController {
     }
 
 
+    @RequiresPermissions("permission:user")
     @DeleteMapping()
     @ApiOperation(value = "删除用户")
     public Result delete(@RequestBody List<Long> ids) {
@@ -140,6 +146,7 @@ public class UserController {
 
     }
 
+    @RequiresPermissions("permission:user")
     @GetMapping("detail")
     @ApiOperation(value = "获得用户详情")
     public Result<UserDetailVO> detail(@Validated IdVO idVO) {
@@ -155,6 +162,7 @@ public class UserController {
 
     }
 
+    @RequiresPermissions("permission:user")
     @PutMapping()
     @ApiOperation(value = "更新用户")
     public Result update(@Validated @RequestBody UserUpdateVO userUpdateVO) {
@@ -175,6 +183,7 @@ public class UserController {
 
     }
 
+    @RequiresPermissions("permission:user")
     @PutMapping("updatePwd")
     @ApiOperation(value = "更新用户密码")
     public Result updatePwd(@Validated @RequestBody UserUpdatePwdVO userUpdatePwdVO) {

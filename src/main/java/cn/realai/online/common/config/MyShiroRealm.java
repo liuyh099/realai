@@ -5,6 +5,7 @@ import cn.realai.online.userandperm.service.MenuService;
 import cn.realai.online.userandperm.service.RoleService;
 import cn.realai.online.userandperm.service.UserService;
 import cn.realai.online.util.EncodingPasswordUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -15,7 +16,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.apache.shiro.util.StringUtils;
+import org.apache.shiro.util.CollectionUtils;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.crazycake.shiro.RedisSessionDAO;
 
@@ -41,10 +42,28 @@ public class MyShiroRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 //        System.out.println("权限配置-->MyShiroRealm.doGetAuthorizationInfo()");
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-//        UserInfo userInfo = (UserInfo) principals.getPrimaryPrincipal();
+        User user = (User) principals.getPrimaryPrincipal();
         try {
+            List<String> permissionList = null;
+            if (user.getName().equals("admin")) {
+                //获得所有的权限
+                permissionList = menuService.getAllPermission();
+            } else {
+                if (user.getRoleId() != null) {
+                    permissionList = menuService.getPermissionByRoleId(user.getRoleId());
+                }
 
-            authorizationInfo.addStringPermission("permission:user:list");
+            }
+            if (!CollectionUtils.isEmpty(permissionList)) {
+                for (String permission : permissionList) {
+                    if (!StringUtils.isBlank(permission)) {
+                        String[] permissions = permission.split(",");
+                        for (String result : permissions) {
+                            authorizationInfo.addStringPermission(result);
+                        }
+                    }
+                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

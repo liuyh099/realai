@@ -19,6 +19,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
@@ -46,6 +47,7 @@ public class WhiteBoxDecisioController {
     @Autowired
     private SampleWeightBussiness sampleWeightBussiness;
 
+    @RequiresPermissions("white:decision")
     @GetMapping("whiteBoxDecisio/getGroupOption")
     @ApiOperation("白盒决策-获得下拉组选项 传入模型ID")
     public Result<List<GroupSelectNameVO>> getGroupOptionName(@Validated IdVO idVO) {
@@ -63,6 +65,7 @@ public class WhiteBoxDecisioController {
         }
     }
 
+    @RequiresPermissions("white:decision")
     @GetMapping("whiteBoxDecisio/getClassResources")
     @ApiOperation("白盒决策-获得根路径")
     public static String getClassResources() {
@@ -73,7 +76,7 @@ public class WhiteBoxDecisioController {
         return path;
     }
 
-
+    @RequiresPermissions("white:decision")
     @GetMapping("whiteBoxDecisio/groupScoreCard")
     @ApiOperation(value = "白盒决策-分组“评分卡")
     public Result<PageBO<WhileBoxScoreCardVO>> groupScoreCard(@Validated ExperimentalResultWhileBoxQuery experimentalResultWhileBoxQuery) {
