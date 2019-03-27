@@ -141,16 +141,23 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         if (!mlock.tryLock()) {
             return -1;
         }
-
+        
+        int deleteStatus = 0;
+        if (relyingId == null || relyingId.longValue() == 0) {
+        	deleteStatus = VariableData.DELETE_YES;
+        } else {
+        	deleteStatus = VariableData.DELETE_NO;
+        }
+        
         //查询需要删除的列
-        HomoAndHetroBO deleteVariableData = variableDataService.selectDeleteByExperimentId(experimentId);
+        HomoAndHetroBO deleteVariableData = variableDataService.selectDeleteByExperimentId(experimentId, deleteStatus);
 
         //修改试验状态
         int ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
         ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
 
         //训练    
-        trainService.training(experimentBO, relyingId, deleteVariableData.getHomoList(), deleteVariableData.getHetroList(), 1);
+        trainService.training(experimentBO, relyingId, deleteVariableData.getHomoList(), deleteVariableData.getHetroList(), deleteStatus);
         return ret;
     }
 

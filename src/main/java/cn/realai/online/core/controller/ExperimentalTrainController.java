@@ -355,7 +355,7 @@ public class ExperimentalTrainController {
         try {
             int ret = experimentalTrainBussiness.train(trainId, 0L);
             if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
-                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("有其他实验正在训练中，请稍后重试"), null);
+            	return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
             }
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
         } catch (Exception e) {
@@ -375,7 +375,7 @@ public class ExperimentalTrainController {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), 1);
             }
             int ret = experimentalTrainBussiness.train(newExperimentId, bo.getTrainId());
-            if (ret == 0) {
+            if (ret == -1) {
             	return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
             }
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);

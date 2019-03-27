@@ -33,7 +33,8 @@ public interface VariableDataDao {
 	 * @param experimentId
 	 * @return
 	 */
-	List<VariableData> selectVariableDataListByExperimentId(@Param("experimentId")Long experimentId);
+	List<VariableData> selectVariableDataListByExperimentId(@Param("experimentId")Long experimentId,
+			@Param("deleteStatus")int deleteStatus);
 
     /**
      * 创建doubleCreate的参数

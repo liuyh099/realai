@@ -63,7 +63,7 @@
 		select *
 		from variable_data
 		where experiment_id = #{experimentId}
-		and `delete` = 2
+		and `delete` = #{deleteStatus}
 	</select>
 
     <select id="findList" resultMap="VariableDataMap" parameterType="cn.realai.online.core.entity.VariableData">
