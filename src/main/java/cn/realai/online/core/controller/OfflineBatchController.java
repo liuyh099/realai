@@ -58,6 +58,7 @@ public class OfflineBatchController {
     public Result<Long> create(@RequestBody @Validated OfflineBatchCreateVO createVO){
         try {
             Long recordId = batchRecordBussiness.createBatchRecord(createVO);
+            batchRecordBussiness.executeBatchRecord(recordId);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), recordId);
         } catch (Exception e) {
             log.error("新建离线跑批异常", e);

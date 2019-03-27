@@ -21,12 +21,12 @@ public class ExperimentalPublishVO {
     private Long experimentId;
 
     @ApiModelProperty(value = "备注")
-    @Length(max = 20, message = "备注最大200个字节")
+    @Length(max = 200, message = "备注最大200个字节")
     private String remark;
 
     @ApiModelProperty(value = "发布方式 2:离线发布 3:在线发布")
     @NotNull(message = "请选择发布方式")
-    @Pattern(regexp = "^[13]$", message = "请选择正确的发布方式")
+    //@Pattern(regexp = "/^[23]$/", message = "请选择正确的发布方式")
     private Integer status;
 
 

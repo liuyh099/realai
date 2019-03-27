@@ -115,7 +115,7 @@ public class ThousandsFacesController {
         }
     }
 
-    @GetMapping("/list/topTen")
+        @GetMapping("/list/topTen")
     @ApiOperation(value = "千人千面-列表数据-详情-异质最强TOP10(传数据id))")
     public Result<List<PersonalHetroResultSetTopTenVO>> listDataDetailTopTen(@Validated IdVO idVo) {
         try {
@@ -135,14 +135,21 @@ public class ThousandsFacesController {
             List<PersonalHomoResultSetBO> list = experimentalTrainBussiness.listDataDetailSameCharts(idVo.getId());
             PersonalHomoResultChartsVO result = new PersonalHomoResultChartsVO();
             if (!CollectionUtils.isEmpty(list)) {
-                List<Integer> x = new ArrayList<>(list.size());
-                List<String> y = new ArrayList<>(list.size());
-                List<List<Double>> data = new ArrayList<>(list.size());
-                for (PersonalHomoResultSetBO tmp : list) {
-                    x.add(tmp.getK());
-                    y.add(tmp.getVariableName());
-                    List<Double> dataItem = new ArrayList<>(1);
-                    dataItem.add(tmp.getWeight());
+                List<Integer> x = new ArrayList<>();
+                List<String> y = new ArrayList<>();
+                List<List<Object>> data = new ArrayList<>(list.size());
+
+                for(int i=0;i<list.size();i++){
+                    if(!x.contains(list.get(i).getK())){
+                        x.add(list.get(i).getK());
+                    }
+                    if(!y.contains(list.get(i).getVariableName())){
+                        y.add(list.get(i).getVariableName());
+                    }
+                    List<Object> dataItem = new ArrayList<>(3);
+                    dataItem.add(y.indexOf(list.get(i).getVariableName()));
+                    dataItem.add(x.indexOf(list.get(i).getK()));
+                    dataItem.add(list.get(i).getWeight());
                     data.add(dataItem);
                 }
                 result.setX(x);
@@ -175,7 +182,7 @@ public class ThousandsFacesController {
 
     @GetMapping("/list/same")
     @ApiOperation(value = "千人千面-列表数据-详情-所有同质数据(传数据id))")
-    public Result<List<PersonalHomoResultSetVO>> listSame(@RequestBody IdQuery query) {
+    public Result<List<PersonalHomoResultSetVO>> listSame(IdQuery query) {
         try {
             PageBO<PersonalHomoResultSetBO> page = experimentalTrainBussiness.listPersonalHomoResultSet(query);
             if (page == null) {
@@ -199,7 +206,7 @@ public class ThousandsFacesController {
             if (ObjectUtils.isEmpty(model)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
-            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId(), false);
+            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId(), false,false);
             List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {

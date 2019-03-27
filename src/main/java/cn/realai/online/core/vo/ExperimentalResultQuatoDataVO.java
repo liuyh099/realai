@@ -9,6 +9,9 @@ public class ExperimentalResultQuatoDataVO {
     @ApiModelProperty(value = "组ID")
     private Long id;
 
+    @ApiModelProperty(value = "组名")
+    private String groupName;
+
     //最小概率
     @ApiModelProperty(value = "最小概率")
     private Double minPro;
@@ -47,6 +50,7 @@ public class ExperimentalResultQuatoDataVO {
     //
     @ApiModelProperty(value = "逾期数/总体逾期数")
     private Double cumulativePostiveCountInTotalPositiveCount;
+
 
     public Long getId() {
         return id;
@@ -150,5 +154,13 @@ public class ExperimentalResultQuatoDataVO {
 
     public void setCumulativePostiveCountInTotalPositiveCount(Double cumulativePostiveCountInTotalPositiveCount) {
         this.cumulativePostiveCountInTotalPositiveCount = cumulativePostiveCountInTotalPositiveCount;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }

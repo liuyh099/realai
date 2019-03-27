@@ -60,6 +60,18 @@
         </where>
     </select>
 
+    <select id="selectMaxPsiList" resultType="java.util.Map">
+        select m.id as modelId, ifnull(max(psi), 0) as maxPsi from psi_check_result as psi
+        join model as m on psi.experiment_id = m.experiment_id
+        <where>
+            m.id in
+            <foreach collection="list" open="(" close=")" separator="," item="modelId">
+                #{modelId}
+            </foreach>
+        </where>
+        group by m.id
+    </select>
+
 
     <resultMap type="cn.realai.online.core.bo.PsiResultBO" id="PsiResultMap">
         <result column="psiId" property="psiId" jdbcType="BIGINT"/>

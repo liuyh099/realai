@@ -18,7 +18,7 @@ public class ModelListBO {
     private String serviceName;
     private Long experimentId;
     private String experimentName;
-    private Date releaseTime;
+    private Long releaseTime;
     private String algorithmType;
     private int tuningCount;
     private String tuningReason;
@@ -73,11 +73,11 @@ public class ModelListBO {
         this.experimentName = experimentName;
     }
 
-    public Date getReleaseTime() {
+    public Long getReleaseTime() {
         return releaseTime;
     }
 
-    public void setReleaseTime(Date releaseTime) {
+    public void setReleaseTime(Long releaseTime) {
         this.releaseTime = releaseTime;
     }
 

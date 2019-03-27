@@ -53,10 +53,15 @@ public class ServiceLicenseCheck {
     public void applyService(long serviceId, String tuningSecretKey) throws LicenseException {
         String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId, SecretKeyType.COMMON);
         FileLicenseInfo tuningLicInfo = checkServiceLic(tuningSecretKey);
+
+        if(Integer.parseInt(tuningLicInfo.getSecretKeyType()) != SecretKeyType.TUNING.getCode()) {
+            throw new LicenseException("秘钥类型不匹配，普通秘钥不能用于强制调优！");
+        }
+
         checkLic(serviceCiphertext, tuningSecretKey);
         ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(tuningLicInfo, serviceId);
         String dataCiphertext = dataCipherHandler.getDataCiphertext(serviceId, serviceDetail);
-        licenseCheckHandler.updateServiceDetail(serviceId, dataCiphertext, tuningSecretKey);
+        licenseCheckHandler.updateServiceDetail(serviceId, dataCiphertext, tuningSecretKey, serviceDetail);
 
         licenseCheckHandler.clearTuningKey(serviceId, serviceLicenseInfoSource);
     }

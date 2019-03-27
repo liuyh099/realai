@@ -25,7 +25,7 @@
     </insert>
 
     <select id="findList" parameterType="cn.realai.online.core.entity.SampleSummary"
-            resultType="cn.realai.online.core.entity.SampleSummary">
+            resultMap="SampleSummaryMap">
         SELECT * FROM sample_summary
         <where>
             1=1

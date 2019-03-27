@@ -69,14 +69,14 @@ public class ModelCallController extends BaseController{
     	Long experimentId = brs.getExperimentId();
     	String type = brs.getType();
         String redisKey = brs.getRedisKey();
-        String batchStr = brs.getDownUrl();
+        String date = brs.getDate();
          
         if (redisKey != null || "".equals(redisKey) || experimentId == null) {
             logger.error("ModelCallController runBatchDaily:date定时任务发生错误，参数格式错误. batchStr{}, "
-                    + "experimentId{}, redisKey{}", batchStr, experimentId, redisKey);
+                    + "experimentId{}, redisKey{}", date, experimentId, redisKey);
             return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("文件地址不能为空或null"), null);
         }
-        modelCallBussiness.runBatchDaily(experimentId, redisKey, type, batchStr);
+        modelCallBussiness.runBatchDaily(experimentId, redisKey, type, date);
         return ResultUtils.generateResultStr(ResultCode.SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
 

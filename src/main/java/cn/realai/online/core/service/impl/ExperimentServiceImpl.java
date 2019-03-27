@@ -170,4 +170,19 @@ public class ExperimentServiceImpl implements ExperimentService {
     public Experiment getPublishExperimentByServerId(Long id) {
         return experimentDao.getPublishExperimentByServerId(id);
     }
+
+    @Override
+    public void updateExperimentOffline(Long experimentId, Long serviceId, int releasNo) {
+        experimentDao.updateExperimentOffline(experimentId,serviceId,releasNo);
+    }
+
+    @Override
+    public void updateExperimentTrainStatus(Long experimentId, int releasYes) {
+        experimentDao.updateExperimentTrainStatus(experimentId,releasYes);
+    }
+
+    @Override
+    public Long getLastServerId() {
+        return experimentDao.getLastServerId();
+    }
 }

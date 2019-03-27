@@ -13,7 +13,9 @@ import cn.realai.online.calculation.requestbo.DeleteExperimentRequestBO;
 import cn.realai.online.calculation.requestbo.DeployRequestBO;
 import cn.realai.online.calculation.requestbo.PreprocessRequestBO;
 import cn.realai.online.calculation.requestbo.TrainRequestBO;
+import cn.realai.online.common.Constant;
 import cn.realai.online.common.config.Config;
+import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.util.ConvertJavaBean;
@@ -31,7 +33,11 @@ public class TrainServiceImpl implements TrainService {
     @Override
     public void preprocess(Experiment experiment) {
         PreprocessRequestBO prbo = new PreprocessRequestBO();
-        ConvertJavaBean.convertJavaBean(prbo, experiment);
+        prbo.setExperimentId(experiment.getId());
+        prbo.setXtableHeterogeneousDataSource(experiment.getXtableHeterogeneousDataSource());
+        prbo.setXtableHomogeneousDataSource(experiment.getXtableHomogeneousDataSource());
+        prbo.setXtableMeaningDataSource(experiment.getXtableMeaningDataSource());
+        prbo.setYtableDataSource(experiment.getYtableDataSource());
         String url = config.getUrl();
         String ret = HttpUtil.postRequest(url, JSON.toJSONString(prbo));
         if (ret == null) {
@@ -47,14 +53,16 @@ public class TrainServiceImpl implements TrainService {
 			List<VariableData> hetroList, int delOrAdd) {
 		TrainRequestBO trbo = new TrainRequestBO();
 		ConvertJavaBean.convertJavaBean(trbo, experiment);
-		trbo.setOldExperimentId(oldEid);
+		trbo.setDependencytId(oldEid);
 		trbo.setExperimentId(experiment.getId());
 		if (delOrAdd == 1) {
-			trbo.setDeleteHomo(getVariableDataName(homoList));
-			trbo.setDeleteHetero(getVariableDataName(hetroList));
+			trbo.setCommand(Constant.COMMAND_TRAIN);
+			trbo.setDeleteColumnsHomo(getVariableDataName(homoList));
+			trbo.setDeleteColumnsHetero(getVariableDataName(hetroList));
 		} else if (delOrAdd == 2) {
-			trbo.setNeedColumnsHomo(getVariableDataName(homoList));
-			trbo.setNeedColumnsHetero(getVariableDataName(hetroList));
+			trbo.setCommand(Constant.COMMAND_SECOND_TRAIN);
+			trbo.setColumnsHomo(getVariableDataName(homoList));
+			trbo.setColumnsHetero(getVariableDataName(hetroList));
 		}
 		String url = config.getUrl();
 		String ret = HttpUtil.postRequest(url, JSON.toJSONString(trbo));
@@ -88,8 +96,7 @@ public class TrainServiceImpl implements TrainService {
 	}
 
 	@Override
-	public int runBatchOfOffline() {
-		// TODO Auto-generated method stub
+	public int runBatchOfOffline(BatchRecord batchRecord) {
 		return 0;
 	}
 

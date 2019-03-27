@@ -8,10 +8,10 @@ public class TrainRequestBO {
 	private long experimentId;
 	
 	//如果是而此实验，这个字段为原实验id
-	private Long oldExperimentId;   
+	private Long dependencytId;   
     
 	//命令
-	private final String command = "train";
+	private String command;
 	
 	private Integer validSampleType = 1;
 	
@@ -27,16 +27,16 @@ public class TrainRequestBO {
     private Integer validRatio;
     
     //异质需要训练列
-    private List<String> needColumnsHetero;
+    private List<String> columnsHetero;
     
     //同质需要训练列
-    private List<String> needColumnsHomo;
+    private List<String> columnsHomo;
     
     //异质删除列
-    private List<String> deleteHetero;
+    private List<String> deleteColumnsHetero;
     
     //同质删除列
-    private List<String> deleteHomo;
+    private List<String> deleteColumnsHomo;
     
 	public long getExperimentId() {
 		return experimentId;
@@ -74,44 +74,36 @@ public class TrainRequestBO {
 		this.validRatio = validRatio;
 	}
 
-	public List<String> getNeedColumnsHetero() {
-		return needColumnsHetero;
-	}
-	
-	public void setNeedColumnsHetero(List<String> needColumnsHetero) {
-		this.needColumnsHetero = needColumnsHetero;
-	}
-	
-	public List<String> getNeedColumnsHomo() {
-		return needColumnsHomo;
-	}
-	
-	public void setNeedColumnsHomo(List<String> needColumnsHomo) {
-		this.needColumnsHomo = needColumnsHomo;
-	}
-	
-	public List<String> getDeleteHetero() {
-		return deleteHetero;
+	public List<String> getColumnsHetero() {
+		return columnsHetero;
 	}
 
-	public void setDeleteHetero(List<String> deleteHetero) {
-		this.deleteHetero = deleteHetero;
+	public void setColumnsHetero(List<String> columnsHetero) {
+		this.columnsHetero = columnsHetero;
 	}
 
-	public List<String> getDeleteHomo() {
-		return deleteHomo;
+	public List<String> getColumnsHomo() {
+		return columnsHomo;
 	}
 
-	public void setDeleteHomo(List<String> deleteHomo) {
-		this.deleteHomo = deleteHomo;
+	public void setColumnsHomo(List<String> columnsHomo) {
+		this.columnsHomo = columnsHomo;
 	}
 
-	public Long getOldExperimentId() {
-		return oldExperimentId;
+	public List<String> getDeleteColumnsHetero() {
+		return deleteColumnsHetero;
 	}
 
-	public void setOldExperimentId(Long oldExperimentId) {
-		this.oldExperimentId = oldExperimentId;
+	public void setDeleteColumnsHetero(List<String> deleteColumnsHetero) {
+		this.deleteColumnsHetero = deleteColumnsHetero;
+	}
+
+	public List<String> getDeleteColumnsHomo() {
+		return deleteColumnsHomo;
+	}
+
+	public void setDeleteColumnsHomo(List<String> deleteColumnsHomo) {
+		this.deleteColumnsHomo = deleteColumnsHomo;
 	}
 
 	public Integer getValidSampleType() {
@@ -128,6 +120,18 @@ public class TrainRequestBO {
 
 	public void setTestSampleType(Integer testSampleType) {
 		this.testSampleType = testSampleType;
+	}
+
+	public Long getDependencytId() {
+		return dependencytId;
+	}
+
+	public void setDependencytId(Long dependencytId) {
+		this.dependencytId = dependencytId;
+	}
+
+	public void setCommand(String command) {
+		this.command = command;
 	}
 	
 }

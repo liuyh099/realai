@@ -21,5 +21,5 @@ public interface ServiceService {
 	Integer update(Service service);
 
 
-
+    List<ServiceBO> getAlreadyPublishService();
 }

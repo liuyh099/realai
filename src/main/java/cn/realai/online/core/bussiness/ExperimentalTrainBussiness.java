@@ -17,7 +17,7 @@ public interface ExperimentalTrainBussiness {
 
     Integer deleteExperimentByIds(List<Long> ids);
 
-    int train(long experimentId);
+    int train(long experimentId, Long relyingId);
 
     void testPreprocess(long experimentId);
 
@@ -194,9 +194,10 @@ public interface ExperimentalTrainBussiness {
      *
      * @param experimentId
      * @param isExceptionGroup 是否返回异常组
+     * @param isAllGroup 是否返全部组
      * @return
      */
-    List<SampleGroupingBO> getGroupOptionName(Long experimentId, boolean isExceptionGroup);
+    List<SampleGroupingBO> getGroupOptionName(Long experimentId, boolean isExceptionGroup,boolean isAllGroup);
 
     /**
      * @param batchRecordBO
@@ -211,7 +212,7 @@ public interface ExperimentalTrainBussiness {
      * @param bo
      * @return
      */
-    Boolean doubleCreate(ExperimentalTrainDoubleCreateBO bo);
+    Long doubleCreate(ExperimentalTrainDoubleCreateBO bo);
 
     /**
      * 根据服务ID获取实验
@@ -228,4 +229,19 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     ExperimentBO getPublishExperimentByServerId(Long id);
+
+    /**
+     * 查询实验列表
+     * @param query
+     * @return
+     */
+    List<ExperimentBO> list(ExperimentalTrainQuery query);
+
+    /**
+     * 获得最近发布的服务ID
+     * @return
+     */
+    Long getLastServerId();
+
+    Long getGroupAllId(long trainId);
 }

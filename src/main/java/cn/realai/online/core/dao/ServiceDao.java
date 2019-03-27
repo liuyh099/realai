@@ -16,4 +16,5 @@ public interface ServiceDao {
 
     Integer update(Service service);
 
+    List<Service> getAlreadyPublishService();
 }

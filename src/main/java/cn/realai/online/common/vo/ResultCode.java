@@ -7,6 +7,8 @@ public enum ResultCode {
     PYTHON_SUCCESS(200),
     
     BLENDING_ERROR(201),
+    
+    PYTHON_WAIT(202),
 
     PARAM_ERROR(400),
 

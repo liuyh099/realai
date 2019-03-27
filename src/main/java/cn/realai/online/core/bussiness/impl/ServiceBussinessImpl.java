@@ -62,7 +62,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
         cn.realai.online.core.entity.Service searchService = new cn.realai.online.core.entity.Service();
 
-        if(!StringUtils.equals(serviceBOold.getName(), serviceBO.getName())) {
+        if(StringUtils.isNotBlank(serviceBO.getName()) && !StringUtils.equals(serviceBOold.getName(), serviceBO.getName())) {
             searchService.setName(serviceBO.getName());
             List old = serviceService.list(searchService);
             if(old != null && old.size() > 0) {
@@ -71,7 +71,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
             }
         }
 
-        if(!StringUtils.equals(serviceBOold.getSecretKey(), serviceBO.getSecretKey())) {
+        if(StringUtils.isNotBlank(serviceBO.getSecretKey()) && !StringUtils.equals(serviceBOold.getSecretKey(), serviceBO.getSecretKey())) {
             searchService = new cn.realai.online.core.entity.Service();
             searchService.setSecretKey(serviceBO.getSecretKey());
             List old = serviceService.list(searchService);
@@ -82,9 +82,8 @@ public class ServiceBussinessImpl implements ServiceBussiness {
         }
 
 
-        Service service = new Service();
-        BeanUtils.copyProperties(serviceBO, service);
-        if (serviceService.update(service) <= 0) {
+        BeanUtils.copyProperties(serviceBO, serviceBOold);
+        if (serviceService.update(serviceBO) <= 0) {
             return false;
         }
         return true;
@@ -98,13 +97,9 @@ public class ServiceBussinessImpl implements ServiceBussiness {
     }
 
     @Override
-    public SecretKeyInfoVO getSecretKeyInfo(String serviceKey) throws LicenseException {
+    public FileLicenseInfo getSecretKeyInfo(String serviceKey) throws LicenseException {
         FileLicenseInfo fileLicenseInfo = serviceLicenseCheck.checkServiceLic(serviceKey);
-        SecretKeyInfoVO secretKeyInfoVO = new SecretKeyInfoVO();
-        secretKeyInfoVO.setStartTime(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeLower(), LicenseConstants.DATE_FORMART));
-        secretKeyInfoVO.setExpireDate(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), LicenseConstants.DATE_FORMART));
-        secretKeyInfoVO.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
-        return secretKeyInfoVO;
+        return fileLicenseInfo;
     }
 
 //    public void bindTuningSecretKey(long serviceId, String tuningSecretKey) {
@@ -127,22 +122,20 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 //    }
 
     @Override
-    public List<ServiceVO> getServiceList(ServiceBO serviceBO) {
+    public List<ServiceBO> getServiceList(ServiceBO serviceBO) {
         Service service = new Service();
         BeanUtils.copyProperties(serviceBO, service);
         List<Service> services = serviceService.list(service);
-        List<ServiceVO> serviceVos = new ArrayList<>();
+        List<ServiceBO> serviceBos = new ArrayList<>();
         if(services != null && !services.isEmpty()) {
             for (Service s : services) {
                 ServiceBO bo = new ServiceBO();
                 BeanUtils.copyProperties(s, bo);
                 convertData(bo);
-                ServiceVO vo = new ServiceVO();
-                BeanUtils.copyProperties(bo, vo);
-                serviceVos.add(vo);
+                serviceBos.add(bo);
             }
         }
-        return serviceVos;
+        return serviceBos;
     }
 
     @Override

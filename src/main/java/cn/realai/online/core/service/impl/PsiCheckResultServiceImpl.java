@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能描述：TODO
@@ -30,7 +31,14 @@ public class PsiCheckResultServiceImpl implements PsiCheckResultService {
     public Double selectMaxPsi(long modelId) {
         return psiCheckResultDao.selectMaxPsi(modelId);
     }
-    
+
+    @Override
+    public List<Map> selectMaxPsiList(List<Long> modelIds) {
+
+        List<Map> map = psiCheckResultDao.selectMaxPsiList(modelIds);
+        return map;
+    }
+
     @Override
     public Integer findMaxPsiTotal() {
         return psiCheckResultDao.findMaxPsiTotal();
