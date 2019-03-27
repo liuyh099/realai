@@ -159,6 +159,7 @@ public class ExperimentalTrainController {
             }
             ExperimentBO experimentBO = new ExperimentBO();
             BeanUtils.copyProperties(experimentalTrainSelectFileVo, experimentBO);
+            experimentBO.setServiceId(experimentalTrainSelectFileVo.getServerId());
             Long id = experimentalTrainBussiness.selectFileAdd(experimentBO);
             if (id == null) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
