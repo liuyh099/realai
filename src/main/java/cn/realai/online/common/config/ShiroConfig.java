@@ -39,6 +39,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/user/forget", "anon");
         filterChainDefinitionMap.put("/modelCall/**", "anon");
+        filterChainDefinitionMap.put("/experimental/train/*", "anon");
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setLoginUrl("/user/unAuth");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
@@ -73,6 +74,8 @@ public class ShiroConfig {
     public SessionManager sessionManager() {
         MySessionManager mySessionManager = new MySessionManager();
         mySessionManager.setSessionDAO(redisSessionDAO());
+        mySessionManager.setSessionValidationInterval(60000);
+        mySessionManager.setSessionValidationSchedulerEnabled(true);
         return mySessionManager;
     }
 

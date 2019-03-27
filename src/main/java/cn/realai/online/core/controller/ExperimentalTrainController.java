@@ -159,6 +159,7 @@ public class ExperimentalTrainController {
             }
             ExperimentBO experimentBO = new ExperimentBO();
             BeanUtils.copyProperties(experimentalTrainSelectFileVo, experimentBO);
+            experimentBO.setServiceId(experimentalTrainSelectFileVo.getServerId());
             Long id = experimentalTrainBussiness.selectFileAdd(experimentBO);
             if (id == null) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
@@ -370,7 +371,7 @@ public class ExperimentalTrainController {
     @ResponseBody
     public Result createModel(@PathVariable Long trainId) {
         try {
-            int ret = experimentalTrainBussiness.train(trainId, 0L);
+            int ret = experimentalTrainBussiness.train(trainId, null);
             if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
             	return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
             }
@@ -381,7 +382,7 @@ public class ExperimentalTrainController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
 
-    @RequiresPermissions("experimental:result")
+    //@RequiresPermissions("experimental:result")
     @PostMapping("/doubleCreate")
     @ApiOperation(value = "二次创建实验")
     @ResponseBody

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 
 import cn.realai.online.calculation.TrainService;
+import cn.realai.online.calculation.requestbo.BatchOfOfflineRequestBO;
 import cn.realai.online.calculation.requestbo.DeleteExperimentRequestBO;
 import cn.realai.online.calculation.requestbo.DeployRequestBO;
 import cn.realai.online.calculation.requestbo.PreprocessRequestBO;
@@ -53,13 +54,13 @@ public class TrainServiceImpl implements TrainService {
 			List<VariableData> hetroList, int delOrAdd) {
 		TrainRequestBO trbo = new TrainRequestBO();
 		ConvertJavaBean.convertJavaBean(trbo, experiment);
-		trbo.setDependencytId(oldEid);
+		trbo.setParentId(oldEid);
 		trbo.setExperimentId(experiment.getId());
-		if (delOrAdd == 1) {
+		if (delOrAdd == 2) {
 			trbo.setCommand(Constant.COMMAND_TRAIN);
 			trbo.setDeleteColumnsHomo(getVariableDataName(homoList));
 			trbo.setDeleteColumnsHetero(getVariableDataName(hetroList));
-		} else if (delOrAdd == 2) {
+		} else if (delOrAdd == 1) {
 			trbo.setCommand(Constant.COMMAND_SECOND_TRAIN);
 			trbo.setColumnsHomo(getVariableDataName(homoList));
 			trbo.setColumnsHetero(getVariableDataName(hetroList));
@@ -84,9 +85,10 @@ public class TrainServiceImpl implements TrainService {
 	}
 
 	@Override
-	public int experimentDeploy(Long experimentId) {
+	public int experimentDeploy(Long experimentId, Long originalId) {
 		DeployRequestBO drbo = new DeployRequestBO();
 		drbo.setExperimentId(experimentId);
+		
         String url = config.getUrl();
         String ret = HttpUtil.postRequest(url, experimentId + "");
         if (ret == null) {
@@ -97,7 +99,18 @@ public class TrainServiceImpl implements TrainService {
 
 	@Override
 	public int runBatchOfOffline(BatchRecord batchRecord) {
-		return 0;
+		BatchOfOfflineRequestBO boorbo = new BatchOfOfflineRequestBO();
+		boorbo.setBatchId(batchRecord.getId());
+		boorbo.setCommand(Constant.COMMAND_BATCH);
+		boorbo.setModelId(batchRecord.getExperimentId());
+		boorbo.setXtableHeterogeneousDataSource(batchRecord.getXtableHeterogeneousDataSource());
+		boorbo.setXtableHomogeneousDataSource(batchRecord.getXtableHomogeneousDataSource());
+		boorbo.setYtableDataSource(batchRecord.getYtableDataSource());
+		String ret = HttpUtil.postRequest(config.getUrl(), JSON.toJSONString(boorbo));
+        if (ret == null) {
+            throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(boorbo));
+        }
+		return 1;
 	}
 
 	@Override
