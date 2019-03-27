@@ -67,7 +67,7 @@ public class UserOptionController {
     @GetMapping("/unAuth")
     @ApiOperation("未认证接口(前端不需要关注)")
     public Result unAuth(HttpServletResponse httpServletResponse) {
-        //httpServletResponse.setStatus(403);
+        httpServletResponse.setStatus(401);
         return new Result(ResultCode.NO_PERMISSION.getCode(), ResultMessage.NO_PERMISSION.getMsg(), null);
     }
 

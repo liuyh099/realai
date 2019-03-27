@@ -15,6 +15,7 @@ import cn.realai.online.core.vo.IdVO;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ public class DataOverviewController {
     @Autowired
     private ServiceService serviceService;
 
+    @RequiresPermissions("data:over")
     @GetMapping("/getLastServerId")
     @ApiModelProperty("获得服务下拉列表")
     public Result<List<DataOverviewServiceSelectOptionVO>> getServiceSelect() {
@@ -69,6 +71,7 @@ public class DataOverviewController {
 
     }*/
 
+    @RequiresPermissions("data:over")
     @GetMapping("/images")
     @ApiModelProperty("获得图片(传服务ID)")
     public Result<DataOverImageVO> images(@Validated IdVO idVO) {
@@ -89,7 +92,8 @@ public class DataOverviewController {
 
     }
 
-        @GetMapping("/chars")
+    @RequiresPermissions("data:over")
+    @GetMapping("/chars")
     @ApiModelProperty("获得chars(传服务ID)")
     public Result<List<EchartsDataVo>> chars(@Validated IdVO idVO) {
         try {

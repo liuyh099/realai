@@ -18,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -52,6 +53,7 @@ public class OfflineBatchController {
     @Autowired
     private BatchRecordService batchRecordService;
 
+    @RequiresPermissions("model:offlinerun")
     @PostMapping("/create")
     @ApiOperation(value="新建离线跑批")
     @ResponseBody
@@ -66,6 +68,7 @@ public class OfflineBatchController {
         }
     }
 
+    @RequiresPermissions("model:offlinerun")
     @GetMapping("/list")
     @ApiOperation(value = "查询离线跑批列表")
     @ResponseBody
@@ -79,6 +82,7 @@ public class OfflineBatchController {
         }
     }
 
+    @RequiresPermissions("model:offlinerun")
     @PostMapping("delete")
     @ApiOperation(value="批量删除离线跑批记录")
     @ResponseBody
@@ -94,7 +98,7 @@ public class OfflineBatchController {
     }
 
 
-
+    @RequiresPermissions("model:offlinerun")
     @GetMapping("/download/{batchId}")
     @ApiOperation(value = "下载离线跑批运算结果")
     @ApiImplicitParam(name = "batchId", value = "离线跑批Id", required = true, dataType = "Long", paramType = "path")
@@ -135,6 +139,7 @@ public class OfflineBatchController {
 
     }
 
+    @RequiresPermissions("model:offlinerun")
     @GetMapping("/getComplete/{batchId}")
     @ApiOperation(value="查询离线跑批是否计算完成")
     @ApiImplicitParam(name = "batchId", value = "离线跑批Id", required = true, dataType = "Long", paramType = "path")
@@ -155,7 +160,7 @@ public class OfflineBatchController {
         }
     }
 
-
+    @RequiresPermissions("model:offlinerun")
     @GetMapping("/detail/{batchId}")
     @ApiOperation(value="查询离线跑批详情")
     @ApiImplicitParam(name = "batchId", value = "离线跑批Id", required = true, dataType = "Long", paramType = "path")

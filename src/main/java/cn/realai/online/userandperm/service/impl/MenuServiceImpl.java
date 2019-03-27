@@ -25,4 +25,14 @@ public class MenuServiceImpl implements MenuService {
     public List<Long> getAllMenuIds() {
         return sysMenuDao.getAllMenuIds();
     }
+
+    @Override
+    public List<String> getAllPermission() {
+        return sysMenuDao.getAllPermission();
+    }
+
+    @Override
+    public List<String> getPermissionByRoleId(Long roleId) {
+        return sysMenuDao.getPermissionByRoleId(roleId);
+    }
 }

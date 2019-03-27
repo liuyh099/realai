@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -35,6 +36,7 @@ public class ExperimentalPublishController {
     @Autowired
     private ModelBussiness modelBussiness;
 
+    @RequiresPermissions("experimental:publish")
     @ApiOperation("获得可以发布的实验列表")
     @GetMapping("/trainList")
     public Result<List<TrainNameSelectVO>> getCanPublishTrain() {
@@ -48,7 +50,7 @@ public class ExperimentalPublishController {
         }
     }
 
-
+    @RequiresPermissions("experimental:publish")
     @ApiOperation("实验发布详细信息")
     @GetMapping("/detail")
     public Result<ExperimentalPublishDetailVO> getCanPublishTrainDetail(@Validated IdVO idVO) {
@@ -67,6 +69,7 @@ public class ExperimentalPublishController {
         }
     }
 
+    @RequiresPermissions("experimental:publish")
     @ApiOperation("实验发布")
     @PostMapping()
     public Result publish(@Validated @RequestBody ExperimentalPublishVO experimentalPublishVO) {
@@ -89,6 +92,7 @@ public class ExperimentalPublishController {
         }
     }
 
+    @RequiresPermissions("experimental:publish")
     @ApiOperation("实验发布检查实验名称 true:表示检查通过")
     @GetMapping("/checkName/{name}")
     @ApiImplicitParam(name = "name", value = "名称", required = true, dataType = "String", paramType = "path")
