@@ -28,6 +28,9 @@ public class UserDetailVO {
     @ApiModelProperty(value = "角色名称")
     private String group;
 
+    @ApiModelProperty(value = "创建时间")
+    private Long createTime;
+
     @ApiModelProperty(value = "备注")
     private String note;
 
@@ -84,9 +87,18 @@ public class UserDetailVO {
         return note;
     }
 
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
+
     public void setNote(String note) {
         this.note = note;
     }
+
     public String getNotes(){
         return this.note;
     }
