@@ -23,6 +23,9 @@ public class StringPathToTreeUtils {
                 // 易得 parent,self,child 与i 的关系
                 String parent = i == 0 ? null : splitPath[i - 1];
                 String self = splitPath[i];
+                if(i==splitPath.length-1){
+                    self=url;
+                }
                 String child = i + 1 == splitPath.length ? null : splitPath[i + 1];
                 String prefix = parent == null ? "" : getPrefix(splitPath, i);
                 fileClassifyList.add(new FileClassifyBO(parent, self, child, prefix));
