@@ -44,12 +44,12 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
     @Transactional(propagation = Propagation.REQUIRED)
     public Integer createTuningRecord(Long modelId, String securityKey) throws LicenseException {
         Assert.notNull(modelId, "模型ID不能为空");
-        PsiCheckVO checkVO = psiCheckResultBussiness.checkPsi(modelId);
-        Assert.isTrue(checkVO != null && checkVO.isFlag(), "该模型不存在或PSI未达标不允许调优");
         Model model = modelService.get(modelId);
         Assert.notNull(model, "该模型没有对应服务");
 
+        PsiCheckVO checkVO = psiCheckResultBussiness.checkPsi(modelId);
         if (!StringUtils.isNotEmpty(securityKey)) {
+            Assert.isTrue(checkVO.isPsiFlag(), checkVO.getPsiReason());
             //Psi调优更新其他记录状态
             TuningRecord item = new TuningRecord();
             item.setStatus(TuningRecord.STATUS.INVALID.value);
@@ -57,6 +57,7 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
             item.setType(TuningRecord.TYPE.PSI.value);
             tuningRecordService.updateByServiceIdAndType(item);
         } else {
+            Assert.isTrue(checkVO.isKeyFlag(), checkVO.getKeyReason());
             //校验密钥串是否可用
             serviceLicenseCheck.checkServiceLic(securityKey);
             //密钥调优更新其他记录状态
