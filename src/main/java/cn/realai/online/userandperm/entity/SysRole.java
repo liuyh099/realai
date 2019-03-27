@@ -15,13 +15,8 @@ public class SysRole {
     private Long createUserId;
     //创建备注
     private String notes;
-
+    //创建人
     private String createUser;
-
-
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
 
     public Long getId() {
         return id;
@@ -61,5 +56,13 @@ public class SysRole {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
     }
 }

@@ -144,4 +144,12 @@ public interface ExperimentService {
     Experiment getById(Long experimentId);
 
     Integer updateName(Long id, String name);
+
+    /**
+     * 实验失败，修改实验状态并记录错误信息
+     * @param experimentId
+     * @param statusTrainingError
+     * @param errMsg
+     */
+	void maintainErrorMsg(Long experimentId, int statusTrainingError, String errMsg);
 }

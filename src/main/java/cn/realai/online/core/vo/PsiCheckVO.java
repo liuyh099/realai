@@ -19,7 +19,16 @@ public class PsiCheckVO {
     private double maxPsi;
 
     @ApiModelProperty(value = "是否可以检测Psi（true：是 false：否）")
-    private boolean flag;
+    private boolean psiFlag;
+
+    @ApiModelProperty(value = "不许检测Psi原因")
+    private String psiReason;
+
+    @ApiModelProperty(value = "是否可以密钥强制调优（true：是 false：否）")
+    private boolean keyFlag;
+
+    @ApiModelProperty(value = "不许强制调优原因")
+    private String keyReason;
 
     public long getModelId() {
         return modelId;
@@ -37,11 +46,35 @@ public class PsiCheckVO {
         this.maxPsi = maxPsi;
     }
 
-    public boolean isFlag() {
-        return flag;
+    public boolean isPsiFlag() {
+        return psiFlag;
     }
 
-    public void setFlag(boolean flag) {
-        this.flag = flag;
+    public void setPsiFlag(boolean psiFlag) {
+        this.psiFlag = psiFlag;
+    }
+
+    public String getPsiReason() {
+        return psiReason;
+    }
+
+    public void setPsiReason(String psiReason) {
+        this.psiReason = psiReason;
+    }
+
+    public boolean isKeyFlag() {
+        return keyFlag;
+    }
+
+    public void setKeyFlag(boolean keyFlag) {
+        this.keyFlag = keyFlag;
+    }
+
+    public String getKeyReason() {
+        return keyReason;
+    }
+
+    public void setKeyReason(String keyReason) {
+        this.keyReason = keyReason;
     }
 }

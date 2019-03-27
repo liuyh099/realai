@@ -6,6 +6,8 @@ public class DeployRequestBO {
 
 	private Long experimentId;
 	
+	private Long originalId;
+	
 	private final String command = Constant.COMMAND_DEPLOY;
 
 	public Long getExperimentId() {
@@ -18,6 +20,14 @@ public class DeployRequestBO {
 
 	public String getCommand() {
 		return command;
+	}
+
+	public Long getOriginalId() {
+		return originalId;
+	}
+
+	public void setOriginalId(Long originalId) {
+		this.originalId = originalId;
 	}
 	
 }

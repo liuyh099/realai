@@ -91,7 +91,7 @@ public class VariableDataServiceImpl implements VariableDataService {
         }
         HomoAndHetroBO hahbo = new HomoAndHetroBO(experimentId);
         Map<String, List<VariableData>> map = breakDownList(list);
-        hahbo.setHetroList(map.get("homo"));
+        hahbo.setHomoList(map.get("homo"));
         hahbo.setHetroList(map.get("hetro"));
         return hahbo;
     }

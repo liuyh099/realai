@@ -410,7 +410,7 @@ public class ExperimentalTrainController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
 
-    @RequiresPermissions("experimental:result")
+    //@RequiresPermissions("experimental:result")
     @PostMapping("/doubleCreate")
     @ApiOperation(value = "二次创建实验")
     @ResponseBody

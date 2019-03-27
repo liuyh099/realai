@@ -7,19 +7,9 @@ import java.util.List;
 
 public class RoleBO extends SysRole {
 
-    private String createUser;
-
     private List<Long> halfMenu;
 
     private List<Long> checkMenu;
-
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
 
     public List<Long> getHalfMenu() {
         return halfMenu;
