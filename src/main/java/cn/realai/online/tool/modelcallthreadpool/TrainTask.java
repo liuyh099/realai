@@ -83,24 +83,24 @@ public class TrainTask implements Runnable {
 		
 		DataSourceTransactionManager txManager = SpringContextUtils.getBean(DataSourceTransactionManager.class);
 		
+		TransactionStatus ts = txManager.getTransaction(definition);
 		try {
-			TransactionStatus ts = txManager.getTransaction(definition);
 	
 	        //解析模型表现
 	        analysisModelPerformance(redisClientTemplate.get(redisKey.getModelperformance()));
-	        //redisClientTemplate.delete(redisKey.getModelperformance());
+	        redisClientTemplate.delete(redisKey.getModelperformance());
 	
 	        //解析top排序
 	        analysisTopSort(redisClientTemplate.get(redisKey.getTopsort()));
-	        //redisClientTemplate.delete(redisKey.getTopsort());
+	        redisClientTemplate.delete(redisKey.getTopsort());
 	
 	        //样本摘要
 	        analysisSampleSummary(redisClientTemplate.get(redisKey.getSampleSummary()));
-	        //redisClientTemplate.delete(redisKey.getSampleSummary());
+	        redisClientTemplate.delete(redisKey.getSampleSummary());
 	
 	        //样本分组
 	        List<SampleGrouping> sampleGroupingList = analysisSampleGrouping(redisClientTemplate.get(redisKey.getSampleGrouping()));
-	        //redisClientTemplate.delete(redisKey.getSampleGrouping());
+	        redisClientTemplate.delete(redisKey.getSampleGrouping());
 	
 	        Map<String, Long> sgMap = new HashMap<String, Long>();
 	        for (SampleGrouping sg : sampleGroupingList) {
@@ -116,7 +116,7 @@ public class TrainTask implements Runnable {
 	
 	        //样本权重
 	        analysisSampleWeight(redisClientTemplate.get(redisKey.getSampleWeight()), sgMap, vdMap);
-	        //redisClientTemplate.delete(redisKey.getSampleWeight());
+	        redisClientTemplate.delete(redisKey.getSampleWeight());
 	
 	        //千人千面人员信息
 	        
@@ -144,15 +144,15 @@ public class TrainTask implements Runnable {
 	        //解析千人千面同质和异质结果
 	        analysisPersonalResultSet(redisClientTemplate.get(redisKey.getPersonalHomoResultSet()),
 	                redisClientTemplate.get(redisKey.getPersonalHetroResultSet()), piMap, vdMap, batchRecordId);
-	        //redisClientTemplate.delete(redisKey.getPersonalHetroResultSet());
+	        redisClientTemplate.delete(redisKey.getPersonalHetroResultSet());
 	        
 	        //解析千人千面聚合信息
 	        analysisPersonalComboResultSet(redisClientTemplate.get(redisKey.getPersonalComboResultSet()), piMap, vdMap, batchRecordId);
-	        //redisClientTemplate.delete(redisKey.getPersonalComboResultSet());
+	        redisClientTemplate.delete(redisKey.getPersonalComboResultSet());
 	        
 	        //解析实验结果集 风控或营销
 	        analysisExperimentResultSet(redisClientTemplate.get(redisKey.getExperimentResultSet()));
-	        //redisClientTemplate.delete(redisKey.getExperimentResultSet());
+	        redisClientTemplate.delete(redisKey.getExperimentResultSet());
 	        
 	        //样本综述
 	        String sampleReview = redisKey.getSampleReview();
@@ -175,8 +175,8 @@ public class TrainTask implements Runnable {
 	
 	        //roc验证图片地址
 	        String rocValidateImageUrl = redisKey.getRocValidateImageUrl();
-	
-	
+	        
+	        
 	        //ks图片地址
 	        String ksTestImageUrl = redisKey.getKsTestImageUrl();
 	
@@ -187,9 +187,11 @@ public class TrainTask implements Runnable {
 	        //维护实验训练结果到实验数据
 	        experimentService.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl, badTopCountImageUrl,
 	                rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl, ksTrainImageUrl, ksValidateImageUrl);
-
+	        
+	        txManager.commit(ts);
 		} catch (Exception e) {
 			e.printStackTrace();
+			txManager.rollback(ts);
 		}
         
         //释放MLock锁
