@@ -108,4 +108,14 @@ public interface ExperimentDao {
      * @return
      */
     Long getLastServerId();
+
+    /**
+     * 实验失败，修改实验状态并记录错误信息
+     * @param experimentId
+     * @param statusTrainingError
+     * @param errMsg
+     */
+	void maintainErrorMsg(@Param("experimentId")Long experimentId, 
+			@Param("status")int status, 
+			@Param("errMsg")String errMsg);
 }

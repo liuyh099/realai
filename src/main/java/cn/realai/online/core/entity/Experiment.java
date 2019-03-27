@@ -53,6 +53,9 @@ public class Experiment {
 
     //试验完毕
     public static final int STATUS_TRAINING_OVER = 5;
+    
+    //训练失败
+    public static final int STATUS_TRAINING_ERROR = 6;
 
     //算法类型
     private String algorithmType;
@@ -143,6 +146,7 @@ public class Experiment {
 
     private String serviceName;
 
+    private String errorMsg;
 
     public String getServiceName() {
         return serviceName;
@@ -419,4 +423,13 @@ public class Experiment {
     public void setKsValidateImageUrl(String ksValidateImageUrl) {
         this.ksValidateImageUrl = ksValidateImageUrl;
     }
+
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
+	}
+    
 }

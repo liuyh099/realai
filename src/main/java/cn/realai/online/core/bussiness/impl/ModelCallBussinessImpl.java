@@ -15,6 +15,7 @@ import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
+import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.service.BatchRecordService;
 import cn.realai.online.core.service.ExperimentService;
@@ -157,7 +158,12 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
      */
     @Override
     public void errorDealWith(Long experimentId, String errMsg) {
-
+    	//释放掉锁
+    	if (experimentId != null ) {
+            MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
+            mlock.unLock();
+    	}
+    	experimentService.maintainErrorMsg(experimentId, Experiment.STATUS_TRAINING_ERROR, errMsg);
     }
 
 }

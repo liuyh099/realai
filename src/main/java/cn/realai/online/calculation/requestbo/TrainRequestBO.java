@@ -8,7 +8,7 @@ public class TrainRequestBO {
 	private long experimentId;
 	
 	//如果是而此实验，这个字段为原实验id
-	private Long dependencytId;   
+	private Long parentId;   
     
 	//命令
 	private String command;
@@ -122,12 +122,12 @@ public class TrainRequestBO {
 		this.testSampleType = testSampleType;
 	}
 
-	public Long getDependencytId() {
-		return dependencytId;
+	public Long getParentId() {
+		return parentId;
 	}
 
-	public void setDependencytId(Long dependencytId) {
-		this.dependencytId = dependencytId;
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 
 	public void setCommand(String command) {

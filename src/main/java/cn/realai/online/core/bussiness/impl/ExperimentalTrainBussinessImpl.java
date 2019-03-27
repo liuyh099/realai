@@ -476,7 +476,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setTrainingTime(null);
         experiment.setReleaseTime(null);
         experiment.setTuningCount(0);
-        experiment.setCreateUserId(UserUtils.getUser().getId());
+        //experiment.setCreateUserId(UserUtils.getUser().getId());
+        experiment.setCreateUserId(1L);
         experiment.setRemark(null);
         experiment.setSampleReview(null);
         experiment.setModelUrl(null);
