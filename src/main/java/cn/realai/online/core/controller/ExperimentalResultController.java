@@ -232,6 +232,20 @@ public class ExperimentalResultController {
         }
     }
 
+    @GetMapping("thousandsFace/list/group")
+    @ApiOperation(value = "实验-千人千面列表-组-数据")
+    public Result<List<GroupSelectNameVO>> group(@Validated IdVO idVO) {
+        try {
+            List<SampleGroupingBO> list = experimentalTrainBusiness.getGroupOptionName(idVO.getId(), true,false);
+            List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("实验-千人千面列表-组-数据异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
+
+
     @GetMapping("thousandsFace/list")
     @ApiOperation(value = "实验-千人千面列表数据")
     public Result<PageBO<PersonalInformationVO>> listData(@Validated FaceListDataQuery query) {
