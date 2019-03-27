@@ -155,6 +155,7 @@ public class RoleBusinessImpl implements RoleBusiness {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public boolean update(RoleBO roleBO) {
 
         if (!checkName(roleBO.getName())) {

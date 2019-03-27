@@ -206,7 +206,7 @@ public class ThousandsFacesController {
             if (ObjectUtils.isEmpty(model)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
-            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId(), false,false);
+            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId(), true,false);
             List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {

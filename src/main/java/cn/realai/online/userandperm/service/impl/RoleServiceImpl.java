@@ -22,11 +22,13 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Integer insert(SysRole sysRole) {
         return sysRoleDao.insert(sysRole);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Integer delete(List<Long> delete) {
         return sysRoleDao.delete(delete);
     }
@@ -37,6 +39,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Integer update(SysRole sysRole) {
         return sysRoleDao.update(sysRole);
     }

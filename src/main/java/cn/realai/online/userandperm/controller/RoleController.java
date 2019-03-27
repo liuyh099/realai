@@ -23,7 +23,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -106,14 +105,13 @@ public class RoleController {
     public Result<MenuTreeNodeVo> menuTree() {
         try {
             List<MenuTreeNodeBO> resultBO = roleBusiness.menuTree();
-
-            List<MenuTreeNodeBO> resultBO1 =new ArrayList<>();
             for (MenuTreeNodeBO menuTreeNodeBO:resultBO){
-                if(!menuTreeNodeBO.getId().equals(12L)){
-                    resultBO1.add(menuTreeNodeBO);
+                if(menuTreeNodeBO.getId().equals(12L)){
+                    resultBO.remove(menuTreeNodeBO);
+                    break;
                 }
             }
-            List<MenuTreeNodeVo> result = JSON.parseArray(JSON.toJSONString(resultBO1), MenuTreeNodeVo.class);
+            List<MenuTreeNodeVo> result = JSON.parseArray(JSON.toJSONString(resultBO), MenuTreeNodeVo.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("角色页面获得所有的菜单异常", e);
