@@ -31,7 +31,7 @@ public class UserAddVO {
 
     @NotNull(message = "角色不能为空")
     @ApiModelProperty(value = "角色ID")
-    private Long group;
+    private Long roleId;
 
     @NotBlank(message = "密码不能为空")
     @Pattern(regexp = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$",message = "密码至少8位，数字+字母")
@@ -75,12 +75,12 @@ public class UserAddVO {
         this.phoneNumber = phoneNumber;
     }
 
-    public Long getGroup() {
-        return group;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setGroup(Long group) {
-        this.group = group;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     public String getPwd() {

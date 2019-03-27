@@ -92,7 +92,6 @@ public class UserController {
             }
             UserBO userBO = new UserBO();
             BeanUtils.copyProperties(userAddVO, userBO);
-            userBO.setRoleId(userAddVO.getGroup());
             if (userBusiness.insert(userBO)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             } else {
