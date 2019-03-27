@@ -36,6 +36,7 @@
         <result column="ks_validate_image_url" property="ksValidateImageUrl" jdbcType="VARCHAR"/>
         <result column="pre_finish" property="preFinish" jdbcType="INTEGER"/>
         <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
+        <result column="err_msg" property="errorMsg" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -205,6 +206,13 @@
 			ks_test_image_url = #{ksTestImageUrl},
 			ks_train_image_url = #{ksTrainImageUrl},
 			ks_validate_image_url = #{ksValidateImageUrl}
+		where id = #{experimentId}
+	</update>
+	
+	<update id="maintainErrorMsg">
+		update experiment
+		set err_msg = #{errMsg},
+			status = #{status}
 		where id = #{experimentId}
 	</update>
 

@@ -98,7 +98,7 @@ public class ModelCallController extends BaseController{
             Map<String, String> map = JSON.parseObject(data, Map.class);
             //参数验证
             if (code == null) {
-                modelCallBussiness.errorDealWith(experimentId, "");
+                modelCallBussiness.errorDealWith(experimentId, msg);
                 return new Result(ResultCode.PARAM_ERROR.getCode(), ResultMessage.PARAM_ERORR.getMsg("code不能为null"), null);
             }
             if (experimentId == null || experimentId == 0) {
@@ -107,7 +107,7 @@ public class ModelCallController extends BaseController{
             }
             if (task == null || "".equals(task)) {
                 logger.error("ModelCallController callback. python回调task为null");
-                modelCallBussiness.errorDealWith(experimentId, "");
+                modelCallBussiness.errorDealWith(experimentId, msg);
                 return new Result(ResultCode.PARAM_ERROR.getCode(), ResultMessage.PARAM_ERORR.getMsg("task不能为null或空"), null);
             }
 

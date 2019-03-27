@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.common.Constant;
@@ -130,7 +132,9 @@ public class ExperimentServiceImpl implements ExperimentService {
         return experiment.getId();
     }
 
+    //释放锁自己处于一个事务中，以确保释放成功，不管同一个业务中的其他操作是否成功
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly=false)
     public MLock getExperimentTrainMLockInstance(long experimentId) {
         return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId,
                 Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
@@ -185,4 +189,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     public Long getLastServerId() {
         return experimentDao.getLastServerId();
     }
+
+	@Override
+	public void maintainErrorMsg(Long experimentId, int statusTrainingError, String errMsg) {
+		experimentDao.maintainErrorMsg(experimentId, statusTrainingError, errMsg);
+	}
 }
