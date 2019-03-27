@@ -6,7 +6,11 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.alibaba.fastjson.JSON;
 
@@ -71,112 +75,127 @@ public class TrainTask implements Runnable {
 
         //获取Redis操作对象
         RedisClientTemplate redisClientTemplate = SpringContextUtils.getBean(RedisClientTemplate.class);
-
-        //解析模型表现
-        analysisModelPerformance(redisClientTemplate.get(redisKey.getModelperformance()));
-        //redisClientTemplate.delete(redisKey.getModelperformance());
-
-        //解析top排序
-        analysisTopSort(redisClientTemplate.get(redisKey.getTopsort()));
-        //redisClientTemplate.delete(redisKey.getTopsort());
-
-        //样本摘要
-        analysisSampleSummary(redisClientTemplate.get(redisKey.getSampleSummary()));
-        //redisClientTemplate.delete(redisKey.getSampleSummary());
-
-        //样本分组
-        List<SampleGrouping> sampleGroupingList = analysisSampleGrouping(redisClientTemplate.get(redisKey.getSampleGrouping()));
-        //redisClientTemplate.delete(redisKey.getSampleGrouping());
-
-        Map<String, Long> sgMap = new HashMap<String, Long>();
-        for (SampleGrouping sg : sampleGroupingList) {
-            sgMap.put(sg.getGroupName(), sg.getId());
-        }
-
-        VariableDataService variableDataService = SpringContextUtils.getBean(VariableDataService.class);
-        List<VariableData> vdList = variableDataService.findListByExperimentId(experimentId);
-        Map<String, Long> vdMap = new HashMap<String, Long>();
-        for (VariableData vd : vdList) {
-            vdMap.put(vd.getName() + vd.getVariableType(), vd.getId());
-        }
-
-        //样本权重
-        analysisSampleWeight(redisClientTemplate.get(redisKey.getSampleWeight()), sgMap, vdMap);
-        //redisClientTemplate.delete(redisKey.getSampleWeight());
-
-        //千人千面人员信息
         
-
-        //生成批次
-        BatchRecord batchRecord = new BatchRecord();
-        batchRecord.setBatchType(BatchRecord.BATCH_TYPE_TRAIN);
-        batchRecord.setServiceId(experiment.getServiceId());
-        batchRecord.setXtableHeterogeneousDataSource(experiment.getXtableHeterogeneousDataSource());
-        batchRecord.setXtableHomogeneousDataSource(experiment.getXtableHomogeneousDataSource());
-        batchRecord.setYtableDataSource(experiment.getYtableDataSource());
-        batchRecord.setExperimentId(experiment.getId());
-        batchRecord.setBatchName(experiment.getName() + "训练结果批次数据");
-        BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
-        batchRecordService.insert(batchRecord);
-        Long batchRecordId = batchRecord.getId();
         
-        List<PersonalInformation> personalInformationList = analysisPersonalInformation(redisClientTemplate.get(redisKey.getPersonalInformation()), sgMap, batchRecordId);
+        DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
+		//设置隔离级别
+		definition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
+		
+		DataSourceTransactionManager txManager = SpringContextUtils.getBean(DataSourceTransactionManager.class);
+		
+		try {
+			TransactionStatus ts = txManager.getTransaction(definition);
+	
+	        //解析模型表现
+	        analysisModelPerformance(redisClientTemplate.get(redisKey.getModelperformance()));
+	        //redisClientTemplate.delete(redisKey.getModelperformance());
+	
+	        //解析top排序
+	        analysisTopSort(redisClientTemplate.get(redisKey.getTopsort()));
+	        //redisClientTemplate.delete(redisKey.getTopsort());
+	
+	        //样本摘要
+	        analysisSampleSummary(redisClientTemplate.get(redisKey.getSampleSummary()));
+	        //redisClientTemplate.delete(redisKey.getSampleSummary());
+	
+	        //样本分组
+	        List<SampleGrouping> sampleGroupingList = analysisSampleGrouping(redisClientTemplate.get(redisKey.getSampleGrouping()));
+	        //redisClientTemplate.delete(redisKey.getSampleGrouping());
+	
+	        Map<String, Long> sgMap = new HashMap<String, Long>();
+	        for (SampleGrouping sg : sampleGroupingList) {
+	            sgMap.put(sg.getGroupName(), sg.getId());
+	        }
+	
+	        VariableDataService variableDataService = SpringContextUtils.getBean(VariableDataService.class);
+	        List<VariableData> vdList = variableDataService.findListByExperimentId(experimentId);
+	        Map<String, Long> vdMap = new HashMap<String, Long>();
+	        for (VariableData vd : vdList) {
+	            vdMap.put(vd.getName() + vd.getVariableType(), vd.getId());
+	        }
+	
+	        //样本权重
+	        analysisSampleWeight(redisClientTemplate.get(redisKey.getSampleWeight()), sgMap, vdMap);
+	        //redisClientTemplate.delete(redisKey.getSampleWeight());
+	
+	        //千人千面人员信息
+	        
+	
+	        //生成批次
+	        BatchRecord batchRecord = new BatchRecord();
+	        batchRecord.setBatchType(BatchRecord.BATCH_TYPE_TRAIN);
+	        batchRecord.setServiceId(experiment.getServiceId());
+	        batchRecord.setXtableHeterogeneousDataSource(experiment.getXtableHeterogeneousDataSource());
+	        batchRecord.setXtableHomogeneousDataSource(experiment.getXtableHomogeneousDataSource());
+	        batchRecord.setYtableDataSource(experiment.getYtableDataSource());
+	        batchRecord.setExperimentId(experiment.getId());
+	        batchRecord.setBatchName(experiment.getName() + "训练结果批次数据");
+	        BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
+	        batchRecordService.insert(batchRecord);
+	        Long batchRecordId = batchRecord.getId();
+	        
+	        List<PersonalInformation> personalInformationList = analysisPersonalInformation(redisClientTemplate.get(redisKey.getPersonalInformation()), sgMap, batchRecordId);
+	
+	        Map<String, Long> piMap = new HashMap<String, Long>();
+	        for (PersonalInformation pi : personalInformationList) {
+	            piMap.put(pi.getPersonalId(), pi.getId());
+	        }
+	
+	        //解析千人千面同质和异质结果
+	        analysisPersonalResultSet(redisClientTemplate.get(redisKey.getPersonalHomoResultSet()),
+	                redisClientTemplate.get(redisKey.getPersonalHetroResultSet()), piMap, vdMap, batchRecordId);
+	        //redisClientTemplate.delete(redisKey.getPersonalHetroResultSet());
+	        
+	        //解析千人千面聚合信息
+	        analysisPersonalComboResultSet(redisClientTemplate.get(redisKey.getPersonalComboResultSet()), piMap, vdMap, batchRecordId);
+	        //redisClientTemplate.delete(redisKey.getPersonalComboResultSet());
+	        
+	        //解析实验结果集 风控或营销
+	        analysisExperimentResultSet(redisClientTemplate.get(redisKey.getExperimentResultSet()));
+	        //redisClientTemplate.delete(redisKey.getExperimentResultSet());
+	        
+	        //样本综述
+	        String sampleReview = redisKey.getSampleReview();
+	
+	        //模型路径
+	        String modelUrl = redisKey.getModelUrl();
+	
+	
+	        //分段统计图片地址（千人千面也是他）
+	        String segmentationStatisticsImageUrl = redisKey.getSegmentationStatisticsImageUrl();
+	
+	        //badTop总数图片地址
+	        String badTopCountImageUrl = redisKey.getBadTopCountImageUrl();
+	
+	        //roc训练图片地址
+	        String rocTestImageUrl = redisKey.getRocTestImageUrl();
+	
+	        //roc测试图片地址
+	        String rocTrainImageUrl = redisKey.getRocTrainImageUrl();
+	
+	        //roc验证图片地址
+	        String rocValidateImageUrl = redisKey.getRocValidateImageUrl();
+	
+	
+	        //ks图片地址
+	        String ksTestImageUrl = redisKey.getKsTestImageUrl();
+	
+	        String ksTrainImageUrl = redisKey.getKsTrainImageUrl();
+	
+	        String ksValidateImageUrl = redisKey.getKsValidateImageUrl();
+	
+	        //维护实验训练结果到实验数据
+	        experimentService.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl, badTopCountImageUrl,
+	                rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl, ksTrainImageUrl, ksValidateImageUrl);
 
-        Map<String, Long> piMap = new HashMap<String, Long>();
-        for (PersonalInformation pi : personalInformationList) {
-            piMap.put(pi.getPersonalId(), pi.getId());
-        }
-
-        //解析千人千面同质和异质结果
-        analysisPersonalResultSet(redisClientTemplate.get(redisKey.getPersonalHomoResultSet()),
-                redisClientTemplate.get(redisKey.getPersonalHetroResultSet()), piMap, vdMap, batchRecordId);
-        //redisClientTemplate.delete(redisKey.getPersonalHetroResultSet());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
         
-        //解析千人千面聚合信息
-        analysisPersonalComboResultSet(redisClientTemplate.get(redisKey.getPersonalComboResultSet()), piMap, vdMap, batchRecordId);
-        //redisClientTemplate.delete(redisKey.getPersonalComboResultSet());
-        
-        //解析实验结果集 风控或营销
-        analysisExperimentResultSet(redisClientTemplate.get(redisKey.getExperimentResultSet()));
-        //redisClientTemplate.delete(redisKey.getExperimentResultSet());
-        
-        //样本综述
-        String sampleReview = redisKey.getSampleReview();
-
-        //模型路径
-        String modelUrl = redisKey.getModelUrl();
-
-
-        //分段统计图片地址（千人千面也是他）
-        String segmentationStatisticsImageUrl = redisKey.getSegmentationStatisticsImageUrl();
-
-        //badTop总数图片地址
-        String badTopCountImageUrl = redisKey.getBadTopCountImageUrl();
-
-        //roc训练图片地址
-        String rocTestImageUrl = redisKey.getRocTestImageUrl();
-
-        //roc测试图片地址
-        String rocTrainImageUrl = redisKey.getRocTrainImageUrl();
-
-        //roc验证图片地址
-        String rocValidateImageUrl = redisKey.getRocValidateImageUrl();
-
-
-        //ks图片地址
-        String ksTestImageUrl = redisKey.getKsTestImageUrl();
-
-        String ksTrainImageUrl = redisKey.getKsTrainImageUrl();
-
-        String ksValidateImageUrl = redisKey.getKsValidateImageUrl();
-
-        //维护实验训练结果到实验数据
-        experimentService.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl, badTopCountImageUrl,
-                rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl, ksTrainImageUrl, ksValidateImageUrl);
-
         //释放MLock锁
         MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
         mlock.unLock();
+        
     }
 
     /*
