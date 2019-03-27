@@ -158,9 +158,9 @@ public class RoleBusinessImpl implements RoleBusiness {
     @Transactional(readOnly = false)
     public boolean update(RoleBO roleBO) {
 
-        if (!checkName(roleBO.getName())) {
+        /*if (!checkName(roleBO.getName())) {
             return false;
-        }
+        }*/
 
         SysRole sysRole = new SysRole();
         BeanUtils.copyProperties(roleBO, sysRole);
