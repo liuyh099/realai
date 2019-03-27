@@ -147,8 +147,8 @@ public class ThousandsFacesController {
                         y.add(list.get(i).getVariableName());
                     }
                     List<Object> dataItem = new ArrayList<>(3);
-                    dataItem.add(x.indexOf(list.get(i).getK()));
                     dataItem.add(y.indexOf(list.get(i).getVariableName()));
+                    dataItem.add(x.indexOf(list.get(i).getK()));
                     dataItem.add(list.get(i).getWeight());
                     data.add(dataItem);
                 }
