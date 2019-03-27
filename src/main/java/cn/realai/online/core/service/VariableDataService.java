@@ -50,7 +50,7 @@ public interface VariableDataService {
 	 * @param experimentId
 	 * @return
 	 */
-	HomoAndHetroBO selectDeleteByExperimentId(Long experimentId);
+	HomoAndHetroBO selectDeleteByExperimentId(Long experimentId, int deleteStatus);
 
     /**
      * 获得二次创建实验的参数

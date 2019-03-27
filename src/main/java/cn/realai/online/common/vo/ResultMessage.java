@@ -15,7 +15,8 @@ public enum ResultMessage {
     NO_PERMISSION("没有权限或未登录"),
     PWD_ERROR("密码错误"),
     NOT_EXISTS_USER("用户不存在"),
-    LOCKED_ACCOUNT("账号已被冻结");
+    LOCKED_ACCOUNT("账号已被冻结"),
+	PYTHON_WAIT("有其他实验或任务正在执行中，请稍后。");
 
     private String msg;
 

@@ -382,11 +382,7 @@ public class TrainTask implements Runnable {
         }
         List<ExperimentResultSet> ersList = JSON.parseArray(redisValue, ExperimentResultSet.class);
         for (ExperimentResultSet ers : ersList) {
-            if (ers.getExperimentId() != experimentId.longValue()) {
-                logger.error("TrainTask analysisModelPerformance. 训练结果数据错误,训练实验id的结果实验id不相等. experimentId{}, resultId{}", experimentId, ers.getExperimentId());
-                throw new RuntimeException("训练结果数据错误,训练实验id的结果实验id不相等.");
-            }
-
+        	ers.setExperimentId(experimentId);
         }
         ExperimentResultSetService experimentResultSetService = SpringContextUtils.getBean(ExperimentResultSetService.class);
         experimentResultSetService.insertList(ersList);
