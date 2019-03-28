@@ -4,8 +4,10 @@ import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
 import cn.realai.online.core.bussiness.ServiceBussiness;
 import cn.realai.online.core.bussiness.TuningRecordBussiness;
 import cn.realai.online.core.entity.Model;
+import cn.realai.online.core.entity.Service;
 import cn.realai.online.core.entity.TuningRecord;
 import cn.realai.online.core.service.ModelService;
+import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.service.TuningRecordService;
 import cn.realai.online.core.vo.PsiCheckVO;
 import cn.realai.online.lic.LicenseException;
@@ -38,6 +40,8 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
     private ModelService modelService;
     @Autowired
     private ServiceLicenseCheck serviceLicenseCheck;
+    @Autowired
+    private ServiceService serviceService;
 
 
     @Override
@@ -45,7 +49,9 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
     public Integer createTuningRecord(Long modelId, String securityKey) throws LicenseException {
         Assert.notNull(modelId, "模型ID不能为空");
         Model model = modelService.get(modelId);
-        Assert.notNull(model, "该模型没有对应服务");
+        Assert.notNull(model, "没有对应的模型可以调优");
+        Service service = serviceService.get(model.getServiceId());
+        Assert.isTrue(service != null && service.getStatus() == Service.STATUS_ONLINE, "服务不存在或者未上线不允许调优");
 
         PsiCheckVO checkVO = psiCheckResultBussiness.checkPsi(modelId);
         if (!StringUtils.isNotEmpty(securityKey)) {

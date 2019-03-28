@@ -114,9 +114,9 @@ public class ModelController {
     @ApiOperation(value = "查询服务下的已发布模型集合")
     @ApiImplicitParam(name = "serviceId", value = "服务ID", required = true, dataType = "Long", paramType = "query")
     @ResponseBody
-    public Result<List<ModelNameSelectVO>> selectModelNameList(@RequestParam(name = "serviceId", required = true) Long modelId) {
+    public Result<List<ModelNameSelectVO>> selectModelNameList(@RequestParam(name = "serviceId", required = true) Long serviceId) {
         try {
-            List<ModelNameSelectVO> result = modelBusiness.selectModelNameList(modelId);
+            List<ModelNameSelectVO> result = modelBusiness.selectModelNameList(serviceId);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             log.error("查询服务下的已发布模型集合", e);
@@ -126,12 +126,11 @@ public class ModelController {
 
 
     @GetMapping("/selectRecentModelNameList")
-    @ApiOperation(value = "根据模型ID或者最近一次发布的模型对应的服务下的模型集合")
-    @ApiImplicitParam(name = "modelId", value = "模型ID", required = false, dataType = "Long", paramType = "query")
+    @ApiOperation(value = "最近一次发布的模型信息")
     @ResponseBody
-    public Result<ModelSelectVO> selectRecentModelNameList(@RequestParam(name = "modelId", required = false) Long modelId) {
+    public Result<ModelSelectVO> selectRecentModelNameList() {
         try {
-            ModelSelectVO result = modelBusiness.selectRecentModelNameList(modelId);
+            ModelSelectVO result = modelBusiness.selectRecentModelNameList();
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             log.error("根据服务ID或者最近一次发布的模型对应的服务下的模型集合", e);
