@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import io.swagger.models.auth.In;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -191,6 +193,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setCreateTime(System.currentTimeMillis());
         experiment.setStatus(Experiment.STATUS_FILE);
         experiment.setReleasStatus(Experiment.RELEAS_NO);
+        experiment.setAlgorithmType("全监督算法");
         return experimentService.insert(experiment);
     }
 
@@ -479,7 +482,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
             return null;
         }
         experiment.setId(null);
-        experiment.setName(experiment.getName() + "-01");
+        experiment.setName(experiment.getName() + "二次创建实验"+ DateFormatUtils.format(new Date(),"yyyyMMddHHmmss"));
         experiment.setStatus(Experiment.STATUS_FILTER);
         experiment.setReleasStatus(Experiment.RELEAS_NO);
         experiment.setCreateTime(System.currentTimeMillis());
