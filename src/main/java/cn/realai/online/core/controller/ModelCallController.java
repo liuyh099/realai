@@ -87,6 +87,7 @@ public class ModelCallController extends BaseController{
      */
     @RequestMapping(value = "/callback", method = RequestMethod.POST)
     public Result callback(@RequestBody String param) {
+    	logger.info("ModelCallController callback. param{}, time{}", JSON.toJSONString(param), System.currentTimeMillis() + "");
     	System.out.println(getRequestIp());
     	try {
     		ModelRequestStructure request = JSON.parseObject(param, ModelRequestStructure.class);

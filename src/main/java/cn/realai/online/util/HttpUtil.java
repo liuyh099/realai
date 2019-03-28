@@ -86,12 +86,12 @@ public class HttpUtil {
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static String postRequest(String urlStr, String param) {
-        logger.info("HttpUtil getObject urlStr ==>  " + urlStr);
+        logger.info("HttpUtil getObject urlStr ==>  " + urlStr + "  param " + JSON.toJSONString(param));
         XUrl url = XUrl.base(urlStr);
         XBody body = XBody.type(XBody.JSON);
         body.param(param);
         String respStr = XHttpTools.request(new XHttpTools.XOption(ChannelAccessConstant.CHARACTER_ENCODING_UTF8, ChannelAccessConstant.WECHAT_CONNECTION_TIMEOUT, ChannelAccessConstant.WECHAT_READ_TIMEOUT), url, body).string();
-        logger.debug("HttpUtil getObject respStr ==>  " + respStr);
+        logger.debug("HttpUtil getObject respStr ==>  " + respStr + "  respStr " + respStr);
         ReturnStructure rs = JSON.parseObject(respStr, ReturnStructure.class);
         if (rs.getCode() == 200) {
         	return "OK";
