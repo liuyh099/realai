@@ -4,6 +4,7 @@ package cn.realai.online.core.service;
 import cn.realai.online.core.bo.ModelDetailBO;
 import cn.realai.online.core.bo.ModelListBO;
 import cn.realai.online.core.entity.Model;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -29,6 +30,9 @@ public interface ModelService {
 
     //获取最近的模型
     Model selectLatest();
+
+    //根据服务选择发布的模型
+    Model selectByServiceId(Long serviceId);
 
     /**
      * 查询模型列表
