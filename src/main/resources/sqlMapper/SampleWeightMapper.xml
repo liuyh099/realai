@@ -10,6 +10,7 @@
         <result column="variable_type" property="variableType" jdbcType="INTEGER"/>
         <result column="box_beans" property="boxBeans" jdbcType="VARCHAR"/>
         <result column="img_url" property="imgUrl" jdbcType="VARCHAR"/>
+        <result column="groupName" property="groupName" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="insertList">
@@ -23,21 +24,21 @@
     </insert>
 
     <select id="findList" resultMap="SampleWeightMap" parameterType="cn.realai.online.core.entity.SampleWeight">
-        select *
-        from sample_weight
+        select *,b.group_name AS "groupName"
+        from sample_weight a LEFT JOIN sample_grouping b ON a.group_id = b.id
         <where>
             1=1
             <if test="experimentId!=null and experimentId!=0">
-                AND	experiment_id = #{experimentId}
+                AND	a.experiment_id = #{experimentId}
             </if>
             <if test="groupId!=null and groupId!=0">
-                AND	group_id = #{groupId}
+                AND	a.group_id = #{groupId}
             </if>
             <if test="variableType!=null and variableType!=0">
-                AND	variable_type= #{variableType}
+                AND	a.variable_type= #{variableType}
             </if>
         </where>
-        ORDER BY id ASC
+        ORDER BY a.id ASC
     </select>
 
 </mapper>

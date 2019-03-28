@@ -6,6 +6,9 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class WhileBoxScoreCardVO {
 
+    @ApiModelProperty(value = "分组名称-当请求类型是image时不返回")
+    private String groupName;
+
     @ApiModelProperty(value = "变量的ID-当请求类型是image时不返回")
     private String variableId;
 
@@ -30,6 +33,14 @@ public class WhileBoxScoreCardVO {
     @ApiModelProperty(value = "图片路径-当请求类型是normal时不返回")
     private String imgUrl;
 
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 
     public String getImgUrl() {
         return imgUrl;
