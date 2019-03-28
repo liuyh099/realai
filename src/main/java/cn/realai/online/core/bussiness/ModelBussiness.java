@@ -19,7 +19,7 @@ public interface ModelBussiness {
 
     List<ModelNameSelectVO> selectModelNameList(Long serviceId);
 
-    ModelSelectVO selectRecentModelNameList(Long modelId);
+    ModelSelectVO selectRecentModelNameList();
 
     /**
      * 检查模型名称是否可用

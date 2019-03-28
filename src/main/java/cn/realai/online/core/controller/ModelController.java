@@ -126,12 +126,11 @@ public class ModelController {
 
 
     @GetMapping("/selectRecentModelNameList")
-    @ApiOperation(value = "根据模型ID或者最近一次发布的模型对应的服务下的模型集合")
-    @ApiImplicitParam(name = "modelId", value = "模型ID", required = false, dataType = "Long", paramType = "query")
+    @ApiOperation(value = "最近一次发布的模型信息")
     @ResponseBody
-    public Result<ModelSelectVO> selectRecentModelNameList(@RequestParam(name = "modelId", required = false) Long modelId) {
+    public Result<ModelSelectVO> selectRecentModelNameList() {
         try {
-            ModelSelectVO result = modelBusiness.selectRecentModelNameList(modelId);
+            ModelSelectVO result = modelBusiness.selectRecentModelNameList();
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             log.error("根据服务ID或者最近一次发布的模型对应的服务下的模型集合", e);
