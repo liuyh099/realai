@@ -64,9 +64,9 @@
             SELECT LAST_INSERT_ID() AS id
         </selectKey>
         INSERT INTO experiment
-        (name,service_id,status,algorithm_type,releas_status,y_table,x_table_homo,x_table_heter,x_table_meaning,create_time)
+        (name,service_id,status,algorithm_type,releas_status,y_table,x_table_homo,x_table_heter,x_table_meaning,create_time,create_user_id)
         VALUE
-        (#{name},#{serviceId},#{status},#{algorithmType},#{releasStatus},#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},#{xtableMeaningDataSource},#{createTime})
+        (#{name},#{serviceId},#{status},#{algorithmType},#{releasStatus},#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},#{xtableMeaningDataSource},#{createTime},#{createUserId})
     </insert>
 
     <insert id="doubleCreate" parameterType="cn.realai.online.core.entity.Experiment">
@@ -114,7 +114,7 @@
 
     <update id="updatePreprocessStatus">
 		update experiment 
-		set pre_finish = #{experimentId} 
+		set pre_finish = #{preFinishStatus} 
 		where id = #{experimentId}
 	</update>
 
@@ -261,7 +261,8 @@
 			roc_validate_image_url = #{rocValidateImageUrl},
 			ks_test_image_url = #{ksTestImageUrl},
 			ks_train_image_url = #{ksTrainImageUrl},
-			ks_validate_image_url = #{ksValidateImageUrl}
+			ks_validate_image_url = #{ksValidateImageUrl},
+			status = #{status}
 		where id = #{experimentId}
 	</update>
 	

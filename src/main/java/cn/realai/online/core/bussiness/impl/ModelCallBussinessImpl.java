@@ -113,6 +113,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
      */
     @Override
     public int preprocessCallback(Long experimentId, String redisKey) {
+    	logger.info("ModelCallBussinessImpl preprocessCallback. 预处开始， experimentId{}, redisKey{} ", experimentId, redisKey);
         ExperimentBO experimentbo = experimentService.selectExperimentById(experimentId);
         if (experimentbo == null) {
             logger.error("ModelCallBussinessImpl preprocessCallback. 预处理实验不存在. experimentId{}, redisKey{}", experimentId, redisKey);
@@ -139,8 +140,8 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
         //修改实验的预处理状态
         ret = experimentService.updatePreprocessStatus(experimentId, Experiment.PREFINISH_YES);
 
-        //redisClientTemplate.delete(redisKey);
-
+        redisClientTemplate.delete(redisKey);
+        logger.info("ModelCallBussinessImpl preprocessCallback. 预处正常结束， experimentId{}, redisKey{} ", experimentId, redisKey);
         return ret;
     }
 

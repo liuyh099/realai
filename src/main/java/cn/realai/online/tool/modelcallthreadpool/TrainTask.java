@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSON;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.entity.BatchRecord;
+import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.ExperimentResultSet;
 import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.ModelPerformance;
@@ -66,6 +67,7 @@ public class TrainTask implements Runnable {
     @Override
     @Transactional()
     public void run() {
+    	logger.info("TrainTask run, 实验回调处理开始， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
         //查询实验信息
         ExperimentService experimentService = SpringContextUtils.getBean(ExperimentService.class);
         ExperimentBO experiment = experimentService.selectExperimentById(experimentId);
@@ -185,7 +187,7 @@ public class TrainTask implements Runnable {
 	        String ksValidateImageUrl = redisKey.getKsValidateImageUrl();
 	
 	        //维护实验训练结果到实验数据
-	        experimentService.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl, badTopCountImageUrl,
+	        experimentService.trainResultMaintain(experimentId, Experiment.STATUS_TRAINING_OVER, sampleReview, modelUrl, segmentationStatisticsImageUrl, badTopCountImageUrl,
 	                rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl, ksTrainImageUrl, ksValidateImageUrl);
 	        
 	        txManager.commit(ts);
@@ -197,6 +199,8 @@ public class TrainTask implements Runnable {
         //释放MLock锁
         MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
         mlock.unLock();
+        
+        logger.info("TrainTask run, 实验回调处理结束， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
         
     }
 

@@ -46,6 +46,7 @@ public interface ExperimentDao {
     Long insert(Experiment experiment);
 
     int trainResultMaintain(@Param("experimentId") Long experimentId,
+    						@Param("status")int status,
                             @Param("sampleReview") String sampleReview,
                             @Param("modelUrl") String modelUrl,
                             @Param("segmentationStatisticsImageUrl") String segmentationStatisticsImageUrl,
