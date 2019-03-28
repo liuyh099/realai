@@ -14,55 +14,87 @@ import io.swagger.annotations.ApiModelProperty;
 public class ServiceVO {
 
     @ApiModelProperty(value = "服务ID")
-    private long id;
+    private Long id;
 
     @ApiModelProperty(value = "秘钥起始时间")
-    private long startTime;
+    private Long startTime;
 
     @ApiModelProperty(value = "秘钥到期时间")
-    private long expireDate;
+    private Long expireDate;
 
     @ApiModelProperty(value = "发布次数")
-    private int releaseCount;
+    private Integer releaseCount;
 
     @ApiModelProperty(value = "创建时间")
-    private long createTime;
+    private Long createTime;
 
     @ApiModelProperty(value = "服务类型", example = Service.TYPE_EXPLAIN)
-    private int type;
+    private Integer type;
 
     @ApiModelProperty(value = "服务子类型", example = Service.BUSINESSTYPE_EXPLAIN)
-    private int businessType;
+    private Integer businessType;
 
 
     @ApiModelProperty(value = "是否可续期", example = "true: 可续期 false: 不可续期")
     private boolean renewable;
 
     @ApiModelProperty(value = "发布次数上限")
-    private int deployTimesUpper;
+    private Integer deployTimesUpper;
 
-    public int getBusinessType() {
-        return businessType;
-    }
-
-    public void setBusinessType(int businessType) {
-        this.businessType = businessType;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getDeployTimesUpper() {
-        return deployTimesUpper;
+    public Long getStartTime() {
+        return startTime;
     }
 
-    public void setDeployTimesUpper(int deployTimesUpper) {
-        this.deployTimesUpper = deployTimesUpper;
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Long getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(Long expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public Integer getReleaseCount() {
+        return releaseCount;
+    }
+
+    public void setReleaseCount(Integer releaseCount) {
+        this.releaseCount = releaseCount;
+    }
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(Integer businessType) {
+        this.businessType = businessType;
     }
 
     public boolean isRenewable() {
@@ -73,43 +105,11 @@ public class ServiceVO {
         this.renewable = renewable;
     }
 
-    public long getStartTime() {
-        return startTime;
+    public Integer getDeployTimesUpper() {
+        return deployTimesUpper;
     }
 
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
-    }
-
-    public long getExpireDate() {
-        return expireDate;
-    }
-
-    public void setExpireDate(long expireDate) {
-        this.expireDate = expireDate;
-    }
-
-    public int getReleaseCount() {
-        return releaseCount;
-    }
-
-    public void setReleaseCount(int releaseCount) {
-        this.releaseCount = releaseCount;
-    }
-
-    public long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(long createTime) {
-        this.createTime = createTime;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
+    public void setDeployTimesUpper(Integer deployTimesUpper) {
+        this.deployTimesUpper = deployTimesUpper;
     }
 }
