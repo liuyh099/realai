@@ -72,7 +72,7 @@ public class OfflineBatchController {
     @GetMapping("/list")
     @ApiOperation(value = "查询离线跑批列表")
     @ResponseBody
-    public Result<PageBO<OfflineBatchListVO>> list(@RequestBody @Validated OfflineBatchListQuery query) {
+    public Result<PageBO<OfflineBatchListVO>> list(OfflineBatchListQuery query) {
         try {
             PageBO<OfflineBatchListVO> page = batchRecordBussiness.pageList(query);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), page);
