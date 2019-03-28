@@ -22,4 +22,13 @@ public interface ServiceService {
 
 
     List<ServiceBO> getAlreadyPublishService();
+
+	/**
+	 * 检查服务是否可用
+	 *
+	 * @param serviceId
+	 * @return
+     */
+	boolean cheackService(long serviceId);
+
 }

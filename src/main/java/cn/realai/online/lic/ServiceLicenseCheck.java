@@ -44,6 +44,20 @@ public class ServiceLicenseCheck {
         return serviceLicenseInfoSource.checkSource(secretKey);
     }
 
+    /**
+     *
+     * 服务使用（普通调优）
+     *
+     * @param serviceId
+     */
+    public void applyService(long serviceId) throws LicenseException {
+        String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId, SecretKeyType.COMMON);
+        FileLicenseInfo licInfo = checkServiceLic(serviceCiphertext);
+        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId);
+        String dataCiphertext = dataCipherHandler.getDataCiphertext(serviceId, serviceDetail);
+        licenseCheckHandler.updateServiceDetail(serviceId, dataCiphertext, null, serviceDetail);
+    }
+
 
     /**
      * 服务使用(强制调优)
@@ -62,9 +76,11 @@ public class ServiceLicenseCheck {
         ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(tuningLicInfo, serviceId);
         String dataCiphertext = dataCipherHandler.getDataCiphertext(serviceId, serviceDetail);
         licenseCheckHandler.updateServiceDetail(serviceId, dataCiphertext, tuningSecretKey, serviceDetail);
-
         licenseCheckHandler.clearTuningKey(serviceId, serviceLicenseInfoSource);
     }
+
+
+
 
     /**
      * 检查服务秘钥与调优秘钥是否匹配

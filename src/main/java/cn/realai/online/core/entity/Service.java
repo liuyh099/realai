@@ -21,12 +21,15 @@ public class Service {
 	public static final int STATUS_ONLINE = 1; //上线
 	
 	public static final int STATUS_OFFLINE = 2; //下线
+
+	/**
+	 * 服务子类型 1：A卡 2：B卡 3：C卡 4：营销
+	 */
+	private Integer businessType;
 	
-	private int businessType;
+	public static final int TYPE_WIND = 1; //风控
 	
-	public static final int BUSINESSTYPE_WIND = 1; //风控
-	
-	public static final int BUSINESSTYPE_MARKETING = 2; //营销
+	public static final int TYPE_MARKETING = 2; //营销
 	
 	//部署类型
 	private Integer deploymentType;
@@ -161,11 +164,11 @@ public class Service {
 		this.onlineExperiment = onlineExperiment;
 	}
 
-	public int getBusinessType() {
+	public Integer getBusinessType() {
 		return businessType;
 	}
 
-	public void setBusinessType(int businessType) {
+	public void setBusinessType(Integer businessType) {
 		this.businessType = businessType;
 	}
 

@@ -1,6 +1,7 @@
 package cn.realai.online.core.service.impl;
 
 import cn.realai.online.core.dao.ServiceDao;
+import cn.realai.online.core.entity.Service;
 import cn.realai.online.lic.*;
 import cn.realai.online.util.DateUtil;
 import com.alibaba.fastjson.JSON;
@@ -9,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.service.ServiceService;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Service
+@org.springframework.stereotype.Service
 @Transactional(readOnly = true)
 public class ServiceServiceImpl implements ServiceService {
 
@@ -38,13 +38,13 @@ public class ServiceServiceImpl implements ServiceService {
 	private ServiceLicenseInfoSource serviceLicenseInfoSource;
 
 	@Override
-	public cn.realai.online.core.entity.Service get(Long serviceId) {
+	public Service get(Long serviceId) {
 		return serviceDao.get(serviceId);
 	}
 
 	@Override
 	public ServiceBO selectServiceById(long serviceId) {
-		cn.realai.online.core.entity.Service service = serviceDao.get(serviceId);
+		Service service = serviceDao.get(serviceId);
 		if(service == null) return null;
 
 		convertData(service);
@@ -55,10 +55,10 @@ public class ServiceServiceImpl implements ServiceService {
 
 
 	@Override
-	public List<cn.realai.online.core.entity.Service> list(cn.realai.online.core.entity.Service service) {
-		List<cn.realai.online.core.entity.Service> services = serviceDao.findList(service);
+	public List<Service> list(Service service) {
+		List<Service> services = serviceDao.findList(service);
 		if(services != null && !services.isEmpty()) {
-			for (cn.realai.online.core.entity.Service s : services) {
+			for (Service s : services) {
 				convertData(s);
 			}
 		}
@@ -67,8 +67,8 @@ public class ServiceServiceImpl implements ServiceService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public Integer insert(cn.realai.online.core.entity.Service service) throws LicenseException {
-		cn.realai.online.core.entity.Service searchService = new cn.realai.online.core.entity.Service();
+	public Integer insert(Service service) throws LicenseException {
+		Service searchService = new Service();
 		searchService.setName(service.getName());
 		List old = list(searchService);
 		if(old != null && old.size() > 0) {
@@ -76,7 +76,7 @@ public class ServiceServiceImpl implements ServiceService {
 			throw new RuntimeException("服务名称已存在！");
 		}
 
-		searchService = new cn.realai.online.core.entity.Service();
+		searchService = new Service();
 		searchService.setSecretKey(service.getSecretKey());
 		old = list(searchService);
 		if(old != null && old.size() > 0) {
@@ -85,7 +85,7 @@ public class ServiceServiceImpl implements ServiceService {
 		}
 
 		if(StringUtils.isNotBlank(service.getTuningSecretKey())) {
-			searchService = new cn.realai.online.core.entity.Service();
+			searchService = new Service();
 			searchService.setTuningSecretKey(service.getTuningSecretKey());
 			old = list(searchService);
 			if(old != null && old.size() > 0) {
@@ -113,7 +113,7 @@ public class ServiceServiceImpl implements ServiceService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public Integer update(cn.realai.online.core.entity.Service service) {
+	public Integer update(Service service) {
 //		cn.realai.online.core.entity.Service old = selectServiceById(service.getId());
 //		BeanUtils.copyProperties(service, old);
 		return serviceDao.update(service);
@@ -121,13 +121,26 @@ public class ServiceServiceImpl implements ServiceService {
 
 	@Override
 	public List<ServiceBO> getAlreadyPublishService() {
-		List<cn.realai.online.core.entity.Service> serviceList =serviceDao.getAlreadyPublishService();
+		List<Service> serviceList =serviceDao.getAlreadyPublishService();
 		List<ServiceBO> list = JSON.parseArray(JSON.toJSONString(serviceList),ServiceBO.class);
 		return list;
 	}
 
+	@Override
+	public boolean cheackService(long serviceId) {
+		Service searchService = get(serviceId);
+		if(searchService != null && StringUtils.isNotBlank(searchService.getSecretKey())) {
+			try {
+				serviceLicenseCheck.checkServiceLic(searchService.getSecretKey());
+				return true;
+			} catch (LicenseException e) {
+			}
+		}
+		return false;
+	}
 
-	public cn.realai.online.core.entity.Service convertData(cn.realai.online.core.entity.Service service) {
+
+	public Service convertData(Service service) {
 		String secretKey =  service.getSecretKey();
 		try {
 			int releaseCount = Integer.parseInt(dataCipherHandler.getDateJsonByCiphertext(service.getDetail()).getDeployUseTimes());

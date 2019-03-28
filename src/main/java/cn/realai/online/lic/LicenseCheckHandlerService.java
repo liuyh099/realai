@@ -59,17 +59,19 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
             throw new LicenseException("系统异常！数据错误！");
         }
 
-        String tuningKey = service.getTuningSecretKey();
-        if(StringUtils.isNotBlank(tuningKey)) {
-            if(tuningKey.indexOf(tuningSecretKey) != -1) {
-                throw new LicenseException("调优秘钥已被使用！");
+        if(StringUtils.isNotBlank(tuningSecretKey)) {
+            String tuningKey = service.getTuningSecretKey();
+            if(StringUtils.isNotBlank(tuningKey)) {
+                if(tuningKey.indexOf(tuningSecretKey) != -1) {
+                    throw new LicenseException("调优秘钥已被使用！");
+                }
+                tuningKey += tuningSecretKey + ",";
+            }else {
+                tuningKey = "," + tuningSecretKey + ",";
             }
-            tuningKey += tuningSecretKey + ",";
-        }else {
-            tuningKey = "," + tuningSecretKey + ",";
+            service.setTuningSecretKey(tuningKey);
         }
 
-        service.setTuningSecretKey(tuningKey);
         service.setDetail(dataCiphertext);
         serviceService.update(service);
 
