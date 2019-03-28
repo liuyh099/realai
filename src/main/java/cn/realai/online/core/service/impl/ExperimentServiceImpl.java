@@ -257,4 +257,9 @@ public class ExperimentServiceImpl implements ExperimentService {
 	public void maintainErrorMsg(Long experimentId, int statusTrainingError, String errMsg) {
 		experimentDao.maintainErrorMsg(experimentId, statusTrainingError, errMsg);
 	}
+
+    @Override
+    public Integer updateNameAndRemark(Experiment experiment) {
+        return experimentDao.updateNameAndRemark(experiment);
+    }
 }

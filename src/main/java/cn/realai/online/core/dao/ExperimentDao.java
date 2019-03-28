@@ -130,4 +130,6 @@ public interface ExperimentDao {
 	void maintainErrorMsg(@Param("experimentId")Long experimentId,
 			@Param("status")int status,
 			@Param("errMsg")String errMsg);
+
+    Integer updateNameAndRemark(Experiment experiment);
 }

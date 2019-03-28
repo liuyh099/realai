@@ -153,4 +153,11 @@ public interface ExperimentService {
      * @param errMsg
      */
 	void maintainErrorMsg(Long experimentId, int statusTrainingError, String errMsg);
+
+    /**
+     * 更新实验名称和备注
+     * @param experiment
+     * @return
+     */
+    Integer updateNameAndRemark(Experiment experiment);
 }

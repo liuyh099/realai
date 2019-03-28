@@ -576,6 +576,14 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         return experimentService.updateName(experimentBO.getId(),experimentBO.getName());
     }
 
+    @Override
+    @Transactional(readOnly = false)
+    public Integer updateNameAndRemark(ExperimentBO experimentBO) {
+        Experiment experiment =new Experiment();
+        BeanUtils.copyProperties(experimentBO,experiment);
+        return experimentService.updateNameAndRemark(experiment);
+    }
+
 
     private PersonalInformation buildQueryCondition(BatchRecord batchRecord, FaceListDataQuery query) {
         PersonalInformation personal = new PersonalInformation();

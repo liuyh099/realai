@@ -59,6 +59,10 @@
         UPDATE experiment set name =#{name} where id=#{id}
     </update>
 
+    <update id="updateNameAndRemark" parameterType="cn.realai.online.core.entity.Experiment">
+        UPDATE experiment set name =#{name},remark=#{remark} where id=#{id}
+    </update>
+
     <insert id="insert" parameterType="cn.realai.online.core.entity.Experiment">
         <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID() AS id
@@ -107,9 +111,9 @@
     </update>
 
     <select id="selectExperimentById" resultMap="ExperimentMap">
-		select * 
-		from experiment
-		where id = #{id}
+		select * ,b.name AS "serviceName"
+		from experiment a  LEFT JOIN service b ON a.service_id = b.id
+		where a.id = #{id}
 	</select>
 
     <update id="updatePreprocessStatus">
@@ -198,6 +202,7 @@
                 AND a.service_id= #{serviceId}
             </if>
         </where>
+        ORDER BY a.create_time DESC
     </select>
 
 
