@@ -73,7 +73,7 @@ public class ExperimentalTrainController {
     }
 
     @RequiresPermissions("experimental:train")
-    @DeleteMapping
+    @DeleteMapping()
     @ApiOperation(value = "删除实验训练列表")
     @ResponseBody
     public Result delete(@RequestBody List<Long> ids) {
