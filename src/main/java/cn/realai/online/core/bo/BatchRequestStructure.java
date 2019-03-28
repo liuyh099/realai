@@ -11,6 +11,7 @@ public class BatchRequestStructure {
 	public static final String TYPE_PERSONALHOMORESULTSET = "personalHomoResultSet";
 	public static final String TYPE_PERSONALINFORMATION = "personalInformation";
 	public static final String TYPE_PSICHECKRESULT = "psiCheckResult";
+	public static final String TYPE_DOENURL = "downUrl";
     
     private String redisKey;
     

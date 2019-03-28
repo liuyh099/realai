@@ -78,6 +78,7 @@
         <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
         <result column="batchTimes" property="batchTimes" jdbcType="INTEGER"/>
         <result column="offlineTimes" property="offlineTimes" jdbcType="INTEGER"/>
+        <result column="batchCreateTime" property="batchCreateTime" jdbcType="BIGINT"/>
         <result column="downUrl" property="downUrl" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
@@ -93,6 +94,7 @@
         s.name as serviceName,
         s.batch_times as batchTimes,
         br.offline_times as offlineTimes,
+        br.create_time as batchCreateTime,
         br.down_url as downUrl,
         br.remark as remark
         from batch_record as br
@@ -107,10 +109,10 @@
                 and ep.status = #{batchListBO.status}
             </if>
             <if test="minTime!=null">
-                and <![CDATA[ ep.release_time >= #{minTime} ]]>
+                and <![CDATA[ br.create_time >= #{minTime} ]]>
             </if>
             <if test="maxTime!=null">
-                and <![CDATA[ ep.release_time <= #{maxTime} ]]>
+                and <![CDATA[ br.create_time <= #{maxTime} ]]>
             </if>
         </where>
         order by br.create_time desc
@@ -180,5 +182,10 @@
 		and batchType = #{batchType}
     </select>
 
+	<update id="maintainDownUrl">
+		update batch_record
+		set down_url = #{downUrl}
+		where id = #{batchId}
+	</update>
 
 </mapper>

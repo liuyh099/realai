@@ -17,7 +17,7 @@ import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.VariableData;
-import cn.realai.online.core.service.BatchRecordService;
+import cn.realai.online.core.service.BatchRecordService; 
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.VariableDataService;
 import cn.realai.online.tool.modelcallthreadpool.BaseBatchTask;
@@ -47,6 +47,9 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
 
     @Autowired
     private VariableDataService variableDataService;
+    
+    @Autowired
+    private BatchRecordService batchRecordService;
 
     /*
      * 处理每日跑批任务
@@ -96,6 +99,11 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
         	bbt = new BatchTaskOfHomo(experimentId,batchId, redisKey);
         } else if (BatchRequestStructure.TYPE_PERSONALINFORMATION.equals(type)) {
         	bbt = new BatchTaskOfPersonalInfo(experimentId,batchId, redisKey);
+        } else if (BatchRequestStructure.TYPE_DOENURL.equals(type)) {
+        	if (downUrl != null && !"".equals(downUrl)) {
+        		batchRecordService.maintainDownUrl(batchId, downUrl);
+        	}
+        	return ;
         } else {
         	logger.error("BatchTask run. 跑批数据类型不能识别. type{}, experimentId{}", type, experimentId);
         	return ;
@@ -103,9 +111,6 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
     	
     	ModelCallPool.modelCallPool.execute(bbt);
     	
-    	if (downUrl != null && "".equals(downUrl)) {
-    		
-    	}
     }
 
     /*
