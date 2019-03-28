@@ -153,7 +153,7 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-白盒决策页面-获得组(传实验ID)")
     public Result<List<GroupSelectNameVO>> whiledecisionGroup(@Validated IdVO idVO) {
         try {
-            List<SampleGroupingBO> list = experimentalTrainBusiness.getGroupOptionName(idVO.getId(), true, false);
+            List<SampleGroupingBO> list = experimentalTrainBusiness.getGroupOptionName(idVO.getId(), false, false);
             //处理查询结果
             List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);

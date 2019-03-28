@@ -353,7 +353,7 @@ public class ExperimentalTrainController {
         }
     }
 
-    @RequiresPermissions("experimental:train")
+
     private Result updateParam(ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo, Integer status) {
         boolean updateFlag = checkCanUpdate(experimentalTrainSelectParamVo.getId());
         if(!updateFlag){

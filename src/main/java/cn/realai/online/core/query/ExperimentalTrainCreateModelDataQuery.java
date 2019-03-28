@@ -7,10 +7,10 @@ import javax.validation.constraints.NotNull;
 
 public class ExperimentalTrainCreateModelDataQuery extends PageQuery {
 
-    @ApiModelProperty(value = "实验Id", name = "实验Id")
+    @ApiModelProperty(value = "实验Id")
     @NotNull(message = "请选择实验")
     private Long id;
-    @ApiModelProperty(value = "数据类型 2:同质 1:异质", name = "数据类型", example = "2:同质 1:异质")
+    @ApiModelProperty(value = "数据类型 2:同质 1:异质",  example = "2:同质 1:异质")
     @NotNull(message = "请选择数据类型")
     private Integer variableType;
 
