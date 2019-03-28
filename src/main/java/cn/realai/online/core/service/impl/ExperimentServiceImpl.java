@@ -229,8 +229,8 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
     @Override
-    public void updateExperimentTrainStatus(Long experimentId, int releasYes) {
-        experimentDao.updateExperimentTrainStatus(experimentId,releasYes);
+    public void updateExperimentTrainStatus(Long experimentId, int releasYes,Long publishTime) {
+        experimentDao.updateExperimentTrainStatus(experimentId,releasYes,publishTime);
     }
 
     @Override

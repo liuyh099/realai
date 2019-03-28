@@ -120,7 +120,7 @@
 
     <update id="updateExperimentStatus">
 		update experiment 
-		set status = #{status} 
+		set status = #{status}
 		where id = #{experimentId}
 	</update>
 
@@ -132,7 +132,7 @@
 
     <update id="updateExperimentTrainStatus">
         update experiment
-		set releas_status = #{status}
+		set releas_status = #{status},release_time =#{publishTime}
 		where id = #{id}
     </update>
 
