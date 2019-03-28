@@ -362,7 +362,7 @@ public class ExperimentalTrainController {
         }
     }
 
-    //@RequiresPermissions("experimental:train")
+    @RequiresPermissions("experimental:train")
     @GetMapping("/createModel/getData")
     @ApiOperation(value = "新增实验-生成模型-一获取同质异质数据")
     @ResponseBody
@@ -388,7 +388,7 @@ public class ExperimentalTrainController {
      * @param trainId 实验id
      * @return
      */
-    //@RequiresPermissions("experimental:train")
+    @RequiresPermissions("experimental:train")
     @PostMapping("/createModel/{trainId}")
     @ApiOperation(value = "新增实验-生成模型-一键建立模型")
     @ApiImplicitParam(name = "trainId", value = "实验ID", required = true, dataType = "Long", paramType = "path")
