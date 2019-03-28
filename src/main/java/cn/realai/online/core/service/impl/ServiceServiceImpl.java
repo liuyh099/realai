@@ -133,7 +133,7 @@ public class ServiceServiceImpl implements ServiceService {
 			int releaseCount = Integer.parseInt(dataCipherHandler.getDateJsonByCiphertext(service.getDetail()).getDeployUseTimes());
 			service.setReleaseCount(releaseCount);
 		} catch (LicenseException e) {
-			logger.error("读取解密信息失败！", e);
+//			logger.error("读取解密信息失败！", e);
 		}
 		if(secretKey != null) {
 			try {
@@ -142,6 +142,7 @@ public class ServiceServiceImpl implements ServiceService {
 				service.setExpireDate(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), LicenseConstants.DATE_FORMART));
 				service.setStartTime(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeLower(), LicenseConstants.DATE_FORMART));
 				service.setDeployTimesUpper(Integer.parseInt(fileLicenseInfo.getDeployTimesUpper()));
+				service.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
 			} catch (LicenseException e) {
 				logger.error("非法秘钥 secretKey："+secretKey, e);
 			}
