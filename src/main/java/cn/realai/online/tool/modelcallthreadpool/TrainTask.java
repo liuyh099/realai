@@ -67,6 +67,7 @@ public class TrainTask implements Runnable {
     @Override
     @Transactional()
     public void run() {
+    	logger.info("TrainTask run, 实验回调处理开始， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
         //查询实验信息
         ExperimentService experimentService = SpringContextUtils.getBean(ExperimentService.class);
         ExperimentBO experiment = experimentService.selectExperimentById(experimentId);
@@ -198,6 +199,8 @@ public class TrainTask implements Runnable {
         //释放MLock锁
         MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
         mlock.unLock();
+        
+        logger.info("TrainTask run, 实验回调处理结束， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
         
     }
 
