@@ -1,5 +1,6 @@
 package cn.realai.online.core.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,7 +17,7 @@ public class ExperimentalTrainVO {
     private String serviceName;
 
     @ApiModelProperty(value = "服务Id", example = "1")
-    private String serviceId;
+    private Long serviceId;
 
     @ApiModelProperty(value = "训练状态", example = "1")
     private int status;
@@ -39,6 +40,34 @@ public class ExperimentalTrainVO {
     @ApiModelProperty(value = "备注", example = "1")
     private String remark;
 
+
+    private Integer publishCount;
+
+    private Boolean canPublish;
+
+    public void SetCanPublish(Boolean canPublish){
+       this.canPublish=canPublish;
+    }
+
+    public boolean getCanPublish(){
+        if(canPublish!=null){
+            return canPublish;
+        }
+        if(publishCount==null || publishCount ==0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @JsonIgnore
+    public Integer getPublishCount() {
+        return publishCount;
+    }
+
+    public void setPublishCount(Integer publishCount) {
+        this.publishCount = publishCount;
+    }
 
     public long getId() {
         return id;
@@ -64,11 +93,11 @@ public class ExperimentalTrainVO {
         this.serviceName = serviceName;
     }
 
-    public String getServiceId() {
+    public Long getServiceId() {
         return serviceId;
     }
 
-    public void setServiceId(String serviceId) {
+    public void setServiceId(Long serviceId) {
         this.serviceId = serviceId;
     }
 

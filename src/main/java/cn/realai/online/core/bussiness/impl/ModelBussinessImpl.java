@@ -6,6 +6,7 @@ import cn.realai.online.core.bo.ModelBO;
 import cn.realai.online.core.bo.ModelDetailBO;
 import cn.realai.online.core.bo.ModelListBO;
 import cn.realai.online.core.bussiness.ModelBussiness;
+import cn.realai.online.core.bussiness.TuningRecordBussiness;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.ModelPerformance;
@@ -13,18 +14,21 @@ import cn.realai.online.core.entity.TuningRecord;
 import cn.realai.online.core.query.ModelListQuery;
 import cn.realai.online.core.service.*;
 import cn.realai.online.core.vo.*;
+import cn.realai.online.lic.LicenseException;
+import cn.realai.online.lic.ServiceLicenseCheck;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 功能描述：TODO
@@ -34,6 +38,8 @@ import java.util.Map;
  */
 @Service
 public class ModelBussinessImpl implements ModelBussiness {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private ModelService modelService;
@@ -45,6 +51,11 @@ public class ModelBussinessImpl implements ModelBussiness {
     private PsiCheckResultService psiChekcResultService;
     @Autowired
     private TuningRecordService tuningRecordService;
+
+    @Autowired
+    private TuningRecordBussiness tuningRecordBussiness;
+    @Autowired
+    private ServiceLicenseCheck serviceLicenseCheck;
 
     @Override
     public PageBO<ModelListVO> pageList(ModelListQuery query) {
@@ -70,10 +81,10 @@ public class ModelBussinessImpl implements ModelBussiness {
 
                 //处理PSI是否足够预警
                 if (modelPsiList != null && !modelPsiList.isEmpty()) {
-                    for (Map psi:modelPsiList) {
+                    for (Map psi : modelPsiList) {
                         if (psi.get("modelId") == item.getModelId()) {
-                            Double maxPsi = (Double)psi.get("maxPsi");
-                            boolean flag = maxPsi > Constant.PSI_ALER_VALUE ? true : false ;
+                            Double maxPsi = (Double) psi.get("maxPsi");
+                            boolean flag = maxPsi > Constant.PSI_ALER_VALUE ? true : false;
                             voItem.setPsi(maxPsi);
                             voItem.setAler(flag);
                             break;
@@ -83,9 +94,9 @@ public class ModelBussinessImpl implements ModelBussiness {
 
                 //设置调优原因
                 if (tuningRecords != null && !tuningRecords.isEmpty()) {
-                    for (TuningRecord record:tuningRecords) {
+                    for (TuningRecord record : tuningRecords) {
                         if (record.getModelId() == item.getModelId()) {
-                            String reason = TuningRecord.TYPE.PSI.value.equals(record.getType()) ? "PSI调优":"强制调优";
+                            String reason = TuningRecord.TYPE.PSI.value.equals(record.getType()) ? "PSI调优" : "强制调优";
                             voItem.setTuningReason(reason);
                             break;
                         }
@@ -110,7 +121,7 @@ public class ModelBussinessImpl implements ModelBussiness {
             detailVO.setTuningReason("新建");
             List<TuningRecord> tuningRecords = tuningRecordService.findLatestListByModelIds(Arrays.asList(modelId));
             if (tuningRecords != null && !tuningRecords.isEmpty()) {
-                String reason = TuningRecord.TYPE.PSI.value.equals(tuningRecords.get(0).getType()) ? "PSI调优":"强制调优";
+                String reason = TuningRecord.TYPE.PSI.value.equals(tuningRecords.get(0).getType()) ? "PSI调优" : "强制调优";
                 detailVO.setTuningReason(reason);
             }
         }
@@ -196,15 +207,90 @@ public class ModelBussinessImpl implements ModelBussiness {
 
     @Override
     @Transactional(readOnly = false)
-    public int publish(ModelBO modelBO) {
+    public Map<String,Object> publish(ModelBO modelBO) {
+        HashMap<String,Object> hashMap =new HashMap<>();
+
+        Experiment experiment = experimentService.getById(modelBO.getExperimentId());
+        if(experiment.getStatus()!=Experiment.STATUS_TRAINING_OVER){
+            hashMap.put("status",false);
+            hashMap.put("msg","训练未完成不可以发布!");
+            return hashMap;
+        }
+        modelBO.setServiceId(experiment.getServiceId());
+        if (modelBO.getTuningType() == null) {
+            //如果不是调优，检查是否可以发布，如果已存在发布实验，那么不可以再发布实验
+            List<Experiment> experiments = experimentService.findPublishByServiceId(modelBO.getServiceId());
+            if (CollectionUtils.isEmpty(experiments)) {
+                return publishModel(modelBO);
+            } else {
+                logger.info("已经发布服务，不可以重新发布,服务ID=" + modelBO.getServiceId() + "实验ID" + modelBO.getExperimentId());
+                hashMap.put("status",false);
+                hashMap.put("msg","该服务已经存在已发布的实验，不可重复发布");
+                return hashMap;
+            }
+        } else {
+            //如果是调优，检查有没有调优记录，有的话调优
+            TuningRecord tuningRecord = tuningRecordBussiness.selectValidTuningRecord(modelBO.getServiceId());
+            if(ObjectUtils.isEmpty(tuningRecord) || !TuningRecord.STATUS.VALID.value.equals(tuningRecord.getStatus())){
+                hashMap.put("status",false);
+                hashMap.put("msg","当前不可以调优");
+                return hashMap;
+            }else {
+                if(StringUtils.isNotBlank(tuningRecord.getSecuriyKey())){
+                    //强制调优
+                    try {
+                        serviceLicenseCheck.applyService(modelBO.getServiceId(),tuningRecord.getSecuriyKey());
+                        return  publishAndTuringReord(modelBO, tuningRecord);
+                    } catch (LicenseException e) {
+                        logger.error("使用调优秘钥失败",e);
+                        hashMap.put("status",false);
+                        hashMap.put("msg","调优秘钥不正确");
+                        return hashMap;
+                    }
+                }else {
+                    //PSI调优
+                    return publishAndTuringReord(modelBO, tuningRecord);
+                }
+            }
+        }
+    }
+
+    /**
+     * 发布模型和更新调优记录
+     * @param modelBO
+     * @param tuningRecord
+     * @return
+     */
+    private HashMap<String,Object> publishAndTuringReord(ModelBO modelBO, TuningRecord tuningRecord) {
+        HashMap a = publishModel(modelBO);
+        if ((boolean)a.get("status")) {
+            tuningRecord.setStatus(TuningRecord.STATUS.USED.value);
+            tuningRecordService.update(tuningRecord);
+        }
+        return a;
+    }
+
+    /**
+     * 发布模型
+     * @param modelBO
+     * @return
+     */
+    private HashMap<String,Object> publishModel(ModelBO modelBO) {
         Experiment experiment = experimentService.selectExperimentById(modelBO.getExperimentId());
         experimentService.updateExperimentTrainStatus(modelBO.getExperimentId(), modelBO.getStatus());
         experimentService.updateExperimentOffline(modelBO.getExperimentId(), experiment.getServiceId(), Experiment.RELEAS_NO);
-        //TODO 查询服务的ID 和处理服务上下线细节
         modelBO.setServiceId(experiment.getServiceId());
         modelBO.setCreateTime(System.currentTimeMillis());
         int count = modelService.insert(modelBO);
-        return count;
+
+        HashMap<String,Object> hashMap =new HashMap<>();
+        if(count>0){
+            hashMap.put("status",true);
+        }else {
+            hashMap.put("status",false);
+            hashMap.put("msg","发布失败");
+        }
+        return hashMap;
     }
 
     @Override

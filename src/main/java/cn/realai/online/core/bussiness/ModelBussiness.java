@@ -10,6 +10,7 @@ import cn.realai.online.core.vo.ModelNameSelectVO;
 import cn.realai.online.core.vo.ModelSelectVO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ModelBussiness {
     PageBO<ModelListVO> pageList(ModelListQuery query);
@@ -32,7 +33,7 @@ public interface ModelBussiness {
      * @param modelBO
      * @return
      */
-    int publish(ModelBO modelBO);
+    Map<String,Object> publish(ModelBO modelBO);
 
     /**
      * 根据模型ID查询实验ID

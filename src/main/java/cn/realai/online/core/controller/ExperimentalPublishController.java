@@ -22,6 +22,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/experimental/publish")
@@ -80,11 +81,11 @@ public class ExperimentalPublishController {
             }
             ModelBO modelBO = new ModelBO();
             BeanUtils.copyProperties(experimentalPublishVO, modelBO);
-            int result = modelBussiness.publish(modelBO);
-            if (result > 0) {
+            Map<String,Object> result = modelBussiness.publish(modelBO);
+            if ((boolean)result.get("status")) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(),result.get("msg").toString(), null);
         } catch (Exception e) {
             logger.error("实验发布异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);

@@ -53,7 +53,7 @@ public class Experiment {
 
     //试验完毕
     public static final int STATUS_TRAINING_OVER = 5;
-    
+
     //训练失败
     public static final int STATUS_TRAINING_ERROR = 6;
 
@@ -146,6 +146,15 @@ public class Experiment {
 
     private String serviceName;
 
+    private Integer publishCount;
+
+    public Integer getPublishCount() {
+        return publishCount;
+    }
+
+    public void setPublishCount(Integer publishCount) {
+        this.publishCount = publishCount;
+    }
     private String errorMsg;
 
     public String getServiceName() {
@@ -431,5 +440,5 @@ public class Experiment {
 	public void setErrorMsg(String errorMsg) {
 		this.errorMsg = errorMsg;
 	}
-    
+
 }
