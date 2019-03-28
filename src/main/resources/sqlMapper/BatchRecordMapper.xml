@@ -182,5 +182,10 @@
 		and batchType = #{batchType}
     </select>
 
+	<update id="maintainDownUrl">
+		update batch_record
+		set down_url = #{downUrl}
+		where id = #{batchId}
+	</update>
 
 </mapper>

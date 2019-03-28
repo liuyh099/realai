@@ -96,4 +96,9 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 		return batchRecordDao.getByEntity(batchRecord);
 	}
 
+	@Override
+	public void maintainDownUrl(Long batchId, String downUrl) {
+		batchRecordDao.maintainDownUrl(batchId, downUrl);
+	}
+
 }

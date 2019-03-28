@@ -37,4 +37,11 @@ public interface BatchRecordService {
     
 	BatchRecord getBatchRecordOfDaily(long eid, String date, int batchTypeDaily);
 
+	/**
+	 * 维护得分下载地址
+	 * @param batchId
+	 * @param downUrl
+	 */
+	void maintainDownUrl(Long batchId, String downUrl);
+
 }
