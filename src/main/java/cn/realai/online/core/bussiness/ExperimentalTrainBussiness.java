@@ -246,4 +246,11 @@ public interface ExperimentalTrainBussiness {
     Long getGroupAllId(long trainId);
 
     Integer updateName(ExperimentBO experimentBO);
+
+    /**
+     * 更新实验名称和备注
+     * @param experimentBO
+     * @return
+     */
+    Integer updateNameAndRemark(ExperimentBO experimentBO);
 }

@@ -247,6 +247,58 @@ public class ExperimentalTrainController {
 
     }
 
+
+//    @RequiresPermissions("experimental:train")
+//    @GetMapping("/editDetail")
+//    @ApiOperation(value = "获得修改详情")
+//    @ResponseBody
+//    public Result editDetail(@RequestBody @Validated IdVO idVO) {
+//        try {
+//            //检查文件名
+//            boolean flag = experimentalTrainBussiness.checkTrainName(experimentalUpdateNameAndRemarkVo.getName(), experimentalUpdateNameAndRemarkVo.getId());
+//            if (!flag) {
+//                return new Result(ResultCode.DATA_ERROR.getCode(), "实验名称不能重复", null);
+//            }
+//            ExperimentBO experimentBO = new ExperimentBO();
+//            BeanUtils.copyProperties(experimentalUpdateNameAndRemarkVo, experimentBO);
+//            Integer count = experimentalTrainBussiness.updateNameAndRemark(experimentBO);
+//            if (count != null && count > 0) {
+//                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+//            }
+//            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+//        } catch (Exception e) {
+//            logger.error("更新实验名称和备注异常", e);
+//            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+//        }
+//
+//    }
+
+    @RequiresPermissions("experimental:train")
+    @PutMapping("/updateNameAndRemark")
+    @ApiOperation(value = "更新实验名称和备注")
+    @ResponseBody
+    public Result updateNameAndRemark(@RequestBody @Validated ExperimentalUpdateNameAndRemarkVo experimentalUpdateNameAndRemarkVo) {
+        try {
+            //检查文件名
+            boolean flag = experimentalTrainBussiness.checkTrainName(experimentalUpdateNameAndRemarkVo.getName(), experimentalUpdateNameAndRemarkVo.getId());
+            if (!flag) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), "实验名称不能重复", null);
+            }
+            ExperimentBO experimentBO = new ExperimentBO();
+            BeanUtils.copyProperties(experimentalUpdateNameAndRemarkVo, experimentBO);
+            Integer count = experimentalTrainBussiness.updateNameAndRemark(experimentBO);
+            if (count != null && count > 0) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            }
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        } catch (Exception e) {
+            logger.error("更新实验名称和备注异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+
+    }
+
+
     private boolean checkCanUpdate(Long id ) {
         ExperimentBO experiment = experimentalTrainBussiness.selectById(id);
         if(experiment.getStatus()== Experiment.STATUS_TRAINING || experiment.getStatus()==Experiment.STATUS_TRAINING_OVER){
