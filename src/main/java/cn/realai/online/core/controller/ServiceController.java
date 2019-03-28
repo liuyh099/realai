@@ -20,6 +20,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -166,6 +167,9 @@ public class ServiceController {
             secretKeyInfoVO.setStartTime(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeLower(), LicenseConstants.DATE_FORMART));
             secretKeyInfoVO.setExpireDate(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), LicenseConstants.DATE_FORMART));
             secretKeyInfoVO.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
+            if(StringUtils.isNotBlank(fileLicenseInfo.getBusinessType())) {
+                secretKeyInfoVO.setBusinessType(Integer.parseInt(fileLicenseInfo.getBusinessType()));
+            }
         }catch (Exception e) {
             logger.error("获取服务详情异常！", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);

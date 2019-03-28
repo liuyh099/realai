@@ -1,5 +1,6 @@
 package cn.realai.online.core.vo.service;
 
+import cn.realai.online.core.entity.Service;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -19,8 +20,19 @@ public class SecretKeyInfoVO {
     @ApiModelProperty(value = "秘钥到期时间")
     private long expireDate;
 
-    @ApiModelProperty(value = "服务类型", example = "1:风控 2:营销")
+    @ApiModelProperty(value = "服务类型", example = Service.TYPE_EXPLAIN)
     private int type;
+
+    @ApiModelProperty(value = "服务子类型", example = Service.BUSINESSTYPE_EXPLAIN)
+    private int businessType;
+
+    public int getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(int businessType) {
+        this.businessType = businessType;
+    }
 
     public long getStartTime() {
         return startTime;

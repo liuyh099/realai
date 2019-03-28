@@ -27,9 +27,21 @@ public class Service {
 	 */
 	private Integer businessType;
 	
-	public static final int TYPE_WIND = 1; //风控
+	public static final int TYPE_WIND = 1; //A卡/B卡/C卡
 	
 	public static final int TYPE_MARKETING = 2; //营销
+
+	public static final int BUSINESSTYPE_A = 1; //A卡
+
+	public static final int BUSINESSTYPE_B = 2; //B卡
+
+	public static final int BUSINESSTYPE_C = 3; //C卡
+
+	public static final int BUSINESSTYPE_MARKETING = 4; //营销
+
+	public static final String TYPE_EXPLAIN = "1:A卡/B卡/C卡 2:营销";
+
+	public static final String BUSINESSTYPE_EXPLAIN = "1:A卡 2:B卡 3:C卡 4:营销";
 	
 	//部署类型
 	private Integer deploymentType;

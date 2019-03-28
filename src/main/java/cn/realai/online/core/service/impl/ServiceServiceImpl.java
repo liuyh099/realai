@@ -156,6 +156,9 @@ public class ServiceServiceImpl implements ServiceService {
 				service.setStartTime(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeLower(), LicenseConstants.DATE_FORMART));
 				service.setDeployTimesUpper(Integer.parseInt(fileLicenseInfo.getDeployTimesUpper()));
 				service.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
+				if(StringUtils.isNotBlank(fileLicenseInfo.getBusinessType())) {
+					service.setBusinessType(Integer.parseInt(fileLicenseInfo.getBusinessType()));
+				}
 			} catch (LicenseException e) {
 				logger.error("非法秘钥 secretKey："+secretKey, e);
 			}

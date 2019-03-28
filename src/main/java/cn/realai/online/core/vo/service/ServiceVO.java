@@ -1,5 +1,6 @@
 package cn.realai.online.core.vo.service;
 
+import cn.realai.online.core.entity.Service;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -27,14 +28,26 @@ public class ServiceVO {
     @ApiModelProperty(value = "创建时间")
     private long createTime;
 
-    @ApiModelProperty(value = "服务类型", example = "1:风控 2:营销")
+    @ApiModelProperty(value = "服务类型", example = Service.TYPE_EXPLAIN)
     private int type;
+
+    @ApiModelProperty(value = "服务子类型", example = Service.BUSINESSTYPE_EXPLAIN)
+    private int businessType;
+
 
     @ApiModelProperty(value = "是否可续期", example = "true: 可续期 false: 不可续期")
     private boolean renewable;
 
     @ApiModelProperty(value = "发布次数上限")
     private int deployTimesUpper;
+
+    public int getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(int businessType) {
+        this.businessType = businessType;
+    }
 
     public long getId() {
         return id;

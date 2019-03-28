@@ -23,6 +23,11 @@ public class FileLicenseInfo {
     private String serviceType;
 
     /**
+     * 服务子类型 1：A卡 2：B卡 3：C卡 4：营销
+     */
+    private String businessType;
+
+    /**
      * 秘钥类型
      */
     private String secretKeyType;
@@ -65,6 +70,14 @@ public class FileLicenseInfo {
      */
     private String checkbit;
 
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
 
     public String getSecretKeyType() {
         return secretKeyType;
