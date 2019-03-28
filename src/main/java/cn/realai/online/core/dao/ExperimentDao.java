@@ -46,6 +46,7 @@ public interface ExperimentDao {
     Long insert(Experiment experiment);
 
     int trainResultMaintain(@Param("experimentId") Long experimentId,
+    						@Param("status")int status,
                             @Param("sampleReview") String sampleReview,
                             @Param("modelUrl") String modelUrl,
                             @Param("segmentationStatisticsImageUrl") String segmentationStatisticsImageUrl,
@@ -110,12 +111,23 @@ public interface ExperimentDao {
     Long getLastServerId();
 
     /**
+     * 获得服务发布的实验列表
+     * @param serviceId
+     * @return
+     */
+    List<Experiment> findPublishByServiceId(@Param("serviceId") Long serviceId);
+
+    Experiment getById(@Param("id") Long experimentId);
+
+    Integer updateName(@Param("id") Long id, @Param("name") String name);
+
+    /**
      * 实验失败，修改实验状态并记录错误信息
      * @param experimentId
      * @param statusTrainingError
      * @param errMsg
      */
-	void maintainErrorMsg(@Param("experimentId")Long experimentId, 
-			@Param("status")int status, 
+	void maintainErrorMsg(@Param("experimentId")Long experimentId,
+			@Param("status")int status,
 			@Param("errMsg")String errMsg);
 }

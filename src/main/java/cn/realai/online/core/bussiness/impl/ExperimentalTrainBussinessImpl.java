@@ -4,6 +4,7 @@ import cn.realai.online.calculation.TrainService;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.*;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
+import cn.realai.online.core.bussiness.TuningRecordBussiness;
 import cn.realai.online.core.entity.*;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
@@ -74,6 +75,9 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Autowired
     private ServiceService serviceService;
 
+    @Autowired
+    private TuningRecordBussiness tuningRecordBussiness;
+
 
     /**
      * 根据实验名称和状态等分页查询实验列表
@@ -83,12 +87,10 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
      */
     @Override
     public PageBO<ExperimentBO> pageList(ExperimentalTrainQuery experimentalTrainQuery) {
-        //TODO 如果是调优状态检查是否可以调优
-        if (experimentalTrainQuery.getTuningType() != null) {
-            boolean flag = checkTrainTuningLock(experimentalTrainQuery.getServiceId(), experimentalTrainQuery.getTuningType());
+        boolean tuningFlag=false;
+        if (experimentalTrainQuery.getServiceId()!=null && experimentalTrainQuery.getTuningType() != null) {
+            tuningFlag = checkTrainTuningLock(experimentalTrainQuery.getServiceId(), experimentalTrainQuery.getTuningType());
         }
-
-
         //开启分页
         Page page = PageHelper.startPage(experimentalTrainQuery.getPageNum(), experimentalTrainQuery.getPageSize());
 
@@ -97,6 +99,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         BeanUtils.copyProperties(experimentalTrainQuery, experiment);
         experiment.setServiceId(experimentalTrainQuery.getServiceId());
         List<Experiment> list = experimentService.findList(experiment);
+        if(tuningFlag){
+            for (Experiment experiment1:list){
+                experiment1.setPublishCount(0);
+            }
+        }
         List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
         //BeanUtilsBean.copyProperties(list,result);
         //处理查询结果
@@ -113,7 +120,10 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
      * @return
      */
     private boolean checkTrainTuningLock(Long serviceId, Integer tuningType) {
-        //TODO 调用调优check
+        TuningRecord tuningRecord=tuningRecordBussiness.selectValidTuningRecord(serviceId);
+        if(tuningRecord!=null){
+            return true;
+        }
         return false;
     }
 
@@ -181,13 +191,14 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setCreateTime(System.currentTimeMillis());
         experiment.setStatus(Experiment.STATUS_FILE);
         experiment.setReleasStatus(Experiment.RELEAS_NO);
-        return experimentService.insert(experiment);
+        Long ret = experimentService.insert(experiment);
+        trainService.preprocess(experiment);
+        return ret;
     }
 
     @Override
     public boolean checkTrainName(String name, Long id) {
         return experimentService.checkTrainName(name, id);
-
     }
 
     @Override
@@ -476,8 +487,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setTrainingTime(null);
         experiment.setReleaseTime(null);
         experiment.setTuningCount(0);
-        //experiment.setCreateUserId(UserUtils.getUser().getId());
-        experiment.setCreateUserId(1L);
+        experiment.setCreateUserId(UserUtils.getUser().getId());
+        //experiment.setCreateUserId(1L);
         experiment.setRemark(null);
         experiment.setSampleReview(null);
         experiment.setModelUrl(null);
@@ -553,6 +564,12 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     public Long getGroupAllId(long trainId) {
         return sampleGroupingService.getAllGroupIdByTrainId(trainId);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Integer updateName(ExperimentBO experimentBO) {
+        return experimentService.updateName(experimentBO.getId(),experimentBO.getName());
     }
 
 

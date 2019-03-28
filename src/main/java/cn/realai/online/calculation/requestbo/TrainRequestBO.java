@@ -13,9 +13,9 @@ public class TrainRequestBO {
 	//命令
 	private String command;
 	
-	private Integer validSampleType = 1;
+	private Integer validSampleType;
 	
-	private Integer testSampleType = 1;
+	private Integer testSampleType;
 	
 	//训练比例
     private Integer trainRatio;

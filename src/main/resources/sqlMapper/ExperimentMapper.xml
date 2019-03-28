@@ -43,6 +43,22 @@
 
     </sql>
 
+    <select id="getById" resultMap="ExperimentMap" parameterType="java.lang.Long">
+        select *
+		from experiment
+		where id = #{id}
+    </select>
+
+    <select id="findPublishByServiceId" resultMap="ExperimentMap">
+        select *
+		from experiment
+		where service_id = #{serviceId}
+    </select>
+
+    <update id="updateName">
+        UPDATE experiment set name =#{name} where id=#{id}
+    </update>
+
     <insert id="insert" parameterType="cn.realai.online.core.entity.Experiment">
         <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID() AS id
@@ -98,7 +114,7 @@
 
     <update id="updatePreprocessStatus">
 		update experiment 
-		set pre_finish = #{experimentId} 
+		set pre_finish = #{preFinishStatus} 
 		where id = #{experimentId}
 	</update>
 
@@ -125,8 +141,48 @@
     </select>
 
 
-    <select id="findList" resultMap="ExperimentMap" parameterType="cn.realai.online.core.entity.Experiment">
-        SELECT *,b.name AS "serviceName" FROM experiment a LEFT JOIN service b ON a.service_id = b.id
+
+    <resultMap type="cn.realai.online.core.entity.Experiment" id="ExperimentListMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="service_id" property="serviceId" jdbcType="BIGINT"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="algorithm_type" property="algorithmType" jdbcType="INTEGER"/>
+        <result column="releas_status" property="releasStatus" jdbcType="INTEGER"/>
+        <result column="y_table" property="ytableDataSource" jdbcType="VARCHAR"/>
+        <result column="x_table_homo" property="xtableHomogeneousDataSource" jdbcType="VARCHAR"/>
+        <result column="x_table_heter" property="xtableHeterogeneousDataSource" jdbcType="VARCHAR"/>
+        <result column="x_table_meaning" property="xtableMeaningDataSource" jdbcType="VARCHAR"/>
+        <result column="verification_set" property="verificationSet" jdbcType="INTEGER"/>
+        <result column="valid_sample_type" property="validSampleType" jdbcType="INTEGER"/>
+        <result column="test_sample_type" property="testSampleType" jdbcType="INTEGER"/>
+        <result column="train_ratio" property="trainRatio" jdbcType="INTEGER"/>
+        <result column="test_ratio" property="testRatio" jdbcType="INTEGER"/>
+        <result column="valid_ratio" property="validRatio" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="BIGINT"/>
+        <result column="training_time" property="trainingTime" jdbcType="BIGINT"/>
+        <result column="release_time" property="releaseTime" jdbcType="BIGINT"/>
+        <result column="tuning_count" property="tuningCount" jdbcType="INTEGER"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="sample_review" property="sampleReview" jdbcType="VARCHAR"/>
+        <result column="model_url" property="modelUrl" jdbcType="VARCHAR"/>
+        <result column="seg_image_url" property="segmentationStatisticsImageUrl" jdbcType="VARCHAR"/>
+        <result column="bad_image_url" property="badTopCountImageUrl" jdbcType="VARCHAR"/>
+        <result column="roc_test_image_url" property="rocTestImageUrl" jdbcType="VARCHAR"/>
+        <result column="roc_train_image_url" property="rocTrainImageUrl" jdbcType="VARCHAR"/>
+        <result column="roc_validate_image_url" property="rocValidateImageUrl" jdbcType="VARCHAR"/>
+        <result column="ks_test_image_url" property="ksTestImageUrl" jdbcType="VARCHAR"/>
+        <result column="ks_train_image_url" property="ksTrainImageUrl" jdbcType="VARCHAR"/>
+        <result column="ks_validate_image_url" property="ksValidateImageUrl" jdbcType="VARCHAR"/>
+        <result column="pre_finish" property="preFinish" jdbcType="INTEGER"/>
+        <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
+        <result column="publish_count" property="publishCount" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="findList" resultMap="ExperimentListMap" parameterType="cn.realai.online.core.entity.Experiment">
+        SELECT *,b.name AS "serviceName",(SELECT count(1) FROM experiment c WHERE c.service_id =a.service_id AND c.releas_status IN (2,3)) AS publish_count FROM experiment a LEFT JOIN service b ON a.service_id = b.id
         <where>
             1=1
             <if test="name!=null and name!=''">
@@ -205,7 +261,8 @@
 			roc_validate_image_url = #{rocValidateImageUrl},
 			ks_test_image_url = #{ksTestImageUrl},
 			ks_train_image_url = #{ksTrainImageUrl},
-			ks_validate_image_url = #{ksValidateImageUrl}
+			ks_validate_image_url = #{ksValidateImageUrl},
+			status = #{status}
 		where id = #{experimentId}
 	</update>
 	

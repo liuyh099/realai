@@ -7,7 +7,9 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @PropertySource({"classpath:config.properties"})
 public class Config {
-
+	
+	private static final String http = "http://"; 
+	
     @Value("${python.host}")
     private String PYTHON_HOST;
 
@@ -16,9 +18,19 @@ public class Config {
 
     @Value("${python.url}")
     private String PYTHON_URL;
-
-    public String getUrl() {
-        return PYTHON_HOST + ":" + PYTHON_PORT + PYTHON_URL;
+    
+    @Value("${nginx.url}")
+    private String NGINX_URL;
+    
+    @Value("${nginx.port}")
+    private String NGINX_PORT;
+    
+    public String getPythonUrl() {
+        return http + PYTHON_HOST + ":" + PYTHON_PORT + PYTHON_URL;
+    }
+    
+    public String getNginxUrl() {
+    	return http + NGINX_URL + ":" + NGINX_PORT;
     }
 
 }

@@ -69,7 +69,7 @@ public interface ExperimentService {
      * @param ksTrainImageUrl 训练ks图片地址
      * @param ksValidateImageUrl 验证ks图片地址
      */
-    int trainResultMaintain(Long experimentId, String sampleReview, String modelUrl,
+    int trainResultMaintain(Long experimentId, int status, String sampleReview, String modelUrl,
                             String segmentationStatisticsImageUrl, String badTopCountImageUrl, String rocTestImageUrl,
                             String rocTrainImageUrl, String rocValidateImageUrl, String ksTestImageUrl, String ksTrainImageUrl,
                             String ksValidateImageUrl);
@@ -133,6 +133,17 @@ public interface ExperimentService {
      * @return
      */
     Long getLastServerId();
+
+    /**
+     * 获得服务发布的实验
+     * @param serviceId
+     * @return
+     */
+    List<Experiment> findPublishByServiceId(Long serviceId);
+
+    Experiment getById(Long experimentId);
+
+    Integer updateName(Long id, String name);
 
     /**
      * 实验失败，修改实验状态并记录错误信息
