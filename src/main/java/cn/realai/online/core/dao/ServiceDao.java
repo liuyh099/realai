@@ -1,6 +1,7 @@
 package cn.realai.online.core.dao;
 
 import cn.realai.online.core.entity.Service;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface ServiceDao {
     Integer update(Service service);
 
     List<Service> getAlreadyPublishService();
+
+    void online(@Param("id") Long serviceId);
 }

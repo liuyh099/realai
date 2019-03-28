@@ -12,6 +12,7 @@ import cn.realai.online.lic.LicenseException;
 import cn.realai.online.lic.ServiceLicenseCheck;
 import cn.realai.online.util.DateUtil;
 import cn.realai.online.util.StringUtil;
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,6 +142,20 @@ public class ServiceBussinessImpl implements ServiceBussiness {
     @Override
     public void renewalService(ServiceBO serviceBO) {
         editService(serviceBO);
+    }
+
+    @Override
+    public List<ServiceBO> findAlreadyPublish() {
+        Service service = new Service();
+        service.setStatus(1);
+        List<Service> services = serviceService.list(service);
+        List<ServiceBO> list=JSON.parseArray(JSON.toJSONString(services),ServiceBO.class);
+        return list;
+    }
+
+    @Override
+    public List<ServiceBO> getAlreadyPublishService() {
+        return serviceService.getAlreadyPublishService();
     }
 
     /**

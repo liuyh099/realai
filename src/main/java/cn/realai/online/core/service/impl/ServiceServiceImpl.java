@@ -126,6 +126,11 @@ public class ServiceServiceImpl implements ServiceService {
 		return list;
 	}
 
+	@Override
+	public void online(Long serviceId) {
+		 serviceDao.online(serviceId);
+	}
+
 
 	public cn.realai.online.core.entity.Service convertData(cn.realai.online.core.entity.Service service) {
 		String secretKey =  service.getSecretKey();

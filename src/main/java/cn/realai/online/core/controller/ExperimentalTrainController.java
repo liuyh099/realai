@@ -382,11 +382,8 @@ public class ExperimentalTrainController {
             ExperimentalTrainCreateModelCheckVO experimentalTrainCreateModelCheckVO = new ExperimentalTrainCreateModelCheckVO();
             if (experimentBO != null) {
                 experimentalTrainCreateModelCheckVO.setName(experimentBO.getName());
-                if (experimentBO.getPreFinish() != null && 2 == experimentBO.getPreFinish()) {
-                    experimentalTrainCreateModelCheckVO.setCreateModelFlag(true);
-                } else {
-                    experimentalTrainCreateModelCheckVO.setCreateModelFlag(false);
-                }
+                experimentalTrainCreateModelCheckVO.setPreFinish(experimentBO.getPreFinish());
+                experimentalTrainCreateModelCheckVO.setErrMsg(experimentBO.getErrorMsg());
             }
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), experimentalTrainCreateModelCheckVO);
         } catch (Exception e) {

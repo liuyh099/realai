@@ -18,6 +18,7 @@ import cn.realai.online.lic.LicenseException;
 import cn.realai.online.lic.ServiceLicenseCheck;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.swagger.annotations.ApiModel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,8 @@ public class ModelBussinessImpl implements ModelBussiness {
     private TuningRecordBussiness tuningRecordBussiness;
     @Autowired
     private ServiceLicenseCheck serviceLicenseCheck;
+    @Autowired
+    private ServiceService serviceService;
 
     @Override
     public PageBO<ModelListVO> pageList(ModelListQuery query) {
@@ -209,7 +212,6 @@ public class ModelBussinessImpl implements ModelBussiness {
     @Transactional(readOnly = false)
     public Map<String,Object> publish(ModelBO modelBO) {
         HashMap<String,Object> hashMap =new HashMap<>();
-
         Experiment experiment = experimentService.getById(modelBO.getExperimentId());
         if(experiment.getStatus()!=Experiment.STATUS_TRAINING_OVER){
             hashMap.put("status",false);
@@ -242,7 +244,7 @@ public class ModelBussinessImpl implements ModelBussiness {
                         serviceLicenseCheck.applyService(modelBO.getServiceId(),tuningRecord.getSecuriyKey());
                         return  publishAndTuringReord(modelBO, tuningRecord);
                     } catch (LicenseException e) {
-                        logger.error("使用调优秘钥失败",e);
+                        logger.error("使用调优秘钥失败,秘钥="+tuningRecord.getSecuriyKey(),e);
                         hashMap.put("status",false);
                         hashMap.put("msg","调优秘钥不正确");
                         return hashMap;
@@ -279,6 +281,7 @@ public class ModelBussinessImpl implements ModelBussiness {
         Experiment experiment = experimentService.selectExperimentById(modelBO.getExperimentId());
         experimentService.updateExperimentTrainStatus(modelBO.getExperimentId(), modelBO.getStatus(),System.currentTimeMillis());
         experimentService.updateExperimentOffline(modelBO.getExperimentId(), experiment.getServiceId(), Experiment.RELEAS_NO);
+        serviceService.online(modelBO.getServiceId());
         modelBO.setServiceId(experiment.getServiceId());
         modelBO.setCreateTime(System.currentTimeMillis());
         int count = modelService.insert(modelBO);

@@ -22,4 +22,6 @@ public interface ServiceService {
 
 
     List<ServiceBO> getAlreadyPublishService();
+
+    void online(Long serviceId);
 }

@@ -35,4 +35,12 @@ public interface ServiceBussiness {
      * @param serviceBO
      */
     void renewalService(ServiceBO serviceBO);
+
+    /**
+     * 查询
+     * @return
+     */
+    List<ServiceBO> findAlreadyPublish();
+
+    List<ServiceBO> getAlreadyPublishService();
 }

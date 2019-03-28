@@ -14,4 +14,8 @@
     <select id="forgetNotice" resultType="java.lang.Integer">
         SELECT count(distinct user_id) from sys_forget_notice
     </select>
+
+    <delete id="deleteByUserId" parameterType="java.lang.Long">
+        DELETE FROM sys_forget_notice where user_id=#{userId}
+    </delete>
 </mapper>

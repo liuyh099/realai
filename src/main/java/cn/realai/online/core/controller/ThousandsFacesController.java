@@ -7,6 +7,7 @@ import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.*;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.bussiness.ModelBussiness;
+import cn.realai.online.core.bussiness.ServiceBussiness;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.SampleGrouping;
@@ -43,29 +44,59 @@ public class ThousandsFacesController {
     private ModelBussiness modelBussiness;
     @Autowired
     private ExperimentalTrainBussiness experimentalTrainBussiness;
+    @Autowired
+    private ServiceBussiness serviceBussiness;
 
-//    @GetMapping("/selectServerOption")
-//    @ApiOperation("获得选则服务选项")
-//    public Result<List<ServerNameSelectVO>> getServerOption() {
-//        try {
-//            Object result = null;
-//            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
-//        } catch (Exception e) {
-//            logger.error("发布管理-千人千面-获得选则服务选项异常", e);
-//            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
-//        }
-//    }
-//    @GetMapping("/selectModelOption")
-//    @ApiOperation("获得选则服务选项")
-//    public Result<List<ModelNameSelectVO>> getModelOptionName() {
-//        try {
-//            Object result = null;
-//            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
-//        } catch (Exception e) {
-//            logger.error("发布管理-千人千面-获得选则服务选项异常", e);
-//            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
-//        }
-//    }
+    @GetMapping("/selectServerOption")
+    @ApiOperation("发布管理-千人千面-获得服务下拉选项")
+    public Result<List<DataOverviewServiceSelectOptionVO>> getServerOption() {
+        try {
+            List<ServiceBO> list = serviceBussiness.getAlreadyPublishService();
+            List<DataOverviewServiceSelectOptionVO> ret = JSON.parseArray(JSON.toJSONString(list), DataOverviewServiceSelectOptionVO.class);
+            if (!CollectionUtils.isEmpty(ret)) {
+                ret.get(0).setCheckFlag(true);
+            }
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
+        } catch (Exception e) {
+            logger.error("发布管理-千人千面-获得服务选项异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
+
+
+
+
+
+
+    @GetMapping("/selectModelOption")
+    @ApiOperation("发布管理-千人千面-获得模型下拉选项")
+    public Result<List<ModelNameSelectVO>> getModelOptionName(@Validated IdVO idVO) {
+        try {
+            List<ModelNameSelectVO> list = modelBussiness.selectModelNameList(idVO.getId());
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), list);
+        } catch (Exception e) {
+            logger.error("发布管理-千人千面-获得模型下拉选项异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
+
+
+    @GetMapping("/list/group")
+    @ApiOperation(value = "千人千面列表-组-数据（模型ID）")
+    public Result<List<GroupSelectNameVO>> group(@Validated IdVO idVO) {
+        try {
+            Model model = modelBussiness.getTrainByModelId(idVO.getId());
+            if (ObjectUtils.isEmpty(model)) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            }
+            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(idVO.getId(), true,false);
+            List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("千人千面列表-组-数据异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
 
     @RequiresPermissions("info:all")
     @GetMapping()
@@ -145,11 +176,11 @@ public class ThousandsFacesController {
                 List<String> y = new ArrayList<>();
                 List<List<Object>> data = new ArrayList<>(list.size());
 
-                for(int i=0;i<list.size();i++){
-                    if(!x.contains(list.get(i).getK())){
+                for (int i = 0; i < list.size(); i++) {
+                    if (!x.contains(list.get(i).getK())) {
                         x.add(list.get(i).getK());
                     }
-                    if(!y.contains(list.get(i).getVariableName())){
+                    if (!y.contains(list.get(i).getVariableName())) {
                         y.add(list.get(i).getVariableName());
                     }
                     List<Object> dataItem = new ArrayList<>(3);
@@ -215,7 +246,7 @@ public class ThousandsFacesController {
             if (ObjectUtils.isEmpty(model)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
-            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId(), true,false);
+            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId(), true, false);
             List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {

@@ -8,10 +8,7 @@ import cn.realai.online.core.bo.SampleGroupingBO;
 import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.service.ServiceService;
-import cn.realai.online.core.vo.DataOverImageVO;
-import cn.realai.online.core.vo.DataOverviewServiceSelectOptionVO;
-import cn.realai.online.core.vo.EchartsDataVo;
-import cn.realai.online.core.vo.IdVO;
+import cn.realai.online.core.vo.*;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -95,21 +92,27 @@ public class DataOverviewController {
     @RequiresPermissions("data:over")
     @GetMapping("/chars")
     @ApiModelProperty("获得chars(传服务ID)")
-    public Result<List<EchartsDataVo>> chars(@Validated IdVO idVO) {
+    public Result<List<EchartsTotalDataVo>> chars(@Validated IdVO idVO) {
         try {
-            List<EchartsDataVo> result = null;
+            EchartsTotalDataVo result =new EchartsTotalDataVo();
             ExperimentBO experiment = experimentalTrainBussiness.getPublishExperimentByServerId(idVO.getId());
             if (experiment != null) {
                 List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBussiness.getGroupOptionName(experiment.getId(), true, false);
+                List<EchartsDataVo> datas = null;
+                List<Integer> total=null;
                 if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
-                    result = new ArrayList<>();
+                    datas = new ArrayList<>();
+                    total = new ArrayList<>();
                     for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {
+                        total.add(sampleGroupingBO.getCount());
                         EchartsDataVo data = new EchartsDataVo();
                         data.setName(sampleGroupingBO.getGroupName());
                         data.setValue(sampleGroupingBO.getPercentage());
-                        result.add(data);
+                        datas.add(data);
                     }
                 }
+                result.setCountList(total);
+                result.setData(datas);
             }
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {

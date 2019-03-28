@@ -1,6 +1,7 @@
 package cn.realai.online.userandperm.dao;
 
 import cn.realai.online.userandperm.entity.SysForgetNotice;
+import org.apache.ibatis.annotations.Param;
 
 public interface SysForgetNoticeDao {
 
@@ -17,4 +18,10 @@ public interface SysForgetNoticeDao {
      * @return
      */
     Integer forgetNotice();
+
+    /**
+     *
+     * @param id
+     */
+    void deleteByUserId(@Param("userId") Long id);
 }

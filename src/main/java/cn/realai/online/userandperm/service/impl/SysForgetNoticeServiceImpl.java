@@ -24,4 +24,9 @@ public class SysForgetNoticeServiceImpl implements SysForgetNoticeService {
     public Integer forgetNotice() {
         return sysForgetNoticeDao.forgetNotice();
     }
+
+    @Override
+    public void deleteByUserId(Long id) {
+        sysForgetNoticeDao.deleteByUserId(id);
+    }
 }

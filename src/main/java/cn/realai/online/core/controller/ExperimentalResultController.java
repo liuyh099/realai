@@ -220,19 +220,25 @@ public class ExperimentalResultController {
     @RequiresPermissions("experimental:result")
     @GetMapping("thousandsFace/echartsData")
     @ApiOperation(value = "实验-千人千面 获取echarts 数据")
-    public Result<List<EchartsDataVo>> echartsData(@Validated IdVO idVo) {
+    public Result<EchartsTotalDataVo> echartsData(@Validated IdVO idVo) {
         try {
             List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBusiness.getGroupOptionName(idVo.getId(), true, false);
-            List<EchartsDataVo> result = null;
+            EchartsTotalDataVo result =new EchartsTotalDataVo();
+            List<EchartsDataVo> datas = null;
+            List<Integer> total=null;
             if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
-                result = new ArrayList<>();
+                datas = new ArrayList<>();
+                total = new ArrayList<>();
                 for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {
+                    total.add(sampleGroupingBO.getCount());
                     EchartsDataVo data = new EchartsDataVo();
                     data.setName(sampleGroupingBO.getGroupName());
                     data.setValue(sampleGroupingBO.getPercentage());
-                    result.add(data);
+                    datas.add(data);
                 }
             }
+            result.setCountList(total);
+            result.setData(datas);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("实验-千人千面 获取echarts 数据异常", e);
