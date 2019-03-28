@@ -40,4 +40,6 @@ public interface BatchRecordDao {
 			@Param("date")String date, 
 			@Param("batchType")int batchType);
 
+	void maintainDownUrl(@Param("batchId")Long batchId, @Param("downUrl")String downUrl);
+
 }

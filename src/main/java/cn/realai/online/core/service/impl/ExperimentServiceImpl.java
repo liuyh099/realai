@@ -229,8 +229,8 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
     @Override
-    public void updateExperimentTrainStatus(Long experimentId, int releasYes) {
-        experimentDao.updateExperimentTrainStatus(experimentId,releasYes);
+    public void updateExperimentTrainStatus(Long experimentId, int releasYes,Long publishTime) {
+        experimentDao.updateExperimentTrainStatus(experimentId,releasYes,publishTime);
     }
 
     @Override
@@ -257,4 +257,9 @@ public class ExperimentServiceImpl implements ExperimentService {
 	public void maintainErrorMsg(Long experimentId, int statusTrainingError, String errMsg) {
 		experimentDao.maintainErrorMsg(experimentId, statusTrainingError, errMsg);
 	}
+
+    @Override
+    public Integer updateNameAndRemark(Experiment experiment) {
+        return experimentDao.updateNameAndRemark(experiment);
+    }
 }
