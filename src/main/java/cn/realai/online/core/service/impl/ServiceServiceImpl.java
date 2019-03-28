@@ -1,6 +1,7 @@
 package cn.realai.online.core.service.impl;
 
 import cn.realai.online.core.dao.ServiceDao;
+import cn.realai.online.core.entity.Service;
 import cn.realai.online.lic.*;
 import cn.realai.online.util.DateUtil;
 import com.alibaba.fastjson.JSON;
