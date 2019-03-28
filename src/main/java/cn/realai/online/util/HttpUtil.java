@@ -87,7 +87,7 @@ public class HttpUtil {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static String postRequest(String urlStr, String param) {
         logger.info("HttpUtil getObject urlStr ==>  " + urlStr);
-        XUrl url = XUrl.base("http://" + urlStr);
+        XUrl url = XUrl.base(urlStr);
         XBody body = XBody.type(XBody.JSON);
         body.param(param);
         String respStr = XHttpTools.request(new XHttpTools.XOption(ChannelAccessConstant.CHARACTER_ENCODING_UTF8, ChannelAccessConstant.WECHAT_CONNECTION_TIMEOUT, ChannelAccessConstant.WECHAT_READ_TIMEOUT), url, body).string();

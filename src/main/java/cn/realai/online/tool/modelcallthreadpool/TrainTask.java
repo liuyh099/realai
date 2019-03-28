@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSON;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.entity.BatchRecord;
+import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.ExperimentResultSet;
 import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.ModelPerformance;
@@ -185,7 +186,7 @@ public class TrainTask implements Runnable {
 	        String ksValidateImageUrl = redisKey.getKsValidateImageUrl();
 	
 	        //维护实验训练结果到实验数据
-	        experimentService.trainResultMaintain(experimentId, sampleReview, modelUrl, segmentationStatisticsImageUrl, badTopCountImageUrl,
+	        experimentService.trainResultMaintain(experimentId, Experiment.STATUS_TRAINING_OVER, sampleReview, modelUrl, segmentationStatisticsImageUrl, badTopCountImageUrl,
 	                rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl, ksTrainImageUrl, ksValidateImageUrl);
 	        
 	        txManager.commit(ts);

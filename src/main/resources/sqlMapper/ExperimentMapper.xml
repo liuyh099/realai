@@ -114,7 +114,7 @@
 
     <update id="updatePreprocessStatus">
 		update experiment 
-		set pre_finish = #{experimentId} 
+		set pre_finish = #{preFinishStatus} 
 		where id = #{experimentId}
 	</update>
 
@@ -261,7 +261,8 @@
 			roc_validate_image_url = #{rocValidateImageUrl},
 			ks_test_image_url = #{ksTestImageUrl},
 			ks_train_image_url = #{ksTrainImageUrl},
-			ks_validate_image_url = #{ksValidateImageUrl}
+			ks_validate_image_url = #{ksValidateImageUrl},
+			status = #{status}
 		where id = #{experimentId}
 	</update>
 	

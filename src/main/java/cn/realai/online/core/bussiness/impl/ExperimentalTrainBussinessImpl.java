@@ -194,13 +194,14 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setStatus(Experiment.STATUS_FILE);
         experiment.setReleasStatus(Experiment.RELEAS_NO);
         experiment.setAlgorithmType("全监督算法");
-        return experimentService.insert(experiment);
+        Long ret = experimentService.insert(experiment);
+        trainService.preprocess(experiment);
+        return ret;
     }
 
     @Override
     public boolean checkTrainName(String name, Long id) {
         return experimentService.checkTrainName(name, id);
-
     }
 
     @Override
@@ -489,8 +490,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setTrainingTime(null);
         experiment.setReleaseTime(null);
         experiment.setTuningCount(0);
-        //experiment.setCreateUserId(UserUtils.getUser().getId());
-        experiment.setCreateUserId(1L);
+        experiment.setCreateUserId(UserUtils.getUser().getId());
+        //experiment.setCreateUserId(1L);
         experiment.setRemark(null);
         experiment.setSampleReview(null);
         experiment.setModelUrl(null);

@@ -35,11 +35,19 @@ public class TrainServiceImpl implements TrainService {
     public void preprocess(Experiment experiment) {
         PreprocessRequestBO prbo = new PreprocessRequestBO();
         prbo.setExperimentId(experiment.getId());
-        prbo.setXtableHeterogeneousDataSource(experiment.getXtableHeterogeneousDataSource());
-        prbo.setXtableHomogeneousDataSource(experiment.getXtableHomogeneousDataSource());
-        prbo.setXtableMeaningDataSource(experiment.getXtableMeaningDataSource());
-        prbo.setYtableDataSource(experiment.getYtableDataSource());
-        String url = config.getUrl();
+        if (experiment.getXtableHeterogeneousDataSource() != null) {
+        	prbo.setXtableHeterogeneousDataSource("/" + experiment.getXtableHeterogeneousDataSource());
+        }
+        if (experiment.getXtableHomogeneousDataSource() != null) {
+        	prbo.setXtableHomogeneousDataSource("/" + experiment.getXtableHomogeneousDataSource());
+        }
+        if (experiment.getXtableMeaningDataSource() != null) {
+        	prbo.setXtableMeaningDataSource("/" + experiment.getXtableMeaningDataSource());
+        }
+        if (experiment.getYtableDataSource() != null) {
+        	prbo.setYtableDataSource("/" + experiment.getYtableDataSource());
+        }
+        String url = config.getPythonUrl();
         String ret = HttpUtil.postRequest(url, JSON.toJSONString(prbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(prbo));
@@ -52,6 +60,18 @@ public class TrainServiceImpl implements TrainService {
 	@Override
 	public int training(Experiment experiment, Long oldEid, List<VariableData> homoList, 
 			List<VariableData> hetroList, int delOrAdd) {
+		if (experiment.getXtableHeterogeneousDataSource() != null) {
+        	experiment.setXtableHeterogeneousDataSource("/" + experiment.getXtableHeterogeneousDataSource());
+        }
+        if (experiment.getXtableHomogeneousDataSource() != null) {
+        	experiment.setXtableHomogeneousDataSource("/" + experiment.getXtableHomogeneousDataSource());
+        }
+        if (experiment.getXtableMeaningDataSource() != null) {
+        	experiment.setXtableMeaningDataSource("/" + experiment.getXtableMeaningDataSource());
+        }
+        if (experiment.getYtableDataSource() != null) {
+        	experiment.setYtableDataSource("/" + experiment.getYtableDataSource());
+        }
 		TrainRequestBO trbo = new TrainRequestBO();
 		ConvertJavaBean.convertJavaBean(trbo, experiment);
 		trbo.setParentId(oldEid);
@@ -65,7 +85,7 @@ public class TrainServiceImpl implements TrainService {
 			trbo.setColumnsHomo(getVariableDataName(homoList));
 			trbo.setColumnsHetero(getVariableDataName(hetroList));
 		}
-		String url = config.getUrl();
+		String url = config.getPythonUrl();
 		String ret = HttpUtil.postRequest(url, JSON.toJSONString(trbo));
 		if (ret == null) {
 			throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(trbo));
@@ -89,7 +109,7 @@ public class TrainServiceImpl implements TrainService {
 		DeployRequestBO drbo = new DeployRequestBO();
 		drbo.setExperimentId(experimentId);
 		
-        String url = config.getUrl();
+        String url = config.getPythonUrl();
         String ret = HttpUtil.postRequest(url, experimentId + "");
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(drbo));
@@ -103,10 +123,10 @@ public class TrainServiceImpl implements TrainService {
 		boorbo.setBatchId(batchRecord.getId());
 		boorbo.setCommand(Constant.COMMAND_BATCH);
 		boorbo.setModelId(batchRecord.getExperimentId());
-		boorbo.setXtableHeterogeneousDataSource(batchRecord.getXtableHeterogeneousDataSource());
-		boorbo.setXtableHomogeneousDataSource(batchRecord.getXtableHomogeneousDataSource());
-		boorbo.setYtableDataSource(batchRecord.getYtableDataSource());
-		String ret = HttpUtil.postRequest(config.getUrl(), JSON.toJSONString(boorbo));
+		boorbo.setXtableHeterogeneousDataSource("/" + batchRecord.getXtableHeterogeneousDataSource());
+		boorbo.setXtableHomogeneousDataSource("/" + batchRecord.getXtableHomogeneousDataSource());
+		boorbo.setYtableDataSource("/" + batchRecord.getYtableDataSource());
+		String ret = HttpUtil.postRequest(config.getPythonUrl(), JSON.toJSONString(boorbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(boorbo));
         }
@@ -117,7 +137,7 @@ public class TrainServiceImpl implements TrainService {
 	public int deleteExperiment(Long experimentId) {
 		DeleteExperimentRequestBO derbo = new DeleteExperimentRequestBO();
 		derbo.setExperimentId(experimentId);
-        String url = config.getUrl();
+        String url = config.getPythonUrl();
         String ret = HttpUtil.postRequest(url, experimentId + "");
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(derbo));

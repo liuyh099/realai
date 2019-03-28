@@ -69,7 +69,7 @@ public interface ExperimentService {
      * @param ksTrainImageUrl 训练ks图片地址
      * @param ksValidateImageUrl 验证ks图片地址
      */
-    int trainResultMaintain(Long experimentId, String sampleReview, String modelUrl,
+    int trainResultMaintain(Long experimentId, int status, String sampleReview, String modelUrl,
                             String segmentationStatisticsImageUrl, String badTopCountImageUrl, String rocTestImageUrl,
                             String rocTrainImageUrl, String rocValidateImageUrl, String ksTestImageUrl, String ksTrainImageUrl,
                             String ksValidateImageUrl);

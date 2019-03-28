@@ -139,7 +139,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
         //修改实验的预处理状态
         ret = experimentService.updatePreprocessStatus(experimentId, Experiment.PREFINISH_YES);
 
-        //redisClientTemplate.delete(redisKey);
+        redisClientTemplate.delete(redisKey);
 
         return ret;
     }

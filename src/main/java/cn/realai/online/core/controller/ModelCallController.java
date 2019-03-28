@@ -121,8 +121,13 @@ public class ModelCallController extends BaseController{
                 } else if (Constant.COMMAND_TRAIN.equals(task)) { //训练
                     TrainResultRedisKey redisKey = JSON.parseObject(data, TrainResultRedisKey.class);
                     modelCallBussiness.trainCallback(experimentId, redisKey);
+                } else if (Constant.COMMAND_SECOND_TRAIN.equals(task)) { //训练
+                    TrainResultRedisKey redisKey = JSON.parseObject(data, TrainResultRedisKey.class);
+                    modelCallBussiness.trainCallback(experimentId, redisKey);
                 } else {
                     logger.warn("ModelCallController callback. python回调task为null");
+                    modelCallBussiness.errorDealWith(experimentId, msg);
+                    return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
                 }
             }
             return new Result(ResultCode.PYTHON_SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
