@@ -194,6 +194,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setStatus(Experiment.STATUS_FILE);
         experiment.setReleasStatus(Experiment.RELEAS_NO);
         experiment.setAlgorithmType("全监督算法");
+        experiment.setCreateUserId(UserUtils.getUser().getId());
         Long ret = experimentService.insert(experiment);
         trainService.preprocess(experiment);
         return ret;
