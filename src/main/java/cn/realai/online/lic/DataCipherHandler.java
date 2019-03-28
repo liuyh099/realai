@@ -68,7 +68,7 @@ public class DataCipherHandler {
 
             return JSONObject.parseObject(json, ServiceDetail.class);
         } catch (Exception e) {
-            log.error("数据解密失败", e);
+//            log.error("数据解密失败", e);
             throw new LicenseException("数据解密失败!");
         }
 
