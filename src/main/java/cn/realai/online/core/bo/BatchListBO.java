@@ -30,6 +30,8 @@ public class BatchListBO {
 
     private Integer offlineTimes;
 
+    private Long batchCreateTime;
+
     private String downUrl;
 
     private String remark;
@@ -120,6 +122,14 @@ public class BatchListBO {
 
     public void setOfflineTimes(Integer offlineTimes) {
         this.offlineTimes = offlineTimes;
+    }
+
+    public Long getBatchCreateTime() {
+        return batchCreateTime;
+    }
+
+    public void setBatchCreateTime(Long batchCreateTime) {
+        this.batchCreateTime = batchCreateTime;
     }
 
     public String getDownUrl() {
