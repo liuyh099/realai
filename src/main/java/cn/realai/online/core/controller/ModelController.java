@@ -114,9 +114,9 @@ public class ModelController {
     @ApiOperation(value = "查询服务下的已发布模型集合")
     @ApiImplicitParam(name = "serviceId", value = "服务ID", required = true, dataType = "Long", paramType = "query")
     @ResponseBody
-    public Result<List<ModelNameSelectVO>> selectModelNameList(@RequestParam(name = "serviceId", required = true) Long modelId) {
+    public Result<List<ModelNameSelectVO>> selectModelNameList(@RequestParam(name = "serviceId", required = true) Long serviceId) {
         try {
-            List<ModelNameSelectVO> result = modelBusiness.selectModelNameList(modelId);
+            List<ModelNameSelectVO> result = modelBusiness.selectModelNameList(serviceId);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             log.error("查询服务下的已发布模型集合", e);

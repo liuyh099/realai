@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 
 @ApiModel("模型名选项")
-public class ModelSelectVO {
+public class ModelSelectVO<T> {
     @ApiModelProperty(value = "传入或者最近发布的服务ID")
     private Long serviceId;
     @ApiModelProperty(value = "传入或者最近发布的服务名称")
@@ -15,8 +15,8 @@ public class ModelSelectVO {
     private Long modelId;
     @ApiModelProperty(value = "传入或者最近发布的模型名称")
     private String modelName;
-    @ApiModelProperty(value = "服务发布的所有模型")
-    private List<ModelNameSelectVO> modelList;
+    @ApiModelProperty(value = "服务发布的所有模型", dataType="List")
+    private List<T> modelList;
 
     public Long getServiceId() {
         return serviceId;
@@ -50,11 +50,11 @@ public class ModelSelectVO {
         this.modelName = modelName;
     }
 
-    public List<ModelNameSelectVO> getModelList() {
+    public List<T> getModelList() {
         return modelList;
     }
 
-    public void setModelList(List<ModelNameSelectVO> modelList) {
+    public void setModelList(List<T> modelList) {
         this.modelList = modelList;
     }
 }

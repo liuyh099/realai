@@ -7,6 +7,7 @@ import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -45,6 +46,12 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public Model selectLatest() {
         return modelDao.selectLatest();
+    }
+
+    @Override
+    public Model selectByServiceId(Long serviceId) {
+        Assert.notNull(serviceId, "服务Id不能为空");
+        return modelDao.selectByServiceId(serviceId);
     }
 
     @Override

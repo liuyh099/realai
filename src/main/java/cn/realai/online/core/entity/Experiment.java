@@ -66,8 +66,11 @@ public class Experiment {
     //未发布
     public static final int RELEAS_NO = 1;
 
-    //已发布
+    //离线已发布
     public static final int RELEAS_YES = 2;
+
+    //线上发布
+    public static final int RELEAS_ON = 3;
 
     //y表数据源
     private String ytableDataSource;

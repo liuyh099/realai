@@ -142,16 +142,14 @@ public class ModelBussinessImpl implements ModelBussiness {
     @Override
     public List<ModelNameSelectVO> selectModelNameList(Long serviceId) {
         List<ModelNameSelectVO> list = new ArrayList<>();
-        List<ModelListBO> modelListBOList = modelService.selectList(null, serviceId);
-        if (modelListBOList == null || modelListBOList.isEmpty()) {
+        Model releasedModel = modelService.selectByServiceId(serviceId);
+        if (releasedModel == null) {
             return list;
         }
-        modelListBOList.forEach(item -> {
-            ModelNameSelectVO itemVO = new ModelNameSelectVO();
-            itemVO.setId(item.getModelId());
-            itemVO.setName(item.getModelName());
-            list.add(itemVO);
-        });
+        ModelNameSelectVO itemVO = new ModelNameSelectVO();
+        itemVO.setId(releasedModel.getId());
+        itemVO.setName(releasedModel.getName());
+        list.add(itemVO);
         return list;
     }
 
@@ -190,7 +188,7 @@ public class ModelBussinessImpl implements ModelBussiness {
             });
             selectVO.setModelList(list);
         }
-        return null;
+        return selectVO;
     }
 
     @Override

@@ -20,6 +20,9 @@ public interface ModelDao {
     //获取最近发布的模型
     Model selectLatest();
 
+    //根据服务选择发布的模型
+    Model selectByServiceId(@Param("serviceId") Long serviceId);
+
     //查询模型列表
     List<ModelListBO> selectList(@Param("name") String name, @Param("serviceId") Long serviceId);
 
