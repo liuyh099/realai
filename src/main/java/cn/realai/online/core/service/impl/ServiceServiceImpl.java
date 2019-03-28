@@ -1,7 +1,6 @@
 package cn.realai.online.core.service.impl;
 
 import cn.realai.online.core.dao.ServiceDao;
-import cn.realai.online.core.entity.Service;
 import cn.realai.online.lic.*;
 import cn.realai.online.util.DateUtil;
 import com.alibaba.fastjson.JSON;
@@ -138,6 +137,11 @@ public class ServiceServiceImpl implements ServiceService {
 		}
 		return false;
 	}
+	@Override
+	public void online(Long serviceId) {
+		 serviceDao.online(serviceId);
+	}
+
 
 
 	public Service convertData(Service service) {

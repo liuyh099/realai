@@ -18,6 +18,7 @@ import cn.realai.online.lic.LicenseException;
 import cn.realai.online.lic.ServiceLicenseCheck;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.swagger.annotations.ApiModel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,8 @@ public class ModelBussinessImpl implements ModelBussiness {
     private TuningRecordBussiness tuningRecordBussiness;
     @Autowired
     private ServiceLicenseCheck serviceLicenseCheck;
+    @Autowired
+    private ServiceService serviceService;
 
     @Override
     public PageBO<ModelListVO> pageList(ModelListQuery query) {
@@ -142,55 +145,33 @@ public class ModelBussinessImpl implements ModelBussiness {
     @Override
     public List<ModelNameSelectVO> selectModelNameList(Long serviceId) {
         List<ModelNameSelectVO> list = new ArrayList<>();
-        List<ModelListBO> modelListBOList = modelService.selectList(null, serviceId);
-        if (modelListBOList == null || modelListBOList.isEmpty()) {
+        Model releasedModel = modelService.selectByServiceId(serviceId);
+        if (releasedModel == null) {
             return list;
         }
-        modelListBOList.forEach(item -> {
-            ModelNameSelectVO itemVO = new ModelNameSelectVO();
-            itemVO.setId(item.getModelId());
-            itemVO.setName(item.getModelName());
-            list.add(itemVO);
-        });
+        ModelNameSelectVO itemVO = new ModelNameSelectVO();
+        itemVO.setId(releasedModel.getId());
+        itemVO.setName(releasedModel.getName());
+        list.add(itemVO);
         return list;
     }
 
     @Override
-    public ModelSelectVO selectRecentModelNameList(Long modelId) {
+    public ModelSelectVO selectRecentModelNameList() {
         ModelSelectVO selectVO = new ModelSelectVO();
-        if (modelId == null) {
-            //未传模型ID则查询最近发布的服务模型
-            Model latestModel = modelService.selectLatest();
-            if (latestModel == null) {
-                return selectVO;
-            }
-            selectVO.setServiceId(latestModel.getServiceId());
-            selectVO.setModelId(latestModel.getId());
-            selectVO.setModelName(latestModel.getName());
-        } else {
-            //直接根据模型ID查询
-            Model model = modelService.get(modelId);
-            if (model == null) {
-                return selectVO;
-            }
-            selectVO.setServiceId(model.getServiceId());
-            selectVO.setModelId(model.getId());
-            selectVO.setModelName(model.getName());
+        Model latestModel = modelService.selectLatest();
+        if (latestModel == null) {
+            return selectVO;
         }
-        //根据服务ID查询模型
-        List<ModelListBO> modelList = modelService.selectList(null, selectVO.getServiceId());
-        if (modelList != null && !modelList.isEmpty()) {
-            selectVO.setServiceName(modelList.get(0).getServiceName());
-            List<ModelNameSelectVO> list = new ArrayList<>();
-            modelList.forEach(itemBO -> {
-                ModelNameSelectVO itemVO = new ModelNameSelectVO();
-                itemVO.setId(itemBO.getModelId());
-                itemVO.setName(itemBO.getModelName());
-                list.add(itemVO);
-            });
-            selectVO.setModelList(list);
+        cn.realai.online.core.entity.Service service = serviceService.get(latestModel.getServiceId());
+        selectVO.setServiceId(latestModel.getServiceId());
+        if (service != null) {
+            selectVO.setServiceName(service.getName());
         }
-        return null;
+        selectVO.setModelId(latestModel.getId());
+        selectVO.setModelName(latestModel.getName());
+
+        return selectVO;
     }
 
     @Override
@@ -209,7 +190,6 @@ public class ModelBussinessImpl implements ModelBussiness {
     @Transactional(readOnly = false)
     public Map<String,Object> publish(ModelBO modelBO) {
         HashMap<String,Object> hashMap =new HashMap<>();
-
         Experiment experiment = experimentService.getById(modelBO.getExperimentId());
         if(experiment.getStatus()!=Experiment.STATUS_TRAINING_OVER){
             hashMap.put("status",false);
@@ -242,7 +222,7 @@ public class ModelBussinessImpl implements ModelBussiness {
                         serviceLicenseCheck.applyService(modelBO.getServiceId(),tuningRecord.getSecuriyKey());
                         return  publishAndTuringReord(modelBO, tuningRecord);
                     } catch (LicenseException e) {
-                        logger.error("使用调优秘钥失败",e);
+                        logger.error("使用调优秘钥失败,秘钥="+tuningRecord.getSecuriyKey(),e);
                         hashMap.put("status",false);
                         hashMap.put("msg","调优秘钥不正确");
                         return hashMap;
@@ -279,6 +259,7 @@ public class ModelBussinessImpl implements ModelBussiness {
         Experiment experiment = experimentService.selectExperimentById(modelBO.getExperimentId());
         experimentService.updateExperimentTrainStatus(modelBO.getExperimentId(), modelBO.getStatus(),System.currentTimeMillis());
         experimentService.updateExperimentOffline(modelBO.getExperimentId(), experiment.getServiceId(), Experiment.RELEAS_NO);
+        serviceService.online(modelBO.getServiceId());
         modelBO.setServiceId(experiment.getServiceId());
         modelBO.setCreateTime(System.currentTimeMillis());
         int count = modelService.insert(modelBO);

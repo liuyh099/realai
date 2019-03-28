@@ -16,4 +16,10 @@ public interface SysForgetNoticeService {
      * @return
      */
     Integer forgetNotice();
+
+    /**
+     * 删除忘记密码提醒
+     * @param id
+     */
+    void deleteByUserId(Long id);
 }

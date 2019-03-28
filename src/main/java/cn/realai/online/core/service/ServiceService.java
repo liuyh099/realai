@@ -23,6 +23,8 @@ public interface ServiceService {
 
     List<ServiceBO> getAlreadyPublishService();
 
+    void online(Long serviceId);
+
 	/**
 	 * 检查服务是否可用
 	 *

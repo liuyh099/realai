@@ -5,6 +5,7 @@ import cn.realai.online.userandperm.bo.UserBO;
 import cn.realai.online.userandperm.business.UserBusiness;
 import cn.realai.online.userandperm.entity.User;
 import cn.realai.online.userandperm.query.UserPageQuery;
+import cn.realai.online.userandperm.service.SysForgetNoticeService;
 import cn.realai.online.userandperm.service.UserService;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
@@ -23,6 +24,9 @@ public class UserBusinessImpl implements UserBusiness {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SysForgetNoticeService sysForgetNoticeService;
 
     @Override
     public PageBO<UserBO> list(UserPageQuery pageQuery) {
@@ -118,6 +122,9 @@ public class UserBusinessImpl implements UserBusiness {
         if (userService.updatePwd(user) <= 0) {
             return false;
         }
+        //删除忘记密码提醒
+        sysForgetNoticeService.deleteByUserId(userbo.getId());
+
         return true;
     }
 

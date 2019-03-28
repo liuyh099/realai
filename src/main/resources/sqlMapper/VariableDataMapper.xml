@@ -78,7 +78,7 @@
                 AND variable_type = #{variableType}
             </if>
         </where>
-        ORDER BY create_time ASC
+        ORDER BY recommended_delete DESC, create_time ASC
     </select>
 
     <update id="deleteVariableData">

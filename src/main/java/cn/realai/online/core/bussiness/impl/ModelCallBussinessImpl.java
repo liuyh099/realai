@@ -132,11 +132,6 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
 
         List<VariableData> vdList = JSON.parseArray(str, VariableData.class);
         for (VariableData vd : vdList) {
-            if (experimentId != vd.getExperimentId()) {
-                logger.error("ModelCallBussinessImpl preprocessCallback. 预处理结果不属于指定的实验. experimentId{}, redisKey{}, vd{}",
-                        experimentId, redisKey, JSON.toJSONString(vd));
-                throw new RuntimeException("");
-            }
             vd.setDelete(VariableData.DELETE_NO);
         }
 
