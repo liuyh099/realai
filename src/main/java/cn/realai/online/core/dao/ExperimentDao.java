@@ -15,8 +15,9 @@ public interface ExperimentDao {
 
     List<Experiment> findList(Experiment experiment);
 
-    int updatePreprocessStatus(@Param("experimentId") Long experimentId,
-                               @Param("preFinishStatus") int preFinishStatus);
+    int maintainPreprocessStatus(@Param("experimentId") Long experimentId,
+                               @Param("preFinishStatus") int preFinishStatus,
+                               @Param("errMsg")String errMsg);
 
     int updateExperimentStatus(@Param("experimentId") long experimentId,
                                @Param("status") int status);

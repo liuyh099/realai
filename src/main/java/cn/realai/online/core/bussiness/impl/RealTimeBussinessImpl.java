@@ -32,7 +32,7 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
     private ServiceService serviceService;
 
     @Override
-    public String getForecastResult(Map<String, Object> map, long serviceId) {
+    public String getForecastResult(String jsonData, long serviceId) {
 
         //
 
@@ -46,7 +46,7 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
         ExperimentBO experimentbo = experimentService.selectExperimentById(servicebo.getOnlineExperiment());
 
         //放到队列里去python计算
-        CalculationTask ct = new CalculationTask(map, experimentbo.getId());
+        CalculationTask ct = new CalculationTask(jsonData, experimentbo.getId());
         FutureTask<String> ft = new FutureTask<String>(ct);
         CalculationQueue.queue.submit(ft);
         String ret = null;
@@ -54,8 +54,8 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
             ret = ft.get(Constant.TIMEOUT_CALCULATION, TimeUnit.SECONDS);
         } catch (Exception e) {
             ft.cancel(true);
-            logger.error("RealTimeBussinessImpl getForecastResult timeoutException, serviceId{}, map{}",
-                    serviceId, JSON.toJSONString(map));
+            logger.error("RealTimeBussinessImpl getForecastResult timeoutException, serviceId{}, jsonData{}",
+                    serviceId, jsonData);
         }
         return ret;
     }

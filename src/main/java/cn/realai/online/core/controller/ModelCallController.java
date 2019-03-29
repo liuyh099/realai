@@ -43,6 +43,7 @@ public class ModelCallController extends BaseController{
      */
     @RequestMapping(value = "/offlineBatch", method = RequestMethod.POST)
     public String runBatchOffline(@RequestBody String param) {
+    	logger.info("ModelCallController runBatchOffline. 离线跑批. param{}", JSON.toJSONString(param));
     	BatchRequestStructure brs = JSON.parseObject(param, BatchRequestStructure.class);
         Long experimentId = brs.getExperimentId();
         String type = brs.getType();
