@@ -116,9 +116,10 @@
 		where a.id = #{id}
 	</select>
 
-    <update id="updatePreprocessStatus">
+    <update id="maintainPreprocessStatus">
 		update experiment 
-		set pre_finish = #{preFinishStatus} 
+		set pre_finish = #{preFinishStatus},
+			err_msg = #{errMsg}
 		where id = #{experimentId}
 	</update>
 

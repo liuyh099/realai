@@ -28,12 +28,6 @@ public class SampleWeight {
     //变量类型
     private Integer variableType;
 
-    //同质
-    public static final int SAMPLE_TYPE_HOMO = 1;
-
-    //异质
-    public static final int SAMPLE_TYPE_HETERO = 2;
-
     //分箱特征
     private String boxBeans;
 

@@ -139,7 +139,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
         int ret = variableDataService.insertVariableDataList(vdList);
 
         //修改实验的预处理状态
-        ret = experimentService.updatePreprocessStatus(experimentId, Experiment.PREFINISH_YES);
+        ret = experimentService.maintainPreprocessStatus(experimentId, Experiment.PREFINISH_YES, "");
 
         redisClientTemplate.delete(redisKey);
         logger.info("ModelCallBussinessImpl preprocessCallback. 预处正常结束， experimentId{}, redisKey{} ", experimentId, redisKey);
@@ -167,7 +167,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
     	}
     	
     	if (Constant.COMMAND_PREPROCESS.equals(task)) { //预处理
-    		experimentService.updatePreprocessStatus(experimentId, Experiment.PREFINISH_ERROR);
+    		experimentService.maintainPreprocessStatus(experimentId, Experiment.PREFINISH_ERROR, errMsg);
         } else if (Constant.COMMAND_TRAIN.equals(task) || Constant.COMMAND_SECOND_TRAIN.equals(task)) { //训练
         	experimentService.maintainErrorMsg(experimentId, Experiment.STATUS_TRAINING_ERROR, errMsg);
         } 
