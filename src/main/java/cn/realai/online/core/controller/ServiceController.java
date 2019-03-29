@@ -56,7 +56,7 @@ public class ServiceController {
         try {
             Service service = new Service();
             if (status != null) {
-                service.setStatus(status);
+//                service.setStatus(status);
             }
             if (deployType != null) {
                 service.setDeploymentType(deployType);

@@ -5,7 +5,6 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="type" property="type" jdbcType="TINYINT"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="deployment_type" property="deploymentType" jdbcType="TINYINT"/>
         <result column="create_time" property="createTime" jdbcType="BIGINT"/>
         <result column="detail" property="detail" jdbcType="VARCHAR"/>
@@ -30,9 +29,6 @@
             <if test="id!=0">
                 AND   a.id =#{id}
             </if>
-            <if test="status!=null">
-                AND   a.status =#{status}
-            </if>
             <if test="type!=null">
                 AND   a.type =#{type}
             </if>
@@ -52,8 +48,8 @@
     </select>
 
     <insert id="insert" parameterType="cn.realai.online.core.entity.Service">
-        INSERT INTO service (name,type,status,deployment_type,create_time,detail,tuning_secret_key,secret_key,online_experiment,batch_times)
-        VALUE (#{name},#{type},#{status},#{deploymentType},#{createTime},#{detail},#{tuningSecretKey},#{secretKey},#{onlineExperiment},#{batchTimes})
+        INSERT INTO service (name,type,deployment_type,create_time,detail,tuning_secret_key,secret_key,online_experiment,batch_times)
+        VALUE (#{name},#{type},#{deploymentType},#{createTime},#{detail},#{tuningSecretKey},#{secretKey},#{onlineExperiment},#{batchTimes})
     </insert>
 
     <select id="getAlreadyPublishService" resultMap="serviceMap">
@@ -84,7 +80,6 @@
         UPDATE service SET
             name = #{name},
             type =#{type},
-            status =#{status},
             deployment_type=#{deploymentType},
             create_time = #{createTime},
             detail=#{detail},
