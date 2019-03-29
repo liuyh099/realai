@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -44,7 +45,7 @@ public class UserOptionController {
 
     @PostMapping("login")
     @ApiOperation("用户登录Api")
-    public Result<MySessionVo> login(@RequestBody UserLoginVo userLoginVo) {
+    public Result<MySessionVo> login(@Validated @RequestBody UserLoginVo userLoginVo) {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(userLoginVo.getName(), userLoginVo.getPwd());
         try {
@@ -74,7 +75,7 @@ public class UserOptionController {
 
     @PostMapping("/forget")
     @ApiOperation("忘记密码")
-    public Result forget(@RequestBody ForgetVo forgetVo) {
+    public Result forget(@Validated @RequestBody ForgetVo forgetVo) {
         try {
             Boolean flag = userOptionBusiness.forget(forgetVo);
             if (flag) {
@@ -89,7 +90,7 @@ public class UserOptionController {
 
     @PutMapping("/changePwd")
     @ApiOperation("修改密码")
-    public Result changePwd(@RequestBody ChangePwdVO changePwdVO) {
+    public Result changePwd(@Validated @RequestBody ChangePwdVO changePwdVO) {
         try {
 
             //1.检查旧密码

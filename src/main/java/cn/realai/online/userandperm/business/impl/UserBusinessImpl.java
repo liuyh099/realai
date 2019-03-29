@@ -43,7 +43,7 @@ public class UserBusinessImpl implements UserBusiness {
     public boolean insert(UserBO userBO) {
 
         //检查用户名
-        if (checkUserNameOrPhoneNumber(userBO)) return false;
+        //if (checkUserNameOrPhoneNumber(userBO)) return false;
         User user = new User();
         BeanUtils.copyProperties(userBO, user);
         user.setCreateTime(System.currentTimeMillis());
@@ -105,7 +105,7 @@ public class UserBusinessImpl implements UserBusiness {
     @Override
     @Transactional(readOnly = false)
     public boolean update(UserBO userBO) {
-        if (checkUserNameOrPhoneNumber(userBO)) return false;
+        //if (checkUserNameOrPhoneNumber(userBO)) return false;
         User user = new User();
         BeanUtils.copyProperties(userBO, user);
         if (userService.update(user) <= 0) {
@@ -132,17 +132,25 @@ public class UserBusinessImpl implements UserBusiness {
     /**
      * 检查用户名或者密码是否相同
      *
-     * @param userBO
+     * @param nameOrPassword
      * @return
      */
-    private boolean checkUserNameOrPhoneNumber(UserBO userBO) {
-        //检查用户名
-        if (!checkUserName(userBO.getName())) {
-            return true;
-        }
-        //检查手机号码
-        if (!checkPhoneNumber(userBO.getPhoneNumber())) {
-            return true;
+    public boolean checkUserNameOrPhoneNumber(String nameOrPassword, Long userId) {
+
+        //用户名和手机号码都不可以重复
+        User user = userService.findByNameOrPhoneNumber(nameOrPassword);
+        if (userId == null) {
+            if (user == null) {
+                return true;
+            }
+        } else {
+            if (user == null) {
+                return true;
+            } else {
+                if (user.getId() == userId) {
+                    return true;
+                }
+            }
         }
         return false;
     }

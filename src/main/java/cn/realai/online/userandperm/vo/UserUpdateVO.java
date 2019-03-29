@@ -29,6 +29,7 @@ public class UserUpdateVO {
     //手机号码
     @Length(max = 11, min = 11, message = "手机号码为11位")
     @ApiModelProperty(value = "手机号码")
+    @NotBlank(message = "手机号码不能为空")
     private String phoneNumber;
     //角色名称
 

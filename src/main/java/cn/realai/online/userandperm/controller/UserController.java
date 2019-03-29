@@ -94,6 +94,14 @@ public class UserController {
             if ("admin".equals(userAddVO.getName())) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "不能增加超级用户", null);
             }
+            Result result = checkNameOrPhoneNumber(userAddVO.getName(), "name", null);
+            if (result != null) {
+                return result;
+            }
+            result = checkNameOrPhoneNumber(userAddVO.getPhoneNumber(), "password", null);
+            if (result != null) {
+                return result;
+            }
             UserBO userBO = new UserBO();
             BeanUtils.copyProperties(userAddVO, userBO);
             if (userBusiness.insert(userBO)) {
@@ -170,6 +178,14 @@ public class UserController {
             if (userUpdateVO.getId().equals(1L)) {
                 userUpdateVO.setName("admin");
             }
+            Result result = checkNameOrPhoneNumber(userUpdateVO.getName(), "name", userUpdateVO.getId());
+            if (result != null) {
+                return result;
+            }
+            result = checkNameOrPhoneNumber(userUpdateVO.getPhoneNumber(), "password", userUpdateVO.getId());
+            if (result != null) {
+                return result;
+            }
             UserBO userbo = new UserBO();
             BeanUtils.copyProperties(userUpdateVO, userbo);
             if (!userBusiness.update(userbo)) {
@@ -181,6 +197,17 @@ public class UserController {
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
 
+    }
+
+    private Result checkNameOrPhoneNumber(String name, String type, Long userId) {
+        if (!userBusiness.checkUserNameOrPhoneNumber(name, userId)) {
+            if (type.equals("name")) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), "用户名已经存在", null);
+            } else {
+                return new Result(ResultCode.DATA_ERROR.getCode(), "电话号码已经存在", null);
+            }
+        }
+        return null;
     }
 
     @RequiresPermissions("permission:user")
