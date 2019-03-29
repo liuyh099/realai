@@ -55,12 +55,6 @@ public class ServiceController {
         List<ServerNameSelectVO> serverNameSelectVOs = new ArrayList<>();
         try {
             Service service = new Service();
-            if (status != null) {
-                service.setStatus(status);
-            }
-            if (deployType != null) {
-                service.setDeploymentType(deployType);
-            }
             List<Service> services = serviceService.list(service);
             if(services != null && services.size() > 0) {
                 for (Service s : services) {
