@@ -40,13 +40,6 @@ public class Service {
 
 	public static final String BUSINESSTYPE_EXPLAIN = "1:A卡 2:B卡 3:C卡 4:营销";
 	
-	//部署类型
-	private Integer deploymentType;
-	
-	public static final int DEPLOYMENT_TYPE_ONLINE = 1; //在线部署
-	
-	public static final int DEPLOYMENT_TYPE_OFFLINE = 2; //离线部署
-	
 	//创建时间
 	private long createTime;
 	
@@ -99,14 +92,6 @@ public class Service {
 
 	public void setBatchTimes(long batchTimes) {
 		this.batchTimes = batchTimes;
-	}
-
-	public Integer getDeploymentType() {
-		return deploymentType;
-	}
-
-	public void setDeploymentType(Integer deploymentType) {
-		this.deploymentType = deploymentType;
 	}
 
 	public long getId() {

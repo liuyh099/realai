@@ -71,4 +71,12 @@ public interface UserBusiness {
      * @return
      */
     boolean updatePwd(UserBO userbo);
+
+    /**
+     * 检查名称和电话号码
+     * @param nameOrPassword
+     * @param userId
+     * @return
+     */
+    boolean checkUserNameOrPhoneNumber(String nameOrPassword, Long userId);
 }
