@@ -52,7 +52,7 @@
     <select id="findPublishByServiceId" resultMap="ExperimentMap">
         select *
 		from experiment
-		where service_id = #{serviceId}
+		where service_id = #{serviceId} AND releas_status = 2
     </select>
 
     <update id="updateName">
@@ -232,6 +232,7 @@
 					<foreach collection="ids" item="id" separator="," open="id in(" close=")">
 						#{id}
 					</foreach>
+					AND releas_status NOT IN (3,4)
 				</when>
 				<otherwise>
 					1=2
