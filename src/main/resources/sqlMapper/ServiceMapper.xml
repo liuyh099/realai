@@ -48,8 +48,8 @@
     </select>
 
     <insert id="insert" parameterType="cn.realai.online.core.entity.Service">
-        INSERT INTO service (name,type,businessType,create_time,detail,tuning_secret_key,secret_key,online_experiment,batch_times)
-        VALUE (#{name},#{type},#{business_type},#{createTime},#{detail},#{tuningSecretKey},#{secretKey},#{onlineExperiment},#{batchTimes})
+        INSERT INTO service (name,type, business_type,create_time,detail,tuning_secret_key,secret_key,online_experiment,batch_times)
+        VALUE (#{name},#{type},#{businessType},#{createTime},#{detail},#{tuningSecretKey},#{secretKey},#{onlineExperiment},#{batchTimes})
     </insert>
 
     <select id="getAlreadyPublishService" resultMap="serviceMap">
