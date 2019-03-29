@@ -22,7 +22,7 @@
         UPDATE tuning_record
         <trim prefix="set" suffixOverrides=",">
             <if test="updateTime!=null">update_time=#{updateTime},</if>
-            <if test="securityKey!=null and securityKey != ''">securiy_key=#{securityKey},</if>
+            <if test="securityKey!=null and securityKey != ''">security_key=#{securityKey},</if>
             <if test="type!=null and type != ''">type=#{type},</if>
             <if test="status!=null and status != ''">status=#{status},</if>
         </trim>
@@ -35,9 +35,9 @@
         UPDATE tuning_record
         <trim prefix="set" suffixOverrides=",">
             <if test="updateTime!=null">update_time=#{updateTime},</if>
-            <if test="securityKey!=null and securityKey != ''">securiy_key=#{securityKey},</if>
+            <if test="securityKey!=null and securityKey != ''">security_key=#{securityKey},</if>
             <if test="type!=null and type != ''">type=#{type},</if>
-            <if test="status!=null and status != ''">type=#{status},</if>
+            <if test="status!=null and status != ''">status=#{status},</if>
         </trim>
         <where>
             service_id = #{serviceId}
@@ -63,7 +63,7 @@
                 AND service_id = #{serviceId}
             </if>
             <if test="securityKey != null and serviceKey != ''">
-                AND securiy_key = #{securityKey}
+                AND security_key = #{securityKey}
             </if>
             <if test="type != null and type != ''">
                 AND type = #{type}
