@@ -43,4 +43,14 @@ public interface ServiceBussiness {
     List<ServiceBO> findAlreadyPublish();
 
     List<ServiceBO> getAlreadyPublishService();
+
+    /**
+     * 检查服务是否可用
+     *
+     * @param serviceId
+     * @param releaseStatus  模型状态
+     * @return
+     */
+    boolean checkService(long serviceId, String releaseStatus);
+
 }

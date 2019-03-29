@@ -55,7 +55,7 @@ public class PreprocessTask implements Runnable {
         variableDataService.insertVariableDataList(vdList);
 
         //修改实验的预处理状态
-        experimentService.updatePreprocessStatus(experimentId, Experiment.PREFINISH_YES);
+        experimentService.maintainPreprocessStatus(experimentId, Experiment.PREFINISH_YES, "");
     }
 
 }

@@ -7,7 +7,7 @@ import java.util.concurrent.FutureTask;
 public class CalculationTask implements Callable<String> {
 
     //实时数据
-    private Map<String, Object> map;
+    private String jsonData;
 
     //任务
     private FutureTask<String> futureTask;
@@ -15,8 +15,8 @@ public class CalculationTask implements Callable<String> {
     //模型code
     private long serviceId;
 
-    public CalculationTask(Map<String, Object> map, long serviceId) {
-        this.map = map;
+    public CalculationTask(String jsonData, long serviceId) {
+        this.jsonData = jsonData;
         this.serviceId = serviceId;
     }
 

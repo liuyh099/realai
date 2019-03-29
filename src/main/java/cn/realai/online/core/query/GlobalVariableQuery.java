@@ -9,7 +9,7 @@ public class GlobalVariableQuery extends PageQuery {
     @ApiModelProperty(value = "实验ID")
     private Long trainId;
 
-    @ApiModelProperty(value = "变量类型 1:同质 2:异质 为空表示查询所有", example = "1:同质 2:异质 为空表示查询所有")
+    @ApiModelProperty(value = "变量类型 2:同质 1:异质 为空表示查询所有", example = "2:同质 1:异质 为空表示查询所有")
     private Integer sampleType;
 
     @ApiModelProperty(value = "请求类型 image:请求图片 normal:普通请求", example = "image:请求图片 normal:普通请求")

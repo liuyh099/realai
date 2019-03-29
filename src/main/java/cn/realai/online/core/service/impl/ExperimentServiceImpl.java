@@ -42,6 +42,7 @@ public class ExperimentServiceImpl implements ExperimentService {
     
     private String getExperimentRedisKey(long id) {
         return RedisKeyPrefix.EXPERIMENT_PREFIX + id;
+        
     }
 
     @Override
@@ -123,8 +124,8 @@ public class ExperimentServiceImpl implements ExperimentService {
      * @param
      */
     @Override
-    public int updatePreprocessStatus(Long experimentId, int preFinishStatus) {
-        int ret = experimentDao.updatePreprocessStatus(experimentId, preFinishStatus);
+    public int maintainPreprocessStatus(Long experimentId, int preFinishStatus, String errMsg) {
+        int ret = experimentDao.maintainPreprocessStatus(experimentId, preFinishStatus, errMsg);
         return ret;
     }
 

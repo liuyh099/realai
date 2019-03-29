@@ -31,6 +31,6 @@ public interface ServiceService {
 	 * @param serviceId
 	 * @return
      */
-	boolean cheackService(long serviceId);
+	boolean checkService(long serviceId);
 
 }

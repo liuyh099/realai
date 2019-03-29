@@ -98,8 +98,6 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Long createBatchRecord(OfflineBatchCreateVO createVO) {
         cn.realai.online.core.entity.Service serviceVO = new cn.realai.online.core.entity.Service();
-        serviceVO.setStatus(cn.realai.online.core.entity.Service.STATUS_ONLINE);
-        serviceVO.setDeploymentType(cn.realai.online.core.entity.Service.DEPLOYMENT_TYPE_OFFLINE);
         List<cn.realai.online.core.entity.Service> services = serviceService.list(serviceVO);
         Assert.notEmpty(services, "未找到对应的离线部署上线服务");
         HashMap releaseMap = experimentService.findByServiceIdAndReleaseStatus(createVO.getServiceId(), Experiment.RELEAS_YES);

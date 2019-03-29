@@ -18,7 +18,7 @@ public interface ExperimentService {
     /*
      * 预处理完成，修改与处理结果
      */
-    int updatePreprocessStatus(Long experimentId, int preFinishStatus);
+    int maintainPreprocessStatus(Long experimentId, int preFinishStatus, String errMsg);
 
 
     /**

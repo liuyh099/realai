@@ -15,9 +15,6 @@ public class Service {
 	//服务名称
 	private String name;
 	
-	//状态
-	private Integer status;
-	
 	public static final int STATUS_ONLINE = 1; //上线
 	
 	public static final int STATUS_OFFLINE = 2; //下线
@@ -42,13 +39,6 @@ public class Service {
 	public static final String TYPE_EXPLAIN = "1:A卡/B卡/C卡 2:营销";
 
 	public static final String BUSINESSTYPE_EXPLAIN = "1:A卡 2:B卡 3:C卡 4:营销";
-	
-	//部署类型
-	private Integer deploymentType;
-	
-	public static final int DEPLOYMENT_TYPE_ONLINE = 1; //在线部署
-	
-	public static final int DEPLOYMENT_TYPE_OFFLINE = 2; //离线部署
 	
 	//创建时间
 	private long createTime;
@@ -102,14 +92,6 @@ public class Service {
 
 	public void setBatchTimes(long batchTimes) {
 		this.batchTimes = batchTimes;
-	}
-
-	public Integer getDeploymentType() {
-		return deploymentType;
-	}
-
-	public void setDeploymentType(Integer deploymentType) {
-		this.deploymentType = deploymentType;
 	}
 
 	public long getId() {
@@ -200,11 +182,4 @@ public class Service {
 		this.type = type;
 	}
 
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
 }
