@@ -59,7 +59,7 @@ public class ServiceController {
 //                service.setStatus(status);
             }
             if (deployType != null) {
-                //service.setDeploymentType(deployType); 
+//                service.setDeploymentType(deployType);
             }
             List<Service> services = serviceService.list(service);
             if(services != null && services.size() > 0) {

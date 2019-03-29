@@ -1,7 +1,6 @@
 package cn.realai.online.core.bussiness.impl;
 
 import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
-import cn.realai.online.core.bussiness.ServiceBussiness;
 import cn.realai.online.core.bussiness.TuningRecordBussiness;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.Service;
@@ -85,7 +84,7 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
             record.setType(TuningRecord.TYPE.PSI.value);
         }
         record.setMaxPsi(checkVO.getMaxPsi());
-        record.setSecuriyKey(securityKey);
+        record.setSecurityKey(securityKey);
         record.setModelId(modelId);
         record.setServiceId(model.getServiceId());
         return tuningRecordService.insert(record);

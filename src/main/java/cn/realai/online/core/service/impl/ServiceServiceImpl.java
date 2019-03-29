@@ -164,7 +164,7 @@ public class ServiceServiceImpl implements ServiceService {
 				if(StringUtils.isNotBlank(fileLicenseInfo.getBusinessType())) {
 					service.setBusinessType(Integer.parseInt(fileLicenseInfo.getBusinessType()));
 				}
-			} catch (LicenseException e) {
+			} catch (LicenseException e) { 
 				logger.error("非法秘钥 secretKey："+secretKey, e);
 			}
 		}

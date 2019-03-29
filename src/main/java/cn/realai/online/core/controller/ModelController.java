@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -206,9 +207,9 @@ public class ModelController {
         @ApiImplicitParam(name = "pkstr", value = "密钥串", required = true, dataType = "String", paramType = "query")
     })
     @ResponseBody
-    public Result<Void> forceTuning(@RequestParam Long modelId, @RequestParam String pkstr) {
+    public Result<Void> forceTuning(@RequestBody @Validated TuningKeyVo tuningKeyVo) {
         try {
-            tuningRecordBussiness.createTuningRecord(modelId, pkstr);
+            tuningRecordBussiness.createTuningRecord(tuningKeyVo.getModelId(), tuningKeyVo.getPkstr());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             log.error("模型调优-强制调优异常", e);

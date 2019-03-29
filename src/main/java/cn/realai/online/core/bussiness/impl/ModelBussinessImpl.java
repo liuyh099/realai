@@ -18,7 +18,6 @@ import cn.realai.online.lic.LicenseException;
 import cn.realai.online.lic.ServiceLicenseCheck;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import io.swagger.annotations.ApiModel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -201,7 +200,16 @@ public class ModelBussinessImpl implements ModelBussiness {
             //如果不是调优，检查是否可以发布，如果已存在发布实验，那么不可以再发布实验
             List<Experiment> experiments = experimentService.findPublishByServiceId(modelBO.getServiceId());
             if (CollectionUtils.isEmpty(experiments)) {
-                return publishModel(modelBO);
+                try {
+                    serviceLicenseCheck.applyService(modelBO.getServiceId());
+                    return publishModel(modelBO);
+                } catch (LicenseException e) {
+                    logger.error("服务发布失败");
+                    hashMap.put("status",false);
+                    hashMap.put("msg",e.getMessage());
+                    return hashMap;
+                }
+
             } else {
                 logger.info("已经发布服务，不可以重新发布,服务ID=" + modelBO.getServiceId() + "实验ID" + modelBO.getExperimentId());
                 hashMap.put("status",false);
@@ -216,20 +224,29 @@ public class ModelBussinessImpl implements ModelBussiness {
                 hashMap.put("msg","当前不可以调优");
                 return hashMap;
             }else {
-                if(StringUtils.isNotBlank(tuningRecord.getSecuriyKey())){
+                if(StringUtils.isNotBlank(tuningRecord.getSecurityKey())){
                     //强制调优
                     try {
-                        serviceLicenseCheck.applyService(modelBO.getServiceId(),tuningRecord.getSecuriyKey());
+                        serviceLicenseCheck.applyService(modelBO.getServiceId(),tuningRecord.getSecurityKey());
                         return  publishAndTuringReord(modelBO, tuningRecord);
                     } catch (LicenseException e) {
-                        logger.error("使用调优秘钥失败,秘钥="+tuningRecord.getSecuriyKey(),e);
+                        logger.error("使用调优秘钥失败,秘钥="+tuningRecord.getSecurityKey());
                         hashMap.put("status",false);
-                        hashMap.put("msg","调优秘钥不正确");
+                        hashMap.put("msg",e.getMessage());
                         return hashMap;
                     }
                 }else {
                     //PSI调优
-                    return publishAndTuringReord(modelBO, tuningRecord);
+                    try {
+                        serviceLicenseCheck.applyService(modelBO.getServiceId());
+                        return publishAndTuringReord(modelBO, tuningRecord);
+                    } catch (LicenseException e) {
+                        logger.error("PSI调优失败");
+                        hashMap.put("status",false);
+                        hashMap.put("msg",e.getMessage());
+                        return hashMap;
+                    }
+
                 }
             }
         }

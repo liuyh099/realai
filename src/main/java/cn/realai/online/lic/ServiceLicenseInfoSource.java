@@ -144,7 +144,7 @@ public class ServiceLicenseInfoSource {
 
             int deployUseTimes = Integer.parseInt(serviceDetail.getDeployUseTimes());
 
-            if(deployUseTimes > Integer.parseInt(licenseInfo.getDeployTimesUpper())) {
+            if(deployUseTimes >= Integer.parseInt(licenseInfo.getDeployTimesUpper())) {
                 throw new LicenseException("部署使用次数超过最大限制！");
             }
 
