@@ -40,7 +40,7 @@ public class TuningRecord {
 	private Double maxPsi;
 
 	//强制调优密钥串
-	private String securiyKey;
+	private String securityKey;
 
 	//状态
 	private String status;
@@ -115,12 +115,12 @@ public class TuningRecord {
 		this.maxPsi = maxPsi;
 	}
 
-	public String getSecuriyKey() {
-		return securiyKey;
+	public String getSecurityKey() {
+		return securityKey;
 	}
 
-	public void setSecuriyKey(String securiyKey) {
-		this.securiyKey = securiyKey;
+	public void setSecurityKey(String securityKey) {
+		this.securityKey = securityKey;
 	}
 
 	public String getStatus() {

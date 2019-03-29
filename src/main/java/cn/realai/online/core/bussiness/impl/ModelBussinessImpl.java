@@ -18,7 +18,6 @@ import cn.realai.online.lic.LicenseException;
 import cn.realai.online.lic.ServiceLicenseCheck;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import io.swagger.annotations.ApiModel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -216,13 +215,13 @@ public class ModelBussinessImpl implements ModelBussiness {
                 hashMap.put("msg","当前不可以调优");
                 return hashMap;
             }else {
-                if(StringUtils.isNotBlank(tuningRecord.getSecuriyKey())){
+                if(StringUtils.isNotBlank(tuningRecord.getSecurityKey())){
                     //强制调优
                     try {
-                        serviceLicenseCheck.applyService(modelBO.getServiceId(),tuningRecord.getSecuriyKey());
+                        serviceLicenseCheck.applyService(modelBO.getServiceId(),tuningRecord.getSecurityKey());
                         return  publishAndTuringReord(modelBO, tuningRecord);
                     } catch (LicenseException e) {
-                        logger.error("使用调优秘钥失败,秘钥="+tuningRecord.getSecuriyKey(),e);
+                        logger.error("使用调优秘钥失败,秘钥="+tuningRecord.getSecurityKey(),e);
                         hashMap.put("status",false);
                         hashMap.put("msg","调优秘钥不正确");
                         return hashMap;
