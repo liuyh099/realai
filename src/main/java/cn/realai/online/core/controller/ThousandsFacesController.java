@@ -175,7 +175,8 @@ public class ThousandsFacesController {
                 List<Integer> x = new ArrayList<>();
                 List<String> y = new ArrayList<>();
                 List<List<Object>> data = new ArrayList<>(list.size());
-
+                Double min =null;
+                Double max =null;
                 for (int i = 0; i < list.size(); i++) {
                     if (!x.contains(list.get(i).getK())) {
                         x.add(list.get(i).getK());
@@ -187,6 +188,12 @@ public class ThousandsFacesController {
                     dataItem.add(y.indexOf(list.get(i).getVariableName()));
                     dataItem.add(x.indexOf(list.get(i).getK()));
                     dataItem.add(list.get(i).getWeight());
+                    if(min==null || list.get(i).getWeight()<min){
+                        min =list.get(i).getWeight();
+                    }
+                    if(max==null || list.get(i).getWeight()>max){
+                        max=list.get(i).getWeight();
+                    }
                     data.add(dataItem);
                 }
                 result.setX(x);

@@ -11,4 +11,5 @@ public interface SampleWeightService {
 
     List<SampleWeightBO> findList(SampleWeight sampleWeight);
 
+    List<SampleWeightBO> findImage(SampleWeight sampleWeight);
 }

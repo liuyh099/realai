@@ -32,4 +32,11 @@ public class SampleWeightServiceImpl implements SampleWeightService {
 		return result;
 	}
 
+    @Override
+    public List<SampleWeightBO> findImage(SampleWeight sampleWeight) {
+        List<SampleWeight> list = sampleWeightDao.findImage(sampleWeight);
+        List<SampleWeightBO> result = JSON.parseArray(JSON.toJSONString(list), SampleWeightBO.class);
+        return result;
+    }
+
 }

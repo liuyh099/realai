@@ -23,7 +23,7 @@
 
     <select id="findList" resultMap="PersonalHomoResultSetMap"
             parameterType="cn.realai.online.core.entity.PersonalHomoResultSet">
-        SELECT *,ABS(weight) AS `absWeight` FROM personal_homo
+        SELECT *,weight AS `absWeight` FROM personal_homo
         <where>
             1=1
             <if test="pid!=null">
@@ -35,7 +35,7 @@
 
     <select id="listCharts" resultMap="PersonalHomoResultSetMap"
             parameterType="cn.realai.online.core.entity.PersonalHomoResultSet">
-        SELECT *,ABS(weight) AS `absWeight` FROM personal_homo
+        SELECT *,weight AS `absWeight` FROM personal_homo
         <where>
             1=1
             <if test="id!=null">
