@@ -87,9 +87,9 @@
           </where>
     </update>
 
-    <update id="online" parameterType="java.lang.Long">
-         UPDATE service SET status = 1 where id = #{id}
-    </update>
+    <!--<update id="online" parameterType="java.lang.Long">-->
+         <!--UPDATE service SET status = 1 where id = #{id}-->
+    <!--</update>-->
 
 
 </mapper>

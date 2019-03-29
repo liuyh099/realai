@@ -63,4 +63,9 @@ public class ModelServiceImpl implements ModelService {
     public int insert(Model model) {
         return modelDao.insert(model);
     }
+
+    @Override
+    public void offline(Long serviceId, Long id, String value) {
+         modelDao.offline(serviceId,id,value);
+    }
 }

@@ -12,6 +12,9 @@
     </resultMap>
 
     <insert id="insert" parameterType="cn.realai.online.core.entity.Model">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
         INSERT INTO model (name,create_time,release_status,experiment_id,service_id,remark)
         VALUE (#{name},#{createTime},#{releaseStatus},#{experimentId},#{serviceId},#{remark})
     </insert>
@@ -40,6 +43,10 @@
         <where>
             id =#{id}
         </where>
+    </update>
+
+    <update id="offline">
+         UPDATE model SET releaseStatus = #{status} WHERE service_id =#{serviceId} AND id !=#{id}
     </update>
 
 

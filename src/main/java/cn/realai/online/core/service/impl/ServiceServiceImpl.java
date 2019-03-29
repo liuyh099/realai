@@ -138,10 +138,10 @@ public class ServiceServiceImpl implements ServiceService {
 		}
 		return false;
 	}
-	@Override
+	/*@Override
 	public void online(Long serviceId) {
 		 serviceDao.online(serviceId);
-	}
+	}*/
 
 
 

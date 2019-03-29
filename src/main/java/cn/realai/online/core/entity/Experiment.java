@@ -72,6 +72,9 @@ public class Experiment {
     //线上发布
     public static final int RELEAS_ON = 3;
 
+    //下线
+    public static final int RELEAS_OFFINE = 4;
+
     //y表数据源
     private String ytableDataSource;
 
