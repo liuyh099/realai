@@ -163,7 +163,6 @@ public class TrainServiceImpl implements TrainService {
 		try {
 			Thread.sleep(3000L);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "OK";
