@@ -204,9 +204,9 @@ public class ModelBussinessImpl implements ModelBussiness {
                     serviceLicenseCheck.applyService(modelBO.getServiceId());
                     return publishModel(modelBO);
                 } catch (LicenseException e) {
-                    logger.error("服务发布失败",e);
+                    logger.error("服务发布失败");
                     hashMap.put("status",false);
-                    hashMap.put("msg","服务发布失败");
+                    hashMap.put("msg",e.getMessage());
                     return hashMap;
                 }
 
@@ -230,9 +230,9 @@ public class ModelBussinessImpl implements ModelBussiness {
                         serviceLicenseCheck.applyService(modelBO.getServiceId(),tuningRecord.getSecurityKey());
                         return  publishAndTuringReord(modelBO, tuningRecord);
                     } catch (LicenseException e) {
-                        logger.error("使用调优秘钥失败,秘钥="+tuningRecord.getSecurityKey(),e);
+                        logger.error("使用调优秘钥失败,秘钥="+tuningRecord.getSecurityKey());
                         hashMap.put("status",false);
-                        hashMap.put("msg","调优秘钥不正确");
+                        hashMap.put("msg",e.getMessage());
                         return hashMap;
                     }
                 }else {
@@ -241,9 +241,9 @@ public class ModelBussinessImpl implements ModelBussiness {
                         serviceLicenseCheck.applyService(modelBO.getServiceId());
                         return publishAndTuringReord(modelBO, tuningRecord);
                     } catch (LicenseException e) {
-                        logger.error("PSI调优失败",e);
+                        logger.error("PSI调优失败");
                         hashMap.put("status",false);
-                        hashMap.put("msg","PSI调优失败");
+                        hashMap.put("msg",e.getMessage());
                         return hashMap;
                     }
 
