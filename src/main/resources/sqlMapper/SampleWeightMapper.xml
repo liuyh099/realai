@@ -23,6 +23,23 @@
         </foreach>
     </insert>
 
+    <select id="findImage" resultMap="SampleWeightMap" parameterType="cn.realai.online.core.entity.SampleWeight">
+        SELECT img_url FROM sample_weight
+        <where>
+            img_url IS NOT NULL AND img_url !=''
+            <if test="experimentId!=null and experimentId!=0">
+                AND	experiment_id = #{experimentId}
+            </if>
+            <if test="groupId!=null and groupId!=0">
+                AND	group_id = #{groupId}
+            </if>
+            <if test="variableType!=null and variableType!=0">
+                AND	variable_type= #{variableType}
+            </if>
+        </where>
+        ORDER BY ABS(variable_weight) DESC
+    </select>
+
     <select id="findList" resultMap="SampleWeightMap" parameterType="cn.realai.online.core.entity.SampleWeight">
         select *,b.group_name AS "groupName"
         from sample_weight a LEFT JOIN sample_grouping b ON a.group_id = b.id
@@ -38,7 +55,7 @@
                 AND	a.variable_type= #{variableType}
             </if>
         </where>
-        ORDER BY a.id ASC
+        ORDER BY ABS(a.variable_weight) DESC
     </select>
 
 </mapper>

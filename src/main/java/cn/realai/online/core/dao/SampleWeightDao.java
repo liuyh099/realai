@@ -11,4 +11,6 @@ public interface SampleWeightDao {
     void insertList(@Param("swList") List<SampleWeight> swList);
 
 	List<SampleWeight> findList(SampleWeight sampleWeight);
+
+    List<SampleWeight> findImage(SampleWeight sampleWeight);
 }

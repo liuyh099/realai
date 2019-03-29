@@ -601,7 +601,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     private ExperimentalResultTopGroupBO quotaTopGroupCommon(Long experimentId, Integer dataType) {
         List<TopSortBO> response = quotaTopGroupDataCommon(experimentId, dataType, 1);
-        List<TopSortBO> noResponse = quotaTopGroupDataCommon(experimentId, dataType, 1);
+        List<TopSortBO> noResponse = quotaTopGroupDataCommon(experimentId, dataType, 2);
         ExperimentalResultTopGroupBO result = new ExperimentalResultTopGroupBO();
         result.setResponseDataList(response);
         result.setNoResponseDataList(noResponse);

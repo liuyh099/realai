@@ -29,19 +29,23 @@ public class SampleWeightBussinessImpl implements SampleWeightBussiness {
         //执行条件查询
         SampleWeight sampleWeight = new SampleWeight();
         BeanUtils.copyProperties(experimentalResultWhileBoxQuery, sampleWeight);
-        List<SampleWeightBO> boList = sampleWeightService.findList(sampleWeight);
-        for (SampleWeightBO sampleWeightBO : boList) {
-            if (!"image".equals(experimentalResultWhileBoxQuery.getType())) {
-                sampleWeightBO.setImgUrl(null);
-                VariableData variableData = variableDataService.getById(sampleWeightBO.getVariableId());
-                sampleWeightBO.setVariableName(variableData.getName());
-                sampleWeightBO.setVariableType(variableData.getVariableType());
-                sampleWeightBO.setMeaning(variableData.getMeaning());
-            } else {
+        if (!"image".equals(experimentalResultWhileBoxQuery.getType())) {
+            List<SampleWeightBO> boList = sampleWeightService.findList(sampleWeight);
+            for (SampleWeightBO sampleWeightBO : boList) {
 
+                    sampleWeightBO.setImgUrl(null);
+                    VariableData variableData = variableDataService.getById(sampleWeightBO.getVariableId());
+                    sampleWeightBO.setVariableName(variableData.getName());
+                    sampleWeightBO.setVariableType(variableData.getVariableType());
+                    sampleWeightBO.setMeaning(variableData.getMeaning());
             }
+            return boList;
+        }else {
+            List<SampleWeightBO> boList = sampleWeightService.findImage(sampleWeight);
+            return boList;
         }
-        return boList;
+
+
     }
 
     @Override
@@ -52,18 +56,19 @@ public class SampleWeightBussinessImpl implements SampleWeightBussiness {
         BeanUtils.copyProperties(globalVariableQuery, sampleWeight);
         sampleWeight.setGroupId(globalVariableQuery.getGroupId());
         sampleWeight.setVariableType(globalVariableQuery.getSampleType());
-        List<SampleWeightBO> boList = sampleWeightService.findList(sampleWeight);
-        for (SampleWeightBO sampleWeightBO : boList) {
-            if (!"image".equals(globalVariableQuery.getType())) {
+        if (!"image".equals(globalVariableQuery.getType())) {
+            List<SampleWeightBO> boList = sampleWeightService.findList(sampleWeight);
+            for (SampleWeightBO sampleWeightBO : boList) {
                 sampleWeightBO.setImgUrl(null);
                 VariableData variableData = variableDataService.getById(sampleWeightBO.getVariableId());
                 sampleWeightBO.setVariableName(variableData.getName());
                 sampleWeightBO.setVariableType(variableData.getVariableType());
                 sampleWeightBO.setMeaning(variableData.getMeaning());
-            } else {
-
             }
+            return boList;
+        }else {
+            List<SampleWeightBO> boList = sampleWeightService.findImage(sampleWeight);
+            return boList;
         }
-        return boList;
     }
 }

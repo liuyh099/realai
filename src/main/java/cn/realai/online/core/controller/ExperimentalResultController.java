@@ -332,7 +332,8 @@ public class ExperimentalResultController {
                 List<Integer> x = new ArrayList<>(list.size());
                 List<String> y = new ArrayList<>(list.size());
                 List<List<Object>> data = new ArrayList<>(list.size());
-
+                Double min =null;
+                Double max =null;
                 for (int i = 0; i < list.size(); i++) {
                     if(!x.contains(list.get(i).getK())){
                         x.add(list.get(i).getK());
@@ -343,12 +344,20 @@ public class ExperimentalResultController {
                     List<Object> dataItem = new ArrayList<>(3);
                     dataItem.add(y.indexOf(list.get(i).getVariableName()));
                     dataItem.add(x.indexOf(list.get(i).getK()));
+                    if(min==null || list.get(i).getWeight()<min){
+                        min =list.get(i).getWeight();
+                    }
+                    if(max==null || list.get(i).getWeight()>max){
+                        max=list.get(i).getWeight();
+                    }
                     dataItem.add(list.get(i).getWeight());
                     data.add(dataItem);
                 }
                 result.setX(x);
                 result.setY(y);
                 result.setData(data);
+                result.setMax(max);
+                result.setMin(min);
             }
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {

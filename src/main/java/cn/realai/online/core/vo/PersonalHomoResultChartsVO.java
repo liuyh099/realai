@@ -17,6 +17,12 @@ public class PersonalHomoResultChartsVO {
     @ApiModelProperty(value = "数据")
     private List<List<Object>> data;
 
+    @ApiModelProperty(value = "min")
+    private Double min;
+
+    @ApiModelProperty(value = "max")
+    private Double max;
+
 
     public List<Integer> getX() {
         return x;
@@ -40,5 +46,21 @@ public class PersonalHomoResultChartsVO {
 
     public void setData(List<List<Object>> data) {
         this.data = data;
+    }
+
+    public Double getMin() {
+        return min;
+    }
+
+    public void setMin(Double min) {
+        this.min = min;
+    }
+
+    public Double getMax() {
+        return max;
+    }
+
+    public void setMax(Double max) {
+        this.max = max;
     }
 }
