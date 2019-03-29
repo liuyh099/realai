@@ -23,6 +23,9 @@
             <if test="name!=null and name!=''">
                 AND name = #{name}
             </if>
+            <if test="releaseStatus!=null and releaseStatus!=''">
+                AND release_status = #{releaseStatus}
+            </if>
         </where>
     </select>
 

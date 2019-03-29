@@ -51,7 +51,7 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
         Model model = modelService.get(modelId);
         Assert.notNull(model, "没有对应的模型可以调优");
         Service service = serviceService.get(model.getServiceId());
-        Assert.isTrue(service != null && service.getStatus() == Service.STATUS_ONLINE, "服务不存在或者未上线不允许调优");
+//        Assert.isTrue(service != null && service.getStatus() == Service.STATUS_ONLINE, "服务不存在或者未上线不允许调优");
 
         PsiCheckVO checkVO = psiCheckResultBussiness.checkPsi(modelId);
         if (!StringUtils.isNotEmpty(securityKey)) {

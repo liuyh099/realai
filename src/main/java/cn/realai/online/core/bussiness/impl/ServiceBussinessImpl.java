@@ -2,7 +2,9 @@ package cn.realai.online.core.bussiness.impl;
 
 import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.bussiness.ServiceBussiness;
+import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.Service;
+import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.service.SecretKeyInfoVO;
 import cn.realai.online.core.vo.service.ServiceVO;
@@ -40,6 +42,9 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
     @Autowired
     private ServiceLicenseCheck serviceLicenseCheck;
+
+    @Autowired
+    private ModelService modelService;
 
     @Override
     public boolean addService(ServiceBO serviceBO) throws LicenseException {
@@ -147,7 +152,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
     @Override
     public List<ServiceBO> findAlreadyPublish() {
         Service service = new Service();
-        service.setStatus(1);
+//        service.setStatus(1);
         List<Service> services = serviceService.list(service);
         List<ServiceBO> list=JSON.parseArray(JSON.toJSONString(services),ServiceBO.class);
         return list;
@@ -156,6 +161,18 @@ public class ServiceBussinessImpl implements ServiceBussiness {
     @Override
     public List<ServiceBO> getAlreadyPublishService() {
         return serviceService.getAlreadyPublishService();
+    }
+
+    @Override
+    public boolean checkService(long serviceId, String releaseStatus) {
+        Model model = new Model();
+        model.setReleaseStatus(releaseStatus);
+        model.setServiceId(serviceId);
+        List<Model> models = modelService.findList(model);
+        if(models != null && !models.isEmpty()) {
+            return serviceService.checkService(serviceId);
+        }
+        return false;
     }
 
     /**

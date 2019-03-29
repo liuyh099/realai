@@ -15,9 +15,6 @@ public class Service {
 	//服务名称
 	private String name;
 	
-	//状态
-	private Integer status;
-	
 	public static final int STATUS_ONLINE = 1; //上线
 	
 	public static final int STATUS_OFFLINE = 2; //下线
@@ -200,11 +197,4 @@ public class Service {
 		this.type = type;
 	}
 
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
 }

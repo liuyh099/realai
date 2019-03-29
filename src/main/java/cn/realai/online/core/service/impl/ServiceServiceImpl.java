@@ -127,7 +127,7 @@ public class ServiceServiceImpl implements ServiceService {
 	}
 
 	@Override
-	public boolean cheackService(long serviceId) {
+	public boolean checkService(long serviceId) {
 		Service searchService = get(serviceId);
 		if(searchService != null && StringUtils.isNotBlank(searchService.getSecretKey())) {
 			try {
