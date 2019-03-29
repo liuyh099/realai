@@ -84,8 +84,8 @@ public class HttpUtil {
      * @param T
      * @return
      */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public static String postRequest(String urlStr, String param) {
+    @SuppressWarnings("rawtypes")
+	public static String postRequest(String urlStr, String param) {
         logger.info("HttpUtil getObject urlStr ==>  " + urlStr + "  param " + JSON.toJSONString(param));
         XUrl url = XUrl.base(urlStr);
         XBody body = XBody.type(XBody.JSON);
@@ -94,6 +94,9 @@ public class HttpUtil {
         logger.debug("HttpUtil getObject respStr ==>  " + respStr + "  respStr " + respStr);
         ReturnStructure rs = JSON.parseObject(respStr, ReturnStructure.class);
         if (rs.getCode() == 200) {
+        	if (rs.getData() != null) {
+        		return rs.getData();
+        	}
         	return "OK";
         }
         return null;

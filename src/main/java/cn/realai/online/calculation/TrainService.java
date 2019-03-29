@@ -7,6 +7,8 @@ import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.VariableData;
 
 public interface TrainService {
+	
+	String realTimeForecast(Long modelId, String jsonData);
 
 	/**
 	 * 预处理

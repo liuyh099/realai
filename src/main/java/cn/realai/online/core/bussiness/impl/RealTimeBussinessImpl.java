@@ -34,19 +34,13 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
     @Override
     public String getForecastResult(String jsonData, long serviceId) {
 
-        //
-
         //判断访问服务是否是已经部署并且是在线模式的
-        ServiceBO servicebo = serviceService.selectServiceById(serviceId);
-		/*if () {
-			
-		}*/
+        //ServiceBO servicebo = serviceService.selectServiceById(serviceId);
 
-
-        ExperimentBO experimentbo = experimentService.selectExperimentById(servicebo.getOnlineExperiment());
+        //ExperimentBO experimentbo = experimentService.selectExperimentById(servicebo.getOnlineExperiment());
 
         //放到队列里去python计算
-        CalculationTask ct = new CalculationTask(jsonData, experimentbo.getId());
+        CalculationTask ct = new CalculationTask(jsonData, 1L);//experimentbo.getId());
         FutureTask<String> ft = new FutureTask<String>(ct);
         CalculationQueue.queue.submit(ft);
         String ret = null;
@@ -56,6 +50,7 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
             ft.cancel(true);
             logger.error("RealTimeBussinessImpl getForecastResult timeoutException, serviceId{}, jsonData{}",
                     serviceId, jsonData);
+            return null;
         }
         return ret;
     }

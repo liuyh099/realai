@@ -15,7 +15,6 @@ import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.service.ServiceService;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -138,10 +137,10 @@ public class ServiceServiceImpl implements ServiceService {
 		}
 		return false;
 	}
-	@Override
+	/*@Override
 	public void online(Long serviceId) {
 		 serviceDao.online(serviceId);
-	}
+	}*/
 
 
 

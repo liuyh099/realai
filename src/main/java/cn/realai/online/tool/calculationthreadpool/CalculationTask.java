@@ -1,8 +1,10 @@
 package cn.realai.online.tool.calculationthreadpool;
 
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
+
+import cn.realai.online.calculation.TrainService;
+import cn.realai.online.util.SpringContextUtils;
 
 public class CalculationTask implements Callable<String> {
 
@@ -13,11 +15,11 @@ public class CalculationTask implements Callable<String> {
     private FutureTask<String> futureTask;
 
     //模型code
-    private long serviceId;
+    private Long modelId;
 
-    public CalculationTask(String jsonData, long serviceId) {
+    public CalculationTask(String jsonData, long modelId) {
         this.jsonData = jsonData;
-        this.serviceId = serviceId;
+        this.modelId = modelId;
     }
 
     public FutureTask<String> getFutureTask() {
@@ -33,8 +35,9 @@ public class CalculationTask implements Callable<String> {
      */
     @Override
     public String call() throws Exception {
-
-        return null;
+    	TrainService trainService = SpringContextUtils.getBean(TrainService.class);
+    	String ret = trainService.realTimeForecast(modelId, jsonData);
+        return ret;
     }
 
 }

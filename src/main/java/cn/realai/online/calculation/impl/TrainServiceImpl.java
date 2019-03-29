@@ -13,6 +13,7 @@ import cn.realai.online.calculation.requestbo.BatchOfOfflineRequestBO;
 import cn.realai.online.calculation.requestbo.DeleteExperimentRequestBO;
 import cn.realai.online.calculation.requestbo.DeployRequestBO;
 import cn.realai.online.calculation.requestbo.PreprocessRequestBO;
+import cn.realai.online.calculation.requestbo.RealTimeRequestBO;
 import cn.realai.online.calculation.requestbo.TrainRequestBO;
 import cn.realai.online.common.Constant;
 import cn.realai.online.common.config.Config;
@@ -140,8 +141,31 @@ public class TrainServiceImpl implements TrainService {
         String url = config.getPythonUrl();
         String ret = HttpUtil.postRequest(url, experimentId + "");
         if (ret == null) {
-            throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(derbo));
+            throw new RuntimeException("TrainServiceImpl deleteExperiment. 调用python删除接口失败. derbo{}" + JSON.toJSONString(derbo));
         }
 		return 1;
+	}
+
+	/**
+	 * 线上实时算法
+	 */
+	@Override
+	public String realTimeForecast(Long modelId, String jsonData) {
+		RealTimeRequestBO rtrbo = new RealTimeRequestBO();
+		rtrbo.setModelId(modelId);
+		rtrbo.setJsonData(jsonData);
+		/*String url = config.getPythonUrl();
+		String ret = HttpUtil.postRequest(url, JSON.toJSONString(rtrbo));
+        if (ret == null) {
+            throw new RuntimeException("TrainServiceImpl realTimeForecast. 调用python线上实时接口失败. rtrbo{}" + JSON.toJSONString(rtrbo));
+        }
+		return ret;*/
+		try {
+			Thread.sleep(3000L);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "OK";
 	}
 }

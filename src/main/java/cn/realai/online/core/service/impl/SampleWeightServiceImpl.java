@@ -32,17 +32,23 @@ public class SampleWeightServiceImpl implements SampleWeightService {
 	@Override
 	public List<SampleWeightBO> findList(SampleWeight sampleWeight) {
 		List<SampleWeight> list = sampleWeightDao.findList(sampleWeight);
-		//凭借图片访问地址的IP和端口
-		for (SampleWeight sw : list) {
-			sw.setImgUrl(config.getNginxUrl() + sw.getImgUrl());
-		}
+		convertImgUrl(list);
 		List<SampleWeightBO> result = JSON.parseArray(JSON.toJSONString(list), SampleWeightBO.class);
 		return result;
 	}
 
+	//转换图片
+	private void convertImgUrl(List<SampleWeight> list) {
+		//凭借图片访问地址的IP和端口
+		for (SampleWeight sw : list) {
+			sw.setImgUrl(config.getNginxUrl() + sw.getImgUrl());
+		}
+	}
+	
     @Override
     public List<SampleWeightBO> findImage(SampleWeight sampleWeight) {
         List<SampleWeight> list = sampleWeightDao.findImage(sampleWeight);
+        convertImgUrl(list);
         List<SampleWeightBO> result = JSON.parseArray(JSON.toJSONString(list), SampleWeightBO.class);
         return result;
     }

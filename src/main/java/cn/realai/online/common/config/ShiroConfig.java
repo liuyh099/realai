@@ -36,6 +36,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/user/forget", "anon");
         filterChainDefinitionMap.put("/modelCall/**", "anon");
+        filterChainDefinitionMap.put("/realTime/**", "anon");
         //filterChainDefinitionMap.put("/experimental/train/**", "anon");
         filterChainDefinitionMap.put("/swagger-resources/**", "anon");
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
