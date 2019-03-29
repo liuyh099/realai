@@ -6,13 +6,17 @@ import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.ModelBO;
 import cn.realai.online.core.bo.ModelPerformanceBO;
+import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.bussiness.ModelBussiness;
+import cn.realai.online.core.bussiness.ServiceBussiness;
 import cn.realai.online.core.entity.Model;
+import cn.realai.online.core.entity.Service;
 import cn.realai.online.core.vo.*;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -38,6 +42,9 @@ public class ExperimentalPublishController {
     @Autowired
     private ModelBussiness modelBussiness;
 
+    @Autowired
+    private ServiceBussiness serviceBussiness;
+
     @RequiresPermissions("experimental:publish")
     @ApiOperation("获得可以发布的实验列表")
     @GetMapping("/trainList")
@@ -58,11 +65,16 @@ public class ExperimentalPublishController {
     public Result<ExperimentalPublishDetailVO> getCanPublishTrainDetail(@Validated IdVO idVO) {
         try {
             ExperimentBO experimentBO = experimentalTrainBussiness.selectById(idVO.getId());
+
             ExperimentalPublishDetailVO result = new ExperimentalPublishDetailVO();
             BeanUtils.copyProperties(experimentBO, result);
             List<ModelPerformanceBO> modelPerformanceBOList = experimentalTrainBussiness.findModelPerformance(idVO.getId());
             List<ModelPerformanceVO> modelPerformanceList = JSON.parseArray(JSON.toJSONString(modelPerformanceBOList), ModelPerformanceVO.class);
             result.setModelPerformanceList(modelPerformanceList);
+            ServiceBO service =new ServiceBO();
+            service.setId(experimentBO.getServiceId());
+            service=serviceBussiness.getServiceDetails(service);
+            result.setType(service.getBusinessType());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("实验发布详细信息异常", e);

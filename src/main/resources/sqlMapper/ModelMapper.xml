@@ -46,7 +46,7 @@
     </update>
 
     <update id="offline">
-         UPDATE model SET releaseStatus = #{status} WHERE service_id =#{serviceId} AND id !=#{id}
+         UPDATE model SET release_status = #{status} WHERE service_id =#{serviceId} AND id !=#{id}
     </update>
 
 

@@ -200,7 +200,16 @@ public class ModelBussinessImpl implements ModelBussiness {
             //如果不是调优，检查是否可以发布，如果已存在发布实验，那么不可以再发布实验
             List<Experiment> experiments = experimentService.findPublishByServiceId(modelBO.getServiceId());
             if (CollectionUtils.isEmpty(experiments)) {
-                return publishModel(modelBO);
+                try {
+                    serviceLicenseCheck.applyService(modelBO.getServiceId());
+                    return publishModel(modelBO);
+                } catch (LicenseException e) {
+                    logger.error("服务发布失败",e);
+                    hashMap.put("status",false);
+                    hashMap.put("msg","服务发布失败");
+                    return hashMap;
+                }
+
             } else {
                 logger.info("已经发布服务，不可以重新发布,服务ID=" + modelBO.getServiceId() + "实验ID" + modelBO.getExperimentId());
                 hashMap.put("status",false);
@@ -228,7 +237,16 @@ public class ModelBussinessImpl implements ModelBussiness {
                     }
                 }else {
                     //PSI调优
-                    return publishAndTuringReord(modelBO, tuningRecord);
+                    try {
+                        serviceLicenseCheck.applyService(modelBO.getServiceId());
+                        return publishAndTuringReord(modelBO, tuningRecord);
+                    } catch (LicenseException e) {
+                        logger.error("PSI调优失败",e);
+                        hashMap.put("status",false);
+                        hashMap.put("msg","PSI调优失败");
+                        return hashMap;
+                    }
+
                 }
             }
         }

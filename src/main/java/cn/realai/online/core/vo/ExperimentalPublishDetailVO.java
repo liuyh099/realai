@@ -11,7 +11,7 @@ public class ExperimentalPublishDetailVO {
     @ApiModelProperty(value = "模型名称")
     private String modelName;
 
-    @ApiModelProperty(value = "服务类型")
+    @ApiModelProperty(value = "服务类型,1:风控A卡 2:风控B卡 3:风控C卡 4:营销")
     private int type;
 
     @ApiModelProperty(value = "算法类型")
