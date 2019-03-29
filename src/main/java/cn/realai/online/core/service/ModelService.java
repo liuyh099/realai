@@ -49,4 +49,12 @@ public interface ModelService {
      * @return
      */
     int insert(Model model);
+
+    /**
+     * 模型下线
+     * @param serviceId
+     * @param id
+     * @param value
+     */
+    void offline(Long serviceId, Long id, String value);
 }

@@ -66,4 +66,5 @@ public interface UserService {
      * @return
      */
     Boolean checkOldPwd(String oldPwd);
+
 }

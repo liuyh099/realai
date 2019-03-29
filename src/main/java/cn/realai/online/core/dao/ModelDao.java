@@ -35,4 +35,12 @@ public interface ModelDao {
      * @return
      */
     List<Model> findList(Model model);
+
+    /**
+     * 模型下线
+     * @param serviceId
+     * @param id
+     * @param value
+     */
+    void offline(@Param("serviceId") Long serviceId, @Param("id") Long id, @Param("status") String value);
 }

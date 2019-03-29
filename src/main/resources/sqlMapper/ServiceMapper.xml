@@ -5,8 +5,6 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="type" property="type" jdbcType="TINYINT"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="deployment_type" property="deploymentType" jdbcType="TINYINT"/>
         <result column="create_time" property="createTime" jdbcType="BIGINT"/>
         <result column="detail" property="detail" jdbcType="VARCHAR"/>
         <result column="tuning_secret_key" property="tuningSecretKey" jdbcType="VARCHAR"/>
@@ -30,9 +28,6 @@
             <if test="id!=0">
                 AND   a.id =#{id}
             </if>
-            <if test="status!=null">
-                AND   a.status =#{status}
-            </if>
             <if test="type!=null">
                 AND   a.type =#{type}
             </if>
@@ -45,15 +40,12 @@
             <if test="tuningSecretKey !=null and tuningSecretKey !='' ">
                 AND   a.tuning_secret_key =#{tuningSecretKey}
             </if>
-            <if test="deploymentType !=null ">
-                AND   a.deployment_type =#{deploymentType}
-            </if>
         </where>
     </select>
 
     <insert id="insert" parameterType="cn.realai.online.core.entity.Service">
-        INSERT INTO service (name,type,status,deployment_type,create_time,detail,tuning_secret_key,secret_key,online_experiment,batch_times)
-        VALUE (#{name},#{type},#{status},#{deploymentType},#{createTime},#{detail},#{tuningSecretKey},#{secretKey},#{onlineExperiment},#{batchTimes})
+        INSERT INTO service (name,type,create_time,detail,tuning_secret_key,secret_key,online_experiment,batch_times)
+        VALUE (#{name},#{type},#{createTime},#{detail},#{tuningSecretKey},#{secretKey},#{onlineExperiment},#{batchTimes})
     </insert>
 
     <select id="getAlreadyPublishService" resultMap="serviceMap">
@@ -84,8 +76,6 @@
         UPDATE service SET
             name = #{name},
             type =#{type},
-            status =#{status},
-            deployment_type=#{deploymentType},
             create_time = #{createTime},
             detail=#{detail},
             tuning_secret_key=#{tuningSecretKey},
@@ -97,9 +87,9 @@
           </where>
     </update>
 
-    <update id="online" parameterType="java.lang.Long">
-         UPDATE service SET status = 1 where id = #{id}
-    </update>
+    <!--<update id="online" parameterType="java.lang.Long">-->
+         <!--UPDATE service SET status = 1 where id = #{id}-->
+    <!--</update>-->
 
 
 </mapper>

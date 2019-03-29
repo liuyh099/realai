@@ -8,6 +8,7 @@ import cn.realai.online.core.bo.ModelBO;
 import cn.realai.online.core.bo.ModelPerformanceBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.bussiness.ModelBussiness;
+import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.vo.*;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
@@ -81,6 +82,11 @@ public class ExperimentalPublishController {
             }
             ModelBO modelBO = new ModelBO();
             BeanUtils.copyProperties(experimentalPublishVO, modelBO);
+            if(2==experimentalPublishVO.getStatus()){
+                modelBO.setReleaseStatus(Model.RELEASE_STATUS.OFFLINE.value);
+            }else {
+                modelBO.setReleaseStatus(Model.RELEASE_STATUS.ONLINE.value);
+            }
             Map<String,Object> result = modelBussiness.publish(modelBO);
             if ((boolean)result.get("status")) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
