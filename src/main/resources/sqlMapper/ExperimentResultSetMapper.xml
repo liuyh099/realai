@@ -69,7 +69,7 @@
                 </if>
             </if>
         </where>
-        ORDER BY postive_count DESC
+        ORDER BY id ASC
     </select>
 
 </mapper> 
