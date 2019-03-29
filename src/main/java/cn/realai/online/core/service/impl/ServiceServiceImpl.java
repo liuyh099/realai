@@ -100,6 +100,7 @@ public class ServiceServiceImpl implements ServiceService {
 		FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(service.getSecretKey());
 		service.setCreateTime(new Date().getTime());
 		service.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
+		service.setBusinessType(Integer.parseInt(fileLicenseInfo.getBusinessType()));
 		return serviceDao.insert(service);
 	}
 
