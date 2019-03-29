@@ -52,7 +52,7 @@
     <select id="findPublishByServiceId" resultMap="ExperimentMap">
         select *
 		from experiment
-		where service_id = #{serviceId} AND releas_status = 2
+		where service_id = #{serviceId} AND releas_status in(2,3)
     </select>
 
     <update id="updateName">
