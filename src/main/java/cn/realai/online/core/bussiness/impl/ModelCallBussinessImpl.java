@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
+import cn.realai.online.common.Constant;
 import cn.realai.online.core.bo.BatchRequestStructure;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.TrainResultRedisKey;
@@ -158,13 +159,18 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
      * 错误处理
      */
     @Override
-    public void errorDealWith(Long experimentId, String errMsg) {
+    public void errorDealWith(Long experimentId, String errMsg, String task) {
     	//释放掉锁
     	if (experimentId != null ) {
             MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
             mlock.unLock();
     	}
-    	experimentService.maintainErrorMsg(experimentId, Experiment.STATUS_TRAINING_ERROR, errMsg);
+    	
+    	if (Constant.COMMAND_PREPROCESS.equals(task)) { //预处理
+    		experimentService.updatePreprocessStatus(experimentId, Experiment.PREFINISH_ERROR);
+        } else if (Constant.COMMAND_TRAIN.equals(task) || Constant.COMMAND_SECOND_TRAIN.equals(task)) { //训练
+        	experimentService.maintainErrorMsg(experimentId, Experiment.STATUS_TRAINING_ERROR, errMsg);
+        } 
     }
 
 }

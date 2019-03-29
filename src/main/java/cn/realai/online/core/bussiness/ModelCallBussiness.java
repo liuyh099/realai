@@ -29,6 +29,6 @@ public interface ModelCallBussiness {
     /*
      * 错误处理
      */
-    void errorDealWith(Long experimentId, String errMsg);
+    void errorDealWith(Long experimentId, String errMsg, String task);
 
 }

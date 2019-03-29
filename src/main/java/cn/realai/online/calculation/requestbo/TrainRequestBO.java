@@ -13,7 +13,7 @@ public class TrainRequestBO {
 	//命令
 	private String command;
 	
-	private Integer validSampleType;
+	private Integer validSampleType = 2;
 	
 	private Integer testSampleType;
 	

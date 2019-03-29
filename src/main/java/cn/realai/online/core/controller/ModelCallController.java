@@ -99,7 +99,6 @@ public class ModelCallController extends BaseController{
             Map<String, String> map = JSON.parseObject(data, Map.class);
             //参数验证
             if (code == null) {
-                modelCallBussiness.errorDealWith(experimentId, msg);
                 return new Result(ResultCode.PARAM_ERROR.getCode(), ResultMessage.PARAM_ERORR.getMsg("code不能为null"), null);
             }
             if (experimentId == null || experimentId == 0) {
@@ -108,26 +107,22 @@ public class ModelCallController extends BaseController{
             }
             if (task == null || "".equals(task)) {
                 logger.error("ModelCallController callback. python回调task为null");
-                modelCallBussiness.errorDealWith(experimentId, msg);
                 return new Result(ResultCode.PARAM_ERROR.getCode(), ResultMessage.PARAM_ERORR.getMsg("task不能为null或空"), null);
             }
 
             //解析处理结果
             if (code != 200) { //如果处理不成功
-                modelCallBussiness.errorDealWith(experimentId, msg);
+                modelCallBussiness.errorDealWith(experimentId, msg, task);
             } else { //处理成功，根据task判断处理方式
                 if (Constant.COMMAND_PREPROCESS.equals(task)) { //预处理
                     String redisKey = map.get("variableData");
                     modelCallBussiness.preprocessCallback(experimentId, redisKey);
-                } else if (Constant.COMMAND_TRAIN.equals(task)) { //训练
-                    TrainResultRedisKey redisKey = JSON.parseObject(data, TrainResultRedisKey.class);
-                    modelCallBussiness.trainCallback(experimentId, redisKey);
-                } else if (Constant.COMMAND_SECOND_TRAIN.equals(task)) { //训练
+                } else if (Constant.COMMAND_TRAIN.equals(task) || Constant.COMMAND_SECOND_TRAIN.equals(task)) { //训练
                     TrainResultRedisKey redisKey = JSON.parseObject(data, TrainResultRedisKey.class);
                     modelCallBussiness.trainCallback(experimentId, redisKey);
                 } else {
                     logger.warn("ModelCallController callback. python回调task为null");
-                    modelCallBussiness.errorDealWith(experimentId, msg);
+                    modelCallBussiness.errorDealWith(experimentId, msg, task);
                     return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
                 }
             }

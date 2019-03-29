@@ -146,6 +146,11 @@ public class Experiment {
 
     private Integer preFinish;
 
+    public static final int PREFINISH_NO = 1; // 预处理未完成
+
+    public static final int PREFINISH_YES = 2; //预处理完成
+    
+    public static final int PREFINISH_ERROR = 3; //与处理异常
 
     private String serviceName;
 
@@ -167,10 +172,6 @@ public class Experiment {
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
-
-    public static final int PREFINISH_NO = 1; // 预处理未完成
-
-    public static final int PREFINISH_YES = 2; //预处理完成
 
     public Integer getPreFinish() {
         return preFinish;

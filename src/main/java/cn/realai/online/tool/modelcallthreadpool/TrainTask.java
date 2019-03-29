@@ -67,27 +67,26 @@ public class TrainTask implements Runnable {
     @Override
     @Transactional()
     public void run() {
-    	logger.info("TrainTask run, 实验回调处理开始， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
-        //查询实验信息
-        ExperimentService experimentService = SpringContextUtils.getBean(ExperimentService.class);
-        ExperimentBO experiment = experimentService.selectExperimentById(experimentId);
-        if (experiment == null) {
-            logger.error("TrainTask run. experiment信息不存在. experimentId{}", experimentId);
-        }
-
-        //获取Redis操作对象
-        RedisClientTemplate redisClientTemplate = SpringContextUtils.getBean(RedisClientTemplate.class);
-        
-        
-        DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
+    	
+    	DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
 		//设置隔离级别
 		definition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
-		
 		DataSourceTransactionManager txManager = SpringContextUtils.getBean(DataSourceTransactionManager.class);
-		
 		TransactionStatus ts = txManager.getTransaction(definition);
+		ExperimentService experimentService = SpringContextUtils.getBean(ExperimentService.class);
+    	
 		try {
+	    	logger.info("TrainTask run, 实验回调处理开始， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
+	        //查询实验信息
+	        ExperimentBO experiment = experimentService.selectExperimentById(experimentId);
+	        if (experiment == null) {
+	            logger.error("TrainTask run. experiment信息不存在. experimentId{}", experimentId);
+	            throw new RuntimeException("实验id不存在  experimentId = " + experimentId);
+	        }
 	
+	        //获取Redis操作对象
+	        RedisClientTemplate redisClientTemplate = SpringContextUtils.getBean(RedisClientTemplate.class);
+	        
 	        //解析模型表现
 	        analysisModelPerformance(redisClientTemplate.get(redisKey.getModelperformance()));
 	        redisClientTemplate.delete(redisKey.getModelperformance());
@@ -192,6 +191,7 @@ public class TrainTask implements Runnable {
 	        
 	        txManager.commit(ts);
 		} catch (Exception e) {
+			logger.info("TrainTask run, 实验回调处理异常， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
 			e.printStackTrace();
 			txManager.rollback(ts);
 		}
@@ -280,7 +280,9 @@ public class TrainTask implements Runnable {
             throw new RuntimeException("训练结果没有样本权重数据experimentId = " + experimentId);
         }
         List<SampleWeight> swList = JSON.parseArray(redisValue, SampleWeight.class);
-        for (SampleWeight sw : swList) {
+        int len = swList.size();
+        for (int i = 0; i < len; i++) {
+        	SampleWeight sw = swList.get(i);
             sw.setExperimentId(experimentId);
             Long sgId = sgMap.get(sw.getGroupName());
             if (sgId == null) {
@@ -337,7 +339,9 @@ public class TrainTask implements Runnable {
         }
         if (homoValue != null && !"".equals(homoValue)) {
             List<PersonalHomoResultSet> homoList = JSON.parseArray(homoValue, PersonalHomoResultSet.class);
-            for (PersonalHomoResultSet phrs : homoList) {
+            int len = homoList.size();
+        	for (int i = 0; i < len; i++) {
+        		PersonalHomoResultSet phrs = homoList.get(i);
                 Long piId = piMap.get(phrs.getPersonalId());
                 if (piId == null) {
                     logger.error("TrainTask analysisPersonalResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, phrs.getPersonalId());
@@ -354,9 +358,14 @@ public class TrainTask implements Runnable {
             personalHomoResultSetService.insertList(homoList);
         }
         if (HetroValue != null && !"".equals(HetroValue)) {
-            List<PersonalHetroResultSet> hetroList = JSON.parseArray(homoValue, PersonalHetroResultSet.class);
-            for (PersonalHetroResultSet phrs : hetroList) {
-                Long piId = piMap.get(phrs.getPersonalId());
+        	
+        	List<PersonalHetroResultSet> hetroList = JSON.parseArray(HetroValue, PersonalHetroResultSet.class);
+        	
+            int len = hetroList.size();
+        	for (int i = 0; i < len; i++) {
+            	PersonalHetroResultSet phrs = hetroList.get(i);
+            	
+            	Long piId = piMap.get(phrs.getPersonalId());
                 if (piId == null) {
                     logger.error("TrainTask analysisPersonalResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, phrs.getPersonalId());
                     throw new RuntimeException("训练结果数据错误,千人千面信息不存在.");
@@ -369,10 +378,10 @@ public class TrainTask implements Runnable {
             }
             PersonalHetroResultSetService personalHetroResultSetService = SpringContextUtils.getBean(PersonalHetroResultSetService.class);
             personalHetroResultSetService.insertList(hetroList);
+            
         }
-
     }
-
+    
     /*
      * 千人千面个人组合信息
      */
