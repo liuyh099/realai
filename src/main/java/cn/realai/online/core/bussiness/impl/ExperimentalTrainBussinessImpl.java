@@ -151,6 +151,15 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     @Transactional(readOnly = false)
     public int train(long experimentId, Long relyingId) {
+<<<<<<< HEAD
+=======
+        //获取训练锁
+        MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
+        if (!mlock.tryLock()) {
+            return -1;
+        }
+
+>>>>>>> branch 'master' of https://github.com/liuyh099/realai.git
         int deleteStatus = 0;
         if (relyingId == null || relyingId.longValue() == 0) {
             deleteStatus = VariableData.DELETE_YES;

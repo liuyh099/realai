@@ -41,4 +41,11 @@ public interface ModelBussiness {
      * @return
      */
     Model getTrainByModelId(Long id);
+
+    /**
+     * 获得服务发布模型的历史记录
+     * @param serviceId
+     * @return
+     */
+    List<ModelBO> findModelOptionHistory(Long serviceId);
 }

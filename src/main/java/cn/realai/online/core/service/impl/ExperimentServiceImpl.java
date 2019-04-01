@@ -43,7 +43,7 @@ public class ExperimentServiceImpl implements ExperimentService {
     @Override
     public ExperimentBO selectExperimentById(long id) {
 //        Experiment experiment = redisClientTemplate.get(getExperimentRedisKey(id), ExperimentBO.class);
-//        if (experiment == null) {
+//        if (experiment == null) {  
         Experiment experiment = experimentDao.selectExperimentById(id);
             //设置缓存
 //        }

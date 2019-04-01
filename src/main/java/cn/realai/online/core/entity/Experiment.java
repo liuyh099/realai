@@ -57,6 +57,9 @@ public class Experiment {
     //训练失败
     public static final int STATUS_TRAINING_ERROR = 6;
 
+    //训练删除
+    public static final int STATUS_DELETE = 7;
+
     //算法类型
     private String algorithmType;
 
