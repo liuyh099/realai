@@ -95,7 +95,7 @@ public class ModelBussinessImpl implements ModelBussiness {
                 //处理PSI是否足够预警
                 if (modelPsiList != null && !modelPsiList.isEmpty()) {
                     for (Map psi : modelPsiList) {
-                        if (psi.get("modelId") == item.getModelId()) {
+                        if (psi.get("modelId").equals(item.getModelId())) {
                             Double maxPsi = (Double) psi.get("maxPsi");
                             boolean flag = maxPsi > Constant.PSI_ALER_VALUE ? true : false;
                             voItem.setPsi(maxPsi);
@@ -108,8 +108,8 @@ public class ModelBussinessImpl implements ModelBussiness {
                 //设置调优原因
                 if (tuningRecords != null && !tuningRecords.isEmpty()) {
                     for (TuningRecord record : tuningRecords) {
-                        if (record.getModelId() == item.getModelId()) {
-                            String reason = TuningRecord.TYPE.PSI.value.equals(record.getType()) ? "PSI调优" : "强制调优";
+                        if (record.getModelId().equals(item.getModelId())) {
+                            String reason = TuningRecord.TYPE.PSI.value.equalsIgnoreCase(record.getType()) ? "PSI调优":"强制调优";
                             voItem.setTuningReason(reason);
                             break;
                         }

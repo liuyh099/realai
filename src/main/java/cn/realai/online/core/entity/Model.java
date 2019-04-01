@@ -41,6 +41,9 @@ public class Model {
     //服务id
     private Long serviceId;
 
+    //调优序列 同一个服务下的模型再次创建则+1，第一次创建为0
+    private Integer tuningNo;
+
     private String remark;
 
 
@@ -106,5 +109,13 @@ public class Model {
 
     public void setServiceId(Long serviceId) {
         this.serviceId = serviceId;
+    }
+
+    public Integer getTuningNo() {
+        return tuningNo;
+    }
+
+    public void setTuningNo(Integer tuningNo) {
+        this.tuningNo = tuningNo;
     }
 }

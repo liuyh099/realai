@@ -166,4 +166,31 @@ public class OfflineBatchController {
         }
     }
 
+    @RequiresPermissions("model:offlinerun")
+    @GetMapping("/execute/{batchId}")
+    @ApiOperation(value="手动执行跑批运算")
+    @ApiImplicitParam(name = "batchId", value = "离线跑批Id", required = true, dataType = "Long", paramType = "path")
+    @ResponseBody
+    public Result<Long> execute(@PathVariable Long batchId) {
+        try {
+            BatchRecord record = new BatchRecord();
+            record.setId(batchId);
+            record = batchRecordService.getByEntity(record);
+            if (record.getStatus() == BatchRecord.BATCH_STATUS_OVER || record.getStatus() == BatchRecord.BATCH_STATUS_EXECUTING) {
+                throw new Exception("该跑批记录不处于新建或者处理有误状态");
+            }
+            if (record != null) {
+                int ret = batchRecordBussiness.executeBatchRecord(record);
+                if (ret == -1) {
+                    return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), record.getId());
+                }
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), record.getId());
+            }
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        } catch (Exception e) {
+            log.error("查询离线跑批是否计算完成异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
+        }
+    }
+
 }
