@@ -65,4 +65,10 @@ public interface VariableDataService {
      * @return
      */
     VariableData getById(Long variableId);
+
+    /**
+     * 物理删除变量
+     * @param id
+     */
+	void deleteVariableDataByExperimentId(Long experimentId);
 }

@@ -54,7 +54,7 @@
 		from experiment
 		where service_id = #{serviceId} AND releas_status in(2,3)
     </select>
-
+  
     <update id="updateName">
         UPDATE experiment set name =#{name} where id=#{id}
     </update>

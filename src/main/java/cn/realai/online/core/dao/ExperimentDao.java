@@ -112,7 +112,7 @@ public interface ExperimentDao {
      * @param currentTimeMillis
      * @return
      */
-    int train(@Param("id")long experimentId, @Param("status")int statusTraining, @Param("trainTime")long currentTimeMillis);
+    int train(@Param("experimentId")long experimentId, @Param("status")int statusTraining, @Param("trainTime")long currentTimeMillis);
 
     /**
      * 获得最近发布的服务id
