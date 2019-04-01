@@ -175,6 +175,13 @@ public class ServiceBussinessImpl implements ServiceBussiness {
         return false;
     }
 
+    @Override
+    public void deleteService(List<Long> ids) {
+        if (serviceService.delete(ids) <= 0) {
+            throw new RuntimeException("删除服务异常！");
+        }
+    }
+
     /**
      * 实装BO属性
      *

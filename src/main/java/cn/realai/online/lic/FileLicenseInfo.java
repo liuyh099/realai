@@ -1,5 +1,7 @@
 package cn.realai.online.lic;
 
+import org.springframework.util.StringUtils;
+
 /**
  * 
  * <p>Title: 文件授权信息类        </p>
@@ -182,4 +184,26 @@ public class FileLicenseInfo {
     public void setCheckbit(String checkbit) {
         this.checkbit = checkbit;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FileLicenseInfo licenseInfo = (FileLicenseInfo) o;
+
+        if(!StringUtils.isEmpty(serviceName) && serviceName.equals(licenseInfo.getServiceName())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = serviceName != null ? serviceName.hashCode() : 0;
+        return result;
+    }
+
 }

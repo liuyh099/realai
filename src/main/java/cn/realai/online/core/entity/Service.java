@@ -70,6 +70,16 @@ public class Service {
 	//离线跑批次数
 	private long batchTimes;
 
+	private int delFlag;  //删除标记 0 : 未删除   1：已删除
+
+	public int getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(int delFlag) {
+		this.delFlag = delFlag;
+	}
+
 	public int getDeployTimesUpper() {
 		return deployTimesUpper;
 	}
