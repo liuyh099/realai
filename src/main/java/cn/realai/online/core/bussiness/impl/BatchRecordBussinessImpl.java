@@ -67,7 +67,7 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
 
         BatchListBO listBO = new BatchListBO();
         listBO.setModelName(query.getName());
-        //listBO.setStatus(query.getTrainStatus());
+        listBO.setStatus(query.getStatus());
 
         Long minDateV = null, maxDateV = null;
         try {
