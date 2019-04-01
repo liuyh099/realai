@@ -150,5 +150,9 @@
         limit 1
     </select>
 
+    <select id="selectCountByServiceId" resultType="java.lang.Integer">
+        select count(1) from model  as m
+        where m.service_id = #{serviceId}
+    </select>
 
 </mapper>

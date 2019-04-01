@@ -73,4 +73,9 @@ public class ModelServiceImpl implements ModelService {
     public List<Model> findModelOptionHistory(Long serviceId) {
         return  modelDao.findModelOptionHistory(serviceId);
     }
+
+    @Override
+    public Integer selectCountByServiceId(Long serviceId) {
+        return modelDao.selectCountByServiceId(serviceId);
+    }
 }

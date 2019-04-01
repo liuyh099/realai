@@ -175,4 +175,5 @@ public class ServiceServiceImpl implements ServiceService {
 	public List<Service> findListByModelStatus(String status) {
 		return serviceDao.findListByModelStatus(status);
 	}
+
 }

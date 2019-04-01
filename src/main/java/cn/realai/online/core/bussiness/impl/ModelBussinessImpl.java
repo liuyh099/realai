@@ -291,6 +291,9 @@ public class ModelBussinessImpl implements ModelBussiness {
         modelBO.setServiceId(experiment.getServiceId());
         modelBO.setCreateTime(System.currentTimeMillis());
         modelBO.setCreateUserId(UserUtils.getUser().getId());
+        //获取服务
+        Integer tuningNo = modelService.selectCountByServiceId(experiment.getServiceId());
+        modelBO.setTuningNo(tuningNo);
         int count = modelService.insert(modelBO);
         ServiceDeployRecordBO serviceDeployRecordBO = getServiceDeployRecordBO(modelBO);
         serviceDeployRecordBussiness.insert(serviceDeployRecordBO);
