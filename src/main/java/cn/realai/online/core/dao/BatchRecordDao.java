@@ -26,8 +26,6 @@ public interface BatchRecordDao {
 	//查询离线跑批列表
 	List<BatchListBO> selectList(@Param("batchListBO") BatchListBO batchListBO, @Param("minTime") Long minTime, @Param("maxTime") Long maxTime);
 
-	//查询离线跑批详细
-	BatchDetailBO selectDetail(Long batchId);
 
 	/**
 	 *

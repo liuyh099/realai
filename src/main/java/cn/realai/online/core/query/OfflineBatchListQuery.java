@@ -16,8 +16,8 @@ public class OfflineBatchListQuery extends PageQuery {
     @ApiModelProperty(value="模型名称")
     private String name;
 
-    @ApiModelProperty(value="训练状态", example = "//选择文件= 1; //选择参数= 2; //变量筛选= 3; //试验训练中= 4; //试验完毕= 5")
-    private Integer trainStatus;
+    @ApiModelProperty(value="跑批状态跑批状态 1:新建 2：处理中 3：处理完成 4：处理有误")
+    private Integer status;
 
     @ApiModelProperty(value="最小跑批时间，格式：yyyy-MM-dd")
     private String minDate;
@@ -31,14 +31,6 @@ public class OfflineBatchListQuery extends PageQuery {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getTrainStatus() {
-        return trainStatus;
-    }
-
-    public void setTrainStatus(Integer trainStatus) {
-        this.trainStatus = trainStatus;
     }
 
     public String getMinDate() {
@@ -55,5 +47,13 @@ public class OfflineBatchListQuery extends PageQuery {
 
     public void setMaxDate(String maxDate) {
         this.maxDate = maxDate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

@@ -13,7 +13,7 @@
         <result column="down_url" property="downUrl" jdbcType="VARCHAR"/>
         <result column="batch_type" property="batchType" jdbcType="INTEGER"/>
         <result column="batch_name" property="batchName" jdbcType="VARCHAR"/>
-
+  
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="err_msg" property="errorMsg" jdbcType="VARCHAR"/>
         <result column="del_flag" property="delFlag" jdbcType="TINYINT"/>

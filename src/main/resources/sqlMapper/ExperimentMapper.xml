@@ -54,7 +54,7 @@
 		from experiment
 		where service_id = #{serviceId} AND releas_status in(2,3)
     </select>
-
+  
     <update id="updateName">
         UPDATE experiment set name =#{name} where id=#{id}
     </update>
@@ -144,6 +144,15 @@
 		where id = #{experimentId}
 	</update>
 
+    <update id="train">
+        update experiment
+		set status = #{status},
+		training_time = #{trainTime}
+		where id = #{experimentId}
+    </update>
+
+
+
     <update id="updateExperimentOffline">
         update experiment
 		set releas_status = #{status}
@@ -155,6 +164,9 @@
 		set releas_status = #{status},release_time =#{publishTime}
 		where id = #{id}
     </update>
+
+
+
 
     <select id="getLastServerId" resultType="java.lang.Long">
         SELECT service_id FROM experiment WHERE releas_status = 2 ORDER BY release_time DESC LIMIT 1

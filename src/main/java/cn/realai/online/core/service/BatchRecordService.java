@@ -24,9 +24,6 @@ public interface BatchRecordService {
 	//查询离线跑批列表
 	List<BatchListBO> selectList(BatchListBO batchListBO, Long minTime, Long maxTime);
 
-	//查询离线跑批详细
-	BatchDetailBO selectDetail(Long batchId);
-
 	/**
 	 * 查询批次数据
 	 * @param batchRecordBO

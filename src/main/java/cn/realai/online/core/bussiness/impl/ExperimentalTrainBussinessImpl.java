@@ -106,7 +106,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         }
         List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
         //BeanUtilsBean.copyProperties(list,result);
-        //处理查询结果
+        //处理查询结果  
         //List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentalTrainVO.class);
         PageBO<ExperimentBO> pageBO = new PageBO<ExperimentBO>(result, experimentalTrainQuery.getPageSize(), experimentalTrainQuery.getPageNum(), page.getTotal(), page.getPages());
         return pageBO;
