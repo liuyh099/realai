@@ -8,6 +8,7 @@ import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.bo.ServiceDeployRecordBO;
 import cn.realai.online.core.bussiness.ServiceBussiness;
 import cn.realai.online.core.bussiness.ServiceDeployRecordBussiness;
+import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.Service;
 import cn.realai.online.core.query.service.*;
 import cn.realai.online.core.service.ServiceService;
@@ -52,22 +53,17 @@ public class ServiceController {
 
     @GetMapping("/select")
     @ApiOperation(value="查询服务下拉选项")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "status", value = "服务状态 1:上线 2：下线", required = false, dataType = "Integer", paramType = "query"),
-        @ApiImplicitParam(name = "deployType", value = "部署类型 1:在线部署 2：离线部署", required = false, dataType = "Integer", paramType = "query")
-    })
-    public Result<List<ServerNameSelectVO>> getSelect(@RequestParam(value="status", required = false) Integer status,
-                                                      @RequestParam(value="deployType", required = false) Integer deployType){
+    @ApiImplicitParam(name = "status", value = "服务状态 0:未发布 1:线上发布 2：线下发布 默认0", required = false, dataType = "Integer", paramType = "query")
+    public Result<List<ServerNameSelectVO>> getSelect(@RequestParam(value="status", required = false) Integer status){
         List<ServerNameSelectVO> serverNameSelectVOs = new ArrayList<>();
         try {
-            Service service = new Service();
-            if (status != null) {
-//                service.setStatus(status);
+            String statusStr = Model.RELEASE_STATUS.NONE.value;
+            if (status == 1) {
+                statusStr = Model.RELEASE_STATUS.ONLINE.value;
+            } else if (status == 2) {
+                statusStr = Model.RELEASE_STATUS.OFFLINE.value;
             }
-            if (deployType != null) {
-//                service.setDeploymentType(deployType);
-            }
-            List<Service> services = serviceService.list(service);
+            List<Service> services = serviceService.findListByModelStatus(statusStr);
             if(services != null && services.size() > 0) {
                 for (Service s : services) {
                     ServerNameSelectVO sv = new ServerNameSelectVO();

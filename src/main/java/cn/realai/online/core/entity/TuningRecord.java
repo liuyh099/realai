@@ -25,7 +25,7 @@ public class TuningRecord {
 
 	public static enum TYPE {
 		PSI("psi", "PSI调优"),
-		KEY("key", "密钥串强制调优");
+		KEY("key", "强制调优");
 
 		public String value;
 		public String desc;

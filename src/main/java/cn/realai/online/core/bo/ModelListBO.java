@@ -20,7 +20,7 @@ public class ModelListBO {
     private String experimentName;
     private Long releaseTime;
     private String algorithmType;
-    private int tuningCount;
+    private Integer tuningNo;
     private String tuningReason;
     private BigDecimal psi;
     private int aler;
@@ -89,12 +89,12 @@ public class ModelListBO {
         this.algorithmType = algorithmType;
     }
 
-    public int getTuningCount() {
-        return tuningCount;
+    public Integer getTuningNo() {
+        return tuningNo;
     }
 
-    public void setTuningCount(int tuningCount) {
-        this.tuningCount = tuningCount;
+    public void setTuningNo(Integer tuningNo) {
+        this.tuningNo = tuningNo;
     }
 
     public String getTuningReason() {

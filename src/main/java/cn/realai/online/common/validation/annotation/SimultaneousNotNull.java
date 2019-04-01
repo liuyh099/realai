@@ -8,9 +8,9 @@ import java.lang.annotation.*;
 
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = SimultaneousNotNullImpl.class)
+@Constraint(validatedBy = SimultaneousNotNullImpl.class )
 @Documented
-public @interface SimultaneousNotNull {
+public @interface  SimultaneousNotNull {
 
     int checkCount();
 

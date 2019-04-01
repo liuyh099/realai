@@ -1,8 +1,10 @@
 package cn.realai.online.core.vo;
 
+import cn.realai.online.common.validation.annotation.SimultaneousNotNull;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * 功能描述：TODO
@@ -18,15 +20,18 @@ public class OfflineBatchCreateVO {
     private Long serviceId;
 
     @ApiModelProperty(value="模型X表同质数据源")
-    //@NotNull(message = "请选择模型X表同质数据源")
+    @SimultaneousNotNull(checkCount = 2, message = "模型X表同质数据源和模型X表异质数据源必须选择一个")
+    @Pattern( regexp = ".+(.csv)$",message = "文件格式不正确")
     private String xHomoDataSource;
 
     @ApiModelProperty(value="模型X表异质数据源")
-    //@NotNull(message = "请选择模型X表异质数据源")
+    @SimultaneousNotNull(checkCount = 2, message = "模型X表同质数据源和模型X表异质数据源必须选择一个")
+    @Pattern( regexp = ".+(.csv)$",message = "文件格式不正确")
     private String xHeteroDataSource;
 
     @ApiModelProperty(value="模型Y表数据源")
     @NotNull(message = "请选择模型Y表数据源")
+    @Pattern( regexp = ".+(.csv)$",message = "文件格式不正确")
     private String yDataSource;
 
     @ApiModelProperty(value="备注")

@@ -20,4 +20,6 @@ public interface ServiceDao {
     List<Service> getAlreadyPublishService();
 
     void online(@Param("id") Long serviceId);
+
+    List<Service> findListByModelStatus(@Param("status") String status);
 }

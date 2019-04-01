@@ -9,14 +9,13 @@
         <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
         <result column="service_id" property="serviceId" jdbcType="BIGINT"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="create_user_id" property="createUserId" jdbcType="BIGINT"/>
+        <result column="tuning_no" property="tuningNo" jdbcType="INTEGER"/>
     </resultMap>
 
-    <insert id="insert" parameterType="cn.realai.online.core.entity.Model">
-        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
-            SELECT LAST_INSERT_ID() AS id
-        </selectKey>
-        INSERT INTO model (name,create_time,release_status,experiment_id,service_id,remark,create_user_id)
-        VALUE (#{name},#{createTime},#{releaseStatus},#{experimentId},#{serviceId},#{remark},#{createUserId})
+    <insert id="insert"  useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO model (name,create_time,release_status,experiment_id,service_id,remark,create_user_id,tuning_no)
+        VALUE (#{name},#{createTime},#{releaseStatus},#{experimentId},#{serviceId},#{remark},#{createUserId},#{tuningNo})
     </insert>
 
     <select id="findList" parameterType="cn.realai.online.core.entity.Model" resultMap="ModelMap">
@@ -85,7 +84,7 @@
         <result column="experimentName" property="experimentName" jdbcType="VARCHAR"/>
         <result column="releaseTime" property="releaseTime" jdbcType="TIMESTAMP"/>
         <result column="algorithmType" property="algorithmType" jdbcType="VARCHAR"/>
-        <result column="tuningCount" property="tuningCount" jdbcType="INTEGER"/>
+        <result column="tuningNo" property="tuningNo" jdbcType="INTEGER"/>
     </resultMap>
     <select id="selectList" resultMap="ModelListMap">
         select
@@ -95,9 +94,9 @@
         sv.name as serviceName,
         ep.id as experimentId,
         ep.name as experimentName,
-        ep.release_time as releaseTime,
+        m.create_time as releaseTime,
         ep.algorithm_type as algorithmType,
-        ep.tuning_count as tuningCount
+        m.tuning_no as tuningNo
         from model as m
         join experiment as ep on m.experiment_id = ep.id
         join service as sv on m.service_id = sv.id
@@ -151,5 +150,9 @@
         limit 1
     </select>
 
+    <select id="selectCountByServiceId" resultType="java.lang.Integer">
+        select count(1) from model  as m
+        where m.service_id = #{serviceId}
+    </select>
 
 </mapper>

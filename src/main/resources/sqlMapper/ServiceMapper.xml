@@ -48,6 +48,19 @@
         </where>
     </select>
 
+    <select id="findListByModelStatus" resultMap="serviceMap" parameterType="java.lang.String">
+        SELECT * FROM service as a
+        <where>
+            a.del_flag = 0
+            <if test="status!=null and status !=''">
+                AND   exists (
+                    select * from model as m
+                    where m.service_id = a.id and m.release_status = #{status}
+                )
+            </if>
+        </where>
+    </select>
+
     <insert id="insert" parameterType="cn.realai.online.core.entity.Service">
         INSERT INTO service (name,type, business_type,create_time,detail,tuning_secret_key,secret_key,online_experiment,batch_times)
         VALUE (#{name},#{type},#{businessType},#{createTime},#{detail},#{tuningSecretKey},#{secretKey},#{onlineExperiment},#{batchTimes})
