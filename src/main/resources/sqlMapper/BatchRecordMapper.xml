@@ -197,4 +197,10 @@
 		where id = #{batchId}
 	</update>
 
+	<update id="updateBatchRecordStatus">
+		update batch_record
+		set status = #{status}
+		where id = #{batchId}
+	</update>
+
 </mapper>

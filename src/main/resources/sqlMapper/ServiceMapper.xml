@@ -12,6 +12,7 @@
         <result column="secret_key" property="secretKey" jdbcType="VARCHAR"/>
         <result column="online_experiment" property="onlineExperiment" jdbcType="BIGINT"/>
         <result column="batch_times" property="batchTimes" jdbcType="BIGINT"/>
+        <result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
     </resultMap>
 
 
@@ -25,7 +26,7 @@
     <select id="findList" resultMap="serviceMap" parameterType="cn.realai.online.core.entity.Service">
         SELECT a.*  FROM service a
         <where>
-            1=1
+            1=1 AND a.del_flag = 0
             <if test="id!=0">
                 AND   a.id =#{id}
             </if>
@@ -55,13 +56,13 @@
     <select id="getAlreadyPublishService" resultMap="serviceMap">
         SELECT a.* FROM service a LEFT JOIN experiment b ON a.id = b.service_id
         <where>
-            b.releas_status = 2
+            b.releas_status = 2 AND a.del_flag = 0
         </where>
         ORDER BY b.release_time DESC
     </select>
 
     <delete id="delete" parameterType="java.lang.Long">
-        DELETE FROM service
+        UPDATE service SET del_flag = 1
         <where>
           <choose>
               <when test="ids!=null and ids.size()>0">

@@ -33,6 +33,7 @@ import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.service.BatchRecordService;
 import cn.realai.online.core.service.ExperimentResultSetService;
 import cn.realai.online.core.service.ExperimentService;
+import cn.realai.online.core.service.MLockService;
 import cn.realai.online.core.service.ModelPerformanceService;
 import cn.realai.online.core.service.PersonalComboResultSetService;
 import cn.realai.online.core.service.PersonalHetroResultSetService;
@@ -197,8 +198,9 @@ public class TrainTask implements Runnable {
 		}
         
         //释放MLock锁
-        MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
-        mlock.unLock();
+		MLockService mLockService = SpringContextUtils.getBean(MLockService.class);
+		MLock mLock = mLockService.getLock(experimentId);
+		mLock.unLock();
         
         logger.info("TrainTask run, 实验回调处理结束， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
         

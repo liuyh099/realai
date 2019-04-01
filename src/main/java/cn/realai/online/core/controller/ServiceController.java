@@ -5,11 +5,14 @@ import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.core.bo.ServiceBO;
+import cn.realai.online.core.bo.ServiceDeployRecordBO;
 import cn.realai.online.core.bussiness.ServiceBussiness;
+import cn.realai.online.core.bussiness.ServiceDeployRecordBussiness;
 import cn.realai.online.core.entity.Service;
 import cn.realai.online.core.query.service.*;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.ServerNameSelectVO;
+import cn.realai.online.core.vo.ServiceDeployRecordVO;
 import cn.realai.online.core.vo.service.*;
 import cn.realai.online.lic.FileLicenseInfo;
 import cn.realai.online.lic.LicenseConstants;
@@ -40,6 +43,9 @@ public class ServiceController {
 
     @Autowired
     private ServiceBussiness serviceBussiness;
+
+    @Autowired
+    private ServiceDeployRecordBussiness serviceDeployRecordBussiness;
 
     @Autowired
     private ServiceService serviceService;
@@ -118,13 +124,24 @@ public class ServiceController {
     @RequiresPermissions("service")
     @GetMapping("/list/item")
     @ApiOperation(value="获取服务详情")
-    public Result<ServiceVO> getServiceDetails(GetServiceDetailsQuery getServiceDetailsQuery){
+    public Result<ServiceDetailVO> getServiceDetails(GetServiceDetailsQuery getServiceDetailsQuery){
         ServiceBO serviceBO = new ServiceBO();
-        ServiceVO serviceVO = new ServiceVO();
+        ServiceDetailVO serviceVO = new ServiceDetailVO();
         try {
             serviceBO.setId(getServiceDetailsQuery.getServiceId());
             serviceBO = serviceBussiness.getServiceDetails(serviceBO);
             BeanUtils.copyProperties(serviceBO, serviceVO);
+
+            List<ServiceDeployRecordBO> serviceDeployRecordBOs = serviceDeployRecordBussiness.findServiceDeployRecordByServiceId(serviceVO.getId());
+            List<ServiceDeployRecordVO> serviceDeployRecordVOs = new ArrayList<>();
+            if(serviceDeployRecordBOs != null && !serviceDeployRecordBOs.isEmpty()) {
+                serviceDeployRecordBOs.forEach(serviceDeployRecordBO -> {
+                    ServiceDeployRecordVO serviceDeployRecordVO = new ServiceDeployRecordVO();
+                    BeanUtils.copyProperties(serviceDeployRecordBO, serviceDeployRecordVO);
+                    serviceDeployRecordVOs.add(serviceDeployRecordVO);
+                });
+            }
+            serviceVO.setServiceDeployRecordVOs(serviceDeployRecordVOs);
         }catch (Exception e) {
             logger.error("获取服务详情异常！", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
@@ -172,7 +189,7 @@ public class ServiceController {
             }
         }catch (Exception e) {
             logger.error("获取服务详情异常！", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(),null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(),null);
         }
 
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),secretKeyInfoVO);
@@ -193,6 +210,18 @@ public class ServiceController {
         return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
     }
 
+    @RequiresPermissions("service")
+    @DeleteMapping("/list")
+    @ApiOperation(value="删除服务")
+    public Result deleteService(@RequestBody DeleteServiceQuery deleteServiceQuery){
+        try {
+            serviceBussiness.deleteService(deleteServiceQuery.getServiceIds());
+        } catch (Exception e) {
+            logger.error("删除服务异常！", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg() + e.getMessage(), null);
+        }
+        return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(),null);
+    }
 
 
 

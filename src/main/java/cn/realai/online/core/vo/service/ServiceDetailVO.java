@@ -1,8 +1,11 @@
 package cn.realai.online.core.vo.service;
 
 import cn.realai.online.core.entity.Service;
+import cn.realai.online.core.vo.ServiceDeployRecordVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 /**
  * Description:
@@ -10,11 +13,14 @@ import io.swagger.annotations.ApiModelProperty;
  * <br>Author:  Shunping.Fu
  * <br>Date: 2019/3/20
  */
-@ApiModel(description = "服务信息")
-public class ServiceVO {
+@ApiModel(description = "服务详情")
+public class ServiceDetailVO {
 
     @ApiModelProperty(value = "服务ID")
     private Long id;
+
+    @ApiModelProperty(value = "秘钥")
+    private String secretKey;
 
     @ApiModelProperty(value = "服务名称")
     private String name;
@@ -43,6 +49,25 @@ public class ServiceVO {
 
     @ApiModelProperty(value = "发布次数上限")
     private Integer deployTimesUpper;
+
+    @ApiModelProperty(value = "发布详情")
+    private List<ServiceDeployRecordVO> serviceDeployRecordVOs;
+
+    public List<ServiceDeployRecordVO> getServiceDeployRecordVOs() {
+        return serviceDeployRecordVOs;
+    }
+
+    public void setServiceDeployRecordVOs(List<ServiceDeployRecordVO> serviceDeployRecordVOs) {
+        this.serviceDeployRecordVOs = serviceDeployRecordVOs;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
 
     public String getName() {
         return name;

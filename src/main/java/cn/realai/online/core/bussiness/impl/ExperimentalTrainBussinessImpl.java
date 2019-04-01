@@ -16,7 +16,6 @@ import cn.realai.online.util.UserUtils;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import io.swagger.models.auth.In;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,11 +151,6 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     @Transactional(readOnly = false)
     public int train(long experimentId, Long relyingId) {
-        //获取训练锁
-        MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
-        if (!mlock.tryLock()) {
-            return -1;
-        }
 
         int deleteStatus = 0;
         if (relyingId == null || relyingId.longValue() == 0) {
@@ -169,11 +163,14 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         HomoAndHetroBO deleteVariableData = variableDataService.selectDeleteByExperimentId(experimentId, deleteStatus);
 
         //修改试验状态
-        int ret = experimentService.train(experimentId, Experiment.STATUS_TRAINING,System.currentTimeMillis());
         ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
 
         //训练    
-        trainService.training(experimentBO, relyingId, deleteVariableData.getHomoList(), deleteVariableData.getHetroList(), deleteStatus);
+        int ret = trainService.training(experimentBO, relyingId, deleteVariableData.getHomoList(), deleteVariableData.getHetroList(), deleteStatus);
+        if (ret != 1) {
+        	return ret;
+        }
+        ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
         return ret;
     }
 

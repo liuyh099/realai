@@ -73,14 +73,6 @@ public interface ExperimentService {
                             String rocTrainImageUrl, String rocValidateImageUrl, String ksTestImageUrl, String ksTrainImageUrl,
                             String ksValidateImageUrl);
 
-    /*
-     * 获取实验训练锁的实例
-     * @param experimentId 实验id
-     * @return
-     */
-    MLock getExperimentTrainMLockInstance(long experimentId);
-
-
     /**
      * 更新选择文件的内容
      *
@@ -93,7 +85,7 @@ public interface ExperimentService {
      * 更新实验参数
      *
      * @param experiment
-     * @return
+     * @return  
      */
     Integer updateParam(Experiment experiment);
 

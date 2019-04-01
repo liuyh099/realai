@@ -11,7 +11,7 @@ public interface ServiceDao {
 
     Integer insert(Service service);
 
-    Integer delete(List<Long> ids);
+    Integer delete(@Param("ids") List<Long> ids);
 
     Service get(Long id);
 

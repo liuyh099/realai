@@ -53,4 +53,10 @@ public interface ServiceBussiness {
      */
     boolean checkService(long serviceId, String releaseStatus);
 
+    /**
+     * 删除服务
+     *
+     * @param ids
+     */
+    void deleteService(List<Long> ids);
 }
