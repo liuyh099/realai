@@ -4,16 +4,16 @@ import cn.realai.online.common.Constant;
 
 public class DeleteExperimentRequestBO {
 
-	private Long experimentId;
+	private Long modelId;
 	
 	private final String command = Constant.COMMAND_DELETE;
 
-	public Long getExperimentId() {
-		return experimentId;
+	public Long getModelId() {
+		return modelId;
 	}
 
-	public void setExperimentId(Long experimentId) {
-		this.experimentId = experimentId;
+	public void setModelId(Long modelId) {
+		this.modelId = modelId;
 	}
 
 	public String getCommand() {

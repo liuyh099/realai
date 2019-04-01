@@ -44,4 +44,12 @@ public interface BatchRecordService {
 	 */
 	void maintainDownUrl(Long batchId, String downUrl);
 
+	/**
+	 * 批次处理报错维护
+	 * @param experimentId
+	 * @param msg
+	 * @param bATCH_STATUS_ERROR
+	 */
+	void maintainErrorMsg(Long batchId, String errorMsg, int status);
+
 }

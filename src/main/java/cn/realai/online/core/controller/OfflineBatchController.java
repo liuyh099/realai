@@ -53,18 +53,24 @@ public class OfflineBatchController {
     @Autowired
     private BatchRecordService batchRecordService;
 
-    @RequiresPermissions("model:offlinerun")
+    //@RequiresPermissions("model:offlinerun")
     @PostMapping("/create")
     @ApiOperation(value="新建离线跑批")
     @ResponseBody
     public Result<Long> create(@RequestBody @Validated OfflineBatchCreateVO createVO){
         try {
-            Long recordId = batchRecordBussiness.createBatchRecord(createVO);
-            batchRecordBussiness.executeBatchRecord(recordId);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), recordId);
+        	BatchRecord batchRecord = batchRecordBussiness.createBatchRecord(createVO);
+        	if (batchRecord != null) {
+        		int ret = batchRecordBussiness.executeBatchRecord(batchRecord);
+        		if (ret == -1) {
+        			return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), batchRecord.getId());
+        		}
+        		return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), batchRecord.getId());
+        	} 
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), batchRecord.getId());
         } catch (Exception e) {
             log.error("新建离线跑批异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }
 

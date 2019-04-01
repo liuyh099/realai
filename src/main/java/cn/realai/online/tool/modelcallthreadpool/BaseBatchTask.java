@@ -8,6 +8,8 @@ public abstract class BaseBatchTask implements Runnable {
 	
 	String redisKey;
 	
+	int errorCount;
+	
 	public Long getBatchId() {
 		return batchId;
 	}

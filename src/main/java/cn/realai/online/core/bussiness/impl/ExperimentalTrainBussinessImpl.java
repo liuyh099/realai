@@ -80,7 +80,6 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Autowired
     private TuningRecordBussiness tuningRecordBussiness;
 
-
     /**
      * 根据实验名称和状态等分页查询实验列表
      *
@@ -138,6 +137,9 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Transactional(readOnly = false)
     public Integer deleteExperimentByIds(List<Long> ids) {
         int count = experimentService.deleteExperimentByIds(ids);
+        for (Long id : ids) {
+        	trainService.deleteExperiment(id);
+        }
         return count;
     }
 

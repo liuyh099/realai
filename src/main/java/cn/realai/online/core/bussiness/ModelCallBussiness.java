@@ -14,7 +14,7 @@ public interface ModelCallBussiness {
      * 离线跑批
      * @param brs 
      */
-    void runBatchOffline(Long experimentId, String redisKey, String type, String downUrl, Long batchId);
+    void runBatchOffline(Long experimentId, String redisKey, String type, String downUrl, Long batchId, Boolean done);
 
     /*
      * 预处理回调处理
@@ -27,8 +27,13 @@ public interface ModelCallBussiness {
     void trainCallback(Long experimentId, TrainResultRedisKey redisKey);
 
     /*
-     * 错误处理
+     * 训练错误处理
      */
-    void errorDealWith(Long experimentId, String errMsg, String task);
+    void trainErrorDealWith(Long experimentId, String errMsg, String task);
+
+    /*
+     * 批次错误处理
+     */
+	void batchErrorDealWith(Long experimentId, String msg);
 
 }

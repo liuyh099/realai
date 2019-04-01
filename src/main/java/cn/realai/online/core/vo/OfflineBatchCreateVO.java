@@ -18,11 +18,11 @@ public class OfflineBatchCreateVO {
     private Long serviceId;
 
     @ApiModelProperty(value="模型X表同质数据源")
-    @NotNull(message = "请选择模型X表同质数据源")
+    //@NotNull(message = "请选择模型X表同质数据源")
     private String xHomoDataSource;
 
     @ApiModelProperty(value="模型X表异质数据源")
-    @NotNull(message = "请选择模型X表异质数据源")
+    //@NotNull(message = "请选择模型X表异质数据源")
     private String xHeteroDataSource;
 
     @ApiModelProperty(value="模型Y表数据源")

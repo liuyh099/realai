@@ -1,9 +1,4 @@
-package cn.realai.online.core.bo;
-
-import java.util.List;
-import java.util.Map;
-
-import com.alibaba.fastjson.JSON;
+package cn.realai.online.core.bo.model;
 
 /**
  * python 回调时发送的json数据封装类
@@ -21,7 +16,7 @@ public class ModelRequestStructure {
     private String msg;
 
     private String data;
-
+    
     public Long getExperimentId() {
         return experimentId;
     }

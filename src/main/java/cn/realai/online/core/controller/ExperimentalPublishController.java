@@ -83,7 +83,7 @@ public class ExperimentalPublishController {
         }
     }
 
-    @RequiresPermissions("experimental:publish")
+   // @RequiresPermissions("experimental:publish")
     @ApiOperation("实验发布")
     @PostMapping()
     public Result publish(@Validated @RequestBody ExperimentalPublishVO experimentalPublishVO) {

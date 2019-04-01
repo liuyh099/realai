@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 
 import cn.realai.online.common.Constant;
-import cn.realai.online.core.bo.BatchRequestStructure;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.TrainResultRedisKey;
+import cn.realai.online.core.bo.model.BatchRequestBase;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
@@ -23,6 +23,7 @@ import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.VariableDataService;
 import cn.realai.online.tool.modelcallthreadpool.BaseBatchTask;
 import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfCombo;
+import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfDone;
 import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfHetro;
 import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfHomo;
 import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfPSI;
@@ -60,15 +61,15 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
     	Long batchId = getBatchId(experimentId, date);
         BaseBatchTask bbt;
         
-        if (BatchRequestStructure.TYPE_PERSONALCOMBORESULTSET.equals(type)) {
+        if (BatchRequestBase.TYPE_PERSONALCOMBORESULTSET.equals(type)) {
         	bbt = new BatchTaskOfCombo(experimentId, batchId, redisKey);
-        } else if (BatchRequestStructure.TYPE_PERSONALHETRORESULTSET.equals(type)) {
+        } else if (BatchRequestBase.TYPE_PERSONALHETRORESULTSET.equals(type)) {
         	bbt = new BatchTaskOfHetro(experimentId,batchId, redisKey);
-        } else if (BatchRequestStructure.TYPE_PERSONALHOMORESULTSET.equals(type)) {
+        } else if (BatchRequestBase.TYPE_PERSONALHOMORESULTSET.equals(type)) {
         	bbt = new BatchTaskOfHomo(experimentId,batchId, redisKey);
-        } else if (BatchRequestStructure.TYPE_PERSONALINFORMATION.equals(type)) {
+        } else if (BatchRequestBase.TYPE_PERSONALINFORMATION.equals(type)) {
         	bbt = new BatchTaskOfPersonalInfo(experimentId,batchId, redisKey);
-        } else if (BatchRequestStructure.TYPE_PSICHECKRESULT.equals(type)) {
+        } else if (BatchRequestBase.TYPE_PSICHECKRESULT.equals(type)) {
         	bbt = new BatchTaskOfPSI(experimentId,batchId, redisKey);
         } else {
         	logger.error("BatchTask run. 跑批数据类型不能识别. type{}, experimentId{}", type, experimentId);
@@ -90,17 +91,20 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
 	}
     
     @Override
-	public void runBatchOffline(Long experimentId, String redisKey, String type, String downUrl, Long batchId) {
+	public void runBatchOffline(Long experimentId, String redisKey, String type, String downUrl, 
+			Long batchId, Boolean done) {
     	BaseBatchTask bbt;
-    	if (BatchRequestStructure.TYPE_PERSONALCOMBORESULTSET.equals(type)) {
-        	bbt = new BatchTaskOfCombo(experimentId,batchId, redisKey);
-        } else if (BatchRequestStructure.TYPE_PERSONALHETRORESULTSET.equals(type)) {
-        	bbt = new BatchTaskOfHetro(experimentId,batchId, redisKey);
-        } else if (BatchRequestStructure.TYPE_PERSONALHOMORESULTSET.equals(type)) {
-        	bbt = new BatchTaskOfHomo(experimentId,batchId, redisKey);
-        } else if (BatchRequestStructure.TYPE_PERSONALINFORMATION.equals(type)) {
-        	bbt = new BatchTaskOfPersonalInfo(experimentId,batchId, redisKey);
-        } else if (BatchRequestStructure.TYPE_DOENURL.equals(type)) {
+    	if (BatchRequestBase.TYPE_PERSONALCOMBORESULTSET.equals(type)) {
+        	bbt = new BatchTaskOfCombo(experimentId, batchId, redisKey);
+        } else if (BatchRequestBase.TYPE_PERSONALHETRORESULTSET.equals(type)) {
+        	bbt = new BatchTaskOfHetro(experimentId, batchId, redisKey);
+        } else if (BatchRequestBase.TYPE_PERSONALHOMORESULTSET.equals(type)) {
+        	bbt = new BatchTaskOfHomo(experimentId, batchId, redisKey);
+        } else if (BatchRequestBase.TYPE_PERSONALINFORMATION.equals(type)) {
+        	bbt = new BatchTaskOfPersonalInfo(experimentId, batchId, redisKey);
+        } else if (BatchRequestBase.TYPE_DONE.equals(type)) {
+        	bbt = new BatchTaskOfDone(experimentId, batchId, done);
+        } else if (BatchRequestBase.TYPE_DOENURL.equals(type)) {
         	if (downUrl != null && !"".equals(downUrl)) {
         		batchRecordService.maintainDownUrl(batchId, downUrl);
         	}
@@ -159,7 +163,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
      * 错误处理
      */
     @Override
-    public void errorDealWith(Long experimentId, String errMsg, String task) {
+    public void trainErrorDealWith(Long experimentId, String errMsg, String task) {
     	//释放掉锁
     	if (experimentId != null ) {
             MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
@@ -172,6 +176,13 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
         	experimentService.maintainErrorMsg(experimentId, Experiment.STATUS_TRAINING_ERROR, errMsg);
         } 
     }
+
+	@Override
+	public void batchErrorDealWith(Long batchId, String errorMsg) {
+		if (batchId != null) {
+			batchRecordService.maintainErrorMsg(batchId, errorMsg, BatchRecord.BATCH_STATUS_ERROR);
+		}
+	}
 
 }
 

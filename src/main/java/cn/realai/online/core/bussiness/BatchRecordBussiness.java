@@ -1,6 +1,7 @@
 package cn.realai.online.core.bussiness;
 
 import cn.realai.online.common.page.PageBO;
+import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.query.OfflineBatchListQuery;
 import cn.realai.online.core.vo.OfflineBatchCreateVO;
 import cn.realai.online.core.vo.OfflineBatchListVO;
@@ -10,9 +11,9 @@ public interface BatchRecordBussiness {
     PageBO<OfflineBatchListVO> pageList(OfflineBatchListQuery query);
 
     //新增离线跑批
-    Long createBatchRecord(OfflineBatchCreateVO createVO);
+    BatchRecord createBatchRecord(OfflineBatchCreateVO createVO);
 
     //执行跑批运算
-    void executeBatchRecord(Long recordId);
+    int executeBatchRecord(BatchRecord batchRecord);
 
 }

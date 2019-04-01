@@ -71,7 +71,7 @@ public class ExperimentalTrainController {
 
     }
 
-    @RequiresPermissions("experimental:train")
+    //@RequiresPermissions("experimental:train")
     @DeleteMapping()
     @ApiOperation(value = "删除实验训练列表")
     @ResponseBody

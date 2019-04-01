@@ -108,12 +108,12 @@ public class TrainServiceImpl implements TrainService {
 	@Override
 	public int experimentDeploy(Long experimentId, Long originalId) {
 		DeployRequestBO drbo = new DeployRequestBO();
-		drbo.setExperimentId(experimentId);
-		
-        String url = config.getPythonUrl();
-        String ret = HttpUtil.postRequest(url, experimentId + "");
+		drbo.setModelId(experimentId);
+		//drbo.setOriginalId(originalId);
+        String url = config.getModelPublish();
+        String ret = HttpUtil.postRequest(url, JSON.toJSONString(drbo));
         if (ret == null) {
-            throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(drbo));
+            throw new RuntimeException("TrainServiceImpl preprocess. 调用python发布接口失败. drbo{}" + JSON.toJSONString(drbo));
         }
         return 1;
 	}
@@ -124,10 +124,20 @@ public class TrainServiceImpl implements TrainService {
 		boorbo.setBatchId(batchRecord.getId());
 		boorbo.setCommand(Constant.COMMAND_BATCH);
 		boorbo.setModelId(batchRecord.getExperimentId());
-		boorbo.setXtableHeterogeneousDataSource("/" + batchRecord.getXtableHeterogeneousDataSource());
-		boorbo.setXtableHomogeneousDataSource("/" + batchRecord.getXtableHomogeneousDataSource());
-		boorbo.setYtableDataSource("/" + batchRecord.getYtableDataSource());
-		String ret = HttpUtil.postRequest(config.getPythonUrl(), JSON.toJSONString(boorbo));
+		boorbo.setModelId(2L);
+		if (batchRecord.getXtableHeterogeneousDataSource() != null) {
+			//boorbo.setXtableHeterogeneousDataSource("/" + batchRecord.getXtableHeterogeneousDataSource());
+			boorbo.setXtableHeterogeneousDataSource(batchRecord.getXtableHeterogeneousDataSource());
+		}
+		if (batchRecord.getXtableHomogeneousDataSource() != null) {
+			//boorbo.setXtableHomogeneousDataSource("/" + batchRecord.getXtableHomogeneousDataSource());
+			boorbo.setXtableHomogeneousDataSource(batchRecord.getXtableHomogeneousDataSource());
+		}
+		if (batchRecord.getYtableDataSource() != null) {
+			boorbo.setYtableDataSource(batchRecord.getYtableDataSource());
+			//boorbo.setYtableDataSource("/" + batchRecord.getYtableDataSource());
+		}
+		String ret = HttpUtil.postRequest(config.getModelOfflineBatch(), JSON.toJSONString(boorbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(boorbo));
         }
@@ -137,9 +147,8 @@ public class TrainServiceImpl implements TrainService {
 	@Override
 	public int deleteExperiment(Long experimentId) {
 		DeleteExperimentRequestBO derbo = new DeleteExperimentRequestBO();
-		derbo.setExperimentId(experimentId);
-        String url = config.getPythonUrl();
-        String ret = HttpUtil.postRequest(url, experimentId + "");
+		derbo.setModelId(experimentId);
+        String ret = HttpUtil.postRequest(config.getModelDrop(), JSON.toJSONString(derbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl deleteExperiment. 调用python删除接口失败. derbo{}" + JSON.toJSONString(derbo));
         }

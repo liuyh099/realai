@@ -47,7 +47,34 @@ public class BatchRecord {
 	private Integer offlineTimes;
 
 	private boolean tranFlag;
+	
+	private int status;
+	
+	public static int BATCH_STATUS_NEW = 1;  //新建
+	
+	public static int BATCH_STATUS_EXECUTING = 2;  //执行中
+	
+	public static int BATCH_STATUS_OVER = 3;  //处理完成
+	
+	public static int BATCH_STATUS_ERROR = 4;  //处理错误
+	
+	public String errorMsg;
 
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
 	public boolean getTranFlag() {
 		return tranFlag;

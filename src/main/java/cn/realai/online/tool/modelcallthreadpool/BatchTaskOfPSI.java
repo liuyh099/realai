@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSON;
 
 import cn.realai.online.common.Constant;
@@ -16,6 +19,8 @@ import cn.realai.online.util.SpringContextUtils;
 
 public class BatchTaskOfPSI extends BaseBatchTask {
 
+	private static Logger logger = LoggerFactory.getLogger(BatchTaskOfPSI.class);
+	
 	public BatchTaskOfPSI(Long experimentId, Long batchId, String redisKey) {
 		this.experimentId = experimentId;
 		this.batchId = batchId;
@@ -24,6 +29,7 @@ public class BatchTaskOfPSI extends BaseBatchTask {
 	
 	@Override
 	public void run() {
+		logger.info("BatchTaskOfPSI run. experimentId{}, batchId{}, redisKey{}", experimentId, batchId, redisKey);
 		RedisClientTemplate redisClientTemplate = SpringContextUtils.getBean(RedisClientTemplate.class);
         String redisValue = redisClientTemplate.get(redisKey);
         List<PSICheckResult> list = JSON.parseArray(redisValue, PSICheckResult.class);

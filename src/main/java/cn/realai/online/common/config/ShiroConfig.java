@@ -35,6 +35,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/user/logout", "anon");
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/user/forget", "anon");
+        filterChainDefinitionMap.put("/offlineBatch/**", "anon");
+        filterChainDefinitionMap.put("/experimental/**", "anon");
         filterChainDefinitionMap.put("/modelCall/**", "anon");
         filterChainDefinitionMap.put("/realTime/**", "anon");
         //filterChainDefinitionMap.put("/experimental/train/**", "anon");

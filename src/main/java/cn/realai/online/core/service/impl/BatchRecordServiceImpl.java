@@ -101,4 +101,9 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 		batchRecordDao.maintainDownUrl(batchId, downUrl);
 	}
 
+	@Override
+	public void maintainErrorMsg(Long batchId, String errorMsg, int status) {
+		batchRecordDao.maintainErrorMsg(batchId, errorMsg, status);
+	}
+
 }

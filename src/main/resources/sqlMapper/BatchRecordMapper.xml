@@ -14,6 +14,8 @@
         <result column="batch_name" property="batchName" jdbcType="VARCHAR"/>
         <result column="offline_times" property="offlineTimes" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="err_msg" property="errorMsg" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
     </resultMap>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
@@ -185,6 +187,13 @@
 	<update id="maintainDownUrl">
 		update batch_record
 		set down_url = #{downUrl}
+		where id = #{batchId}
+	</update>
+	
+	<update id="maintainErrorMsg">
+		update batch_record
+		set status = #{status},
+			err_msg = #{errorMsg}
 		where id = #{batchId}
 	</update>
 

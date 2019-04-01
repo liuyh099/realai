@@ -19,6 +19,15 @@ public class Config {
     @Value("${python.url}")
     private String PYTHON_URL;
     
+    @Value("${model.publish}")
+    private String MODEL_PUBLISH;
+    
+    @Value("${model.drop}")
+    private String MODEL_DROP;
+    
+    @Value("${model.offline.batch}")
+    private String MODEL_OFFLINE_BATCH;
+    
     @Value("${nginx.url}")
     private String NGINX_URL;
     
@@ -33,4 +42,16 @@ public class Config {
     	return http + NGINX_URL + ":" + NGINX_PORT;
     }
 
+    public String getModelPublish() {
+    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_PUBLISH;
+    }
+    
+    public String getModelDrop() {
+    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_DROP;
+    }
+    
+    public String getModelOfflineBatch() {
+    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_OFFLINE_BATCH;
+    }
+    
 }

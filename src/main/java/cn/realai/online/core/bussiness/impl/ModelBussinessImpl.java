@@ -1,5 +1,6 @@
 package cn.realai.online.core.bussiness.impl;
 
+import cn.realai.online.calculation.TrainService;
 import cn.realai.online.common.Constant;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.ModelBO;
@@ -58,6 +59,9 @@ public class ModelBussinessImpl implements ModelBussiness {
     private ServiceLicenseCheck serviceLicenseCheck;
     @Autowired
     private ServiceService serviceService;
+    
+    @Autowired
+    private TrainService trainService;
 
     @Override
     public PageBO<ModelListVO> pageList(ModelListQuery query) {
@@ -280,6 +284,7 @@ public class ModelBussinessImpl implements ModelBussiness {
         modelBO.setServiceId(experiment.getServiceId());
         modelBO.setCreateTime(System.currentTimeMillis());
         int count = modelService.insert(modelBO);
+        count = trainService.experimentDeploy(modelBO.getExperimentId(), null);
         HashMap<String,Object> hashMap =new HashMap<>();
         if(count>0){
             modelService.offline(modelBO.getServiceId(),modelBO.getId(),Model.RELEASE_STATUS.NONE.value);

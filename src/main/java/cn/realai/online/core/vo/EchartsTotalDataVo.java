@@ -12,7 +12,9 @@ public class EchartsTotalDataVo {
    private List<Integer> countList;
 
    private List<EchartsDataVo> data;
-
+   
+   private List<Double> positiveRatioList;
+   
     public List<EchartsDataVo> getData() {
         return data;
     }
@@ -28,4 +30,13 @@ public class EchartsTotalDataVo {
     public void setCountList(List<Integer> countList) {
         this.countList = countList;
     }
+
+	public List<Double> getPositiveRatioList() {
+		return positiveRatioList;
+	}
+
+	public void setPositiveRatioList(List<Double> positiveRatioList) {
+		this.positiveRatioList = positiveRatioList;
+	}
+    
 }

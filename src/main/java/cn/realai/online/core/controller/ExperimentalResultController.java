@@ -226,10 +226,13 @@ public class ExperimentalResultController {
             EchartsTotalDataVo result =new EchartsTotalDataVo();
             List<EchartsDataVo> datas = null;
             List<Integer> total=null;
+            List<Double> positiveRatioList = null;
             if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
                 datas = new ArrayList<>();
                 total = new ArrayList<>();
+                positiveRatioList = new ArrayList<>();
                 for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {
+                	positiveRatioList.add(sampleGroupingBO.getPositiveRatio());
                     total.add(sampleGroupingBO.getCount());
                     EchartsDataVo data = new EchartsDataVo();
                     data.setName(sampleGroupingBO.getGroupName());
@@ -238,6 +241,7 @@ public class ExperimentalResultController {
                 }
             }
             result.setCountList(total);
+            result.setPositiveRatioList(positiveRatioList);
             result.setData(datas);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {

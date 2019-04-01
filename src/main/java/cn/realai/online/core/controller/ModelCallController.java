@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 
-import cn.realai.online.core.bo.BatchRequestStructure;
-import cn.realai.online.core.bo.ModelRequestStructure;
 import cn.realai.online.core.bo.TrainResultRedisKey;
+import cn.realai.online.core.bo.model.OfflineBatchRequestStructure;
+import cn.realai.online.core.bo.model.BatchRequestBase;
+import cn.realai.online.core.bo.model.ModelRequestStructure;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
 import cn.realai.online.common.Constant;
 import cn.realai.online.common.base.BaseController;
@@ -44,19 +45,24 @@ public class ModelCallController extends BaseController{
     @RequestMapping(value = "/offlineBatch", method = RequestMethod.POST)
     public String runBatchOffline(@RequestBody String param) {
     	logger.info("ModelCallController runBatchOffline. 离线跑批. param{}", JSON.toJSONString(param));
-    	BatchRequestStructure brs = JSON.parseObject(param, BatchRequestStructure.class);
-        Long experimentId = brs.getExperimentId();
-        String type = brs.getType();
-        String redisKey = brs.getRedisKey();
-        String downUrl = brs.getDownUrl();
-        Long batchId = brs.getBatchId();
-        if (type != null || "".equals(type) || experimentId == null || redisKey == null || "".equals(redisKey)) {
+    	OfflineBatchRequestStructure obrs = JSON.parseObject(param, OfflineBatchRequestStructure.class);
+    	if (obrs.getCode() != 200) {
+    		modelCallBussiness.batchErrorDealWith(obrs.getBatchId(), obrs.getMsg());
+    		return ResultUtils.generateResultStr(ResultCode.SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
+    	}
+    	
+    	Long experimentId = obrs.getModelId();
+        String type = obrs.getType();
+        String redisKey = obrs.getRedisKey();
+        String downUrl = obrs.getDownUrl();
+        Long batchId = obrs.getBatchId();
+       /* if (type == null || "".equals(type) || experimentId == null || redisKey == null || "".equals(redisKey)) {
             logger.error("ModelCallController runBatchDaily:date定时任务发生错误，参数格式错误. "
                     + "experimentId{}, redisKey{}", experimentId, type);
             return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("文件地址不能为空或null"), null);
-        }       
-        modelCallBussiness.runBatchOffline(experimentId, redisKey, type, downUrl, batchId);
-        return ResultUtils.generateResultStr(ResultCode.SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
+        }       */
+        modelCallBussiness.runBatchOffline(experimentId, redisKey, type, downUrl, batchId, obrs.getDone());
+        return ResultUtils.generateResultStr(ResultCode.PYTHON_SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
     
     /**
@@ -66,8 +72,8 @@ public class ModelCallController extends BaseController{
      */
     @RequestMapping(value = "/dailyBatch", method = RequestMethod.POST)
     public String runBatchDaily(@RequestBody String param) {
-    	BatchRequestStructure brs = JSON.parseObject(param, BatchRequestStructure.class);
-    	Long experimentId = brs.getExperimentId();
+    	OfflineBatchRequestStructure brs = JSON.parseObject(param, OfflineBatchRequestStructure.class);
+    	Long experimentId = brs.getModelId();
     	String type = brs.getType();
         String redisKey = brs.getRedisKey();
         String date = brs.getDate();
@@ -113,7 +119,7 @@ public class ModelCallController extends BaseController{
 
             //解析处理结果
             if (code != 200) { //如果处理不成功
-                modelCallBussiness.errorDealWith(experimentId, msg, task);
+                modelCallBussiness.trainErrorDealWith(experimentId, msg, task);
             } else { //处理成功，根据task判断处理方式
                 if (Constant.COMMAND_PREPROCESS.equals(task)) { //预处理
                     String redisKey = map.get("variableData");
@@ -123,7 +129,7 @@ public class ModelCallController extends BaseController{
                     modelCallBussiness.trainCallback(experimentId, redisKey);
                 } else {
                     logger.warn("ModelCallController callback. python回调task为null");
-                    modelCallBussiness.errorDealWith(experimentId, msg, task);
+                    modelCallBussiness.trainErrorDealWith(experimentId, msg, task);
                     return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
                 }
             }

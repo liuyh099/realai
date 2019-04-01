@@ -42,4 +42,8 @@ public interface BatchRecordDao {
 
 	void maintainDownUrl(@Param("batchId")Long batchId, @Param("downUrl")String downUrl);
 
+	void maintainErrorMsg(@Param("batchId")Long batchId, 
+			@Param("errorMsg")String errorMsg, 
+			@Param("status")int status);
+
 }

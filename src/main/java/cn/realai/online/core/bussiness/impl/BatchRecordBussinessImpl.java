@@ -7,6 +7,7 @@ import cn.realai.online.core.bo.BatchListBO;
 import cn.realai.online.core.bussiness.BatchRecordBussiness;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
+import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.query.OfflineBatchListQuery;
 import cn.realai.online.core.service.BatchRecordService;
 import cn.realai.online.core.service.ExperimentService;
@@ -96,7 +97,7 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Long createBatchRecord(OfflineBatchCreateVO createVO) {
+    public BatchRecord createBatchRecord(OfflineBatchCreateVO createVO) {
         cn.realai.online.core.entity.Service serviceVO = new cn.realai.online.core.entity.Service();
         List<cn.realai.online.core.entity.Service> services = serviceService.list(serviceVO);
         Assert.notEmpty(services, "未找到对应的离线部署上线服务");
@@ -124,27 +125,18 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
         cn.realai.online.core.entity.Service service = serviceService.get(createVO.getServiceId());
         service.setBatchTimes(service.getBatchTimes() + 1);
         serviceService.update(service);
-        return record.getId();
+        return record;
     }
 
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void executeBatchRecord(Long recordId) {
-        if (redissonLock.tryLock(RedisKeyPrefix.OFFLINE_BATCH_PREFIX + "CALCULATE", TimeUnit.SECONDS, 5L, 1L)) {
-            try {
-                ModelCallPool.modelCallPool.execute(() -> {
-                    log.warn("开始执行离线跑批记录运算:{}", recordId);
-                    BatchRecord record = new BatchRecord();
-                    record.setId(recordId);
-                    record = batchRecordService.getByEntity(record);
-                    Assert.notNull(record, "未查询到相关跑批记录无法运算");
-                    trainService.runBatchOfOffline(record);
-                    log.warn("离线跑批记录运算完成:{}", recordId);
-                });
-            } finally {
-                redissonLock.unlock(RedisKeyPrefix.EXPERIMENT_PREFIX);
-            }
-        }
+    public int executeBatchRecord(BatchRecord batchRecord) {
+    	MLock mLock = experimentService.getExperimentTrainMLockInstance(batchRecord.getExperimentId());
+    	if (mLock.tryLock()) {
+    		trainService.runBatchOfOffline(batchRecord);
+    		return 1;
+    	}
+    	return -1;
     }
 }
