@@ -173,4 +173,13 @@ public interface ExperimentService {
      * @return
      */
     int logicDeleteExperiment(List<Long> ids);
+
+    /**
+     * 训练
+     * @param experimentId
+     * @param statusTraining
+     * @param currentTimeMillis
+     * @return
+     */
+    int train(long experimentId, int statusTraining, long currentTimeMillis);
 }

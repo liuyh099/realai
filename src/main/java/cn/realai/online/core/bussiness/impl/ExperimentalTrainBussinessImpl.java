@@ -169,7 +169,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         HomoAndHetroBO deleteVariableData = variableDataService.selectDeleteByExperimentId(experimentId, deleteStatus);
 
         //修改试验状态
-        int ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
+        int ret = experimentService.train(experimentId, Experiment.STATUS_TRAINING,System.currentTimeMillis());
         ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
 
         //训练    

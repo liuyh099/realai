@@ -273,4 +273,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     public int logicDeleteExperiment(List<Long> ids) {
         return experimentDao.logicDeleteExperiment(ids);
     }
+
+    @Override
+    public int train(long experimentId, int statusTraining, long currentTimeMillis) {
+        return experimentDao.train(experimentId,statusTraining,currentTimeMillis);
+    }
 }
