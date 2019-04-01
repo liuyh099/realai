@@ -170,7 +170,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         if (ret != 1) {
         	return ret;
         }
-        ret = experimentService.train(experimentId, Experiment.STATUS_TRAINING,System.currentTimeMillis());
+        ret = experimentService.train(experimentId, Experiment.STATUS_TRAINING, System.currentTimeMillis());
         return ret;
     }
 
