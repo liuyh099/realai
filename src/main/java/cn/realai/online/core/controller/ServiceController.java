@@ -57,11 +57,16 @@ public class ServiceController {
     public Result<List<ServerNameSelectVO>> getSelect(@RequestParam(value="status", required = false) Integer status){
         List<ServerNameSelectVO> serverNameSelectVOs = new ArrayList<>();
         try {
-            String statusStr = Model.RELEASE_STATUS.NONE.value;
+            if (status == null) {
+                status = 0;
+            }
+            String statusStr;
             if (status == 1) {
                 statusStr = Model.RELEASE_STATUS.ONLINE.value;
             } else if (status == 2) {
                 statusStr = Model.RELEASE_STATUS.OFFLINE.value;
+            } else {
+                statusStr = Model.RELEASE_STATUS.NONE.value;
             }
             List<Service> services = serviceService.findListByModelStatus(statusStr);
             if(services != null && services.size() > 0) {
