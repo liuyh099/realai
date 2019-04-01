@@ -197,6 +197,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setAlgorithmType("全监督算法");
         experiment.setCreateUserId(UserUtils.getUser().getId());
         Long ret = experimentService.insert(experiment);
+        variableDataService.deleteVariableDataByExperimentId(experimentBO.getId());
         trainService.preprocess(experiment);
         return ret;
     }

@@ -130,4 +130,10 @@ public class VariableDataServiceImpl implements VariableDataService {
         return map;
     }
 
+
+	@Override
+	public void deleteVariableDataByExperimentId(Long experimentId) {
+		variableDataDao.deleteVariableDataByExperimentId(experimentId);
+	}
+
 }
