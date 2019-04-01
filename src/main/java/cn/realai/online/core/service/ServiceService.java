@@ -33,4 +33,6 @@ public interface ServiceService {
      */
 	boolean checkService(long serviceId);
 
+	List<Service> findListByModelStatus(String status);
+
 }
