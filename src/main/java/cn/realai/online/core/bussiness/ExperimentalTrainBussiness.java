@@ -253,4 +253,11 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     Integer updateNameAndRemark(ExperimentBO experimentBO);
+
+    /**
+     * 筛选不是发布状态的实验ID
+     * @param ids
+     * @return
+     */
+    List<Long> findNotPublishExperimentIds(List<Long> ids);
 }

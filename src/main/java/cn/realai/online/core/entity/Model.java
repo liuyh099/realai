@@ -18,6 +18,9 @@ public class Model {
     //模型状态
     private String releaseStatus;
 
+
+    private Long createUserId;
+
     public static enum RELEASE_STATUS {
         NONE("none", "未发布"),
         ONLINE("online", "线上发布"),
@@ -39,6 +42,15 @@ public class Model {
     private Long serviceId;
 
     private String remark;
+
+
+    public Long getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
+    }
 
     public String getRemark() {
         return remark;

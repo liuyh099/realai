@@ -81,7 +81,12 @@ public class ExperimentalTrainController {
             if (CollectionUtils.isEmpty(ids)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
-            if (experimentalTrainBussiness.deleteExperimentByIds(ids) > 0) {
+            //去除是发布状态的Id
+            List<Long> resultIds = experimentalTrainBussiness.findNotPublishExperimentIds(ids);
+            if (CollectionUtils.isEmpty(resultIds)) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            }
+            if (experimentalTrainBussiness.deleteExperimentByIds(resultIds) > 0) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             } else {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
@@ -177,9 +182,9 @@ public class ExperimentalTrainController {
     @ApiOperation(value = "新增实验-选择文件-获得文件地址")
     @ApiImplicitParam(name = "type", value = "文件地址类别[experiment：实验，offline：离线跑批 默认是实验]", required = false, dataType = "String", paramType = "query")
     @ResponseBody
-    public Result<FileTreeVo> getFilePath(@RequestParam(name="type", required = false) String type) {
+    public Result<FileTreeVo> getFilePath(@RequestParam(name = "type", required = false) String type) {
         try {
-            type = StringUtils.isEmpty(type) ? "experiment":type;
+            type = StringUtils.isEmpty(type) ? "experiment" : type;
             Object o = sSHBusinness.getFilePath(type);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), o);
         } catch (Exception e) {
@@ -230,9 +235,9 @@ public class ExperimentalTrainController {
             BeanUtils.copyProperties(experimentalTrainSelectFileVo, experimentBO);
             experimentBO.setServiceId(experimentalTrainSelectFileVo.getServerId());
             boolean updateFlag = checkCanUpdate(experimentalTrainSelectFileVo.getId());
-            if(updateFlag){
+            if (updateFlag) {
                 count = experimentalTrainBussiness.selectFileUpdate(experimentBO);
-            }else {
+            } else {
                 count = experimentalTrainBussiness.updateName(experimentBO);
             }
             if (count != null && count > 0) {
@@ -298,9 +303,9 @@ public class ExperimentalTrainController {
     }
 
 
-    private boolean checkCanUpdate(Long id ) {
+    private boolean checkCanUpdate(Long id) {
         ExperimentBO experiment = experimentalTrainBussiness.selectById(id);
-        if(experiment.getStatus()== Experiment.STATUS_TRAINING || experiment.getStatus()==Experiment.STATUS_TRAINING_OVER){
+        if (experiment.getStatus() == Experiment.STATUS_TRAINING || experiment.getStatus() == Experiment.STATUS_TRAINING_OVER) {
             return false;
         }
         return true;
@@ -355,7 +360,7 @@ public class ExperimentalTrainController {
 
     private Result updateParam(ExperimentalTrainSelectParamVO experimentalTrainSelectParamVo, Integer status) {
         boolean updateFlag = checkCanUpdate(experimentalTrainSelectParamVo.getId());
-        if(!updateFlag){
+        if (!updateFlag) {
             return new Result(ResultCode.DATA_ERROR.getCode(), "实验已经完成或者正在进行中，不可以修改实验", null);
         }
         ExperimentBO experimentBO = new ExperimentBO();
@@ -399,7 +404,7 @@ public class ExperimentalTrainController {
     public Result createModelDelete(@RequestBody @Validated ExperimentalTrainCreateModelVO experimentalTrainCreateModelVo) {
         try {
             boolean updateFlag = checkCanUpdate(experimentalTrainCreateModelVo.getId());
-            if(!updateFlag){
+            if (!updateFlag) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "实验已经完成或者正在进行中，不可以修改实验", null);
             }
             experimentalTrainBussiness.deleteVariableData(experimentalTrainCreateModelVo.getId(), experimentalTrainCreateModelVo.getIds());
@@ -444,12 +449,12 @@ public class ExperimentalTrainController {
     public Result createModel(@PathVariable Long trainId) {
         try {
             boolean updateFlag = checkCanUpdate(trainId);
-            if(!updateFlag){
+            if (!updateFlag) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "实验已经完成或者正在进行中，不可以修改实验", null);
             }
             int ret = experimentalTrainBussiness.train(trainId, null);
             if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
-            	return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
+                return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
             }
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
         } catch (Exception e) {
@@ -471,7 +476,7 @@ public class ExperimentalTrainController {
             }
             int ret = experimentalTrainBussiness.train(newExperimentId, bo.getTrainId());
             if (ret == -1) {
-            	return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
+                return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
             }
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
         } catch (Exception e) {

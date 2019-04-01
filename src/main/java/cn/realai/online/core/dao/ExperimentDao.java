@@ -132,5 +132,24 @@ public interface ExperimentDao {
 			@Param("status")int status,
 			@Param("errMsg")String errMsg);
 
+    /**
+     * 更新名称和备注
+     * @param experiment
+     * @return
+     */
     Integer updateNameAndRemark(Experiment experiment);
+
+    /**
+     * 筛选未发布的实验ID
+     * @param ids
+     * @return
+     */
+    List<Long> findNotPublishExperimentIds(@Param("ids") List<Long> ids);
+
+    /**
+     * 逻辑删除实验
+     * @param ids
+     * @return
+     */
+    int logicDeleteExperiment(@Param("ids")List<Long> ids);
 }

@@ -8,58 +8,86 @@ package cn.realai.online.core.entity;
 public class ServiceDeployRecord {
 
     //主键
-    private long id;
+    private Long id;
 
     //服务id
-    private long serviceId;
+    private Long serviceId;
 
     //模型名称
     private String modelName;
 
     //实验id
-    private long experimentId;
+    private Long experimentId;
 
     //创建时间
-    private long createTime;
+    private Long createTime;
 
     //操作类型
     private int opertionType;
 
     //操作人
-    private long userId;
+    private Long userId;
 
     //备注
     private String remark;
 
-    public long getId() {
+    private Long modelId;
+
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Long getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(Long modelId) {
+        this.modelId = modelId;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getServiceId() {
+    public Long getServiceId() {
         return serviceId;
     }
 
-    public void setServiceId(long serviceId) {
+    public void setServiceId(Long serviceId) {
         this.serviceId = serviceId;
     }
 
-    public long getExperimentId() {
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public Long getExperimentId() {
         return experimentId;
     }
 
-    public void setExperimentId(long experimentId) {
+    public void setExperimentId(Long experimentId) {
         this.experimentId = experimentId;
     }
 
-    public long getCreateTime() {
+    public Long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
 
@@ -71,11 +99,11 @@ public class ServiceDeployRecord {
         this.opertionType = opertionType;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -86,5 +114,4 @@ public class ServiceDeployRecord {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
 }

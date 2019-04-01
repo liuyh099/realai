@@ -6,7 +6,9 @@ import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.ModelBO;
 import cn.realai.online.core.bo.ModelDetailBO;
 import cn.realai.online.core.bo.ModelListBO;
+import cn.realai.online.core.bo.ServiceDeployRecordBO;
 import cn.realai.online.core.bussiness.ModelBussiness;
+import cn.realai.online.core.bussiness.ServiceDeployRecordBussiness;
 import cn.realai.online.core.bussiness.TuningRecordBussiness;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.Model;
@@ -17,6 +19,8 @@ import cn.realai.online.core.service.*;
 import cn.realai.online.core.vo.*;
 import cn.realai.online.lic.LicenseException;
 import cn.realai.online.lic.ServiceLicenseCheck;
+import cn.realai.online.userandperm.entity.User;
+import cn.realai.online.util.UserUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -62,6 +66,9 @@ public class ModelBussinessImpl implements ModelBussiness {
     
     @Autowired
     private TrainService trainService;
+
+    @Autowired
+    private ServiceDeployRecordBussiness serviceDeployRecordBussiness;
 
     @Override
     public PageBO<ModelListVO> pageList(ModelListQuery query) {
@@ -283,7 +290,11 @@ public class ModelBussinessImpl implements ModelBussiness {
         //serviceService.online(modelBO.getServiceId());
         modelBO.setServiceId(experiment.getServiceId());
         modelBO.setCreateTime(System.currentTimeMillis());
+        modelBO.setCreateUserId(UserUtils.getUser().getId());
         int count = modelService.insert(modelBO);
+        ServiceDeployRecordBO serviceDeployRecordBO = getServiceDeployRecordBO(modelBO);
+        serviceDeployRecordBussiness.insert(serviceDeployRecordBO);
+
         count = trainService.experimentDeploy(modelBO.getExperimentId(), null);
         HashMap<String,Object> hashMap =new HashMap<>();
         if(count>0){
@@ -296,9 +307,27 @@ public class ModelBussinessImpl implements ModelBussiness {
         return hashMap;
     }
 
+    private ServiceDeployRecordBO getServiceDeployRecordBO(ModelBO modelBO) {
+        ServiceDeployRecordBO serviceDeployRecordBO =new ServiceDeployRecordBO();
+        serviceDeployRecordBO.setServiceId(modelBO.getServiceId());
+        serviceDeployRecordBO.setModelId(modelBO.getId());
+        serviceDeployRecordBO.setCreateTime(System.currentTimeMillis());
+        serviceDeployRecordBO.setExperimentId(modelBO.getExperimentId());
+        serviceDeployRecordBO.setOpertionType(1);
+        serviceDeployRecordBO.setRemark(modelBO.getRemark());
+        serviceDeployRecordBO.setUserId(UserUtils.getUser().getId());
+        return serviceDeployRecordBO;
+    }
+
     @Override
     public Model getTrainByModelId(Long id) {
         return modelService.get(id);
+    }
+
+    @Override
+    public List<ModelBO> findModelOptionHistory(Long serviceId) {
+        List<Model> result = modelService.findModelOptionHistory(serviceId);
+        return null;
     }
 
 }
