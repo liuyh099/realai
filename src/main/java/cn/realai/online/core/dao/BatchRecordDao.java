@@ -44,4 +44,7 @@ public interface BatchRecordDao {
 			@Param("errorMsg")String errorMsg, 
 			@Param("status")int status);
 
+	void updateBatchRecordStatus(@Param("batchId")Long batchId, 
+			@Param("status")int status);
+
 }

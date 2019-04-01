@@ -20,6 +20,7 @@ import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.service.BatchRecordService; 
 import cn.realai.online.core.service.ExperimentService;
+import cn.realai.online.core.service.MLockService;
 import cn.realai.online.core.service.VariableDataService;
 import cn.realai.online.tool.modelcallthreadpool.BaseBatchTask;
 import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfCombo;
@@ -53,6 +54,9 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
     @Autowired
     private BatchRecordService batchRecordService;
 
+    @Autowired
+    private MLockService mLockService;
+    
     /*
      * 处理每日跑批任务
      */
@@ -166,7 +170,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
     public void trainErrorDealWith(Long experimentId, String errMsg, String task) {
     	//释放掉锁
     	if (experimentId != null ) {
-            MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
+            MLock mlock = mLockService.getLock(experimentId);
             mlock.unLock();
     	}
     	

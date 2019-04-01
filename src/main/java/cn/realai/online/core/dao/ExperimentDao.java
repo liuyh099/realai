@@ -106,6 +106,15 @@ public interface ExperimentDao {
     void updateExperimentTrainStatus(@Param("id")Long experimentId, @Param("status")int releasYes,@Param("publishTime")Long publishTime);
 
     /**
+     * 实验训练
+     * @param experimentId
+     * @param statusTraining
+     * @param currentTimeMillis
+     * @return
+     */
+    int train(@Param("id")long experimentId, @Param("status")int statusTraining, @Param("trainTime")long currentTimeMillis);
+
+    /**
      * 获得最近发布的服务id
      * @return
      */
@@ -152,4 +161,6 @@ public interface ExperimentDao {
      * @return
      */
     int logicDeleteExperiment(@Param("ids")List<Long> ids);
+
+
 }

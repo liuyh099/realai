@@ -111,6 +111,7 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
         //创建跑批记录
         BatchRecord record = new BatchRecord();
         record.setXtableHeterogeneousDataSource(createVO.getxHeteroDataSource());
+        record.setStatus(BatchRecord.BATCH_STATUS_NEW);
         record.setXtableHomogeneousDataSource(createVO.getxHomoDataSource());
         record.setYtableDataSource(createVO.getyDataSource());
         record.setBatchType(BatchRecord.BATCH_TYPE_OFFLINE);
@@ -134,11 +135,10 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public int executeBatchRecord(BatchRecord batchRecord) {
-    	MLock mLock = experimentService.getExperimentTrainMLockInstance(batchRecord.getExperimentId());
-    	if (mLock.tryLock()) {
-    		trainService.runBatchOfOffline(batchRecord);
-    		return 1;
+    	int ret = trainService.runBatchOfOffline(batchRecord);
+    	if (ret == 1) {
+    		batchRecordService.updateBatchRecordStatus(batchRecord.getId(), BatchRecord.BATCH_STATUS_EXECUTING);
     	}
-    	return -1;
+    	return ret;
     }
 }

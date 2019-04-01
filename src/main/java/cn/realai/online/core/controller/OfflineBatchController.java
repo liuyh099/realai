@@ -53,7 +53,7 @@ public class OfflineBatchController {
     @Autowired
     private BatchRecordService batchRecordService;
 
-    //@RequiresPermissions("model:offlinerun")
+    @RequiresPermissions("model:offlinerun")
     @PostMapping("/create")
     @ApiOperation(value="新建离线跑批")
     @ResponseBody
