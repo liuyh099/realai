@@ -63,6 +63,21 @@
         UPDATE experiment set name =#{name},remark=#{remark} where id=#{id}
     </update>
 
+    <select id="findNotPublishExperimentIds" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT id FROM experiment WHERE id in
+        <foreach collection="ids" separator="," open="(" close=")" item="item">
+            #{item}
+        </foreach>
+        AND releas_status NOT IN (2,3)
+    </select>
+
+    <update id="logicDeleteExperiment" parameterType="java.lang.Long">
+        UPDATE　experiment SET status = 7 WHERE id in
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
     <insert id="insert" parameterType="cn.realai.online.core.entity.Experiment">
         <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID() AS id
@@ -202,6 +217,7 @@
             <if test="serviceId!=null">
                 AND a.service_id= #{serviceId}
             </if>
+            AND a.status !=7
         </where>
         ORDER BY a.create_time DESC
     </select>

@@ -42,6 +42,12 @@ public class SampleWeightBussinessImpl implements SampleWeightBussiness {
             return boList;
         }else {
             List<SampleWeightBO> boList = sampleWeightService.findImage(sampleWeight);
+            for (SampleWeightBO sampleWeightBO : boList) {
+                VariableData variableData = variableDataService.getById(sampleWeightBO.getVariableId());
+                sampleWeightBO.setVariableName(variableData.getName());
+                sampleWeightBO.setVariableType(variableData.getVariableType());
+                sampleWeightBO.setMeaning(variableData.getMeaning());
+            }
             return boList;
         }
 
@@ -68,6 +74,12 @@ public class SampleWeightBussinessImpl implements SampleWeightBussiness {
             return boList;
         }else {
             List<SampleWeightBO> boList = sampleWeightService.findImage(sampleWeight);
+            for (SampleWeightBO sampleWeightBO : boList) {
+                VariableData variableData = variableDataService.getById(sampleWeightBO.getVariableId());
+                sampleWeightBO.setVariableName(variableData.getName());
+                sampleWeightBO.setVariableType(variableData.getVariableType());
+                sampleWeightBO.setMeaning(variableData.getMeaning());
+            }
             return boList;
         }
     }

@@ -68,4 +68,9 @@ public class ModelServiceImpl implements ModelService {
     public void offline(Long serviceId, Long id, String value) {
          modelDao.offline(serviceId,id,value);
     }
+
+    @Override
+    public List<Model> findModelOptionHistory(Long serviceId) {
+        return  modelDao.findModelOptionHistory(serviceId);
+    }
 }

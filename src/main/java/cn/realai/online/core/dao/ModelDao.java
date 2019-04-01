@@ -43,4 +43,11 @@ public interface ModelDao {
      * @param value
      */
     void offline(@Param("serviceId") Long serviceId, @Param("id") Long id, @Param("status") String value);
+
+    /**
+     * 获得模型操作记录
+     * @param serviceId
+     * @return
+     */
+    List<Model> findModelOptionHistory(@Param("serviceId") Long serviceId);
 }

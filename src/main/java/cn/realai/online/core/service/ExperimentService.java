@@ -159,4 +159,18 @@ public interface ExperimentService {
      * @return
      */
     Integer updateNameAndRemark(Experiment experiment);
+
+    /**
+     * 筛选不是发布状态的实验ID
+     * @param ids
+     * @return
+     */
+    List<Long> findNotPublishExperimentIds(List<Long> ids);
+
+    /**
+     * 逻辑删除实验
+     * @param ids
+     * @return
+     */
+    int logicDeleteExperiment(List<Long> ids);
 }

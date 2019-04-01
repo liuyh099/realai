@@ -263,4 +263,14 @@ public class ExperimentServiceImpl implements ExperimentService {
     public Integer updateNameAndRemark(Experiment experiment) {
         return experimentDao.updateNameAndRemark(experiment);
     }
+
+    @Override
+    public List<Long> findNotPublishExperimentIds(List<Long> ids) {
+        return experimentDao.findNotPublishExperimentIds(ids);
+    }
+
+    @Override
+    public int logicDeleteExperiment(List<Long> ids) {
+        return experimentDao.logicDeleteExperiment(ids);
+    }
 }

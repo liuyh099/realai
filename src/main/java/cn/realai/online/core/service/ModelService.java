@@ -57,4 +57,11 @@ public interface ModelService {
      * @param value
      */
     void offline(Long serviceId, Long id, String value);
+
+    /**
+     * 根据服务ID获得模型发布记录
+     * @param serviceId
+     * @return
+     */
+    List<Model> findModelOptionHistory(Long serviceId);
 }
