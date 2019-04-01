@@ -66,7 +66,7 @@ public class BatchRecord {
 
 	public static int NO_DEL = 0; //未删除
 
-	public static int YES_DEL = 0; //已删除
+	public static int YES_DEL = 1; //已删除
 
 	public String getErrorMsg() {
 		return errorMsg;

@@ -79,6 +79,7 @@
         <result column="serviceId" property="serviceId" jdbcType="BIGINT"/>
         <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
         <result column="batchTimes" property="batchTimes" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="batchCreateTime" property="batchCreateTime" jdbcType="BIGINT"/>
         <result column="downUrl" property="downUrl" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
@@ -93,6 +94,7 @@
         s.id as serviceId,
         s.name as serviceName,
         s.batch_times as batchTimes,
+        br.status as status,
         br.create_time as batchCreateTime,
         br.down_url as downUrl,
         br.remark as remark
@@ -101,13 +103,13 @@
         join experiment as ep on br.experiment_id = ep.id
         join model as m on br.experiment_id = m.experiment_id
         <where>
-            del_flag = 0
+            br.del_flag = 0
             <if test="batchListBO!=null and batchListBO.modelName!=null">
                 and m.name like '%${batchListBO.modelName}%'
             </if>
-            <!--<if test="batchListBO!=null and batchListBO.status!=null">
-                and ep.status = #{batchListBO.status}
-            </if>-->
+            <if test="batchListBO!=null and batchListBO.status!=null">
+                and br.status = #{batchListBO.status}
+            </if>
             <if test="minTime!=null">
                 and <![CDATA[ br.create_time >= #{minTime} ]]>
             </if>
@@ -159,7 +161,7 @@
         br.service_id as serviceId,
         sv.name as serviceName,
         br.experiment_id as experimentId,
-        ep.status,
+        br.status,
         br.offline_times as offlineTimes,
         br.x_table_heter as xtabaleHeter,
         br.x_table_homo as xtableHomo,

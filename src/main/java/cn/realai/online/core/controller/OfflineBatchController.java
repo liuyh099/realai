@@ -67,7 +67,7 @@ public class OfflineBatchController {
         		}
         		return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), batchRecord.getId());
         	} 
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), batchRecord.getId());
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         } catch (Exception e) {
             log.error("新建离线跑批异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);

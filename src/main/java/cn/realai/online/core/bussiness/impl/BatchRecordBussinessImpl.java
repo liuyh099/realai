@@ -8,9 +8,11 @@ import cn.realai.online.core.bussiness.BatchRecordBussiness;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.MLock;
+import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.query.OfflineBatchListQuery;
 import cn.realai.online.core.service.BatchRecordService;
 import cn.realai.online.core.service.ExperimentService;
+import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.OfflineBatchCreateVO;
 import cn.realai.online.core.vo.OfflineBatchListVO;
@@ -54,6 +56,8 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
     private TrainService trainService;
     @Autowired
     private RedissonLock redissonLock;
+    @Autowired
+    private ModelService modelService;
 
 
     @Override
@@ -98,11 +102,11 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public BatchRecord createBatchRecord(OfflineBatchCreateVO createVO) {
-        cn.realai.online.core.entity.Service serviceVO = new cn.realai.online.core.entity.Service();
-        List<cn.realai.online.core.entity.Service> services = serviceService.list(serviceVO);
-        Assert.notEmpty(services, "未找到对应的离线部署上线服务");
-        HashMap releaseMap = experimentService.findByServiceIdAndReleaseStatus(createVO.getServiceId(), Experiment.RELEAS_YES);
-        Assert.notNull(releaseMap, "未找到服务对应的发布实验信息无法创建跑批记录");
+        boolean isAvailable = serviceService.checkService(createVO.getServiceId());
+        Assert.isTrue(isAvailable, "当前服务不可用");
+        Model model = modelService.selectByServiceId(createVO.getServiceId());
+        Assert.notNull(model, "当前服务下无已发布模型");
+        cn.realai.online.core.entity.Service serviceEntity = serviceService.get(createVO.getServiceId());
 
         //创建跑批记录
         BatchRecord record = new BatchRecord();
@@ -111,15 +115,18 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
         record.setYtableDataSource(createVO.getyDataSource());
         record.setBatchType(BatchRecord.BATCH_TYPE_OFFLINE);
         //record.setCreateTime(new Date().getTime());
+        record.setModelId(model.getId());
         record.setServiceId(createVO.getServiceId());
-        record.setExperimentId((Long) releaseMap.get("experimentId"));
-        record.setBatchName(String.valueOf(releaseMap.get("serviceName")) + "_" + String.valueOf(DateUtil.formatDateToString(new Date(), "yyyyMMddHHmmss")) + "_离线跑批");
+        record.setExperimentId(model.getExperimentId());
+        record.setBatchName(serviceEntity.getName() + "_" + String.valueOf(DateUtil.formatDateToString(new Date(), "yyyyMMddHHmmss")) + "_离线跑批");
+        record.setRemark(createVO.getRemark());
+        record.setStatus(BatchRecord.BATCH_STATUS_NEW);
+        record.setDelFlag(BatchRecord.NO_DEL);
         batchRecordService.insert(record);
 
-        //todo 更新服务离线跑批次数
-        cn.realai.online.core.entity.Service service = serviceService.get(createVO.getServiceId());
-        service.setBatchTimes(service.getBatchTimes() + 1);
-        serviceService.update(service);
+        //更新服务跑批次数
+        serviceEntity.setBatchTimes(serviceEntity.getBatchTimes() + 1);
+        serviceService.update(serviceEntity);
         return record;
     }
 

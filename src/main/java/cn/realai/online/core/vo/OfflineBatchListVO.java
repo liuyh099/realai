@@ -39,6 +39,9 @@ public class OfflineBatchListVO {
     @ApiModelProperty(value="跑批次数")
     private Integer batchTimes;
 
+    @ApiModelProperty(value="跑批状态 1:新建 2：处理中 3：处理完成 4：处理有误")
+    private Integer status;
+
     @ApiModelProperty(value="离线跑批时间")
     private Long batchCreateTime;
 
@@ -118,6 +121,14 @@ public class OfflineBatchListVO {
 
     public void setBatchTimes(Integer batchTimes) {
         this.batchTimes = batchTimes;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Long getBatchCreateTime() {
