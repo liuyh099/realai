@@ -25,7 +25,7 @@
         <where>
             1=1
             <if test="serviceId!=null">
-                a.service_id = #{serviceId}
+                AND a.service_id = #{serviceId}
             </if>
         </where>
     </select>
