@@ -2,20 +2,15 @@ package cn.realai.online.core.service.impl;
 
 import cn.realai.online.core.bo.ExperimentalTrainDetailBO;
 import com.alibaba.fastjson.JSON;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import cn.realai.online.core.bo.ExperimentBO;
-import cn.realai.online.common.Constant;
 import cn.realai.online.common.RedisKeyPrefix;
 import cn.realai.online.core.dao.ExperimentDao;
 import cn.realai.online.core.entity.Experiment;
-import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.tool.redis.RedisClientTemplate;
 import cn.realai.online.util.ConvertJavaBean;
@@ -181,14 +176,6 @@ public class ExperimentServiceImpl implements ExperimentService {
         return experiment.getId();
     }
 
-    //释放锁自己处于一个事务中，以确保释放成功，不管同一个业务中的其他操作是否成功
-    @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly=false)
-    public MLock getExperimentTrainMLockInstance(long experimentId) {
-        return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId,
-                Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
-    }
-
     @Override
     public int trainResultMaintain(Long experimentId, int status, String sampleReview, String modelUrl,
                                    String segmentationStatisticsImageUrl, String badTopCountImageUrl, String rocTestImageUrl,
@@ -262,5 +249,15 @@ public class ExperimentServiceImpl implements ExperimentService {
     @Override
     public Integer updateNameAndRemark(Experiment experiment) {
         return experimentDao.updateNameAndRemark(experiment);
+    }
+
+    @Override
+    public List<Long> findNotPublishExperimentIds(List<Long> ids) {
+        return experimentDao.findNotPublishExperimentIds(ids);
+    }
+
+    @Override
+    public int logicDeleteExperiment(List<Long> ids) {
+        return experimentDao.logicDeleteExperiment(ids);
     }
 }

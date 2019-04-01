@@ -4,7 +4,6 @@ import cn.realai.online.core.bo.BatchDetailBO;
 import cn.realai.online.core.bo.BatchListBO;
 import cn.realai.online.core.bo.BatchRecordBO;
 import cn.realai.online.core.entity.BatchRecord;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -51,5 +50,12 @@ public interface BatchRecordService {
 	 * @param bATCH_STATUS_ERROR
 	 */
 	void maintainErrorMsg(Long batchId, String errorMsg, int status);
+
+	/**
+	 * 修改批次状态
+	 * @param id
+	 * @param status
+	 */
+	void updateBatchRecordStatus(Long batchId, int status);
 
 }

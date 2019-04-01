@@ -106,4 +106,9 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 		batchRecordDao.maintainErrorMsg(batchId, errorMsg, status);
 	}
 
+	@Override
+	public void updateBatchRecordStatus(Long batchId, int status) {
+		batchRecordDao.updateBatchRecordStatus(batchId, status);
+	}
+
 }

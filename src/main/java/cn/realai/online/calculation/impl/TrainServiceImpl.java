@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
+import ch.qos.logback.classic.Logger;
 import cn.realai.online.calculation.TrainService;
 import cn.realai.online.calculation.requestbo.BatchOfOfflineRequestBO;
 import cn.realai.online.calculation.requestbo.DeleteExperimentRequestBO;
@@ -19,7 +20,9 @@ import cn.realai.online.common.Constant;
 import cn.realai.online.common.config.Config;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
+import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.VariableData;
+import cn.realai.online.core.service.MLockService;
 import cn.realai.online.util.ConvertJavaBean;
 import cn.realai.online.util.HttpUtil;
 
@@ -29,6 +32,9 @@ public class TrainServiceImpl implements TrainService {
     @Autowired
     private Config config;
 
+    @Autowired
+    private MLockService mLockService;
+    
     /*
      * 预处理
      */
@@ -61,6 +67,11 @@ public class TrainServiceImpl implements TrainService {
 	@Override
 	public int training(Experiment experiment, Long oldEid, List<VariableData> homoList, 
 			List<VariableData> hetroList, int delOrAdd) {
+		//获取训练锁
+        if (!getLock(experiment.getId())) {
+            return -1;
+        }
+		
 		if (experiment.getXtableHeterogeneousDataSource() != null) {
         	experiment.setXtableHeterogeneousDataSource("/" + experiment.getXtableHeterogeneousDataSource());
         }
@@ -120,22 +131,27 @@ public class TrainServiceImpl implements TrainService {
 
 	@Override
 	public int runBatchOfOffline(BatchRecord batchRecord) {
+		//获取锁
+    	if (!getLock(batchRecord.getExperimentId())) {
+    		return -1;
+    	}
+		
 		BatchOfOfflineRequestBO boorbo = new BatchOfOfflineRequestBO();
 		boorbo.setBatchId(batchRecord.getId());
 		boorbo.setCommand(Constant.COMMAND_BATCH);
 		boorbo.setModelId(batchRecord.getExperimentId());
 		boorbo.setModelId(2L);
 		if (batchRecord.getXtableHeterogeneousDataSource() != null) {
-			//boorbo.setXtableHeterogeneousDataSource("/" + batchRecord.getXtableHeterogeneousDataSource());
-			boorbo.setXtableHeterogeneousDataSource(batchRecord.getXtableHeterogeneousDataSource());
+			boorbo.setXtableHeterogeneousDataSource("/" + batchRecord.getXtableHeterogeneousDataSource());
+			//boorbo.setXtableHeterogeneousDataSource(batchRecord.getXtableHeterogeneousDataSource());
 		}
 		if (batchRecord.getXtableHomogeneousDataSource() != null) {
-			//boorbo.setXtableHomogeneousDataSource("/" + batchRecord.getXtableHomogeneousDataSource());
-			boorbo.setXtableHomogeneousDataSource(batchRecord.getXtableHomogeneousDataSource());
+			boorbo.setXtableHomogeneousDataSource("/" + batchRecord.getXtableHomogeneousDataSource());
+			//boorbo.setXtableHomogeneousDataSource(batchRecord.getXtableHomogeneousDataSource());
 		}
 		if (batchRecord.getYtableDataSource() != null) {
-			boorbo.setYtableDataSource(batchRecord.getYtableDataSource());
-			//boorbo.setYtableDataSource("/" + batchRecord.getYtableDataSource());
+			//boorbo.setYtableDataSource(batchRecord.getYtableDataSource());
+			boorbo.setYtableDataSource("/" + batchRecord.getYtableDataSource());
 		}
 		String ret = HttpUtil.postRequest(config.getModelOfflineBatch(), JSON.toJSONString(boorbo));
         if (ret == null) {
@@ -144,10 +160,26 @@ public class TrainServiceImpl implements TrainService {
 		return 1;
 	}
 
+	public boolean getLock(Long experimentId) {
+		//获取锁
+		MLock mLock = mLockService.getLock(experimentId);
+    	return mLock.tryLock();
+	}
+	
 	@Override
 	public int deleteExperiment(Long experimentId) {
 		DeleteExperimentRequestBO derbo = new DeleteExperimentRequestBO();
 		derbo.setModelId(experimentId);
+        String ret = HttpUtil.postRequest(config.getModelDrop(), JSON.toJSONString(derbo));
+        if (ret == null) {
+            throw new RuntimeException("TrainServiceImpl deleteExperiment. 调用python删除接口失败. derbo{}" + JSON.toJSONString(derbo));
+        }
+		return 1;
+	}
+	
+	public int deleteModel(Long modelId) {
+		DeleteExperimentRequestBO derbo = new DeleteExperimentRequestBO();
+		derbo.setModelId(modelId);
         String ret = HttpUtil.postRequest(config.getModelDrop(), JSON.toJSONString(derbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl deleteExperiment. 调用python删除接口失败. derbo{}" + JSON.toJSONString(derbo));

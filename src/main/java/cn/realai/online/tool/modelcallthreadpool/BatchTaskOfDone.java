@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.realai.online.core.entity.MLock;
-import cn.realai.online.core.service.ExperimentService;
+import cn.realai.online.core.service.MLockService;
 import cn.realai.online.util.SpringContextUtils;
 
 public class BatchTaskOfDone extends BaseBatchTask {
@@ -27,8 +27,8 @@ public class BatchTaskOfDone extends BaseBatchTask {
 	public void run() {
 		logger.info("BatchTaskOfDone run. experimentId{}, batchId{}, redisKey{}", experimentId, batchId, redisKey);
 		//释放批次锁
-		ExperimentService experimentService = SpringContextUtils.getBean(ExperimentService.class);
-		MLock mLock = experimentService.getExperimentTrainMLockInstance(experimentId);
+		MLockService mLockService = SpringContextUtils.getBean(MLockService.class);
+		MLock mLock = mLockService.getLock(experimentId);
 		mLock.unLock();
 	}
 

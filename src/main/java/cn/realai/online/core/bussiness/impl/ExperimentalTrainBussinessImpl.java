@@ -16,7 +16,6 @@ import cn.realai.online.util.UserUtils;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import io.swagger.models.auth.In;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,8 +87,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
      */
     @Override
     public PageBO<ExperimentBO> pageList(ExperimentalTrainQuery experimentalTrainQuery) {
-        boolean tuningFlag=false;
-        if (experimentalTrainQuery.getServiceId()!=null && experimentalTrainQuery.getTuningType() != null) {
+        boolean tuningFlag = false;
+        if (experimentalTrainQuery.getServiceId() != null && experimentalTrainQuery.getTuningType() != null) {
             tuningFlag = checkTrainTuningLock(experimentalTrainQuery.getServiceId(), experimentalTrainQuery.getTuningType());
         }
         //开启分页
@@ -100,8 +99,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         BeanUtils.copyProperties(experimentalTrainQuery, experiment);
         experiment.setServiceId(experimentalTrainQuery.getServiceId());
         List<Experiment> list = experimentService.findList(experiment);
-        if(tuningFlag){
-            for (Experiment experiment1:list){
+        if (tuningFlag) {
+            for (Experiment experiment1 : list) {
                 experiment1.setPublishCount(0);
             }
         }
@@ -121,8 +120,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
      * @return
      */
     private boolean checkTrainTuningLock(Long serviceId, Integer tuningType) {
-        TuningRecord tuningRecord=tuningRecordBussiness.selectValidTuningRecord(serviceId);
-        if(tuningRecord!=null){
+        TuningRecord tuningRecord = tuningRecordBussiness.selectValidTuningRecord(serviceId);
+        if (tuningRecord != null) {
             return true;
         }
         return false;
@@ -136,9 +135,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     @Transactional(readOnly = false)
     public Integer deleteExperimentByIds(List<Long> ids) {
-        int count = experimentService.deleteExperimentByIds(ids);
-        for (Long id : ids) {
-        	trainService.deleteExperiment(id);
+        int count = experimentService.logicDeleteExperiment(ids);
+        if (count > 0) {
+            for (Long id : ids) {
+                trainService.deleteExperiment(id);
+            }
         }
         return count;
     }
@@ -150,28 +151,25 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     @Transactional(readOnly = false)
     public int train(long experimentId, Long relyingId) {
-        //获取训练锁
-        MLock mlock = experimentService.getExperimentTrainMLockInstance(experimentId);
-        if (!mlock.tryLock()) {
-            return -1;
-        }
-        
         int deleteStatus = 0;
         if (relyingId == null || relyingId.longValue() == 0) {
-        	deleteStatus = VariableData.DELETE_YES;
+            deleteStatus = VariableData.DELETE_YES;
         } else {
-        	deleteStatus = VariableData.DELETE_NO;
+            deleteStatus = VariableData.DELETE_NO;
         }
-        
+
         //查询需要删除的列
         HomoAndHetroBO deleteVariableData = variableDataService.selectDeleteByExperimentId(experimentId, deleteStatus);
 
         //修改试验状态
-        int ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
         ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
 
         //训练    
-        trainService.training(experimentBO, relyingId, deleteVariableData.getHomoList(), deleteVariableData.getHetroList(), deleteStatus);
+        int ret = trainService.training(experimentBO, relyingId, deleteVariableData.getHomoList(), deleteVariableData.getHetroList(), deleteStatus);
+        if (ret != 1) {
+        	return ret;
+        }
+        ret = experimentService.updateExperimentStatus(experimentId, Experiment.STATUS_TRAINING);
         return ret;
     }
 
@@ -261,8 +259,6 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public ExperimentalResultQuatoBO quota(Long experimentId) {
 
 
-
-
         //TODO 去获取服务
         List<ExperimentResultSetBO> trainResultSetListBO = quotaCommon(Experiment.DATA_SET_TRAIN, experimentId, "parent");
         List<ExperimentResultSetBO> testResultSetListBO = quotaCommon(Experiment.DATA_SET_TEST, experimentId, "parent");
@@ -275,8 +271,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
         //获得评估的结果集
         Experiment experiment = experimentService.selectExperimentById(experimentId);
-        cn.realai.online.core.entity.Service service=serviceService.selectServiceById(experiment.getServiceId());
-        Integer type=service.getType();
+        cn.realai.online.core.entity.Service service = serviceService.selectServiceById(experiment.getServiceId());
+        Integer type = service.getType();
         experimentalResultQuatoBO.setModel(type);
         return experimentalResultQuatoBO;
     }
@@ -303,8 +299,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         }
         ExperimentResultSet experimentResultSetTemp = list.get(0);
         String name = experimentResultSetTemp.getGroupName();
-        name = name.substring(0,name.length()-1);
-        List<ExperimentResultSetBO> validResultSetList =quotaCommon(experimentResultSetTemp.getDataSetType(),experimentResultSetTemp.getExperimentId(),name);
+        name = name.substring(0, name.length() - 1);
+        List<ExperimentResultSetBO> validResultSetList = quotaCommon(experimentResultSetTemp.getDataSetType(), experimentResultSetTemp.getExperimentId(), name);
         return validResultSetList;
     }
 
@@ -464,8 +460,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     }
 
     @Override
-    public List<SampleGroupingBO> getGroupOptionName(Long experimentId, boolean isExceptionGroup,boolean isAllGroup) {
-        List<SampleGrouping> sampleGroupings = sampleGroupingService.findListByExperimentId(experimentId, isExceptionGroup,isAllGroup);
+    public List<SampleGroupingBO> getGroupOptionName(Long experimentId, boolean isExceptionGroup, boolean isAllGroup) {
+        List<SampleGrouping> sampleGroupings = sampleGroupingService.findListByExperimentId(experimentId, isExceptionGroup, isAllGroup);
         List<SampleGroupingBO> sampleGroupingBOList = JSON.parseArray(JSON.toJSONString(sampleGroupings), SampleGroupingBO.class);
         return sampleGroupingBOList;
     }
@@ -474,7 +470,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public List<BatchRecordBO> findBatchRecordBOList(BatchRecordBO batchRecordBO, boolean isTranFlag) {
         batchRecordBO.setTranFlag(isTranFlag);
         List<BatchRecord> batchRecords = batchRecordService.findBatchRecordList(batchRecordBO);
-        List<BatchRecordBO> result = JSON.parseArray(JSON.toJSONString(batchRecords),BatchRecordBO.class);
+        List<BatchRecordBO> result = JSON.parseArray(JSON.toJSONString(batchRecords), BatchRecordBO.class);
         return result;
     }
 
@@ -486,7 +482,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
             return null;
         }
         experiment.setId(null);
-        experiment.setName(experiment.getName() + "二次创建实验"+ DateFormatUtils.format(new Date(),"yyyyMMddHHmmss"));
+        experiment.setName(experiment.getName() + "二次创建实验" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
         experiment.setStatus(Experiment.STATUS_FILTER);
         experiment.setReleasStatus(Experiment.RELEAS_NO);
         experiment.setCreateTime(System.currentTimeMillis());
@@ -559,7 +555,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setStatus(query.getStatus());
         List<Experiment> list = experimentService.findList(experiment);
         List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
-        return result; 
+        return result;
     }
 
     @Override
@@ -575,15 +571,20 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     @Transactional(readOnly = false)
     public Integer updateName(ExperimentBO experimentBO) {
-        return experimentService.updateName(experimentBO.getId(),experimentBO.getName());
+        return experimentService.updateName(experimentBO.getId(), experimentBO.getName());
     }
 
     @Override
     @Transactional(readOnly = false)
     public Integer updateNameAndRemark(ExperimentBO experimentBO) {
-        Experiment experiment =new Experiment();
-        BeanUtils.copyProperties(experimentBO,experiment);
+        Experiment experiment = new Experiment();
+        BeanUtils.copyProperties(experimentBO, experiment);
         return experimentService.updateNameAndRemark(experiment);
+    }
+
+    @Override
+    public List<Long> findNotPublishExperimentIds(List<Long> ids) {
+        return experimentService.findNotPublishExperimentIds(ids);
     }
 
 
