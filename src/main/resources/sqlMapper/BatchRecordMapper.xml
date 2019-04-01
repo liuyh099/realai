@@ -6,29 +6,32 @@
         <result column="y_table" property="ytableDataSource" jdbcType="VARCHAR"/>
         <result column="x_table_homo" property="xtableHomogeneousDataSource" jdbcType="VARCHAR"/>
         <result column="x_table_heter" property="xtableHeterogeneousDataSource" jdbcType="VARCHAR"/>
+        <result column="model_id" property="modelId" jdbcType="BIGINT"/>
         <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
         <result column="service_id" property="serviceId" jdbcType="BIGINT"/>
         <result column="create_time" property="createTime" jdbcType="BIGINT"/>
         <result column="down_url" property="downUrl" jdbcType="VARCHAR"/>
         <result column="batch_type" property="batchType" jdbcType="INTEGER"/>
         <result column="batch_name" property="batchName" jdbcType="VARCHAR"/>
-        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+
+        <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="err_msg" property="errorMsg" jdbcType="VARCHAR"/>
-        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        INSERT INTO batch_record (y_table , x_table_homo, x_table_heter, experiment_id, service_id,
-        	create_time, down_url, batch_type, batch_name, remark)
+        INSERT INTO batch_record (y_table , x_table_homo, x_table_heter, model_id, experiment_id, service_id,
+        	create_time, down_url, batch_type, batch_name, status, err_msg, del_flag, remark)
         VALUE (#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},
-        	#{experimentId},#{serviceId},#{createTime},#{downUrl},#{batchType},
-        	#{batchName}, #{remark})
+        	#{modelId},#{experimentId},#{serviceId},#{createTime},#{downUrl},#{batchType},
+        	#{batchName}, #{status}, #{errorMsg}, #{delFlag}, #{remark})
     </insert>
 
     <select id="findBatchRecordList" resultMap="BatchRecordMap" parameterType="cn.realai.online.core.bo.BatchRecordBO">
           SELECT * FROM batch_record
           <where>
-              1=1
+              del_flag = 0
               <if test="experimentId!=null">
                  AND experiment_id = #{experimentId}
               </if>
@@ -51,13 +54,13 @@
         </where>
     </update>  
 
-    <delete id="delete" parameterType="java.util.List">
-        DELETE FROM batch_record
+    <update id="delete" parameterType="java.util.List">
+        update batch_record set del_flag = 1
         where id in
         <foreach item="id" collection="list" open="(" close=")" separator=",">
             #{id}
         </foreach>
-    </delete>  
+    </update>
 
     <select id="get" resultMap="BatchRecordMap" parameterType="java.lang.Long">
         SELECT * from batch_record
@@ -74,11 +77,10 @@
         <result column="experimentId" property="experimentId" jdbcType="BIGINT"/>
         <result column="experimentName" property="experimentName" jdbcType="VARCHAR"/>
         <result column="releaseTime" property="releaseTime" jdbcType="BIGINT"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="serviceId" property="serviceId" jdbcType="BIGINT"/>
         <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
         <result column="batchTimes" property="batchTimes" jdbcType="INTEGER"/>
-        <result column="offlineTimes" property="offlineTimes" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="batchCreateTime" property="batchCreateTime" jdbcType="BIGINT"/>
         <result column="downUrl" property="downUrl" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
@@ -89,12 +91,11 @@
         m.name as modelName,
         ep.id as experimentId,
         ep.name as experimentName,
-        ep.release_time as releaseTime,
-        ep.status as status,
+        m.create_time as releaseTime,
         s.id as serviceId,
         s.name as serviceName,
         s.batch_times as batchTimes,
-        br.offline_times as offlineTimes,
+        br.status as status,
         br.create_time as batchCreateTime,
         br.down_url as downUrl,
         br.remark as remark
@@ -103,11 +104,12 @@
         join experiment as ep on br.experiment_id = ep.id
         join model as m on br.experiment_id = m.experiment_id
         <where>
+            br.del_flag = 0
             <if test="batchListBO!=null and batchListBO.modelName!=null">
                 and m.name like '%${batchListBO.modelName}%'
             </if>
             <if test="batchListBO!=null and batchListBO.status!=null">
-                and ep.status = #{batchListBO.status}
+                and br.status = #{batchListBO.status}
             </if>
             <if test="minTime!=null">
                 and <![CDATA[ br.create_time >= #{minTime} ]]>
@@ -116,14 +118,14 @@
                 and <![CDATA[ br.create_time <= #{maxTime} ]]>
             </if>
         </where>
-        order by br.create_time desc
+        order by br.id desc
     </select>
 
 
     <select id="getByEntity" resultMap="BatchRecordMap" parameterType="cn.realai.online.core.entity.BatchRecord">
         SELECT * FROM batch_record
         <where>
-            1=1
+            del_flag = 0
             <if test="experimentId!=null">
                 AND experiment_id = #{experimentId}
             </if>
@@ -160,7 +162,7 @@
         br.service_id as serviceId,
         sv.name as serviceName,
         br.experiment_id as experimentId,
-        ep.status,
+        br.status,
         br.offline_times as offlineTimes,
         br.x_table_heter as xtabaleHeter,
         br.x_table_homo as xtableHomo,
