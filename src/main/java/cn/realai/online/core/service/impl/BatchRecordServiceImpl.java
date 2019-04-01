@@ -44,11 +44,6 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 	}
 
 	@Override
-	public BatchDetailBO selectDetail(Long batchId) {
-		return batchRecordDao.selectDetail(batchId);
-	}
-
-	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Integer delete(List<Long> idList) {
 		return batchRecordDao.delete(idList);

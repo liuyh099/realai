@@ -63,7 +63,7 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
 
         BatchListBO listBO = new BatchListBO();
         listBO.setModelName(query.getName());
-        listBO.setStatus(query.getTrainStatus());
+        //listBO.setStatus(query.getTrainStatus());
 
         Long minDateV = null, maxDateV = null;
         try {
@@ -114,11 +114,6 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
         record.setServiceId(createVO.getServiceId());
         record.setExperimentId((Long) releaseMap.get("experimentId"));
         record.setBatchName(String.valueOf(releaseMap.get("serviceName")) + "_" + String.valueOf(DateUtil.formatDateToString(new Date(), "yyyyMMddHHmmss")) + "_离线跑批");
-        if (releaseMap.get("batchTimes") != null) {
-            record.setOfflineTimes((Integer)releaseMap.get("batchTimes") + 1);
-        } else {
-            record.setOfflineTimes(1);
-        }
         batchRecordService.insert(record);
 
         //todo 更新服务离线跑批次数
