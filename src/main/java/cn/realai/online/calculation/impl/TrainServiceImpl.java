@@ -140,7 +140,7 @@ public class TrainServiceImpl implements TrainService {
 		boorbo.setBatchId(batchRecord.getId());
 		boorbo.setCommand(Constant.COMMAND_BATCH);
 		boorbo.setModelId(batchRecord.getExperimentId());
-		boorbo.setModelId(2L);
+		//boorbo.setModelId(2L);
 		if (batchRecord.getXtableHeterogeneousDataSource() != null) {
 			boorbo.setXtableHeterogeneousDataSource("/" + batchRecord.getXtableHeterogeneousDataSource());
 			//boorbo.setXtableHeterogeneousDataSource(batchRecord.getXtableHeterogeneousDataSource());
