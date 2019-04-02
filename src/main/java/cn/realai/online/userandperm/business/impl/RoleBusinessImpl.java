@@ -114,7 +114,9 @@ public class RoleBusinessImpl implements RoleBusiness {
         //删除角色表
         int count = roleService.delete(ids);
         //删除角色菜单表
-        roleMenuService.deleteByRoleIds(ids);
+        if(count>0){
+            roleMenuService.deleteByRoleIds(ids);
+        }
         return count;
     }
 
