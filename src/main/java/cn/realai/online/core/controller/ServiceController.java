@@ -53,20 +53,19 @@ public class ServiceController {
 
     @GetMapping("/select")
     @ApiOperation(value="查询服务下拉选项")
-    @ApiImplicitParam(name = "status", value = "服务状态 0:未发布 1:线上发布 2：线下发布 默认0", required = false, dataType = "Integer", paramType = "query")
+    @ApiImplicitParam(name = "status", value = "服务状态 0:未发布 1:线上发布 2：线下发布 不传或其他值则取全部", required = false, dataType = "Integer", paramType = "query")
     public Result<List<ServerNameSelectVO>> getSelect(@RequestParam(value="status", required = false) Integer status){
         List<ServerNameSelectVO> serverNameSelectVOs = new ArrayList<>();
         try {
-            if (status == null) {
-                status = 0;
-            }
-            String statusStr;
-            if (status == 1) {
-                statusStr = Model.RELEASE_STATUS.ONLINE.value;
-            } else if (status == 2) {
-                statusStr = Model.RELEASE_STATUS.OFFLINE.value;
-            } else {
-                statusStr = Model.RELEASE_STATUS.NONE.value;
+            String statusStr = null;
+            if (status != null) {
+                if (status == 1) {
+                    statusStr = Model.RELEASE_STATUS.ONLINE.value;
+                } else if (status == 2) {
+                    statusStr = Model.RELEASE_STATUS.OFFLINE.value;
+                } else if (status == 0) {
+                    statusStr = Model.RELEASE_STATUS.NONE.value;
+                }
             }
             List<Service> services = serviceService.findListByModelStatus(statusStr);
             if(services != null && services.size() > 0) {
