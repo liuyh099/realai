@@ -17,8 +17,11 @@ public class ModelListVO {
     @ApiModelProperty(value = "模型id")
     private long modelId;
 
-    @ApiModelProperty(value = "服务名称")
+    @ApiModelProperty(value = "模型名称")
     private String modelName;
+
+    @ApiModelProperty(value = "服务Id")
+    private Long serviceId;
 
     @ApiModelProperty(value = "服务名称")
     private String serviceName;
@@ -62,6 +65,14 @@ public class ModelListVO {
 
     public void setModelName(String modelName) {
         this.modelName = modelName;
+    }
+
+    public Long getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(Long serviceId) {
+        this.serviceId = serviceId;
     }
 
     public String getServiceName() {
@@ -128,7 +139,7 @@ public class ModelListVO {
         this.psi = psi;
     }
 
-    public boolean getAler() {
+    public boolean isAler() {
         return aler;
     }
 
