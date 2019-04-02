@@ -35,8 +35,17 @@ public class ModelDetailVO {
     @ApiModelProperty(value = "来源实验名称")
     private String experimentName;
 
+    @ApiModelProperty(value = "服务名称")
+    private String serviceName;
+
     @ApiModelProperty(value = "服务类型")
-    private String serviceType;
+    private Integer serviceType;
+
+    @ApiModelProperty(value = "服务子类型")
+    private Integer serviceBusinessType;
+
+    @ApiModelProperty(value = "服务类型名称")
+    private String serviceTypeName;
 
     @ApiModelProperty(value = "算法类型")
     private String algorithmType;
@@ -106,12 +115,36 @@ public class ModelDetailVO {
         this.experimentName = experimentName;
     }
 
-    public String getServiceType() {
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public Integer getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(String serviceType) {
+    public void setServiceType(Integer serviceType) {
         this.serviceType = serviceType;
+    }
+
+    public Integer getServiceBusinessType() {
+        return serviceBusinessType;
+    }
+
+    public void setServiceBusinessType(Integer serviceBusinessType) {
+        this.serviceBusinessType = serviceBusinessType;
+    }
+
+    public String getServiceTypeName() {
+        return serviceTypeName;
+    }
+
+    public void setServiceTypeName(String serviceTypeName) {
+        this.serviceTypeName = serviceTypeName;
     }
 
     public String getAlgorithmType() {

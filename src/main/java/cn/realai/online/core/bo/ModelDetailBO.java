@@ -20,7 +20,8 @@ public class ModelDetailBO {
     private int tuningCount;
     private String ydefine;
     private String tuningReason;
-    private String serviceType;
+    private Integer serviceType;
+    private Integer serviceBusinessType;
     private String remark;
 
     public Long getModelId() {
@@ -111,12 +112,20 @@ public class ModelDetailBO {
         this.tuningReason = tuningReason;
     }
 
-    public String getServiceType() {
+    public Integer getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(String serviceType) {
+    public void setServiceType(Integer serviceType) {
         this.serviceType = serviceType;
+    }
+
+    public Integer getServiceBusinessType() {
+        return serviceBusinessType;
+    }
+
+    public void setServiceBusinessType(Integer serviceBusinessType) {
+        this.serviceBusinessType = serviceBusinessType;
     }
 
     public String getRemark() {
