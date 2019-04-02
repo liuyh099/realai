@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.core.dao.GroupDifDao">
+    <resultMap type="cn.realai.online.core.entity.GroupDif" id="GroupDifMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+        <result column="variable_name" property="variableName" jdbcType="VARCHAR"/>
+        <result column="group_name_1" property="groupName1" jdbcType="VARCHAR"/>
+        <result column="group_name_2" property="groupName2" jdbcType="VARCHAR"/>
+        <result column="value_1" property="value1" jdbcType="DOUBLE"/>
+        <result column="value_2" property="value2" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+
+    </sql>
+
+    <insert id="insertList">
+        insert into group_dif(experiment_id, name, meaning, data_type, count, max,
+        	min, mean, median, percent25, percent75, variable_type, recommended_delete, `delete` ,create_time)
+        values
+        <foreach collection="vdList" item="vd" index="index" separator=",">
+            (#{vd.experimentId}, #{vd.name}, #{vd.meaning}, #{vd.dataType}, #{vd.count}, #{vd.max},
+            #{vd.min}, #{vd.mean}, #{vd.median}, #{vd.percent25} ,#{vd.percent75}, #{vd.variableType},
+            #{vd.recommendedDelete}, #{vd.delete}, #{vd.createTime})
+        </foreach>
+    </insert>
+  
+</mapper> 
