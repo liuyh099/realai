@@ -187,6 +187,8 @@ public class ServiceController {
             if(StringUtils.isNotBlank(fileLicenseInfo.getBusinessType())) {
                 secretKeyInfoVO.setBusinessType(Integer.parseInt(fileLicenseInfo.getBusinessType()));
             }
+            String serviceTypeName = Service.getServiceTypeName(secretKeyInfoVO.getType(), secretKeyInfoVO.getBusinessType());
+            secretKeyInfoVO.setServiceTypeName(serviceTypeName);
         }catch (Exception e) {
             logger.error("获取服务详情异常！", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(),null);
