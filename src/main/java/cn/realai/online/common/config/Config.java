@@ -19,6 +19,9 @@ public class Config {
     @Value("${python.url}")
     private String PYTHON_URL;
     
+    @Value("${experiment.drop}")
+    private String EXPERIMENT_DROP;
+    
     @Value("${model.publish}")
     private String MODEL_PUBLISH;
     
@@ -36,6 +39,10 @@ public class Config {
     
     public String getPythonUrl() {
         return http + PYTHON_HOST + ":" + PYTHON_PORT + PYTHON_URL;
+    }
+    
+    public String getExperimentDrop() {
+    	return http + PYTHON_HOST + ":" + PYTHON_PORT + EXPERIMENT_DROP;
     }
     
     public String getNginxUrl() {

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
-import ch.qos.logback.classic.Logger;
 import cn.realai.online.calculation.TrainService;
 import cn.realai.online.calculation.requestbo.BatchOfOfflineRequestBO;
 import cn.realai.online.calculation.requestbo.DeleteExperimentRequestBO;
@@ -169,8 +168,8 @@ public class TrainServiceImpl implements TrainService {
 	@Override
 	public int deleteExperiment(Long experimentId) {
 		DeleteExperimentRequestBO derbo = new DeleteExperimentRequestBO();
-		derbo.setModelId(experimentId);
-        String ret = HttpUtil.postRequest(config.getModelDrop(), JSON.toJSONString(derbo));
+		derbo.setExperimentId(experimentId);
+        String ret = HttpUtil.postRequest(config.getExperimentDrop(), JSON.toJSONString(derbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl deleteExperiment. 调用python删除接口失败. derbo{}" + JSON.toJSONString(derbo));
         }
