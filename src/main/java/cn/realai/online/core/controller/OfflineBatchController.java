@@ -67,7 +67,7 @@ public class OfflineBatchController {
         		}
         		return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), batchRecord.getId());
         	} 
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), batchRecord.getId());
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         } catch (Exception e) {
             log.error("新建离线跑批异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
@@ -158,7 +158,7 @@ public class OfflineBatchController {
             Assert.notNull(record, "该离线跑批记录不存在");
             OfflineBatchCompleteVO resultVO = new OfflineBatchCompleteVO();
             resultVO.setBatchid(batchId);
-            resultVO.setComplete(record != null && StringUtils.isNotEmpty(record.getDownUrl()));
+            resultVO.setComplete(record != null && record.getStatus() == BatchRecord.BATCH_STATUS_OVER);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), resultVO);
         } catch (Exception e) {
             log.error("查询离线跑批是否计算完成异常", e);
@@ -167,20 +167,30 @@ public class OfflineBatchController {
     }
 
     @RequiresPermissions("model:offlinerun")
-    @GetMapping("/detail/{batchId}")
-    @ApiOperation(value="查询离线跑批详情")
+    @GetMapping("/execute/{batchId}")
+    @ApiOperation(value="手动执行跑批运算")
     @ApiImplicitParam(name = "batchId", value = "离线跑批Id", required = true, dataType = "Long", paramType = "path")
     @ResponseBody
-    public Result<OfflineBatchDetailVO> detail(@PathVariable("batchId") Long batchId){
+    public Result<Long> execute(@PathVariable Long batchId) {
         try {
-            BatchDetailBO resultBO = batchRecordService.selectDetail(batchId);
-            Assert.notNull(resultBO, "未找到对应跑批记录详情");
-            OfflineBatchDetailVO resultVO = new OfflineBatchDetailVO();
-            BeanUtils.copyProperties(resultBO, resultVO);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), resultVO);
+            BatchRecord record = new BatchRecord();
+            record.setId(batchId);
+            record = batchRecordService.getByEntity(record);
+            if (record.getStatus() == BatchRecord.BATCH_STATUS_OVER || record.getStatus() == BatchRecord.BATCH_STATUS_EXECUTING) {
+                throw new Exception("该跑批记录不处于新建或者处理有误状态");
+            }
+            if (record != null) {
+                int ret = batchRecordBussiness.executeBatchRecord(record);
+                if (ret == -1) {
+                    return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), record.getId());
+                }
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), record.getId());
+            }
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         } catch (Exception e) {
             log.error("查询离线跑批是否计算完成异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
+
 }

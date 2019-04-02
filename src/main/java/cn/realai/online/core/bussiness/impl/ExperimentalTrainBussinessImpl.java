@@ -106,7 +106,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         }
         List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
         //BeanUtilsBean.copyProperties(list,result);
-        //处理查询结果
+        //处理查询结果  
         //List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentalTrainVO.class);
         PageBO<ExperimentBO> pageBO = new PageBO<ExperimentBO>(result, experimentalTrainQuery.getPageSize(), experimentalTrainQuery.getPageNum(), page.getTotal(), page.getPages());
         return pageBO;
@@ -170,7 +170,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         if (ret != 1) {
         	return ret;
         }
-        ret = experimentService.train(experimentId, Experiment.STATUS_TRAINING,System.currentTimeMillis());
+        ret = experimentService.train(experimentId, Experiment.STATUS_TRAINING, System.currentTimeMillis());
         return ret;
     }
 
@@ -197,6 +197,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experiment.setAlgorithmType("全监督算法");
         experiment.setCreateUserId(UserUtils.getUser().getId());
         Long ret = experimentService.insert(experiment);
+        variableDataService.deleteVariableDataByExperimentId(experimentBO.getId());
         trainService.preprocess(experiment);
         return ret;
     }

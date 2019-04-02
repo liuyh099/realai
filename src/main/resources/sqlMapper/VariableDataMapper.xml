@@ -83,7 +83,7 @@
 
     <update id="deleteVariableData">
         UPDATE variable_data
-        SET `delete` =2
+        SET `delete` = 2
         <where>
             <if test="experimentId!=null">
                 experiment_id = #{experimentId}
@@ -98,5 +98,11 @@
             </if>
         </where>
     </update>
+    
+    <delete id="deleteVariableDataByExperimentId">
+    	delete 
+    	from variable_data
+    	where experiment_id = #{experimentId}
+    </delete>
   
 </mapper> 

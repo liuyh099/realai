@@ -171,4 +171,9 @@ public class ServiceServiceImpl implements ServiceService {
 		return service;
 	}
 
+	@Override
+	public List<Service> findListByModelStatus(String status) {
+		return serviceDao.findListByModelStatus(status);
+	}
+
 }

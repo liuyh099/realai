@@ -24,6 +24,7 @@ public class MLockServiceImpl implements MLockService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
     public boolean unLock(MLock mlock) {
         int ret = mlockDao.unLock(mlock);
         return ret == 1 ? true : false;

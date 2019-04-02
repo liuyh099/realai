@@ -49,4 +49,10 @@ public interface VariableDataDao {
      * @return
      */
     VariableData getById(@Param("id") Long variableId);
+
+    /**
+     * 物理删除VariableData
+     * @param id
+     */
+	void deleteVariableDataByExperimentId(@Param("experimentId")Long experimentId);
 }

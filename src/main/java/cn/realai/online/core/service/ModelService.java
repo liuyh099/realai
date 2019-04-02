@@ -64,4 +64,7 @@ public interface ModelService {
      * @return
      */
     List<Model> findModelOptionHistory(Long serviceId);
+
+
+    Integer selectCountByServiceId(Long serviceId);
 }

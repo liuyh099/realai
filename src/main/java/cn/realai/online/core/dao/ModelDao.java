@@ -50,4 +50,7 @@ public interface ModelDao {
      * @return
      */
     List<Model> findModelOptionHistory(@Param("serviceId") Long serviceId);
+
+    //根据服务ID获取模型数量
+    Integer selectCountByServiceId(@Param("serviceId") Long serviceId);
 }

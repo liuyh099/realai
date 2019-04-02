@@ -16,6 +16,9 @@ public class BatchRecord {
 	
 	//x表异质数据源
 	private String xtableHeterogeneousDataSource;
+
+	//跑批模型Id
+	private Long modelId;
 	
 	//实验id
 	private Long experimentId;
@@ -43,9 +46,7 @@ public class BatchRecord {
 
 	private String remark;
 
-	//第几次离线跑批
-	private Integer offlineTimes;
-
+	//查询状态-非实体字段
 	private boolean tranFlag;
 	
 	private int status;
@@ -59,6 +60,13 @@ public class BatchRecord {
 	public static int BATCH_STATUS_ERROR = 4;  //处理错误
 	
 	public String errorMsg;
+
+	//删除标志位
+	private int delFlag;
+
+	public static int NO_DEL = 0; //未删除
+
+	public static int YES_DEL = 1; //已删除
 
 	public String getErrorMsg() {
 		return errorMsg;
@@ -114,6 +122,14 @@ public class BatchRecord {
 
 	public void setXtableHeterogeneousDataSource(String xtableHeterogeneousDataSource) {
 		this.xtableHeterogeneousDataSource = xtableHeterogeneousDataSource;
+	}
+
+	public Long getModelId() {
+		return modelId;
+	}
+
+	public void setModelId(Long modelId) {
+		this.modelId = modelId;
 	}
 
 	public Long getExperimentId() {
@@ -172,13 +188,11 @@ public class BatchRecord {
 		this.remark = remark;
 	}
 
-	public Integer getOfflineTimes() {
-		return offlineTimes;
+	public int getDelFlag() {
+		return delFlag;
 	}
 
-	public void setOfflineTimes(Integer offlineTimes) {
-		this.offlineTimes = offlineTimes;
+	public void setDelFlag(int delFlag) {
+		this.delFlag = delFlag;
 	}
-
-	
 }

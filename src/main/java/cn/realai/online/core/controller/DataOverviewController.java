@@ -100,17 +100,21 @@ public class DataOverviewController {
                 List<SampleGroupingBO> sampleGroupingBOList = experimentalTrainBussiness.getGroupOptionName(experiment.getId(), true, false);
                 List<EchartsDataVo> datas = null;
                 List<Integer> total=null;
+                List<Double> positiveRatioList = null;
                 if (!CollectionUtils.isEmpty(sampleGroupingBOList)) {
                     datas = new ArrayList<>();
                     total = new ArrayList<>();
+                    positiveRatioList = new ArrayList<Double>();
                     for (SampleGroupingBO sampleGroupingBO : sampleGroupingBOList) {
                         total.add(sampleGroupingBO.getCount());
+                        positiveRatioList.add(sampleGroupingBO.getPositiveRatio());
                         EchartsDataVo data = new EchartsDataVo();
                         data.setName(sampleGroupingBO.getGroupName());
                         data.setValue(sampleGroupingBO.getPercentage());
                         datas.add(data);
                     }
                 }
+                result.setPositiveRatioList(positiveRatioList);
                 result.setCountList(total);
                 result.setData(datas);
             }
