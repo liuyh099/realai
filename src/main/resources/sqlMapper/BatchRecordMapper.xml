@@ -36,10 +36,10 @@
                  AND experiment_id = #{experimentId}
               </if>
               <if test="tranFlag==true">
-                  AND batch_type =1
+                  AND batch_type =3
               </if>
               <if test="tranFlag==false">
-                  AND batch_type in (2,3)
+                  AND batch_type in (1,2)
                   AND status = 3
               </if>
           </where>
