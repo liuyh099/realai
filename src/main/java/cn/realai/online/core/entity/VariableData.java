@@ -29,7 +29,7 @@ public class VariableData {
     public static final int DATATYPE_ENUM = 3;
 
     //总数
-    private String count;
+    private Integer count;
 
     //最大值
     private String max;
@@ -53,10 +53,10 @@ public class VariableData {
     private Integer variableType;
 
     //同质
-    public static final int SCHEMA_TYPE_HOMO = 2;
+    public static final int VARIABLE_TYPE_HOMO = 2;
 
     //异质
-    public static final int SCHEMA_TYPE_HETERO = 1;
+    public static final int VARIABLE_TYPE_HETERO = 1;
 
     //推荐删除
     private int recommendedDelete;
@@ -115,15 +115,15 @@ public class VariableData {
         this.dataType = dataType;
     }
 
-    public String getCount() {
-        return count;
-    }
+    public Integer getCount() {
+		return count;
+	}
 
-    public void setCount(String count) {
-        this.count = count;
-    }
+	public void setCount(Integer count) {
+		this.count = count;
+	}
 
-    public String getMax() {
+	public String getMax() {
         return max;
     }
 
