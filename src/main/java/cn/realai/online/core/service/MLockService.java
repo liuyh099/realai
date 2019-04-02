@@ -4,7 +4,7 @@ import cn.realai.online.core.entity.MLock;
 
 public interface MLockService {
 
-	MLock getLock(Long experimentId);
+	MLock getLock(Long id, int type);
 	
     boolean tryLock(MLock mlock);
 

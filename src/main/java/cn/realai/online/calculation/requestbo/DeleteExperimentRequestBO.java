@@ -1,13 +1,11 @@
 package cn.realai.online.calculation.requestbo;
 
-import cn.realai.online.common.Constant;
-
 public class DeleteExperimentRequestBO {
 
 	private Long modelId;
 	
-	private final String command = Constant.COMMAND_DELETE;
-
+	private Long ExperimentId;
+	
 	public Long getModelId() {
 		return modelId;
 	}
@@ -16,8 +14,12 @@ public class DeleteExperimentRequestBO {
 		this.modelId = modelId;
 	}
 
-	public String getCommand() {
-		return command;
+	public Long getExperimentId() {
+		return ExperimentId;
+	}
+
+	public void setExperimentId(Long experimentId) {
+		ExperimentId = experimentId;
 	}
 	
 }

@@ -31,9 +31,16 @@ public class MLockServiceImpl implements MLockService {
     }
 
 	@Override
-	public MLock getLock(Long experimentId) {
-        return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + experimentId,
-                Constant.TRAIN_MLOCK_LOCK_LEASE_TIME);
+	public MLock getLock(Long id, int type) {
+		if (type == MLock.MLOCK_TYPE_TRAIN) {
+			return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + id,
+					Constant.MLOCK_LEASE_TIME);
+		}
+		if (type == MLock.MLOCK_TYPE_BATCH) {
+			return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.BATCH_MLOCK_PREFIX + id,
+					Constant.MLOCK_LEASE_TIME);
+		}
+		return null;
 	}
 
 }
