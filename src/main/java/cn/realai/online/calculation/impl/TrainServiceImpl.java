@@ -67,7 +67,7 @@ public class TrainServiceImpl implements TrainService {
 	public int training(Experiment experiment, Long oldEid, List<VariableData> homoList, 
 			List<VariableData> hetroList, int delOrAdd) {
 		//获取训练锁
-        if (!getLock(experiment.getId())) {
+        if (!getLock(experiment.getId(), MLock.MLOCK_TYPE_TRAIN)) {
             return -1;
         }
 		
@@ -131,7 +131,7 @@ public class TrainServiceImpl implements TrainService {
 	@Override
 	public int runBatchOfOffline(BatchRecord batchRecord) {
 		//获取锁
-    	if (!getLock(batchRecord.getExperimentId())) {
+    	if (!getLock(batchRecord.getExperimentId(), MLock.MLOCK_TYPE_BATCH)) {
     		return -1;
     	}
 		
@@ -159,9 +159,12 @@ public class TrainServiceImpl implements TrainService {
 		return 1;
 	}
 
-	public boolean getLock(Long experimentId) {
+	public boolean getLock(Long id, int type) {
 		//获取锁
-		MLock mLock = mLockService.getLock(experimentId);
+		MLock mLock = mLockService.getLock(id, type);
+		if (mLock == null) {
+			return false;
+		}
     	return mLock.tryLock();
 	}
 	

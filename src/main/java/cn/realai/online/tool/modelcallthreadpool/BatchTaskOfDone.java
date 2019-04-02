@@ -30,8 +30,10 @@ public class BatchTaskOfDone extends BaseBatchTask {
 		logger.info("BatchTaskOfDone run. experimentId{}, batchId{}, redisKey{}", experimentId, batchId, redisKey);
 		//释放批次锁
 		MLockService mLockService = SpringContextUtils.getBean(MLockService.class);
-		MLock mLock = mLockService.getLock(experimentId);
-		mLock.unLock();
+		MLock mLock = mLockService.getLock(batchId, MLock.MLOCK_TYPE_BATCH);
+		if (mLock != null) {
+			mLock.unLock();
+		}
 		
 		//修改批次状态
 		BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
