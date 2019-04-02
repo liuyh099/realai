@@ -19,6 +19,7 @@ import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.ExperimentResultSet;
+import cn.realai.online.core.entity.GroupDif;
 import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.ModelPerformance;
 import cn.realai.online.core.entity.PersonalComboResultSet;
@@ -33,6 +34,7 @@ import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.service.BatchRecordService;
 import cn.realai.online.core.service.ExperimentResultSetService;
 import cn.realai.online.core.service.ExperimentService;
+import cn.realai.online.core.service.GroupDifService;
 import cn.realai.online.core.service.MLockService;
 import cn.realai.online.core.service.ModelPerformanceService;
 import cn.realai.online.core.service.PersonalComboResultSetService;
@@ -116,6 +118,9 @@ public class TrainTask implements Runnable {
 	            vdMap.put(vd.getName() + vd.getVariableType(), vd.getId());
 	        }
 	
+	        analysisGroupDif(redisClientTemplate.get(redisKey.getGroupDif()));
+	        redisClientTemplate.delete(redisKey.getGroupDif());
+	        
 	        //样本权重
 	        analysisSampleWeight(redisClientTemplate.get(redisKey.getSampleWeight()), sgMap, vdMap);
 	        redisClientTemplate.delete(redisKey.getSampleWeight());
@@ -200,14 +205,16 @@ public class TrainTask implements Runnable {
         
         //释放MLock锁
 		MLockService mLockService = SpringContextUtils.getBean(MLockService.class);
-		MLock mLock = mLockService.getLock(experimentId);
-		mLock.unLock();
+		MLock mLock = mLockService.getLock(experimentId, MLock.MLOCK_TYPE_TRAIN);
+		if (mLock != null) {
+			mLock.unLock();
+		}
         
         logger.info("TrainTask run, 实验回调处理结束， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
         
     }
 
-    /*
+	/*
      * 模型表现
      */
     private void analysisModelPerformance(String redisValue) {
@@ -274,6 +281,22 @@ public class TrainTask implements Runnable {
         return sgList;
     }
 
+    /*
+     * 分组对比
+     */
+    private void analysisGroupDif(String redisValue) {
+		if (redisValue == null || "".equals(redisValue)) {
+			return ;
+		}
+		List<GroupDif> gdList = JSON.parseArray(redisValue, GroupDif.class);
+		for (GroupDif groupDif : gdList) {
+			groupDif.setExperimentId(experimentId);
+		}
+		GroupDifService groupDifService = SpringContextUtils.getBean(GroupDifService.class);
+		groupDifService.insertList(gdList);
+	}
+
+    
     /*
      * 样本权重
      */

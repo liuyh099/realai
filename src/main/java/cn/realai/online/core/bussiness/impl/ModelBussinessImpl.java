@@ -131,6 +131,9 @@ public class ModelBussinessImpl implements ModelBussiness {
         ModelDetailBO detailBO = modelService.selectDetail(modelId);
         if (detailBO != null) {
             BeanUtils.copyProperties(detailBO, detailVO);
+            //处理服务类型
+            String serviceTypeName = cn.realai.online.core.entity.Service.getServiceTypeName(detailBO.getServiceType(), detailBO.getServiceBusinessType());
+            detailVO.setServiceTypeName(serviceTypeName);
             //处理调优原因
             detailVO.setTuningReason("新建");
             List<TuningRecord> tuningRecords = tuningRecordService.findLatestListByModelIds(Arrays.asList(modelId));

@@ -25,6 +25,12 @@ public class MLock {
 	//结束时间
 	private long endTime;
 	
+	private int type;
+	
+	public static final int MLOCK_TYPE_TRAIN = 1;
+	
+	public static final int MLOCK_TYPE_BATCH = 2;
+	
 	MLockService mlockService = SpringContextUtils.getBean(MLockService.class);
 	
 	public MLock(String lockKey, String lockValue, long expiredTime) {
@@ -62,6 +68,14 @@ public class MLock {
 	
 	public boolean unLock() {
 		return mlockService.unLock(this);
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 	
 }

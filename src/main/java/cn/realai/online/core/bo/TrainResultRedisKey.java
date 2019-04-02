@@ -18,6 +18,9 @@ public class TrainResultRedisKey {
 
     //样本分组
     private String sampleGrouping;
+    
+    //分组对比
+    private String groupDif;
 
     //样本权重
     private String sampleWeight;
@@ -234,5 +237,13 @@ public class TrainResultRedisKey {
     public void setExperimentResultSet(String experimentResultSet) {
         this.experimentResultSet = experimentResultSet;
     }
+
+	public String getGroupDif() {
+		return groupDif;
+	}
+
+	public void setGroupDif(String groupDif) {
+		this.groupDif = groupDif;
+	}
 
 }
