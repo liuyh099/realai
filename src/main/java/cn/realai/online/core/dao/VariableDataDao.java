@@ -28,6 +28,15 @@ public interface VariableDataDao {
      */
     void deleteVariableData(@Param("experimentId") Long experimentId, @Param("ids") List<Long> ids);
 
+
+    /**
+     * 删除数据
+     *
+     * @param experimentId
+     * @param excludeIds 从推荐位中排除这些ID
+     */
+    void deleteByRecommend(@Param("experimentId") Long experimentId, @Param("ids") List<Long> excludeIds);
+
 	/**
 	 * 查询训练时被删除的列
 	 * @param experimentId

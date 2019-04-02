@@ -12,4 +12,8 @@ public interface GroupDifService {
 	 */
 	void insertList(List<GroupDif> gdList);
 
+	List<GroupDif> selectList(GroupDif groupDif);
+
+	//获取分组名称
+	List<String> selectGroupNameList(Long experimentId);
 }
