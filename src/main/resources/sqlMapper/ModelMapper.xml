@@ -31,6 +31,10 @@
         </where>
     </select>
 
+    <select id="selectAllModelNameList" parameterType="java.lang.Long" resultMap="ModelMap">
+       SELECT * FROM model WHERE service_id = #{serviceId}
+    </select>
+
 
     <update id="update" parameterType="cn.realai.online.core.entity.Model">
         UPDATE model

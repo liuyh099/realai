@@ -7,16 +7,16 @@ package cn.realai.online.core.entity;
  */
 public class SampleGrouping {
 
-    private long id;
+    private Long id;
 
-    private long experimentId;
+    private Long experimentId;
 
     private String groupName;
 
-    private long createTime;
+    private Long createTime;
 
     //组数量
-    private int count;
+    private Integer count;
 
     //组占总数的比例
     private Double percentage;
@@ -24,19 +24,19 @@ public class SampleGrouping {
     //正本比例
     private Double positiveRatio;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getExperimentId() {
+    public Long getExperimentId() {
         return experimentId;
     }
 
-    public void setExperimentId(long experimentId) {
+    public void setExperimentId(Long experimentId) {
         this.experimentId = experimentId;
     }
 
@@ -48,19 +48,19 @@ public class SampleGrouping {
         this.groupName = groupName;
     }
 
-    public long getCreateTime() {
+    public Long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
 
-    public int getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
@@ -79,5 +79,4 @@ public class SampleGrouping {
     public void setPositiveRatio(Double positiveRatio) {
         this.positiveRatio = positiveRatio;
     }
-
 }

@@ -21,6 +21,7 @@ import cn.realai.online.lic.LicenseException;
 import cn.realai.online.lic.ServiceLicenseCheck;
 import cn.realai.online.userandperm.entity.User;
 import cn.realai.online.util.UserUtils;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -165,6 +166,14 @@ public class ModelBussinessImpl implements ModelBussiness {
         list.add(itemVO);
         return list;
     }
+
+    @Override
+    public List<ModelNameSelectVO> selectAllModelNameList(Long serviceId) {
+        List<Model> releasedModelList = modelService.selectAllModelNameList(serviceId);
+        List<ModelNameSelectVO> list = JSON.parseArray(JSON.toJSONString(releasedModelList),ModelNameSelectVO.class);
+        return list;
+    }
+
 
     @Override
     public ModelSelectVO selectRecentModelNameList() {
@@ -332,5 +341,6 @@ public class ModelBussinessImpl implements ModelBussiness {
         List<Model> result = modelService.findModelOptionHistory(serviceId);
         return null;
     }
+
 
 }

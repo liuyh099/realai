@@ -67,4 +67,11 @@ public interface ModelService {
 
 
     Integer selectCountByServiceId(Long serviceId);
+
+    /**
+     * 根基服务ID查询所有的模型列表
+     * @param serviceId
+     * @return
+     */
+    List<Model> selectAllModelNameList(Long serviceId);
 }

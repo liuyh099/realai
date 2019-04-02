@@ -48,4 +48,11 @@ public interface ModelBussiness {
      * @return
      */
     List<ModelBO> findModelOptionHistory(Long serviceId);
+
+    /**
+     * 根据服务ID查询所有的模型选择
+     * @param serviceId
+     * @return
+     */
+    List<ModelNameSelectVO> selectAllModelNameList(Long serviceId);
 }
