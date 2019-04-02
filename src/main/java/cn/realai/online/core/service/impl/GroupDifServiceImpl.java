@@ -20,4 +20,13 @@ public class GroupDifServiceImpl implements GroupDifService {
 		groupDifDao.insertList(gdList);
 	}
 
+	@Override
+	public List<GroupDif> selectList(GroupDif groupDif) {
+		return groupDifDao.selectList(groupDif);
+	}
+
+	@Override
+	public List<String> selectGroupNameList(Long experimentId) {
+		return groupDifDao.selectGroupNameList(experimentId);
+	}
 }

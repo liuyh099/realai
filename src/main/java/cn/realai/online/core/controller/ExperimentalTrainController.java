@@ -416,6 +416,24 @@ public class ExperimentalTrainController {
     }
 
     @RequiresPermissions("experimental:train")
+    @DeleteMapping("/deleteByRecommend")
+    @ApiOperation(value = "根据推荐删除位删除同质或者异质量数据")
+    @ResponseBody
+    public Result deleteByRecommend(@RequestBody @Validated ExperimentalTrainDelRecommendVO recommendVO) {
+        try {
+            boolean updateFlag = checkCanUpdate(recommendVO.getId());
+            if (!updateFlag) {
+                return new Result(ResultCode.DATA_ERROR.getCode(), "实验已经完成或者正在进行中，不可以修改实验", null);
+            }
+//            experimentalTrainBussiness.deleteVariableData(experimentalTrainCreateModelVo.getId(), experimentalTrainCreateModelVo.getIds());
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+        } catch (Exception e) {
+            logger.error("新增实验-生成模型-删除同质或者异质量数据异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
+
+    @RequiresPermissions("experimental:train")
     @GetMapping("/createModel/getData")
     @ApiOperation(value = "新增实验-生成模型-一获取同质异质数据")
     @ResponseBody
