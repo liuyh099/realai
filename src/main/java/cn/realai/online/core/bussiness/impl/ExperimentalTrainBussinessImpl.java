@@ -268,7 +268,12 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experimentalResultQuatoBO.setModel(1);
         experimentalResultQuatoBO.setTestResultList(testResultSetListBO);
         experimentalResultQuatoBO.setTrainResultList(trainResultSetListBO);
-        experimentalResultQuatoBO.setValidateResultList(validResultSetListBO);
+        if(validResultSetListBO==null || validResultSetListBO.size()<=0){
+            experimentalResultQuatoBO.setValidateResultList(null);
+        }else {
+            experimentalResultQuatoBO.setValidateResultList(validResultSetListBO);
+        }
+
 
         //获得评估的结果集
         Experiment experiment = experimentService.selectExperimentById(experimentId);
