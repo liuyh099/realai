@@ -263,7 +263,7 @@ public class ModelBussinessImpl implements ModelBussiness {
                     //PSI调优
 
                     //检查PSI调优是否可行
-                    Double d=psiChekcResultService.selectPsiByExperimentId(modelBO.getExperimentId());
+                    Double d=psiChekcResultService.selectPsiByServiceId(modelBO.getServiceId());
                     if(d<=0.1){
                         tuningRecord.setStatus(TuningRecord.STATUS.USED.value);
                         tuningRecordService.update(tuningRecord);

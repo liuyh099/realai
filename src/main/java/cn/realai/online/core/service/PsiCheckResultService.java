@@ -32,5 +32,5 @@ public interface PsiCheckResultService {
 	
 	Integer findMaxPsiTotal();
 
-    Double selectPsiByExperimentId(Long experimentId);
+    Double selectPsiByServiceId(Long serviceId);
 }

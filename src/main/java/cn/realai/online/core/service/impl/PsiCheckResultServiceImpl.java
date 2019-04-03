@@ -45,8 +45,8 @@ public class PsiCheckResultServiceImpl implements PsiCheckResultService {
     }
 
     @Override
-    public Double selectPsiByExperimentId(Long experimentId) {
-        return psiCheckResultDao.selectPsiByExperimentId(experimentId);
+    public Double selectPsiByServiceId(Long serviceId) {
+        return psiCheckResultDao.selectPsiByServiceId(serviceId);
     }
 
     @Override
