@@ -270,6 +270,7 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验-千人千面列表数据")
     public Result<PageBO<PersonalInformationVO>> listData(@Validated FaceListDataQuery query) {
         try {
+            query.setSearchType("thousandsFace");
             PageBO<PersonalInformationBO> page = experimentalTrainBusiness.personalInformationPage(query, BatchRecord.BATCH_TYPE_TRAIN);
             if (page == null) {
                 return null;

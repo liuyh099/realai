@@ -612,6 +612,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         personal.setPersonalId(query.getPersonalId());
         personal.setInputStartDate(query.getInputStartDate());
         personal.setInputEndDate(query.getInputStartEnd());
+        personal.setSearchType(query.getSearchType());
         return personal;
     }
 
