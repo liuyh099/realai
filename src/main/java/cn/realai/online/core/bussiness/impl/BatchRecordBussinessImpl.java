@@ -79,7 +79,7 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
                 minDateV = Optional.ofNullable(minDate).map(v -> v.getTime()).orElse(null);
             }
             if (StringUtils.isNotBlank(query.getMaxDate())) {
-                Date maxDate = DateUtils.parseDate(query.getMinDate(), DateUtil.ymd, DateUtil.ymdhms);
+                Date maxDate = DateUtils.parseDate(query.getMaxDate(), DateUtil.ymd, DateUtil.ymdhms);
                 maxDateV = Optional.ofNullable(maxDate).map(v -> v.getTime()).orElse(null);
             }
 
