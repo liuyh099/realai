@@ -131,7 +131,7 @@ public class TrainServiceImpl implements TrainService {
 	@Override
 	public int runBatchOfOffline(BatchRecord batchRecord) {
 		//获取锁
-    	if (!getLock(batchRecord.getExperimentId(), MLock.MLOCK_TYPE_BATCH)) {
+    	if (!getLock(batchRecord.getId(), MLock.MLOCK_TYPE_BATCH)) {
     		return -1;
     	}
 		

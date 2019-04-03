@@ -30,7 +30,7 @@ public class ModelListVO {
     private long experimentId;
 
     @ApiModelProperty(value = "来源实验")
-    private String experementName;
+    private String experimentName;
 
     @ApiModelProperty(value = "上线时间")
     private Long releaseTime;
@@ -49,7 +49,6 @@ public class ModelListVO {
 
     @ApiModelProperty(value = "是否预警(true: 预警； false：不预警)")
     private boolean aler;
-
 
     public long getModelId() {
         return modelId;
@@ -91,12 +90,12 @@ public class ModelListVO {
         this.experimentId = experimentId;
     }
 
-    public String getExperementName() {
-        return experementName;
+    public String getExperimentName() {
+        return experimentName;
     }
 
-    public void setExperementName(String experementName) {
-        this.experementName = experementName;
+    public void setExperimentName(String experimentName) {
+        this.experimentName = experimentName;
     }
 
     public Long getReleaseTime() {

@@ -78,7 +78,7 @@ public class ShiroConfig {
     public SessionManager sessionManager() {
         MySessionManager mySessionManager = new MySessionManager();
         mySessionManager.setSessionDAO(redisSessionDAO());
-        mySessionManager.setSessionValidationInterval(60000);
+        mySessionManager.setSessionValidationInterval(7200000); //2小时
         mySessionManager.setSessionValidationSchedulerEnabled(true);
         return mySessionManager;
     }

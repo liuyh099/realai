@@ -30,6 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -131,6 +133,7 @@ public class ServiceController {
             serviceBO.setId(getServiceDetailsQuery.getServiceId());
             serviceBO = serviceBussiness.getServiceDetails(serviceBO);
             BeanUtils.copyProperties(serviceBO, serviceVO);
+            serviceVO.setServiceTypeName(Service.getServiceTypeName(serviceBO.getType(), serviceBO.getBusinessType()));
 
             List<ServiceDeployRecordBO> serviceDeployRecordBOs = serviceDeployRecordBussiness.findServiceDeployRecordByServiceId(serviceVO.getId());
             List<ServiceDeployRecordVO> serviceDeployRecordVOs = new ArrayList<>();
@@ -163,6 +166,7 @@ public class ServiceController {
                 for (ServiceBO s : serviceBOs) {
                     ServiceVO vo = new ServiceVO();
                     BeanUtils.copyProperties(s, vo);
+                    vo.setServiceTypeName(Service.getServiceTypeName(s.getType(), s.getBusinessType()));
                     serviceVOs.add(vo);
                 }
             }
@@ -200,10 +204,14 @@ public class ServiceController {
     @RequiresPermissions("service")
     @PostMapping("/list/renewal")
     @ApiOperation(value="服务续期")
+    @Transactional(readOnly = true)
     public Result renewalService(@RequestBody RenewalServiceQuery renewalServiceQuery){
         ServiceBO serviceBO = new ServiceBO();
         try {
-            BeanUtils.copyProperties(renewalServiceQuery, serviceBO);
+            Service serviceEntity = serviceService.selectServiceById(renewalServiceQuery.getId());
+            Assert.notNull(serviceEntity, "服务不存在");
+            BeanUtils.copyProperties(serviceEntity, serviceBO);
+            serviceBO.setSecretKey(renewalServiceQuery.getSecretKey());
             serviceBussiness.renewalService(serviceBO);
         } catch (Exception e) {
             logger.error("服务续期异常！", e);

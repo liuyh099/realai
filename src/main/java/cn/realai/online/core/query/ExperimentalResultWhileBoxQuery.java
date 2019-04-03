@@ -1,5 +1,7 @@
 package cn.realai.online.core.query;
 
+import javax.validation.constraints.NotNull;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -9,6 +11,7 @@ public class ExperimentalResultWhileBoxQuery extends PageQuery {
     @ApiModelProperty(value = "实验ID")
     private Long experimentId;
     @ApiModelProperty(value = "分组ID")
+    @NotNull
     private Long groupId;
     @ApiModelProperty(value = "变量类型 2:同质 1:异质 为空表示查询所有", example = "2:同质 1:异质 为空表示查询所有")
     private Integer variableType;

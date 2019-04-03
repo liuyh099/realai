@@ -92,7 +92,6 @@ public class ModelBussinessImpl implements ModelBussiness {
                 ModelListVO voItem = new ModelListVO();
                 BeanUtils.copyProperties(item, voItem);
                 voItem.setAlgorithm(item.getAlgorithmType());
-                voItem.setExperementName(item.getExperimentName());
                 voItem.setTuningReason("新建");
 
                 //处理PSI是否足够预警

@@ -232,7 +232,23 @@ public class DateUtil {
         try {
             dt2 = sdf.parse(date);
 
-            lTime = dt2.getTime() / 1000L;
+            lTime = dt2.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return lTime;
+    }
+
+    //日期字符串转换成毫秒时间戳
+    public static long stringToMilliLong(String date, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        Date dt2 = null;
+        long lTime = 0L;
+        try {
+            dt2 = sdf.parse(date);
+
+            lTime = dt2.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
