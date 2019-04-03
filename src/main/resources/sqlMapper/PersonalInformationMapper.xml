@@ -81,6 +81,11 @@
             <if test="inputEndDate!=null">
                 AND a.order_date &lt;= #{inputEndDate}
             </if>
+            <if test="searchType!=null and searchType!=''">
+                <if test="searchType='thousandsFace'">
+                    AND b.group_name!='全局'
+                </if>
+            </if>
         </where>
     </select>
 

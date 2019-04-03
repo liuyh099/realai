@@ -145,6 +145,7 @@ public class ThousandsFacesController {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
             query.setId(model.getExperimentId());
+            query.setSearchType("thousandsFace");
             PageBO<PersonalInformationBO> page = experimentalTrainBussiness.personalInformationPage(query, null);
             if (page == null) {
                 return null;

@@ -64,6 +64,16 @@ public class PersonalInformation {
 
     private Long inputEndDate;
 
+    private String searchType;
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
+
     public Long getInputStartDate() {
         return inputStartDate;
     }
