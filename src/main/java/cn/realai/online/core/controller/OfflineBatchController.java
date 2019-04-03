@@ -60,7 +60,7 @@ public class OfflineBatchController {
     public Result<Long> create(@RequestBody @Validated OfflineBatchCreateVO createVO){
         try {
         	BatchRecord batchRecord = batchRecordBussiness.createBatchRecord(createVO);
-        	if (batchRecord != null && false) {
+        	if (batchRecord != null) {
         		int ret = batchRecordBussiness.executeBatchRecord(batchRecord);
         		if (ret == -1) {
         			return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), batchRecord.getId());
