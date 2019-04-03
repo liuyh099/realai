@@ -232,7 +232,7 @@ public class DateUtil {
         try {
             dt2 = sdf.parse(date);
 
-            lTime = dt2.getTime() / 1000L;
+            lTime = dt2.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
