@@ -39,7 +39,7 @@ public class ModelListVO {
     private String algorithm;
 
     @ApiModelProperty(value = "调优序列")
-    private String tuningNo;
+    private Integer tuningNo;
 
     @ApiModelProperty(value = "调优原因")
     private String tuningReason;
@@ -115,11 +115,11 @@ public class ModelListVO {
         this.algorithm = algorithm;
     }
 
-    public String getTuningNo() {
+    public Integer getTuningNo() {
         return tuningNo;
     }
 
-    public void setTuningNo(String tuningNo) {
+    public void setTuningNo(Integer tuningNo) {
         this.tuningNo = tuningNo;
     }
 
