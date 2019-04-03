@@ -31,5 +31,6 @@ public interface PsiCheckResultService {
 	int insertList(List<PSICheckResult> list);
 	
 	Integer findMaxPsiTotal();
-	
+
+    Double selectPsiByExperimentId(Long experimentId);
 }

@@ -44,7 +44,12 @@ public class PsiCheckResultServiceImpl implements PsiCheckResultService {
         return psiCheckResultDao.findMaxPsiTotal();
     }
 
-	@Override
+    @Override
+    public Double selectPsiByExperimentId(Long experimentId) {
+        return psiCheckResultDao.selectPsiByExperimentId(experimentId);
+    }
+
+    @Override
 	public int deletePSIByExperimentId(Long experimentId) {
 		return psiCheckResultDao.deletePSIByExperimentId(experimentId);
 	}
