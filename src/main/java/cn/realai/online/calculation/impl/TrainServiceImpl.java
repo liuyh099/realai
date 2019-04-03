@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
-import ch.qos.logback.classic.Logger;
 import cn.realai.online.calculation.TrainService;
 import cn.realai.online.calculation.requestbo.BatchOfOfflineRequestBO;
 import cn.realai.online.calculation.requestbo.DeleteExperimentRequestBO;
@@ -68,7 +67,7 @@ public class TrainServiceImpl implements TrainService {
 	public int training(Experiment experiment, Long oldEid, List<VariableData> homoList, 
 			List<VariableData> hetroList, int delOrAdd) {
 		//获取训练锁
-        if (!getLock(experiment.getId())) {
+        if (!getLock(experiment.getId(), MLock.MLOCK_TYPE_TRAIN)) {
             return -1;
         }
 		
@@ -132,7 +131,7 @@ public class TrainServiceImpl implements TrainService {
 	@Override
 	public int runBatchOfOffline(BatchRecord batchRecord) {
 		//获取锁
-    	if (!getLock(batchRecord.getExperimentId())) {
+    	if (!getLock(batchRecord.getExperimentId(), MLock.MLOCK_TYPE_BATCH)) {
     		return -1;
     	}
 		
@@ -160,17 +159,20 @@ public class TrainServiceImpl implements TrainService {
 		return 1;
 	}
 
-	public boolean getLock(Long experimentId) {
+	public boolean getLock(Long id, int type) {
 		//获取锁
-		MLock mLock = mLockService.getLock(experimentId);
+		MLock mLock = mLockService.getLock(id, type);
+		if (mLock == null) {
+			return false;
+		}
     	return mLock.tryLock();
 	}
 	
 	@Override
 	public int deleteExperiment(Long experimentId) {
 		DeleteExperimentRequestBO derbo = new DeleteExperimentRequestBO();
-		derbo.setModelId(experimentId);
-        String ret = HttpUtil.postRequest(config.getModelDrop(), JSON.toJSONString(derbo));
+		derbo.setExperimentId(experimentId);
+        String ret = HttpUtil.postRequest(config.getExperimentDrop(), JSON.toJSONString(derbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl deleteExperiment. 调用python删除接口失败. derbo{}" + JSON.toJSONString(derbo));
         }

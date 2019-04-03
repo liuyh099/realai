@@ -126,7 +126,7 @@ public class OfflineBatchController {
             BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
 
             response.addHeader("Content-Disposition","attachment;filename="+ new String(filename.getBytes("UTF-8"),"ISO8859_1"));
-            response.addHeader("Content-Length", "" + bis.available());
+            response.addHeader("Content-Length", "" + conn.getContentLength());
             response.setContentType("application/octet-stream");
 
             byte[] bytes = new byte[1024];

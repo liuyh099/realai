@@ -43,6 +43,9 @@ public class ServiceDetailVO {
     @ApiModelProperty(value = "服务子类型", example = Service.BUSINESSTYPE_EXPLAIN)
     private Integer businessType;
 
+    @ApiModelProperty(value = "服务类型名称，服务类型和服务子类型组合")
+    private String serviceTypeName;
+
 
     @ApiModelProperty(value = "是否可续期", example = "true: 可续期 false: 不可续期")
     private boolean renewable;
@@ -131,6 +134,14 @@ public class ServiceDetailVO {
 
     public void setBusinessType(Integer businessType) {
         this.businessType = businessType;
+    }
+
+    public String getServiceTypeName() {
+        return serviceTypeName;
+    }
+
+    public void setServiceTypeName(String serviceTypeName) {
+        this.serviceTypeName = serviceTypeName;
     }
 
     public boolean isRenewable() {

@@ -258,6 +258,12 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public void deleteVariableDataWithRecommend(Long experimentId, List<Long> excludeIds) {
+        variableDataService.deleteByRecommendAndExcludeIds(experimentId, excludeIds);
+    }
+
+    @Override
     public ExperimentalResultQuatoBO quota(Long experimentId) {
 
 
@@ -269,7 +275,12 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experimentalResultQuatoBO.setModel(1);
         experimentalResultQuatoBO.setTestResultList(testResultSetListBO);
         experimentalResultQuatoBO.setTrainResultList(trainResultSetListBO);
-        experimentalResultQuatoBO.setValidateResultList(validResultSetListBO);
+        if(validResultSetListBO==null || validResultSetListBO.size()<=0){
+            experimentalResultQuatoBO.setValidateResultList(null);
+        }else {
+            experimentalResultQuatoBO.setValidateResultList(validResultSetListBO);
+        }
+
 
         //获得评估的结果集
         Experiment experiment = experimentService.selectExperimentById(experimentId);
@@ -601,6 +612,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         personal.setPersonalId(query.getPersonalId());
         personal.setInputStartDate(query.getInputStartDate());
         personal.setInputEndDate(query.getInputStartEnd());
+        personal.setSearchType(query.getSearchType());
         return personal;
     }
 

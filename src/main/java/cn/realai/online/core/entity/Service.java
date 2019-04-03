@@ -1,5 +1,7 @@
 package cn.realai.online.core.entity;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 服务（我的服务）
  * @author lyh
@@ -192,4 +194,43 @@ public class Service {
 		this.type = type;
 	}
 
+
+	public static String getDescByType(Integer type) {
+		if (type != null) {
+			if (type == TYPE_WIND) {
+				return "风控";
+			} else if (type == TYPE_MARKETING) {
+				return "营销";
+			}
+		}
+		return null;
+	}
+
+	public static String getDescByBusinessType(Integer businessType) {
+		if (businessType != null) {
+			if (businessType == BUSINESSTYPE_A)  {
+				return "A卡";
+			} else if (businessType == BUSINESSTYPE_B) {
+				return "B卡";
+			} else if (businessType == BUSINESSTYPE_C) {
+				return "C卡";
+			} else if (businessType == BUSINESSTYPE_MARKETING) {
+				return "营销";
+			}
+		}
+		return null;
+	}
+
+	public static String getServiceTypeName(Integer type, Integer businessType) {
+		if (type == TYPE_MARKETING) {
+			return "营销";
+		}
+		if (type == TYPE_WIND) {
+			if (businessType == BUSINESSTYPE_A || businessType == BUSINESSTYPE_B || businessType == BUSINESSTYPE_C) {
+				return getDescByType(type) + getDescByBusinessType(businessType);
+			}
+			return "风控";
+		}
+		return null;
+	}
 }

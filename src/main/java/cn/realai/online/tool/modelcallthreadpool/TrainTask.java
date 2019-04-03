@@ -19,6 +19,7 @@ import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.ExperimentResultSet;
+import cn.realai.online.core.entity.GroupDif;
 import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.ModelPerformance;
 import cn.realai.online.core.entity.PersonalComboResultSet;
@@ -33,6 +34,7 @@ import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.service.BatchRecordService;
 import cn.realai.online.core.service.ExperimentResultSetService;
 import cn.realai.online.core.service.ExperimentService;
+import cn.realai.online.core.service.GroupDifService;
 import cn.realai.online.core.service.MLockService;
 import cn.realai.online.core.service.ModelPerformanceService;
 import cn.realai.online.core.service.PersonalComboResultSetService;
@@ -116,12 +118,13 @@ public class TrainTask implements Runnable {
 	            vdMap.put(vd.getName() + vd.getVariableType(), vd.getId());
 	        }
 	
+	        //分组对比
+	        analysisGroupDif(redisClientTemplate.get(redisKey.getGroupDif()));
+	        redisClientTemplate.delete(redisKey.getGroupDif());
+	        
 	        //样本权重
 	        analysisSampleWeight(redisClientTemplate.get(redisKey.getSampleWeight()), sgMap, vdMap);
 	        redisClientTemplate.delete(redisKey.getSampleWeight());
-	
-	        //千人千面人员信息
-	        
 	
 	        //生成批次
 	        BatchRecord batchRecord = new BatchRecord();
@@ -136,6 +139,7 @@ public class TrainTask implements Runnable {
 	        batchRecordService.insert(batchRecord);
 	        Long batchRecordId = batchRecord.getId();
 	        
+            //千人千面人员信息
 	        List<PersonalInformation> personalInformationList = analysisPersonalInformation(redisClientTemplate.get(redisKey.getPersonalInformation()), sgMap, batchRecordId);
 	
 	        Map<String, Long> piMap = new HashMap<String, Long>();
@@ -200,14 +204,16 @@ public class TrainTask implements Runnable {
         
         //释放MLock锁
 		MLockService mLockService = SpringContextUtils.getBean(MLockService.class);
-		MLock mLock = mLockService.getLock(experimentId);
-		mLock.unLock();
+		MLock mLock = mLockService.getLock(experimentId, MLock.MLOCK_TYPE_TRAIN);
+		if (mLock != null) {
+			mLock.unLock();
+		}
         
         logger.info("TrainTask run, 实验回调处理结束， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
         
     }
 
-    /*
+	/*
      * 模型表现
      */
     private void analysisModelPerformance(String redisValue) {
@@ -274,6 +280,25 @@ public class TrainTask implements Runnable {
         return sgList;
     }
 
+    /*
+     * 分组对比
+     */
+    private void analysisGroupDif(String redisValue) {
+		if (redisValue == null || "".equals(redisValue)) {
+			return ;
+		}
+		List<GroupDif> gdList = JSON.parseArray(redisValue, GroupDif.class);
+		if (gdList.isEmpty()) {
+			return;
+		}
+		for (GroupDif groupDif : gdList) {
+			groupDif.setExperimentId(experimentId);
+		}
+		GroupDifService groupDifService = SpringContextUtils.getBean(GroupDifService.class);
+		groupDifService.insertList(gdList);
+	}
+
+    
     /*
      * 样本权重
      */
@@ -351,7 +376,7 @@ public class TrainTask implements Runnable {
                     throw new RuntimeException("训练结果数据错误,千人千面信息不存在.");
                 }
                 
-                Long vId = vdMap.get(phrs.getVariableName() + VariableData.SCHEMA_TYPE_HOMO);
+                Long vId = vdMap.get(phrs.getVariableName() + VariableData.VARIABLE_TYPE_HOMO);
                 phrs.setVariableId(vId);
                 phrs.setPid(piId);
                 phrs.setBatchId(batchRecordId);
@@ -373,7 +398,7 @@ public class TrainTask implements Runnable {
                     logger.error("TrainTask analysisPersonalResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, phrs.getPersonalId());
                     throw new RuntimeException("训练结果数据错误,千人千面信息不存在.");
                 }
-                Long vId = vdMap.get(phrs.getVariableName() + VariableData.SCHEMA_TYPE_HETERO);
+                Long vId = vdMap.get(phrs.getVariableName() + VariableData.VARIABLE_TYPE_HETERO);
                 phrs.setVariableId(vId);
                 phrs.setPid(piId);
                 phrs.setBatchId(batchRecordId);
@@ -401,11 +426,11 @@ public class TrainTask implements Runnable {
             }
             pcrs.setPid(piId);
             pcrs.setBatchId(batchRecordId);
-            Long variableId1 = vdMap.get(pcrs.getVariableName1() + VariableData.SCHEMA_TYPE_HETERO);
+            Long variableId1 = vdMap.get(pcrs.getVariableName1() + VariableData.VARIABLE_TYPE_HETERO);
             pcrs.setVariableId1(variableId1);
-            Long variableId2 = vdMap.get(pcrs.getVariableName2() + VariableData.SCHEMA_TYPE_HETERO);
+            Long variableId2 = vdMap.get(pcrs.getVariableName2() + VariableData.VARIABLE_TYPE_HETERO);
             pcrs.setVariableId2(variableId2);
-            Long variableId3 = vdMap.get(pcrs.getVariableName3() + VariableData.SCHEMA_TYPE_HETERO);
+            Long variableId3 = vdMap.get(pcrs.getVariableName3() + VariableData.VARIABLE_TYPE_HETERO);
             pcrs.setVariableId3(variableId3);
         }
         PersonalComboResultSetService personalComboResultSetService = SpringContextUtils.getBean(PersonalComboResultSetService.class);

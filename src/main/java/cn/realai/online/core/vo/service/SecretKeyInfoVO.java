@@ -21,10 +21,13 @@ public class SecretKeyInfoVO {
     private long expireDate;
 
     @ApiModelProperty(value = "服务类型", example = Service.TYPE_EXPLAIN)
-    private int type;
+    private Integer type;
 
     @ApiModelProperty(value = "服务子类型", example = Service.BUSINESSTYPE_EXPLAIN)
-    private int businessType;
+    private Integer businessType;
+
+    @ApiModelProperty(value = "服务类型名称")
+    private String serviceTypeName;
 
     public int getBusinessType() {
         return businessType;
@@ -50,11 +53,23 @@ public class SecretKeyInfoVO {
         this.expireDate = expireDate;
     }
 
-    public int getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
+    }
+
+    public void setBusinessType(Integer businessType) {
+        this.businessType = businessType;
+    }
+
+    public String getServiceTypeName() {
+        return serviceTypeName;
+    }
+
+    public void setServiceTypeName(String serviceTypeName) {
+        this.serviceTypeName = serviceTypeName;
     }
 }

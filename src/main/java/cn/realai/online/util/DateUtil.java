@@ -240,6 +240,22 @@ public class DateUtil {
         return lTime;
     }
 
+    //日期字符串转换成毫秒时间戳
+    public static long stringToMilliLong(String date, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        Date dt2 = null;
+        long lTime = 0L;
+        try {
+            dt2 = sdf.parse(date);
+
+            lTime = dt2.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return lTime;
+    }
+
     public static Map<String, String> getTwoDay(String endTime, String beginTime, boolean isEndTime) {
         Map<String, String> result = new HashMap<String, String>();
         if ((endTime == null) || (endTime.equals("")) || (beginTime == null) || (beginTime.equals(""))) {

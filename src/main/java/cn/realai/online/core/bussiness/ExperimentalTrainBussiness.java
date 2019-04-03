@@ -80,6 +80,14 @@ public interface ExperimentalTrainBussiness {
      */
     void deleteVariableData(Long experimentId, List<Long> ids);
 
+
+    /**
+     * 删除VariableData并且排除一些ID
+     * @param experimentId
+     * @param excludeIds
+     */
+    void deleteVariableDataWithRecommend(Long experimentId, List<Long> excludeIds);
+
     /**
      * 实验评估指标数据
      *

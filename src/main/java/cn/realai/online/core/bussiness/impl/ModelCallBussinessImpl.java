@@ -170,8 +170,10 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
     public void trainErrorDealWith(Long experimentId, String errMsg, String task) {
     	//释放掉锁
     	if (experimentId != null ) {
-            MLock mlock = mLockService.getLock(experimentId);
-            mlock.unLock();
+            MLock mlock = mLockService.getLock(experimentId, MLock.MLOCK_TYPE_TRAIN);
+            if (mlock != null) {
+            	mlock.unLock();
+            }
     	}
     	
     	if (Constant.COMMAND_PREPROCESS.equals(task)) { //预处理

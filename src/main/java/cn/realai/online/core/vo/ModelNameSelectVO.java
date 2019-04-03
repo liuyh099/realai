@@ -7,15 +7,15 @@ import io.swagger.annotations.ApiModelProperty;
 public class ModelNameSelectVO {
 
     @ApiModelProperty(value = "模型ID", example = "1")
-    private long id;
+    private Long id;
     @ApiModelProperty(value = "模型名称", example = "小微-A卡")
     private String name;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

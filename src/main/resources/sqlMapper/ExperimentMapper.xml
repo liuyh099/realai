@@ -72,7 +72,7 @@
     </select>
 
     <update id="logicDeleteExperiment" parameterType="java.lang.Long">
-        UPDATE　experiment SET status = 7 WHERE id in
+        UPDATE experiment SET status = 7 WHERE id IN
         <foreach collection="ids" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>

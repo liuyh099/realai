@@ -17,8 +17,11 @@ public class ModelListVO {
     @ApiModelProperty(value = "模型id")
     private long modelId;
 
-    @ApiModelProperty(value = "服务名称")
+    @ApiModelProperty(value = "模型名称")
     private String modelName;
+
+    @ApiModelProperty(value = "服务Id")
+    private Long serviceId;
 
     @ApiModelProperty(value = "服务名称")
     private String serviceName;
@@ -27,7 +30,7 @@ public class ModelListVO {
     private long experimentId;
 
     @ApiModelProperty(value = "来源实验")
-    private String experementName;
+    private String experimentName;
 
     @ApiModelProperty(value = "上线时间")
     private Long releaseTime;
@@ -36,7 +39,7 @@ public class ModelListVO {
     private String algorithm;
 
     @ApiModelProperty(value = "调优序列")
-    private String tuningNo;
+    private Integer tuningNo;
 
     @ApiModelProperty(value = "调优原因")
     private String tuningReason;
@@ -46,7 +49,6 @@ public class ModelListVO {
 
     @ApiModelProperty(value = "是否预警(true: 预警； false：不预警)")
     private boolean aler;
-
 
     public long getModelId() {
         return modelId;
@@ -62,6 +64,14 @@ public class ModelListVO {
 
     public void setModelName(String modelName) {
         this.modelName = modelName;
+    }
+
+    public Long getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(Long serviceId) {
+        this.serviceId = serviceId;
     }
 
     public String getServiceName() {
@@ -80,12 +90,12 @@ public class ModelListVO {
         this.experimentId = experimentId;
     }
 
-    public String getExperementName() {
-        return experementName;
+    public String getExperimentName() {
+        return experimentName;
     }
 
-    public void setExperementName(String experementName) {
-        this.experementName = experementName;
+    public void setExperimentName(String experimentName) {
+        this.experimentName = experimentName;
     }
 
     public Long getReleaseTime() {
@@ -104,11 +114,11 @@ public class ModelListVO {
         this.algorithm = algorithm;
     }
 
-    public String getTuningNo() {
+    public Integer getTuningNo() {
         return tuningNo;
     }
 
-    public void setTuningNo(String tuningNo) {
+    public void setTuningNo(Integer tuningNo) {
         this.tuningNo = tuningNo;
     }
 
@@ -128,7 +138,7 @@ public class ModelListVO {
         this.psi = psi;
     }
 
-    public boolean getAler() {
+    public boolean isAler() {
         return aler;
     }
 

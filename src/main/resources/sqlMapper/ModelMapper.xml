@@ -31,6 +31,10 @@
         </where>
     </select>
 
+    <select id="selectAllModelNameList" parameterType="java.lang.Long" resultMap="ModelMap">
+       SELECT * FROM model WHERE service_id = #{serviceId}
+    </select>
+
 
     <update id="update" parameterType="cn.realai.online.core.entity.Model">
         UPDATE model
@@ -125,6 +129,7 @@
         <!--<result column="tuningReason" property="tuningReason" jdbcType="VARCHAR"/>-->
         <result column="ydefine" property="ydefine" jdbcType="VARCHAR"/>
         <result column="serviceType" property="serviceType" jdbcType="VARCHAR"/>
+        <result column="serviceBusinessType" property="serviceBusinessType" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
     <select id="selectDetail" resultMap="ModelDetailMap">
@@ -134,11 +139,12 @@
         sv.name as serviceName,
         ep.id as experimentId,
         ep.name as experimentName,
-        ep.release_time as releaseTime,
+        m.create_time as releaseTime,
         ep.algorithm_type as algorithmType,
         ep.tuning_count as tuningCount,
         ep.y_table as ydefine,
         sv.type as serviceType,
+        sv.business_type as serviceBusinessType,
         m.remark as remark
         from model as m
         join experiment as ep on m.experiment_id = ep.id

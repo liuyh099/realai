@@ -78,4 +78,9 @@ public class ModelServiceImpl implements ModelService {
     public Integer selectCountByServiceId(Long serviceId) {
         return modelDao.selectCountByServiceId(serviceId);
     }
+
+    @Override
+    public List<Model> selectAllModelNameList(Long serviceId) {
+        return modelDao.selectAllModelNameList(serviceId);
+    }
 }

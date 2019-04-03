@@ -78,7 +78,7 @@
                 AND variable_type = #{variableType}
             </if>
         </where>
-        ORDER BY recommended_delete DESC, create_time ASC
+        ORDER BY recommended_delete DESC, create_time ASC, id ASC
     </select>
 
     <update id="deleteVariableData">
@@ -88,7 +88,7 @@
             <if test="experimentId!=null">
                 experiment_id = #{experimentId}
             </if>
-            <if test="ids!=null">
+            <if test="ids!=null and ids.size() > 0">
                 <if test="experimentId!=null">
                     AND
                 </if>
@@ -98,6 +98,26 @@
             </if>
         </where>
     </update>
+
+    <update id="deleteByRecommendAndExcludeIds">
+        UPDATE variable_data
+        SET `delete` = 2
+        <where>
+            recommended_delete = 2
+            <if test="experimentId!=null">
+                and experiment_id = #{experimentId}
+            </if>
+            <if test="excludeIds!=null and excludeIds.size() > 0">
+                <if test="experimentId!=null">
+                    AND
+                </if>
+                <foreach collection="excludeIds" separator="," open=" id not in (" close=")" item="id">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </update>
+
     
     <delete id="deleteVariableDataByExperimentId">
     	delete 

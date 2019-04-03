@@ -21,6 +21,7 @@ import cn.realai.online.lic.LicenseException;
 import cn.realai.online.lic.ServiceLicenseCheck;
 import cn.realai.online.userandperm.entity.User;
 import cn.realai.online.util.UserUtils;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -90,6 +91,7 @@ public class ModelBussinessImpl implements ModelBussiness {
             for (ModelListBO item : list) {
                 ModelListVO voItem = new ModelListVO();
                 BeanUtils.copyProperties(item, voItem);
+                voItem.setAlgorithm(item.getAlgorithmType());
                 voItem.setTuningReason("新建");
 
                 //处理PSI是否足够预警
@@ -130,6 +132,9 @@ public class ModelBussinessImpl implements ModelBussiness {
         ModelDetailBO detailBO = modelService.selectDetail(modelId);
         if (detailBO != null) {
             BeanUtils.copyProperties(detailBO, detailVO);
+            //处理服务类型
+            String serviceTypeName = cn.realai.online.core.entity.Service.getServiceTypeName(detailBO.getServiceType(), detailBO.getServiceBusinessType());
+            detailVO.setServiceTypeName(serviceTypeName);
             //处理调优原因
             detailVO.setTuningReason("新建");
             List<TuningRecord> tuningRecords = tuningRecordService.findLatestListByModelIds(Arrays.asList(modelId));
@@ -165,6 +170,14 @@ public class ModelBussinessImpl implements ModelBussiness {
         list.add(itemVO);
         return list;
     }
+
+    @Override
+    public List<ModelNameSelectVO> selectAllModelNameList(Long serviceId) {
+        List<Model> releasedModelList = modelService.selectAllModelNameList(serviceId);
+        List<ModelNameSelectVO> list = JSON.parseArray(JSON.toJSONString(releasedModelList),ModelNameSelectVO.class);
+        return list;
+    }
+
 
     @Override
     public ModelSelectVO selectRecentModelNameList() {
@@ -332,5 +345,6 @@ public class ModelBussinessImpl implements ModelBussiness {
         List<Model> result = modelService.findModelOptionHistory(serviceId);
         return null;
     }
+
 
 }

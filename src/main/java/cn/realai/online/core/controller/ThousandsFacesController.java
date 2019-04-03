@@ -63,23 +63,17 @@ public class ThousandsFacesController {
         }
     }
 
-
-
-
-
-
     @GetMapping("/selectModelOption")
     @ApiOperation("发布管理-千人千面-获得模型下拉选项")
     public Result<List<ModelNameSelectVO>> getModelOptionName(@Validated IdVO idVO) {
         try {
-            List<ModelNameSelectVO> list = modelBussiness.selectModelNameList(idVO.getId());
+            List<ModelNameSelectVO> list = modelBussiness.selectAllModelNameList(idVO.getId());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), list);
         } catch (Exception e) {
             logger.error("发布管理-千人千面-获得模型下拉选项异常", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }
-
 
     @GetMapping("/list/group")
     @ApiOperation(value = "千人千面列表-组-数据（模型ID）")
@@ -89,7 +83,7 @@ public class ThousandsFacesController {
             if (ObjectUtils.isEmpty(model)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
-            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(idVO.getId(), true,false);
+            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId(), true,false);
             List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
@@ -99,15 +93,59 @@ public class ThousandsFacesController {
     }
 
     @RequiresPermissions("info:all")
+    @GetMapping("getGroupOption")
+    @ApiOperation("获得下拉组选项 传入模型ID")
+    public Result<List<GroupSelectNameVO>> getGroupOptionName(@Validated IdVO idVO) {
+        try {
+            Model model = modelBussiness.getTrainByModelId(idVO.getId());
+            if (ObjectUtils.isEmpty(model)) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            }
+            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId(), true, false);
+            List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("发布管理-千人千面-获得下拉组选项异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
+
+    @RequiresPermissions("info:all")
+    @GetMapping("getBatchOption")
+    @ApiOperation("获得下拉批次选项 传入模型ID")
+    public Result<List<BatchSelectNameVO>> getBatchOption(@Validated IdVO idVO) {
+        try {
+            Model model = modelBussiness.getTrainByModelId(idVO.getId());
+            if (ObjectUtils.isEmpty(model)) {
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            }
+            BatchRecordBO batchRecordBO = new BatchRecordBO();
+            batchRecordBO.setExperimentId(model.getExperimentId());
+            List<BatchRecordBO> batchList = experimentalTrainBussiness.findBatchRecordBOList(batchRecordBO, false);
+            List<BatchSelectNameVO> result = JSON.parseArray(JSON.toJSONString(batchList), BatchSelectNameVO.class);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
+        } catch (Exception e) {
+            logger.error("发布管理-千人千面-获得下拉批次选项异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+    }
+
+
+    @RequiresPermissions("info:all")
     @GetMapping()
     @ApiOperation("获得千人千面数据 传入模型ID")
     public Result<PageBO<PersonalInformationVO>> getModelOptionName(@Validated FaceListDataQuery query) {
         try {
+            //没有传入batchId直接返回空
+            if(query.getBatchId()==null){
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+            }
             Model model = modelBussiness.getTrainByModelId(query.getId());
             if (ObjectUtils.isEmpty(model)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             }
             query.setId(model.getExperimentId());
+            query.setSearchType("thousandsFace");
             PageBO<PersonalInformationBO> page = experimentalTrainBussiness.personalInformationPage(query, null);
             if (page == null) {
                 return null;
@@ -244,43 +282,7 @@ public class ThousandsFacesController {
         }
     }
 
-    @RequiresPermissions("info:all")
-    @GetMapping("getGroupOption")
-    @ApiOperation("获得下拉组选项 传入模型ID")
-    public Result<List<GroupSelectNameVO>> getGroupOptionName(@Validated IdVO idVO) {
-        try {
-            Model model = modelBussiness.getTrainByModelId(idVO.getId());
-            if (ObjectUtils.isEmpty(model)) {
-                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
-            }
-            List<SampleGroupingBO> list = experimentalTrainBussiness.getGroupOptionName(model.getExperimentId(), true, false);
-            List<GroupSelectNameVO> result = JSON.parseArray(JSON.toJSONString(list), GroupSelectNameVO.class);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
-        } catch (Exception e) {
-            logger.error("发布管理-千人千面-获得下拉组选项异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
-        }
-    }
 
-    @RequiresPermissions("info:all")
-    @GetMapping("getBatchOption")
-    @ApiOperation("获得下拉批次选项 传入模型ID")
-    public Result<List<BatchSelectNameVO>> getBatchOption(@Validated IdVO idVO) {
-        try {
-            Model model = modelBussiness.getTrainByModelId(idVO.getId());
-            if (ObjectUtils.isEmpty(model)) {
-                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
-            }
-            BatchRecordBO batchRecordBO = new BatchRecordBO();
-            batchRecordBO.setExperimentId(model.getExperimentId());
-            List<BatchRecordBO> batchList = experimentalTrainBussiness.findBatchRecordBOList(batchRecordBO, false);
-            List<BatchSelectNameVO> result = JSON.parseArray(JSON.toJSONString(batchList), BatchSelectNameVO.class);
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
-        } catch (Exception e) {
-            logger.error("发布管理-千人千面-获得下拉批次选项异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
-        }
-    }
 
 
 }

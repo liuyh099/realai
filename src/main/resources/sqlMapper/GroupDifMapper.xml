@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.core.dao.GroupDifDao">
+    <resultMap type="cn.realai.online.core.entity.GroupDif" id="GroupDifMap">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+        <result column="variable_name" property="variableName" jdbcType="VARCHAR"/>
+        <result column="group_name_1" property="groupName1" jdbcType="VARCHAR"/>
+        <result column="group_name_2" property="groupName2" jdbcType="VARCHAR"/>
+        <result column="value_1" property="value1" jdbcType="DOUBLE"/>
+        <result column="value_2" property="value2" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+
+    </sql>
+
+    <insert id="insertList">
+        insert into group_dif(experiment_id, variable_name, group_name_1, group_name_2, value_1, value_2) 
+        values
+        <foreach collection="gdList" item="gd" separator=",">
+            (#{gd.experimentId}, #{gd.variableName}, #{gd.groupName1}, #{gd.groupName2}, #{gd.value1}, #{gd.value2})
+        </foreach>
+    </insert>
+
+
+    <select id="selectList" resultMap="GroupDifMap" parameterType="cn.realai.online.core.entity.GroupDif">
+        select * from group_dif as g
+        <where>
+            <if test="experimentId!=null">
+                and g.experiment_id = #{experimentId}
+            </if>
+            <if test="groupName1!=null and groupName1 != ''">
+                and g.group_name_1 = #{groupName1}
+            </if>
+            <if test="groupName2!=null and groupName2 != ''">
+                and g.group_name_2 = #{groupName2}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectGroupNameList" resultType="java.lang.String">
+        select distinct group_name_1 from group_dif as g
+        where experiment_id = #{experiment_id}
+    </select>
+
+</mapper> 
