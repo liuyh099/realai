@@ -220,7 +220,8 @@ public class ModelBussinessImpl implements ModelBussiness {
             return hashMap;
         }
         modelBO.setServiceId(experiment.getServiceId());
-        if (modelBO.getTuningType() == null) {
+        TuningRecord tuningRecord = tuningRecordBussiness.selectValidTuningRecord(modelBO.getServiceId());
+        if (tuningRecord == null) {
             //如果不是调优，检查是否可以发布，如果已存在发布实验，那么不可以再发布实验
             List<Experiment> experiments = experimentService.findPublishByServiceId(modelBO.getServiceId());
             if (CollectionUtils.isEmpty(experiments)) {
@@ -242,7 +243,6 @@ public class ModelBussinessImpl implements ModelBussiness {
             }
         } else {
             //如果是调优，检查有没有调优记录，有的话调优
-            TuningRecord tuningRecord = tuningRecordBussiness.selectValidTuningRecord(modelBO.getServiceId());
             if(ObjectUtils.isEmpty(tuningRecord) || !TuningRecord.STATUS.VALID.value.equals(tuningRecord.getStatus())){
                 hashMap.put("status",false);
                 hashMap.put("msg","当前不可以调优");
