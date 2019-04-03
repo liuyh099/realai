@@ -36,6 +36,17 @@ public class FaceListDataQuery extends PageQuery {
     @ApiModelProperty(value = "批次Id")
     private Long batchId;
 
+
+    private String searchType;
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
+
     public Long getBatchId() {
         return batchId;
     }

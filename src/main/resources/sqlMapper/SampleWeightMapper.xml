@@ -37,6 +37,11 @@
             <if test="variableType!=null and variableType!=0">
                 AND	a.variable_type= #{variableType}
             </if>
+            <if test="searchType!=null and searchType!=''">
+                <if test="searchType=='while'">
+                    AND b.group_name!='异常点' AND b.group_name!='全局'
+                </if>
+            </if>
         </where>
         ORDER BY ABS(a.variable_weight) DESC
     </select>
@@ -55,6 +60,12 @@
             <if test="variableType!=null and variableType!=0">
                 AND	a.variable_type= #{variableType}
             </if>
+            <if test="searchType!=null and searchType!=''">
+                <if test="searchType=='while'">
+                    AND b.group_name!='异常点' AND b.group_name!='全局'
+                </if>
+            </if>
+            
         </where>
         ORDER BY ABS(a.variable_weight) DESC
     </select>

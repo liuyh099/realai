@@ -35,6 +35,16 @@ public class SampleWeight {
     private String imgUrl;
 
 
+    private String searchType;
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
+
     public Long getId() {
         return id;
     }

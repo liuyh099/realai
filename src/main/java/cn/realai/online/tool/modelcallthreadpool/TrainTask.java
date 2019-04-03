@@ -126,9 +126,6 @@ public class TrainTask implements Runnable {
 	        analysisSampleWeight(redisClientTemplate.get(redisKey.getSampleWeight()), sgMap, vdMap);
 	        redisClientTemplate.delete(redisKey.getSampleWeight());
 	
-	        //千人千面人员信息
-	        
-	
 	        //生成批次
 	        BatchRecord batchRecord = new BatchRecord();
 	        batchRecord.setBatchType(BatchRecord.BATCH_TYPE_TRAIN);
@@ -142,6 +139,7 @@ public class TrainTask implements Runnable {
 	        batchRecordService.insert(batchRecord);
 	        Long batchRecordId = batchRecord.getId();
 	        
+            //千人千面人员信息
 	        List<PersonalInformation> personalInformationList = analysisPersonalInformation(redisClientTemplate.get(redisKey.getPersonalInformation()), sgMap, batchRecordId);
 	
 	        Map<String, Long> piMap = new HashMap<String, Long>();
