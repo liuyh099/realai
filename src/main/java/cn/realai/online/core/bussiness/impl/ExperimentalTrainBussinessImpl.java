@@ -103,7 +103,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         for (Experiment experiment1 : list) {
             Boolean tuningFlag = tuningMap.get(experiment1.getServiceId());
             if (tuningFlag == null) {
-                tuningFlag = checkTrainTuningLock(experimentalTrainQuery.getServiceId(), experimentalTrainQuery.getTuningType());
+                tuningFlag = checkTrainTuningLock(experiment1.getServiceId(), experimentalTrainQuery.getTuningType());
                 tuningMap.put(experimentalTrainQuery.getServiceId(), tuningFlag);
             }
             if (tuningFlag != null && tuningFlag == true) {

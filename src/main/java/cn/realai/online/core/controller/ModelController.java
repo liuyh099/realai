@@ -9,6 +9,7 @@ import cn.realai.online.core.bussiness.ModelBussiness;
 import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
 import cn.realai.online.core.bussiness.TuningRecordBussiness;
 import cn.realai.online.core.entity.Model;
+import cn.realai.online.core.entity.TuningRecord;
 import cn.realai.online.core.query.ModelListQuery;
 import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.vo.*;
@@ -29,6 +30,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 
 /**
