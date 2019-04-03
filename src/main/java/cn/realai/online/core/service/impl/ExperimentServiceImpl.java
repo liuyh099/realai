@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.common.RedisKeyPrefix;
@@ -242,6 +243,7 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
 	@Override
+	@Transactional
 	public void maintainErrorMsg(Long experimentId, int statusTrainingError, String errMsg) {
 		experimentDao.maintainErrorMsg(experimentId, statusTrainingError, errMsg);
 	}

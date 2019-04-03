@@ -69,7 +69,7 @@
     <select id="getAlreadyPublishService" resultMap="serviceMap">
         SELECT a.* FROM service a LEFT JOIN experiment b ON a.id = b.service_id
         <where>
-            b.releas_status = 2 AND a.del_flag = 0
+            b.releas_status IN (2,3) AND a.del_flag = 0
         </where>
         ORDER BY b.release_time DESC
     </select>

@@ -186,6 +186,13 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
 	@Override
 	public void batchErrorDealWith(Long batchId, String errorMsg) {
 		if (batchId != null) {
+			MLock mLock = mLockService.getLock(batchId, MLock.MLOCK_TYPE_BATCH);
+			if (mLock != null) {
+				mLock.unLock();
+			}
+		}
+		
+		if (batchId != null) {
 			batchRecordService.maintainErrorMsg(batchId, errorMsg, BatchRecord.BATCH_STATUS_ERROR);
 		}
 	}

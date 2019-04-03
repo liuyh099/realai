@@ -197,9 +197,9 @@ public class TrainTask implements Runnable {
 	        txManager.commit(ts);
 		} catch (Exception e) {
 			logger.info("TrainTask run, 实验回调处理异常， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
+			txManager.rollback(ts);
 			experimentService.maintainErrorMsg(experimentId, Experiment.STATUS_TRAINING_ERROR, "训练失败");
 			e.printStackTrace();
-			txManager.rollback(ts);
 		}
         
         //释放MLock锁
