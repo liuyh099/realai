@@ -2,6 +2,7 @@ package cn.realai.online.core.bussiness.impl;
 
 import cn.realai.online.calculation.TrainService;
 import cn.realai.online.common.RedisKeyPrefix;
+import cn.realai.online.common.config.Config;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.bo.BatchListBO;
 import cn.realai.online.core.bussiness.BatchRecordBussiness;
@@ -58,6 +59,8 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
     private RedissonLock redissonLock;
     @Autowired
     private ModelService modelService;
+    @Autowired
+    private Config config;
 
 
     @Override
@@ -91,6 +94,10 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
             list.forEach(item -> {
                 OfflineBatchListVO itemVO = new OfflineBatchListVO();
                 BeanUtils.copyProperties(item, itemVO);
+                //处理离线跑批的下载地址
+                if (StringUtils.isNotEmpty(item.getDownUrl())) {
+                    itemVO.setDownUrl(config.getNginxUrl() + item.getDownUrl());
+                }
                 voList.add(itemVO);
             });
 
@@ -107,6 +114,7 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
         Model model = modelService.selectByServiceId(createVO.getServiceId());
         Assert.notNull(model, "当前服务下无已发布模型");
         cn.realai.online.core.entity.Service serviceEntity = serviceService.get(createVO.getServiceId());
+        int batchTimes = (int)serviceEntity.getBatchTimes() + 1;
 
         //创建跑批记录
         BatchRecord record = new BatchRecord();
@@ -115,6 +123,7 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
         record.setXtableHomogeneousDataSource(createVO.getxHomoDataSource());
         record.setYtableDataSource(createVO.getyDataSource());
         record.setBatchType(BatchRecord.BATCH_TYPE_OFFLINE);
+        record.setOfflineTimes(batchTimes);
         //record.setCreateTime(new Date().getTime());
         record.setModelId(model.getId());
         record.setServiceId(createVO.getServiceId());
@@ -126,7 +135,7 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
         batchRecordService.insert(record);
 
         //更新服务跑批次数
-        serviceEntity.setBatchTimes(serviceEntity.getBatchTimes() + 1);
+        serviceEntity.setBatchTimes(batchTimes);
         serviceService.update(serviceEntity);
         return record;
     }

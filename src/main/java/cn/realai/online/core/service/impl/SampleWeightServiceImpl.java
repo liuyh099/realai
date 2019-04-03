@@ -39,7 +39,7 @@ public class SampleWeightServiceImpl implements SampleWeightService {
 
 	//转换图片
 	private void convertImgUrl(List<SampleWeight> list) {
-		//凭借图片访问地址的IP和端口
+		//图片访问地址的IP和端口
 		for (SampleWeight sw : list) {
 			sw.setImgUrl(config.getNginxUrl() + sw.getImgUrl());
 		}

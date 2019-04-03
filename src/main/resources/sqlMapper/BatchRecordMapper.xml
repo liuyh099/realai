@@ -18,14 +18,15 @@
         <result column="err_msg" property="errorMsg" jdbcType="VARCHAR"/>
         <result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="offline_times" property="offlineTimes" jdbcType="INTEGER"/>
     </resultMap>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO batch_record (y_table , x_table_homo, x_table_heter, model_id, experiment_id, service_id,
-        	create_time, down_url, batch_type, batch_name, status, err_msg, del_flag, remark)
+        	create_time, down_url, batch_type, batch_name, status, err_msg, del_flag, remark, offline_times)
         VALUE (#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},
         	#{modelId},#{experimentId},#{serviceId},#{createTime},#{downUrl},#{batchType},
-        	#{batchName}, #{status}, #{errorMsg}, #{delFlag}, #{remark})
+        	#{batchName}, #{status}, #{errorMsg}, #{delFlag}, #{remark},#{offlineTimes})
     </insert>
 
     <select id="findBatchRecordList" resultMap="BatchRecordMap" parameterType="cn.realai.online.core.bo.BatchRecordBO">
@@ -81,6 +82,7 @@
         <result column="serviceId" property="serviceId" jdbcType="BIGINT"/>
         <result column="serviceName" property="serviceName" jdbcType="VARCHAR"/>
         <result column="batchTimes" property="batchTimes" jdbcType="INTEGER"/>
+        <result column="offlineTimes" property="offlineTimes" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="batchCreateTime" property="batchCreateTime" jdbcType="BIGINT"/>
         <result column="downUrl" property="downUrl" jdbcType="VARCHAR"/>
@@ -96,6 +98,7 @@
         s.id as serviceId,
         s.name as serviceName,
         s.batch_times as batchTimes,
+        br.offline_times as offlineTimes,
         br.status as status,
         br.create_time as batchCreateTime,
         br.down_url as downUrl,

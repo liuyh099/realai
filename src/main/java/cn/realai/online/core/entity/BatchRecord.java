@@ -68,6 +68,17 @@ public class BatchRecord {
 
 	public static int YES_DEL = 1; //已删除
 
+	//第几次离线跑批
+	private Integer offlineTimes;
+
+	public Integer getOfflineTimes() {
+		return offlineTimes;
+	}
+
+	public void setOfflineTimes(Integer offlineTimes) {
+		this.offlineTimes = offlineTimes;
+	}
+
 	public String getErrorMsg() {
 		return errorMsg;
 	}

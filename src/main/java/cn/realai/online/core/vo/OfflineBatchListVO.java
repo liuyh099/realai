@@ -36,8 +36,11 @@ public class OfflineBatchListVO {
     @ApiModelProperty(value="服务名称")
     private String serviceName;
 
-    @ApiModelProperty(value="跑批次数")
+    @ApiModelProperty(value="服务跑批次数")
     private Integer batchTimes;
+
+    @ApiModelProperty(value="第几次离线跑批")
+    private Integer offlineTimes;
 
     @ApiModelProperty(value="跑批状态 1:新建 2：处理中 3：处理完成 4：处理有误")
     private Integer status;
@@ -121,6 +124,14 @@ public class OfflineBatchListVO {
 
     public void setBatchTimes(Integer batchTimes) {
         this.batchTimes = batchTimes;
+    }
+
+    public Integer getOfflineTimes() {
+        return offlineTimes;
+    }
+
+    public void setOfflineTimes(Integer offlineTimes) {
+        this.offlineTimes = offlineTimes;
     }
 
     public Integer getStatus() {
