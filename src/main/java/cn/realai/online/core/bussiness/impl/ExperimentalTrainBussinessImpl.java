@@ -223,6 +223,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public Integer selectFileUpdate(ExperimentBO experimentBO) {
         Experiment experiment = new Experiment();
         BeanUtils.copyProperties(experimentBO, experiment);
+        variableDataService.deleteVariableDataByExperimentId(experimentBO.getId());
+        trainService.preprocess(experiment);
         return experimentService.selectFileUpdate(experiment);
     }
 

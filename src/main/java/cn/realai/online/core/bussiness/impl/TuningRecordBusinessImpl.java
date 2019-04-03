@@ -49,8 +49,8 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
         Assert.notNull(modelId, "模型ID不能为空");
         Model model = modelService.get(modelId);
         Assert.notNull(model, "没有对应的模型可以调优");
+        serviceService.checkService(model.getServiceId());
         Service service = serviceService.get(model.getServiceId());
-//        Assert.isTrue(service != null && service.getStatus() == Service.STATUS_ONLINE, "服务不存在或者未上线不允许调优");
 
         PsiCheckVO checkVO = psiCheckResultBussiness.checkPsi(modelId);
         if (!StringUtils.isNotEmpty(securityKey)) {
@@ -65,12 +65,6 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
             Assert.isTrue(checkVO.isKeyFlag(), checkVO.getKeyReason());
             //校验密钥串是否可用
             serviceLicenseCheck.checkServiceLic(securityKey);
-            //密钥调优更新其他记录状态
-            TuningRecord item = new TuningRecord();
-            item.setStatus(TuningRecord.STATUS.INVALID.value);
-            item.setServiceId(model.getServiceId());
-            item.setType(TuningRecord.TYPE.KEY.value);
-            tuningRecordService.updateByServiceIdAndType(item);
         }
 
         //创建新的调优记录

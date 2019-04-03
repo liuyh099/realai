@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,17 +61,17 @@ public class PsiCheckResultlBussinessImpl implements PsiCheckResultBussiness {
         record.setServiceId(model.getServiceId());
         record.setStatus(TuningRecord.STATUS.VALID.value);
         List<TuningRecord> tuningRecords = tuningRecordService.findList(record);
-        boolean flag = tuningRecords == null || tuningRecords.isEmpty();
-        String reason = "已有调优尚未完成暂时无法新增调优";
+        boolean hasKeyTuning = false;  //是否存在秘钥调优
+        for (TuningRecord item:tuningRecords) {
+            if (TuningRecord.TYPE.KEY.value.equalsIgnoreCase(item.getType())) {
+                hasKeyTuning = true;
+                break;
+            }
+        }
 
         PsiCheckVO checkVO = new PsiCheckVO();
         checkVO.setModelId(modelId);
-        if (!flag) {
-            checkVO.setPsiFlag(false);
-            checkVO.setPsiReason(reason);
-            checkVO.setKeyFlag(false);
-            checkVO.setKeyReason(reason);
-        } else {
+        if (CollectionUtils.isEmpty(tuningRecords) && !hasKeyTuning) {
             Double maxPsi = psiChekcResultService.selectMaxPsi(modelId);
             checkVO.setMaxPsi(maxPsi);
             checkVO.setPsiFlag(maxPsi > Constant.PSI_ALER_VALUE);
@@ -78,6 +79,11 @@ public class PsiCheckResultlBussinessImpl implements PsiCheckResultBussiness {
                 checkVO.setPsiReason("PSI值未达标");
             }
             checkVO.setKeyFlag(true);
+        } else {
+            checkVO.setPsiFlag(false);
+            checkVO.setPsiReason("该服务已有秘钥强制调优尚未执行，不可再次新增强制调优");
+            checkVO.setKeyFlag(false);
+            checkVO.setKeyReason(checkVO.getPsiReason());
         }
 
         return checkVO;

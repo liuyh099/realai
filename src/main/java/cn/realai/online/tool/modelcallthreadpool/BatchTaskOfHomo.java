@@ -75,7 +75,7 @@ public class BatchTaskOfHomo extends BaseBatchTask {
 	    		phrs.setPid(pid);
 				phrs.setBatchId(batchId);
 				phrs.setExperimentId(experimentId);
-	    		phrs.setVariableId(vdMap.get(phrs.getVariableName()));
+	    		phrs.setVariableId(vdMap.get(phrs.getVariableName() + VariableData.VARIABLE_TYPE_HOMO));
 			}
 			PersonalHomoResultSetService personalHomoResultSetService = SpringContextUtils.getBean(PersonalHomoResultSetService.class);
 			personalHomoResultSetService.insertList(list);

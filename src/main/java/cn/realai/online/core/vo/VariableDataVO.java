@@ -13,6 +13,10 @@ public class VariableDataVO {
     //名称
     @ApiModelProperty(value = "名称", example = "名称")
     private String name;
+    
+    //总数
+    @ApiModelProperty(value = "总数", example = "总数")
+    private Integer count;
 
     //数据类型
     @ApiModelProperty(value = "数据类型")
@@ -94,7 +98,15 @@ public class VariableDataVO {
         this.mean = mean;
     }
 
-    public String getMedian() {
+    public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
+	public String getMedian() {
         return median;
     }
 
