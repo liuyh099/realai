@@ -170,6 +170,7 @@ public class ExperimentalResultController {
         try {
             //开启分页
             Page page = PageHelper.startPage(experimentalResultWhileBoxQuery.getPageNum(), experimentalResultWhileBoxQuery.getPageSize());
+            experimentalResultWhileBoxQuery.setSearchType("while");
             List<SampleWeightBO> boList = sampleWeightBussiness.getSampleWeightList(experimentalResultWhileBoxQuery);
             //处理查询结果
             List<WhileBoxScoreCardVO> result = JSON.parseArray(JSON.toJSONString(boList), WhileBoxScoreCardVO.class);
