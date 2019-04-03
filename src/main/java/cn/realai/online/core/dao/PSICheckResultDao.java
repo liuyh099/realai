@@ -34,4 +34,6 @@ public interface PSICheckResultDao {
      * @return
      */
     Integer findMaxPsiTotal();
+
+    Double selectPsiByServiceId(@Param("serviceId")Long experimentId);
 }

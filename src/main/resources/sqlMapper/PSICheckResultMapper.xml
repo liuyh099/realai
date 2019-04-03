@@ -52,6 +52,10 @@
         psi>0.1
     </select>
 
+    <select id="selectPsiByServiceId" parameterType="java.lang.Long" resultType="java.lang.Double">
+        SELECT ifnull(max(psi), 0) FROM psi_check_result WHERE experiment_id in (SELECT id FROM experiment where service_id =#{serviceId})
+    </select>
+
     <select id="selectMaxPsi" resultType="double" parameterType="java.lang.Long">
         select ifnull(max(psi), 0) from psi_check_result as psi
         join model as m on psi.experiment_id = m.experiment_id
