@@ -425,7 +425,7 @@ public class ExperimentalTrainController {
             if (!updateFlag) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "实验已经完成或者正在进行中，不可以修改实验", null);
             }
-//            experimentalTrainBussiness.deleteVariableData(experimentalTrainCreateModelVo.getId(), experimentalTrainCreateModelVo.getIds());
+            experimentalTrainBussiness.deleteVariableDataWithRecommend(recommendVO.getId(), recommendVO.getExcludeIds());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             logger.error("新增实验-生成模型-删除同质或者异质量数据异常", e);

@@ -82,6 +82,10 @@ public class VariableDataServiceImpl implements VariableDataService {
         variableDataDao.deleteVariableData(experimentId, ids);
     }
 
+    @Override
+    public void deleteByRecommendAndExcludeIds(Long experimentId, List<Long> excludeIds) {
+        variableDataDao.deleteByRecommendAndExcludeIds(experimentId, excludeIds);
+    }
 
     @Override
     public HomoAndHetroBO selectDeleteByExperimentId(Long experimentId, int deleteStatus) {

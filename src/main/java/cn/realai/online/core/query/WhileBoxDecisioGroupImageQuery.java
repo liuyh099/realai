@@ -9,15 +9,15 @@ import javax.validation.constraints.NotNull;
 public class WhileBoxDecisioGroupImageQuery {
 
     @ApiModelProperty(value="模型ID",required = true)
-    @NotNull
+    @NotNull(message = "模型Id不能为空")
     private Long modelId;
 
     @ApiModelProperty(value="分组1", required = true)
-    @NotNull
+    @NotNull(message = "分组1不能为空")
     private String groupName1;
 
     @ApiModelProperty(value="分组2", required = true)
-    @NotNull
+    @NotNull(message = "分组2不能为空")
     private String groupName2;
 
     public Long getModelId() {

@@ -258,6 +258,12 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public void deleteVariableDataWithRecommend(Long experimentId, List<Long> excludeIds) {
+        variableDataService.deleteByRecommendAndExcludeIds(experimentId, excludeIds);
+    }
+
+    @Override
     public ExperimentalResultQuatoBO quota(Long experimentId) {
 
 

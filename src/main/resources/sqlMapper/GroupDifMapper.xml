@@ -31,7 +31,7 @@
         select * from group_dif as g
         <where>
             <if test="experimentId!=null">
-                and g.experiment_id = #{experiment_id}
+                and g.experiment_id = #{experimentId}
             </if>
             <if test="groupName1!=null and groupName1 != ''">
                 and g.group_name_1 = #{groupName1}

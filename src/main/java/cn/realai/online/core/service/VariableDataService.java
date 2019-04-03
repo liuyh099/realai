@@ -5,6 +5,7 @@ import java.util.List;
 import cn.realai.online.core.bo.HomoAndHetroBO;
 import cn.realai.online.core.bo.VariableDataBO;
 import cn.realai.online.core.entity.VariableData;
+import org.apache.ibatis.annotations.Param;
 
 public interface VariableDataService {
 
@@ -44,6 +45,14 @@ public interface VariableDataService {
      * @param ids
      */
     void deleteVariableData(Long experimentId, List<Long> ids);
+
+    /**
+     * 删除数据
+     *
+     * @param experimentId
+     * @param excludeIds 从推荐位中排除这些ID
+     */
+    void deleteByRecommendAndExcludeIds(@Param("experimentId") Long experimentId, @Param("excludeIds") List<Long> excludeIds);
 
 	/**
 	 * 查询训练时要删除的列

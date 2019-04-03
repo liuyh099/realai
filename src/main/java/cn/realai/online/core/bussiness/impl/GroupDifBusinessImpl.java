@@ -31,7 +31,7 @@ public class GroupDifBusinessImpl implements GroupDifBussiness {
         for (GroupDif dif:groupDifs) {
             if (StringUtils.isNotEmpty(dif.getVariableName()) && StringUtils.isNotEmpty(dif.getGroupName1()) &&
                 StringUtils.isNotEmpty(dif.getGroupName2())) {
-                List list = Arrays.asList(dif.getGroupName1(), dif.getGroupName2());
+                List list = Arrays.asList(dif.getValue1(), dif.getValue2());
                 result.put(dif.getVariableName(), list);
             }
         }

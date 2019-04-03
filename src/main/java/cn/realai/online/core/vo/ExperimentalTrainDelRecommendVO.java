@@ -13,8 +13,8 @@ public class ExperimentalTrainDelRecommendVO {
     @NotNull(message = "请选择实验")
     private Long id;
 
-    @ApiModelProperty(value = "ids", name = "需要从推荐删除数据中排除的数据", dataType = "list")
-    private List<Long> ids;
+    @ApiModelProperty(value = "excludeIds", name = "需要从推荐删除数据中排除的数据", dataType = "list")
+    private List<Long> excludeIds;
 
 
     public Long getId() {
@@ -25,11 +25,11 @@ public class ExperimentalTrainDelRecommendVO {
         this.id = id;
     }
 
-    public List<Long> getIds() {
-        return ids;
+    public List<Long> getExcludeIds() {
+        return excludeIds;
     }
 
-    public void setIds(List<Long> ids) {
-        this.ids = ids;
+    public void setExcludeIds(List<Long> excludeIds) {
+        this.excludeIds = excludeIds;
     }
 }
