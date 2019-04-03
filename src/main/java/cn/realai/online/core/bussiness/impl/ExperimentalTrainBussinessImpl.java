@@ -16,6 +16,7 @@ import cn.realai.online.util.UserUtils;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 实验训练的业务实现
@@ -87,10 +89,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
      */
     @Override
     public PageBO<ExperimentBO> pageList(ExperimentalTrainQuery experimentalTrainQuery) {
-        boolean tuningFlag = false;
-        if (experimentalTrainQuery.getServiceId() != null && experimentalTrainQuery.getTuningType() != null) {
-            tuningFlag = checkTrainTuningLock(experimentalTrainQuery.getServiceId(), experimentalTrainQuery.getTuningType());
-        }
+
         //开启分页
         Page page = PageHelper.startPage(experimentalTrainQuery.getPageNum(), experimentalTrainQuery.getPageSize());
 
@@ -99,15 +98,19 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         BeanUtils.copyProperties(experimentalTrainQuery, experiment);
         experiment.setServiceId(experimentalTrainQuery.getServiceId());
         List<Experiment> list = experimentService.findList(experiment);
-        if (tuningFlag) {
-            for (Experiment experiment1 : list) {
+
+        Map<Long, Boolean> tuningMap = new HashedMap();
+        for (Experiment experiment1 : list) {
+            Boolean tuningFlag = tuningMap.get(experiment1.getServiceId());
+            if (tuningFlag == null) {
+                tuningFlag = checkTrainTuningLock(experimentalTrainQuery.getServiceId(), experimentalTrainQuery.getTuningType());
+                tuningMap.put(experimentalTrainQuery.getServiceId(), tuningFlag);
+            }
+            if (tuningFlag != null && tuningFlag == true) {
                 experiment1.setPublishCount(0);
             }
         }
         List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
-        //BeanUtilsBean.copyProperties(list,result);
-        //处理查询结果  
-        //List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentalTrainVO.class);
         PageBO<ExperimentBO> pageBO = new PageBO<ExperimentBO>(result, experimentalTrainQuery.getPageSize(), experimentalTrainQuery.getPageNum(), page.getTotal(), page.getPages());
         return pageBO;
     }
@@ -168,7 +171,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         //训练    
         int ret = trainService.training(experimentBO, relyingId, deleteVariableData.getHomoList(), deleteVariableData.getHetroList(), deleteStatus);
         if (ret != 1) {
-        	return ret;
+            return ret;
         }
         ret = experimentService.train(experimentId, Experiment.STATUS_TRAINING, System.currentTimeMillis());
         return ret;
@@ -220,6 +223,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public Integer selectFileUpdate(ExperimentBO experimentBO) {
         Experiment experiment = new Experiment();
         BeanUtils.copyProperties(experimentBO, experiment);
+        variableDataService.deleteVariableDataByExperimentId(experimentBO.getId());
+        trainService.preprocess(experiment);
         return experimentService.selectFileUpdate(experiment);
     }
 
@@ -275,9 +280,9 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         experimentalResultQuatoBO.setModel(1);
         experimentalResultQuatoBO.setTestResultList(testResultSetListBO);
         experimentalResultQuatoBO.setTrainResultList(trainResultSetListBO);
-        if(validResultSetListBO==null || validResultSetListBO.size()<=0){
+        if (validResultSetListBO == null || validResultSetListBO.size() <= 0) {
             experimentalResultQuatoBO.setValidateResultList(null);
-        }else {
+        } else {
             experimentalResultQuatoBO.setValidateResultList(validResultSetListBO);
         }
 

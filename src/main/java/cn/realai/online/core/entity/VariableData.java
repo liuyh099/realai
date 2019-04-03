@@ -56,7 +56,7 @@ public class VariableData {
     public static final int VARIABLE_TYPE_HOMO = 2;
 
     //异质
-    public static final int VARIABLE_TYPE_HETERO = 1;
+    public static final int VARIABLE_TYPE_HETRO = 1;
 
     //推荐删除
     private int recommendedDelete;
