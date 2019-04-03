@@ -329,7 +329,7 @@ public class ModelBussinessImpl implements ModelBussiness {
         serviceDeployRecordBO.setModelId(modelBO.getId());
         serviceDeployRecordBO.setCreateTime(System.currentTimeMillis());
         serviceDeployRecordBO.setExperimentId(modelBO.getExperimentId());
-        serviceDeployRecordBO.setOpertionType(1);
+        serviceDeployRecordBO.setOpertionType(modelBO.getStatus());
         serviceDeployRecordBO.setRemark(modelBO.getRemark());
         serviceDeployRecordBO.setUserId(UserUtils.getUser().getId());
         return serviceDeployRecordBO;
