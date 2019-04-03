@@ -24,7 +24,7 @@ public class ExperimentalTrainCreateModelDataVO {
 
     //总数
     @ApiModelProperty(value = "总数")
-    private String count;
+    private Integer count;
 
     //最大值
     @ApiModelProperty(value = "max")
@@ -87,15 +87,15 @@ public class ExperimentalTrainCreateModelDataVO {
         this.dataType = dataType;
     }
 
-    public String getCount() {
-        return count;
-    }
+    public Integer getCount() {
+		return count;
+	}
 
-    public void setCount(String count) {
-        this.count = count;
-    }
+	public void setCount(Integer count) {
+		this.count = count;
+	}
 
-    public String getMax() {
+	public String getMax() {
         return max;
     }
 
