@@ -104,7 +104,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
             Boolean tuningFlag = tuningMap.get(experiment1.getServiceId());
             if (tuningFlag == null) {
                 tuningFlag = checkTrainTuningLock(experiment1.getServiceId(), experimentalTrainQuery.getTuningType());
-                tuningMap.put(experimentalTrainQuery.getServiceId(), tuningFlag);
+                tuningMap.put(experiment1.getServiceId(), tuningFlag);
             }
             if (tuningFlag != null && tuningFlag == true) {
                 experiment1.setPublishCount(0);
@@ -223,6 +223,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public Integer selectFileUpdate(ExperimentBO experimentBO) {
         Experiment experiment = new Experiment();
         BeanUtils.copyProperties(experimentBO, experiment);
+        variableDataService.deleteVariableDataByExperimentId(experimentBO.getId());
+        trainService.preprocess(experiment);
         return experimentService.selectFileUpdate(experiment);
     }
 

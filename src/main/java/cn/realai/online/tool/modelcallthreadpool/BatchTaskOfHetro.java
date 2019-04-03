@@ -74,7 +74,7 @@ public class BatchTaskOfHetro extends BaseBatchTask {
 	    		phrs.setBatchId(batchId);
 	    		phrs.setExperimentId(experimentId);
 	    		phrs.setPid(pid);
-	    		phrs.setVariableId(vdMap.get(phrs.getVariableName()));
+	    		phrs.setVariableId(vdMap.get(phrs.getVariableName() + VariableData.VARIABLE_TYPE_HETRO));
 	    	}
 	    	
 	    	PersonalHetroResultSetService personalHetroResultSetService = SpringContextUtils.getBean(PersonalHetroResultSetService.class);
