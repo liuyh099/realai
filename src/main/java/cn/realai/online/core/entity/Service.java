@@ -222,11 +222,16 @@ public class Service {
 	}
 
 	public static String getServiceTypeName(Integer type, Integer businessType) {
+		if (type == null) {
+			return null;
+		}
 		if (type == TYPE_MARKETING) {
 			return "营销";
 		}
 		if (type == TYPE_WIND) {
-			if (businessType == BUSINESSTYPE_A || businessType == BUSINESSTYPE_B || businessType == BUSINESSTYPE_C) {
+			if (businessType == null) {
+				return "风控";
+			} else if (businessType == BUSINESSTYPE_A || businessType == BUSINESSTYPE_B || businessType == BUSINESSTYPE_C) {
 				return getDescByType(type) + getDescByBusinessType(businessType);
 			}
 			return "风控";

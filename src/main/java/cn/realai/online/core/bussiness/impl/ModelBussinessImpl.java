@@ -220,7 +220,8 @@ public class ModelBussinessImpl implements ModelBussiness {
             return hashMap;
         }
         modelBO.setServiceId(experiment.getServiceId());
-        if (modelBO.getTuningType() == null) {
+        TuningRecord tuningRecord = tuningRecordBussiness.selectValidTuningRecord(modelBO.getServiceId());
+        if (tuningRecord == null) {
             //如果不是调优，检查是否可以发布，如果已存在发布实验，那么不可以再发布实验
             List<Experiment> experiments = experimentService.findPublishByServiceId(modelBO.getServiceId());
             if (CollectionUtils.isEmpty(experiments)) {
@@ -228,44 +229,54 @@ public class ModelBussinessImpl implements ModelBussiness {
                     serviceLicenseCheck.applyService(modelBO.getServiceId());
                     return publishModel(modelBO);
                 } catch (LicenseException e) {
-                    logger.error("服务发布失败");
+                    logger.error(modelBO.getServiceId()+"服务发布失败");
                     hashMap.put("status",false);
                     hashMap.put("msg",e.getMessage());
                     return hashMap;
                 }
 
             } else {
-                logger.info("已经发布服务，不可以重新发布,服务ID=" + modelBO.getServiceId() + "实验ID" + modelBO.getExperimentId());
+                logger.info(modelBO.getServiceId()+"已经发布服务，不可以重新发布,服务ID=" + modelBO.getServiceId() + "实验ID" + modelBO.getExperimentId());
                 hashMap.put("status",false);
                 hashMap.put("msg","该服务已经存在已发布的实验，不可重复发布");
                 return hashMap;
             }
         } else {
             //如果是调优，检查有没有调优记录，有的话调优
-            TuningRecord tuningRecord = tuningRecordBussiness.selectValidTuningRecord(modelBO.getServiceId());
             if(ObjectUtils.isEmpty(tuningRecord) || !TuningRecord.STATUS.VALID.value.equals(tuningRecord.getStatus())){
                 hashMap.put("status",false);
                 hashMap.put("msg","当前不可以调优");
                 return hashMap;
             }else {
-                if(StringUtils.isNotBlank(tuningRecord.getSecurityKey())){
+                if(TuningRecord.TYPE.KEY.value.equals(tuningRecord.getType())){
                     //强制调优
                     try {
                         serviceLicenseCheck.applyService(modelBO.getServiceId(),tuningRecord.getSecurityKey());
                         return  publishAndTuringReord(modelBO, tuningRecord);
                     } catch (LicenseException e) {
-                        logger.error("使用调优秘钥失败,秘钥="+tuningRecord.getSecurityKey());
+                        logger.error(modelBO.getServiceId()+"使用调优秘钥失败,秘钥="+tuningRecord.getSecurityKey());
                         hashMap.put("status",false);
                         hashMap.put("msg",e.getMessage());
                         return hashMap;
                     }
                 }else {
                     //PSI调优
+
+                    //检查PSI调优是否可行
+                    Double d=psiChekcResultService.selectPsiByServiceId(modelBO.getServiceId());
+                    if(d<=0.1){
+                        tuningRecord.setStatus(TuningRecord.STATUS.USED.value);
+                        tuningRecordService.update(tuningRecord);
+                        logger.error(modelBO.getServiceId()+"PSI调优失败,PSI实际值为:"+d);
+                        hashMap.put("status",false);
+                        hashMap.put("msg","psi调优失败");
+                        return hashMap;
+                    }
                     try {
                         serviceLicenseCheck.applyService(modelBO.getServiceId());
                         return publishAndTuringReord(modelBO, tuningRecord);
                     } catch (LicenseException e) {
-                        logger.error("PSI调优失败");
+                        logger.error(modelBO.getServiceId()+"PSI调优失败");
                         hashMap.put("status",false);
                         hashMap.put("msg",e.getMessage());
                         return hashMap;
@@ -329,7 +340,7 @@ public class ModelBussinessImpl implements ModelBussiness {
         serviceDeployRecordBO.setModelId(modelBO.getId());
         serviceDeployRecordBO.setCreateTime(System.currentTimeMillis());
         serviceDeployRecordBO.setExperimentId(modelBO.getExperimentId());
-        serviceDeployRecordBO.setOpertionType(1);
+        serviceDeployRecordBO.setOpertionType(modelBO.getStatus());
         serviceDeployRecordBO.setRemark(modelBO.getRemark());
         serviceDeployRecordBO.setUserId(UserUtils.getUser().getId());
         return serviceDeployRecordBO;
