@@ -111,7 +111,7 @@ public class WhiteBoxDecisioController {
 
 
     @RequiresPermissions("white:decision")
-    @GetMapping("whiteBoxDecisio/getGroupList")
+    @GetMapping("whiteBoxDecisio/getGroupList/{modelId}")
     @ApiOperation("白盒决策-获得分组对比图的分组")
     @ApiImplicitParam(name = "modelId", value = "模型ID", required = true, dataType = "Long", paramType = "path")
     public Result<List<String>> getGroupList(@PathVariable Long modelId) {
@@ -131,7 +131,7 @@ public class WhiteBoxDecisioController {
     @RequiresPermissions("white:decision")
     @GetMapping("whiteBoxDecisio/getGroupCompareImage")
     @ApiOperation("白盒决策-获得分组对比图数据")
-    public Result<Map> getGroupCompareImage(@RequestBody @Validated WhileBoxDecisioGroupImageQuery query) {
+    public Result<Map> getGroupCompareImage(@Validated WhileBoxDecisioGroupImageQuery query) {
         try {
             Model model = modelBussiness.getTrainByModelId(query.getModelId());
             Assert.notNull(model, "无效模型ID");

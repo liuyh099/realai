@@ -88,7 +88,7 @@
             <if test="experimentId!=null">
                 experiment_id = #{experimentId}
             </if>
-            <if test="ids!=null">
+            <if test="ids!=null and ids.size() > 0">
                 <if test="experimentId!=null">
                     AND
                 </if>
@@ -99,7 +99,7 @@
         </where>
     </update>
 
-    <update id="deleteByRecommend">
+    <update id="deleteByRecommendAndExcludeIds">
         UPDATE variable_data
         SET `delete` = 2
         <where>
@@ -107,7 +107,7 @@
             <if test="experimentId!=null">
                 and experiment_id = #{experimentId}
             </if>
-            <if test="ids!=null">
+            <if test="excludeIds!=null and excludeIds.size() > 0">
                 <if test="experimentId!=null">
                     AND
                 </if>
