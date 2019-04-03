@@ -123,7 +123,7 @@ public class VariableDataServiceImpl implements VariableDataService {
         List<VariableData> homoList = new ArrayList<VariableData>();
         List<VariableData> hetroList = new ArrayList<VariableData>();
         for (VariableData vd : vdList) {
-            if (vd.getVariableType() == VariableData.SCHEMA_TYPE_HOMO) {
+            if (vd.getVariableType() == VariableData.VARIABLE_TYPE_HOMO) {
                 homoList.add(vd);
             } else {
                 hetroList.add(vd);

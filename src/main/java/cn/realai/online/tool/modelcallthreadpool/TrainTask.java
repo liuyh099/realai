@@ -118,6 +118,7 @@ public class TrainTask implements Runnable {
 	            vdMap.put(vd.getName() + vd.getVariableType(), vd.getId());
 	        }
 	
+	        //分组对比
 	        analysisGroupDif(redisClientTemplate.get(redisKey.getGroupDif()));
 	        redisClientTemplate.delete(redisKey.getGroupDif());
 	        
@@ -289,6 +290,9 @@ public class TrainTask implements Runnable {
 			return ;
 		}
 		List<GroupDif> gdList = JSON.parseArray(redisValue, GroupDif.class);
+		if (gdList.isEmpty()) {
+			return;
+		}
 		for (GroupDif groupDif : gdList) {
 			groupDif.setExperimentId(experimentId);
 		}
@@ -374,7 +378,7 @@ public class TrainTask implements Runnable {
                     throw new RuntimeException("训练结果数据错误,千人千面信息不存在.");
                 }
                 
-                Long vId = vdMap.get(phrs.getVariableName() + VariableData.SCHEMA_TYPE_HOMO);
+                Long vId = vdMap.get(phrs.getVariableName() + VariableData.VARIABLE_TYPE_HOMO);
                 phrs.setVariableId(vId);
                 phrs.setPid(piId);
                 phrs.setBatchId(batchRecordId);
@@ -396,7 +400,7 @@ public class TrainTask implements Runnable {
                     logger.error("TrainTask analysisPersonalResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, phrs.getPersonalId());
                     throw new RuntimeException("训练结果数据错误,千人千面信息不存在.");
                 }
-                Long vId = vdMap.get(phrs.getVariableName() + VariableData.SCHEMA_TYPE_HETERO);
+                Long vId = vdMap.get(phrs.getVariableName() + VariableData.VARIABLE_TYPE_HETERO);
                 phrs.setVariableId(vId);
                 phrs.setPid(piId);
                 phrs.setBatchId(batchRecordId);
@@ -424,11 +428,11 @@ public class TrainTask implements Runnable {
             }
             pcrs.setPid(piId);
             pcrs.setBatchId(batchRecordId);
-            Long variableId1 = vdMap.get(pcrs.getVariableName1() + VariableData.SCHEMA_TYPE_HETERO);
+            Long variableId1 = vdMap.get(pcrs.getVariableName1() + VariableData.VARIABLE_TYPE_HETERO);
             pcrs.setVariableId1(variableId1);
-            Long variableId2 = vdMap.get(pcrs.getVariableName2() + VariableData.SCHEMA_TYPE_HETERO);
+            Long variableId2 = vdMap.get(pcrs.getVariableName2() + VariableData.VARIABLE_TYPE_HETERO);
             pcrs.setVariableId2(variableId2);
-            Long variableId3 = vdMap.get(pcrs.getVariableName3() + VariableData.SCHEMA_TYPE_HETERO);
+            Long variableId3 = vdMap.get(pcrs.getVariableName3() + VariableData.VARIABLE_TYPE_HETERO);
             pcrs.setVariableId3(variableId3);
         }
         PersonalComboResultSetService personalComboResultSetService = SpringContextUtils.getBean(PersonalComboResultSetService.class);

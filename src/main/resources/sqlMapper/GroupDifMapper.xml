@@ -16,13 +16,10 @@
     </sql>
 
     <insert id="insertList">
-        insert into group_dif(experiment_id, name, meaning, data_type, count, max,
-        	min, mean, median, percent25, percent75, variable_type, recommended_delete, `delete` ,create_time)
+        insert into group_dif(experiment_id, variable_name, group_name_1, group_name_2, value_1, value_2) 
         values
-        <foreach collection="vdList" item="vd" index="index" separator=",">
-            (#{vd.experimentId}, #{vd.name}, #{vd.meaning}, #{vd.dataType}, #{vd.count}, #{vd.max},
-            #{vd.min}, #{vd.mean}, #{vd.median}, #{vd.percent25} ,#{vd.percent75}, #{vd.variableType},
-            #{vd.recommendedDelete}, #{vd.delete}, #{vd.createTime})
+        <foreach collection="gdList" item="gd" separator=",">
+            (#{gd.experimentId}, #{gd.variableName}, #{gd.groupName1}, #{gd.groupName2}, #{gd.value1}, #{gd.value2})
         </foreach>
     </insert>
 
