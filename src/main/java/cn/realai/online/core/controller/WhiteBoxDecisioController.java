@@ -14,6 +14,7 @@ import cn.realai.online.core.entity.GroupDif;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.query.ExperimentalResultWhileBoxQuery;
 import cn.realai.online.core.query.WhileBoxDecisioGroupImageQuery;
+import cn.realai.online.core.query.WhileBoxScoreCardQuery;
 import cn.realai.online.core.service.GroupDifService;
 import cn.realai.online.core.vo.GroupSelectNameVO;
 import cn.realai.online.core.vo.IdVO;
@@ -25,6 +26,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
@@ -91,21 +93,24 @@ public class WhiteBoxDecisioController {
 
     @RequiresPermissions("white:decision")
     @GetMapping("whiteBoxDecisio/groupScoreCard")
-    @ApiOperation(value = "白盒决策-分组“评分卡")
-    public Result<PageBO<WhileBoxScoreCardVO>> groupScoreCard(@Validated ExperimentalResultWhileBoxQuery experimentalResultWhileBoxQuery) {
+    @ApiOperation(value = "白盒决策-分组评分卡")
+    public Result<PageBO<WhileBoxScoreCardVO>> groupScoreCard(@Validated WhileBoxScoreCardQuery query) {
         try {
-            //开启分页
-            Page page = PageHelper.startPage(experimentalResultWhileBoxQuery.getPageNum(), experimentalResultWhileBoxQuery.getPageSize());
-            experimentalResultWhileBoxQuery.setSearchType("while");
-            List<SampleWeightBO> boList = sampleWeightBussiness.getSampleWeightList(experimentalResultWhileBoxQuery);
-            //处理查询结果
+            Model model = modelBussiness.getTrainByModelId(query.getModelId());
+            Assert.notNull(model, "无效模型ID");
+            ExperimentalResultWhileBoxQuery experimentalQuery = new ExperimentalResultWhileBoxQuery();
+            BeanUtils.copyProperties(query, experimentalQuery);
+            //排除异常点、全局点
+            experimentalQuery.setSearchType("while");
+            Page page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
+            List<SampleWeightBO> boList = sampleWeightBussiness.getSampleWeightList(experimentalQuery);
             List<WhileBoxScoreCardVO> result = JSON.parseArray(JSON.toJSONString(boList), WhileBoxScoreCardVO.class);
-            PageBO<WhileBoxScoreCardVO> pageBO = new PageBO<WhileBoxScoreCardVO>(result, experimentalResultWhileBoxQuery.getPageSize(), experimentalResultWhileBoxQuery.getPageNum(), page.getTotal(), page.getPages());
+            PageBO<WhileBoxScoreCardVO> pageBO = new PageBO<WhileBoxScoreCardVO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
 
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
         } catch (Exception e) {
-            logger.error("实验评估-图片异常", e);
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+            logger.error("白盒决策-分组评分卡查询异常", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }
 
