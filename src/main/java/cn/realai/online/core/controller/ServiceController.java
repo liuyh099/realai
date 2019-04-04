@@ -61,6 +61,7 @@ public class ServiceController {
         List<ServerNameSelectVO> serverNameSelectVOs = new ArrayList<>();
         try {
             String statusStr = null;
+            List<Service> services = null;
             if (status != null) {
                 if (status == 1) {
                     statusStr = Model.RELEASE_STATUS.ONLINE.value;
@@ -70,8 +71,7 @@ public class ServiceController {
                     statusStr = Model.RELEASE_STATUS.NONE.value;
                 }
             }
-            List<Service> services = null;
-            if (status == 3) { //所有已发布
+            if (status != null && status == 3) { //所有已发布
                 services = serviceService.findListByAlreadyPublishModel();
             } else {
                  services = serviceService.findListByModelStatus(statusStr);
