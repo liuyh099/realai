@@ -96,8 +96,10 @@ public class ServiceServiceImpl implements ServiceService {
 		ServiceDetail detail = new ServiceDetail();
 		detail.setDeployUseTimes("0");
 		detail.setServiceName(service.getName());
+		detail.setVersion(0);
 		service.setDetail(dataCipherHandler.encryptData(detail, service.getSecretKey()));
 		FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(service.getSecretKey());
+		service.setSecretKey(dataCipherHandler.initSecretKey(service.getSecretKey(), detail.getVersion()));
 		service.setCreateTime(new Date().getTime());
 		service.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
 		service.setBusinessType(Integer.parseInt(fileLicenseInfo.getBusinessType()));
@@ -155,6 +157,8 @@ public class ServiceServiceImpl implements ServiceService {
 		}
 		if(secretKey != null) {
 			try {
+				ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(service.getDetail());
+				secretKey = dataCipherHandler.getOriginalSecretKey(secretKey, serviceDetail.getVersion());
 				FileLicenseInfo fileLicenseInfo = serviceLicenseCheck.checkServiceLic(secretKey);
 				fileLicenseInfo.getRangeTimeLower();
 				service.setExpireDate(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), LicenseConstants.DATE_FORMART));

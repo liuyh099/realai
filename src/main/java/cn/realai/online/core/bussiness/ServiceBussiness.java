@@ -21,7 +21,7 @@ public interface ServiceBussiness {
 
     boolean addService(ServiceBO serviceBO) throws LicenseException;
 
-    boolean editService(ServiceBO serviceBO);
+    boolean editService(ServiceBO serviceBO) throws LicenseException;
 
     ServiceBO getServiceDetails(ServiceBO serviceBO);
 
@@ -34,7 +34,7 @@ public interface ServiceBussiness {
      *
      * @param serviceBO
      */
-    void renewalService(ServiceBO serviceBO);
+    void renewalService(ServiceBO serviceBO) throws LicenseException;
 
     /**
      * 查询

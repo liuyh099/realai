@@ -13,6 +13,26 @@ public class ServiceDetail {
 
     private String deployUseTimes;
 
+    private int version;
+
+    private String tuningKeyIds;
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public String getTuningKeyIds() {
+        return tuningKeyIds;
+    }
+
+    public void setTuningKeyIds(String tuningKeyIds) {
+        this.tuningKeyIds = tuningKeyIds;
+    }
+
     public String getServiceName() {
         return serviceName;
     }
