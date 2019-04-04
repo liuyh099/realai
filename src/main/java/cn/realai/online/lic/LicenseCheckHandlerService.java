@@ -121,11 +121,12 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
 
             if(StringUtils.isNotBlank(key)) {
                 //检查过期
+                FileLicenseInfo licenseInfo = null;
                 try {
-                    FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(key);
-                    overdueTuningKeyIds.add(licenseInfo.getId());
+                    licenseInfo = serviceLicenseInfoSource.checkSource(key);
                 } catch (LicenseException e) {
                     tuningKey = tuningKey.replaceAll(","+key+",", ",");
+                    overdueTuningKeyIds.add(licenseInfo.getId());
                 }
             }
         }
