@@ -18,6 +18,8 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,8 @@ import java.util.Map;
 @Transactional(readOnly = true)
 public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussiness {
 
+	private static Logger logger = LoggerFactory.getLogger(ExperimentalTrainBussinessImpl.class);
+	
     @Autowired
     private ExperimentService experimentService;
 
@@ -152,25 +156,28 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
      * 训练
      * @param trainId 实验id
      */
-    @Override
+	@Override
     @Transactional(readOnly = false)
-    public int train(long experimentId, Long relyingId) {
+    public int train(long experimentId) {
 
-        int deleteStatus = 0;
-        if (relyingId == null || relyingId.longValue() == 0) {
-            deleteStatus = VariableData.DELETE_YES;
-        } else {
-            deleteStatus = VariableData.DELETE_NO;
+    	ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
+    	logger.info("ExperimentalTrainBussinessImpl train. experimentBO{}", JSON.toJSONString(experimentBO));
+        int deleteStatus = VariableData.DELETE_YES;
+        Long parentId = null;
+        
+        if (experimentBO.getParentId() != null && experimentBO.getParentId() != 0) {
+        	logger.info("ExperimentalTrainBussinessImpl train. experimentBO{}, VariableData{}", JSON.toJSONString(experimentBO), VariableData.DELETE_NO);
+        	deleteStatus = VariableData.DELETE_NO;
+        	parentId = experimentBO.getParentId();
         }
 
         //查询需要删除的列
         HomoAndHetroBO deleteVariableData = variableDataService.selectDeleteByExperimentId(experimentId, deleteStatus);
 
         //修改试验状态
-        ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
 
         //训练    
-        int ret = trainService.training(experimentBO, relyingId, deleteVariableData.getHomoList(), deleteVariableData.getHetroList(), deleteStatus);
+        int ret = trainService.training(experimentBO, parentId, deleteVariableData.getHomoList(), deleteVariableData.getHetroList(), deleteStatus);
         if (ret != 1) {
             return ret;
         }
@@ -518,6 +525,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         }
         experiment.setId(null);
         experiment.setName(experiment.getName() + "二次创建实验" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
+        experiment.setParentId(bo.getTrainId());
         experiment.setStatus(Experiment.STATUS_FILTER);
         experiment.setReleasStatus(Experiment.RELEAS_NO);
         experiment.setCreateTime(System.currentTimeMillis());
