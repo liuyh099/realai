@@ -229,7 +229,7 @@ public class ModelBussinessImpl implements ModelBussiness {
                     serviceLicenseCheck.applyService(modelBO.getServiceId());
                     return publishModel(modelBO);
                 } catch (LicenseException e) {
-                    logger.error(modelBO.getServiceId()+"服务发布失败");
+                    logger.error(modelBO.getServiceId()+"服务发布失败:", e);
                     hashMap.put("status",false);
                     hashMap.put("msg",e.getMessage());
                     return hashMap;

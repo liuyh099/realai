@@ -35,4 +35,6 @@ public interface ServiceService {
 
 	List<Service> findListByModelStatus(String status);
 
+	List<Service> findListByAlreadyPublishModel();
+
 }

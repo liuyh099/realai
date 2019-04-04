@@ -32,6 +32,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class ServiceController {
 
     @GetMapping("/select")
     @ApiOperation(value="查询服务下拉选项")
-    @ApiImplicitParam(name = "status", value = "服务状态 0:未发布 1:线上发布 2：线下发布 不传或其他值则取全部", required = false, dataType = "Integer", paramType = "query")
+    @ApiImplicitParam(name = "status", value = "服务状态 0:未发布 1:线上发布 2：线下发布 3: 线上或者线下发布 不传或其他值则取全部", required = false, dataType = "Integer", paramType = "query")
     public Result<List<ServerNameSelectVO>> getSelect(@RequestParam(value="status", required = false) Integer status){
         List<ServerNameSelectVO> serverNameSelectVOs = new ArrayList<>();
         try {
@@ -69,7 +70,12 @@ public class ServiceController {
                     statusStr = Model.RELEASE_STATUS.NONE.value;
                 }
             }
-            List<Service> services = serviceService.findListByModelStatus(statusStr);
+            List<Service> services = null;
+            if (status == 3) { //所有已发布
+                services = serviceService.findListByAlreadyPublishModel();
+            } else {
+                 services = serviceService.findListByModelStatus(statusStr);
+            }
             if(services != null && services.size() > 0) {
                 for (Service s : services) {
                     ServerNameSelectVO sv = new ServerNameSelectVO();
