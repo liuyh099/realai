@@ -75,6 +75,8 @@ public class ExperimentalPublishController {
             service.setId(experimentBO.getServiceId());
             service=serviceBussiness.getServiceDetails(service);
             result.setType(service.getBusinessType());
+            result.setTypeName(Service.getServiceTypeName(service.getType(), service.getBusinessType()));
+
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), result);
         } catch (Exception e) {
             logger.error("实验发布详细信息异常", e);
