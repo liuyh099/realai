@@ -24,7 +24,7 @@ public interface ModelCallBussiness {
     /*
      * 训练回调处理
      */
-    void trainCallback(Long experimentId, TrainResultRedisKey redisKey);
+    void trainCallback(Long experimentId, TrainResultRedisKey redisKey, Integer stage);
 
     /*
      * 训练错误处理

@@ -61,6 +61,7 @@ public class SampleWeightBussinessImpl implements SampleWeightBussiness {
         SampleWeight sampleWeight = new SampleWeight();
         BeanUtils.copyProperties(globalVariableQuery, sampleWeight);
         sampleWeight.setGroupId(globalVariableQuery.getGroupId());
+        sampleWeight.setExperimentId(globalVariableQuery.getTrainId());
         sampleWeight.setVariableType(globalVariableQuery.getSampleType());
         if (!"image".equals(globalVariableQuery.getType())) {
             List<SampleWeightBO> boList = sampleWeightService.findList(sampleWeight);

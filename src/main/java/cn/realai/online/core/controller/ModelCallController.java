@@ -125,8 +125,9 @@ public class ModelCallController extends BaseController{
                     String redisKey = map.get("variableData");
                     modelCallBussiness.preprocessCallback(experimentId, redisKey);
                 } else if (Constant.COMMAND_TRAIN.equals(task) || Constant.COMMAND_SECOND_TRAIN.equals(task)) { //训练
-                    TrainResultRedisKey redisKey = JSON.parseObject(data, TrainResultRedisKey.class);
-                    modelCallBussiness.trainCallback(experimentId, redisKey);
+                    int stage = request.getStage();
+                	TrainResultRedisKey redisKey = JSON.parseObject(data, TrainResultRedisKey.class);
+                    modelCallBussiness.trainCallback(experimentId, redisKey, stage);
                 } else {
                     logger.warn("ModelCallController callback. python回调task为null");
                     modelCallBussiness.trainErrorDealWith(experimentId, msg, task);

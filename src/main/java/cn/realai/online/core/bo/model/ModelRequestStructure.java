@@ -17,7 +17,18 @@ public class ModelRequestStructure {
 
     private String data;
     
-    public Long getExperimentId() {
+    private Integer stage;
+    
+    
+    public Integer getStage() {
+		return stage;
+	}
+
+	public void setStage(Integer stage) {
+		this.stage = stage;
+	}
+
+	public Long getExperimentId() {
         return experimentId;
     }
 

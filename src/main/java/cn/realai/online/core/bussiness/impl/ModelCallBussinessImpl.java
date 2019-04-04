@@ -30,7 +30,8 @@ import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfHomo;
 import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfPSI;
 import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfPersonalInfo;
 import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
-import cn.realai.online.tool.modelcallthreadpool.TrainTask;
+import cn.realai.online.tool.modelcallthreadpool.TrainTaskStageOne;
+import cn.realai.online.tool.modelcallthreadpool.TrainTaskStageTwo;
 import cn.realai.online.tool.redis.RedisClientTemplate;
 import cn.realai.online.util.SpringContextUtils;
 
@@ -158,9 +159,16 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
      * 模型训练回调
      */
     @Override
-    public void trainCallback(Long experimentId, TrainResultRedisKey redisKey) {
-        TrainTask trainTask = new TrainTask(experimentId, redisKey);
-        ModelCallPool.modelCallPool.execute(trainTask);
+    public void trainCallback(Long experimentId, TrainResultRedisKey redisKey, Integer stage) {
+    	if (stage == 1) { //训练回调的第一个步骤
+    		TrainTaskStageOne stageOne = new TrainTaskStageOne(experimentId, redisKey);
+    		ModelCallPool.modelCallPool.execute(stageOne);
+    	} else if (stage == 2) { //训练回调的第二个步骤   解释性数据
+    		TrainTaskStageTwo stageTwo = new TrainTaskStageTwo(experimentId, redisKey);
+    		ModelCallPool.modelCallPool.execute(stageTwo);
+    	} else {
+    		throw new RuntimeException("ModelCallBussinessImpl trainCallback.模型训练回调错误,stage为null");
+    	}
     }
 
     /*

@@ -17,7 +17,7 @@ public interface ExperimentalTrainBussiness {
 
     Integer deleteExperimentByIds(List<Long> ids);
 
-    int train(long experimentId, Long relyingId);
+    int train(long experimentId);
 
     void testPreprocess(long experimentId);
 

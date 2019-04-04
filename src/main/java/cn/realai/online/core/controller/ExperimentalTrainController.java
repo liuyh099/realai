@@ -470,7 +470,7 @@ public class ExperimentalTrainController {
             if (!updateFlag) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "实验已经完成或者正在进行中，不可以修改实验", null);
             }
-            int ret = experimentalTrainBussiness.train(trainId, null);
+            int ret = experimentalTrainBussiness.train(trainId);
             if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
                 return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
             }
@@ -492,7 +492,7 @@ public class ExperimentalTrainController {
             if (newExperimentId == null) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), 1);
             }
-            int ret = experimentalTrainBussiness.train(newExperimentId, bo.getTrainId());
+            int ret = experimentalTrainBussiness.train(newExperimentId);
             if (ret == -1) {
                 return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
             }
