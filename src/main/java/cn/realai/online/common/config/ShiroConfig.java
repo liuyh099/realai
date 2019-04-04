@@ -79,7 +79,7 @@ public class ShiroConfig {
         MySessionManager mySessionManager = new MySessionManager();
         mySessionManager.setGlobalSessionTimeout(1800000*6); //Session时间默认30 分钟 乘以6 为3个小时
         mySessionManager.setSessionDAO(redisSessionDAO());
-        mySessionManager.setSessionValidationInterval(7200000); //2小时
+        mySessionManager.setSessionValidationInterval(60000);
         mySessionManager.setSessionValidationSchedulerEnabled(true);
         return mySessionManager;
     }
