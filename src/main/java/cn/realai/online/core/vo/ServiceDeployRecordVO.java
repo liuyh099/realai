@@ -19,7 +19,7 @@ public class ServiceDeployRecordVO {
     @ApiModelProperty(value = "创建时间")
     private Long createTime;
 
-    @ApiModelProperty(value = "操作类型", example = "1:发布模型")
+    @ApiModelProperty(value = "操作类型", example = "2:离线发布 3:在线发布")
     private int opertionType;
 
     @ApiModelProperty(value = "操作人")

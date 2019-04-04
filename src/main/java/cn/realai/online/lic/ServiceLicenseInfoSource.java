@@ -136,21 +136,24 @@ public class ServiceLicenseInfoSource {
      * @return
      * @throws LicenseException
      */
-    public ServiceDetail licenseCheck(FileLicenseInfo licenseInfo,long serviceId) throws LicenseException {
+    public ServiceDetail licenseCheck(FileLicenseInfo licenseInfo,long serviceId, String serviceCiphertext) throws LicenseException {
 
         synchronized (licenseInfo) {
             String dataCiphertext = licenseCheckHandler.getDataCiphertext(serviceId);
             ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(dataCiphertext);
 
             int deployUseTimes = Integer.parseInt(serviceDetail.getDeployUseTimes());
+            int version = serviceDetail.getVersion();
 
             if(deployUseTimes >= Integer.parseInt(licenseInfo.getDeployTimesUpper())) {
                 throw new LicenseException("部署使用次数超过最大限制！");
             }
 
             deployUseTimes++;
+            version++;
 
             serviceDetail.setDeployUseTimes(deployUseTimes+"");
+            serviceDetail.setVersion(version);
             return serviceDetail;
         }
     }

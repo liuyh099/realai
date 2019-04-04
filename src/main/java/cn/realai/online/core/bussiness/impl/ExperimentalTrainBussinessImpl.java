@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -101,13 +102,17 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
         Map<Long, Boolean> tuningMap = new HashedMap();
         for (Experiment experiment1 : list) {
-            Boolean tuningFlag = tuningMap.get(experiment1.getServiceId());
-            if (tuningFlag == null) {
-                tuningFlag = checkTrainTuningLock(experiment1.getServiceId(), experimentalTrainQuery.getTuningType());
-                tuningMap.put(experiment1.getServiceId(), tuningFlag);
-            }
-            if (tuningFlag != null && tuningFlag == true) {
-                experiment1.setPublishCount(0);
+            if(experiment1.getStatus()==Experiment.STATUS_TRAINING_OVER ){
+                Boolean tuningFlag = tuningMap.get(experiment1.getServiceId());
+                if (tuningFlag == null) {
+                    tuningFlag = checkTrainTuningLock(experiment1.getServiceId(), experimentalTrainQuery.getTuningType());
+                    tuningMap.put(experiment1.getServiceId(), tuningFlag);
+                }
+                if (tuningFlag != null && tuningFlag == true) {
+                    experiment1.setPublishCount(0);
+                }
+            }else {
+                experiment1.setPublishCount(1);
             }
         }
         List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
@@ -462,9 +467,25 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public List<ExperimentBO> getCanPublishTrain() {
         Experiment experiment = new Experiment();
         experiment.setStatus(Experiment.STATUS_TRAINING_OVER);
-        experiment.setReleasStatus(Experiment.RELEAS_NO);
+        // experiment.setReleasStatus(Experiment.RELEAS_NO);
         List<Experiment> list = experimentService.findList(experiment);
-        List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
+        //训练完成（可以调优和可以发布的实验）
+        List<Experiment> filterList = null;
+        if (!CollectionUtils.isEmpty(list)) {
+            filterList = new ArrayList<>();
+            for (Experiment experimentTemp : list) {
+                if (experimentTemp.getPublishCount() <= 0) {
+                    //可以正常发布的实验
+                    filterList.add(experimentTemp);
+                } else {
+                    //需要判断是否是调优需求
+                    if(checkTrainTuningLock(experimentTemp.getServiceId(),null)){
+                        filterList.add(experimentTemp);
+                    }
+                }
+            }
+        }
+        List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(filterList), ExperimentBO.class);
         return result;
     }
 
