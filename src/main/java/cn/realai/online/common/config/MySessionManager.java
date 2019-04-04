@@ -66,7 +66,7 @@ public class MySessionManager extends DefaultWebSessionManager {
                 long last = date.getTime();
                 long current = System.currentTimeMillis();
                 //if(current-last>180000){
-                if (current - last > 1800000) {
+                if (current - last > 1800000*6) {
                     Object o =session.getAttribute("userId");
                     if(o!=null){
                         String userId = (String)o ;
