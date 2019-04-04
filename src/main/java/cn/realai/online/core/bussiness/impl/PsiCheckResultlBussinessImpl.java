@@ -71,19 +71,17 @@ public class PsiCheckResultlBussinessImpl implements PsiCheckResultBussiness {
 
         PsiCheckVO checkVO = new PsiCheckVO();
         checkVO.setModelId(modelId);
+        Double maxPsi = psiChekcResultService.selectMaxPsi(modelId);
+        checkVO.setMaxPsi(maxPsi);
+        checkVO.setPsiFlag(maxPsi > Constant.PSI_ALER_VALUE);
+        if (!checkVO.isPsiFlag()) {
+            checkVO.setPsiReason("PSI值未达标");
+        }
         if (CollectionUtils.isEmpty(tuningRecords) && !hasKeyTuning) {
-            Double maxPsi = psiChekcResultService.selectMaxPsi(modelId);
-            checkVO.setMaxPsi(maxPsi);
-            checkVO.setPsiFlag(maxPsi > Constant.PSI_ALER_VALUE);
-            if (!checkVO.isPsiFlag()) {
-                checkVO.setPsiReason("PSI值未达标");
-            }
             checkVO.setKeyFlag(true);
         } else {
-            checkVO.setPsiFlag(false);
-            checkVO.setPsiReason("该服务已有秘钥强制调优尚未执行，不可再次新增强制调优");
             checkVO.setKeyFlag(false);
-            checkVO.setKeyReason(checkVO.getPsiReason());
+            checkVO.setKeyReason("该服务已有秘钥强制调优尚未执行，不可再次新增强制调优");
         }
 
         return checkVO;
