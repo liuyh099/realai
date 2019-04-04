@@ -12,6 +12,9 @@ public class Experiment {
 
     //训练名称
     private String name;
+    
+    //如果此实验是二次实验，此字段是二次实验的父实验id
+    private Long parentId;
 
     //验证集类型
     private Integer validSampleType;
@@ -59,6 +62,9 @@ public class Experiment {
 
     //训练删除
     public static final int STATUS_DELETE = 7;
+    
+    //训练第一步结束
+    public static final int STATUS_TRAINING_STAGE_ONE = 8;
 
     //算法类型
     private String algorithmType;
@@ -449,6 +455,14 @@ public class Experiment {
 
 	public void setErrorMsg(String errorMsg) {
 		this.errorMsg = errorMsg;
+	}
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 
 }
