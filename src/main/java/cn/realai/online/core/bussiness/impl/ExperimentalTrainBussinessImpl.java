@@ -106,13 +106,17 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
         Map<Long, Boolean> tuningMap = new HashedMap();
         for (Experiment experiment1 : list) {
-            Boolean tuningFlag = tuningMap.get(experiment1.getServiceId());
-            if (tuningFlag == null) {
-                tuningFlag = checkTrainTuningLock(experiment1.getServiceId(), experimentalTrainQuery.getTuningType());
-                tuningMap.put(experiment1.getServiceId(), tuningFlag);
-            }
-            if (tuningFlag != null && tuningFlag == true) {
-                experiment1.setPublishCount(0);
+            if(experiment1.getStatus()==Experiment.STATUS_TRAINING_OVER ){
+                Boolean tuningFlag = tuningMap.get(experiment1.getServiceId());
+                if (tuningFlag == null) {
+                    tuningFlag = checkTrainTuningLock(experiment1.getServiceId(), experimentalTrainQuery.getTuningType());
+                    tuningMap.put(experiment1.getServiceId(), tuningFlag);
+                }
+                if (tuningFlag != null && tuningFlag == true) {
+                    experiment1.setPublishCount(0);
+                }
+            }else {
+                experiment1.setPublishCount(1);
             }
         }
         List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);

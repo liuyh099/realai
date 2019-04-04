@@ -53,9 +53,8 @@ public class ServiceLicenseCheck {
     public void applyService(long serviceId) throws LicenseException {
         String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId, SecretKeyType.COMMON);
         FileLicenseInfo licInfo = checkServiceLic(serviceCiphertext);
-        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId);
-        String dataCiphertext = dataCipherHandler.getDataCiphertext(serviceId, serviceDetail);
-        licenseCheckHandler.updateServiceDetail(serviceId, dataCiphertext, null, serviceDetail);
+        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId, serviceCiphertext);
+        licenseCheckHandler.updateServiceDetail(serviceId, null, serviceDetail);
     }
 
 
@@ -73,9 +72,8 @@ public class ServiceLicenseCheck {
         }
 
         checkLic(serviceCiphertext, tuningSecretKey);
-        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(tuningLicInfo, serviceId);
-        String dataCiphertext = dataCipherHandler.getDataCiphertext(serviceId, serviceDetail);
-        licenseCheckHandler.updateServiceDetail(serviceId, dataCiphertext, tuningSecretKey, serviceDetail);
+        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(tuningLicInfo, serviceId, serviceCiphertext);
+        licenseCheckHandler.updateServiceDetail(serviceId, tuningSecretKey, serviceDetail);
         licenseCheckHandler.clearTuningKey(serviceId, serviceLicenseInfoSource);
     }
 

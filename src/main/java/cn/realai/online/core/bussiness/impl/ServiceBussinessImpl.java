@@ -8,10 +8,7 @@ import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.service.SecretKeyInfoVO;
 import cn.realai.online.core.vo.service.ServiceVO;
-import cn.realai.online.lic.FileLicenseInfo;
-import cn.realai.online.lic.LicenseConstants;
-import cn.realai.online.lic.LicenseException;
-import cn.realai.online.lic.ServiceLicenseCheck;
+import cn.realai.online.lic.*;
 import cn.realai.online.util.DateUtil;
 import cn.realai.online.util.StringUtil;
 import com.alibaba.fastjson.JSON;
@@ -20,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,6 +44,12 @@ public class ServiceBussinessImpl implements ServiceBussiness {
     @Autowired
     private ModelService modelService;
 
+    @Autowired
+    private DataCipherHandler dataCipherHandler;
+
+    @Autowired
+    private ServiceLicenseInfoSource serviceLicenseInfoSource;
+
     @Override
     public boolean addService(ServiceBO serviceBO) throws LicenseException {
         Service service = new Service();
@@ -57,7 +61,8 @@ public class ServiceBussinessImpl implements ServiceBussiness {
     }
 
     @Override
-    public boolean editService(ServiceBO serviceBO) {
+    @Transactional(readOnly = false)
+    public boolean editService(ServiceBO serviceBO) throws LicenseException {
 
         ServiceBO serviceBOold = serviceService.selectServiceById(serviceBO.getId());
 
@@ -77,19 +82,38 @@ public class ServiceBussinessImpl implements ServiceBussiness {
             }
         }
 
-        if(StringUtils.isNotBlank(serviceBO.getSecretKey()) && !StringUtils.equals(serviceBOold.getSecretKey(), serviceBO.getSecretKey())) {
+        BeanUtils.copyProperties(serviceBO, serviceBOold);
+
+        if(StringUtils.isNotBlank(serviceBO.getSecretKey())
+                && !StringUtils.equals(dataCipherHandler.getOriginalSecretKey(serviceBOold.getSecretKey()), serviceBO.getSecretKey())) {
             searchService = new cn.realai.online.core.entity.Service();
-            searchService.setSecretKey(serviceBO.getSecretKey());
-            List old = serviceService.list(searchService);
-            if(old != null && old.size() > 0) {
-                logger.error("服务秘钥已被使用！");
-                throw new RuntimeException("服务秘钥已被使用！");
+
+//            ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(searchService.getDetail());
+//            int version = serviceDetail.getVersion();
+//            dataCipherHandler.initSecretKey(serviceBO.getSecretKey(), version);
+//            searchService.setSecretKey(serviceBO.getSecretKey());
+            List<Service> old = serviceService.list(searchService);
+            old.forEach(service -> {
+                if(StringUtils.isNotEmpty(service.getSecretKey())) {
+                    String secretkey = dataCipherHandler.getOriginalSecretKey(service.getSecretKey());
+                    if(StringUtils.equals(secretkey, serviceBO.getSecretKey())) {
+                        logger.error("服务秘钥已被使用！");
+                        throw new RuntimeException("服务秘钥已被使用！");
+                    }
+                }
+            });
+
+            FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(serviceBO.getSecretKey());
+            if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
+                throw new RuntimeException("秘钥已过期");
             }
+            ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(serviceBOold.getDetail());
+            int version = serviceDetail.getVersion();
+            String newkey = dataCipherHandler.initSecretKey(serviceBO.getSecretKey(), version);
+            serviceBOold.setSecretKey(newkey);
         }
 
-
-        BeanUtils.copyProperties(serviceBO, serviceBOold);
-        if (serviceService.update(serviceBO) <= 0) {
+        if (serviceService.update(serviceBOold) <= 0) {
             return false;
         }
         return true;
@@ -145,7 +169,8 @@ public class ServiceBussinessImpl implements ServiceBussiness {
     }
 
     @Override
-    public void renewalService(ServiceBO serviceBO) {
+    @Transactional(readOnly = false)
+    public void renewalService(ServiceBO serviceBO) throws LicenseException {
         editService(serviceBO);
     }
 

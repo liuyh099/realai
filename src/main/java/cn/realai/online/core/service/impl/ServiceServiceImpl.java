@@ -76,28 +76,35 @@ public class ServiceServiceImpl implements ServiceService {
 		}
 
 		searchService = new Service();
-		searchService.setSecretKey(service.getSecretKey());
-		old = list(searchService);
-		if(old != null && old.size() > 0) {
-			logger.error("服务秘钥已被使用！");
-			throw new RuntimeException("服务秘钥已被使用！");
-		}
+//		searchService.setSecretKey(service.getSecretKey());
+//		old = list(searchService);
+//		if(old != null && old.size() > 0) {
+//			logger.error("服务秘钥已被使用！");
+//			throw new RuntimeException("服务秘钥已被使用！");
+//		}
 
-		if(StringUtils.isNotBlank(service.getTuningSecretKey())) {
-			searchService = new Service();
-			searchService.setTuningSecretKey(service.getTuningSecretKey());
-			old = list(searchService);
-			if(old != null && old.size() > 0) {
-				logger.error("调优秘钥已被使用！");
-				throw new RuntimeException("调优秘钥已被使用！");
+		List<Service> olds = list(searchService);
+		olds.forEach(oldService -> {
+			if(StringUtils.isNotEmpty(oldService.getSecretKey())) {
+				String secretkey = dataCipherHandler.getOriginalSecretKey(oldService.getSecretKey());
+				if(StringUtils.equals(secretkey, service.getSecretKey())) {
+					logger.error("服务秘钥已被使用！");
+					throw new RuntimeException("服务秘钥已被使用！");
+				}
 			}
-		}
+		});
+
 
 		ServiceDetail detail = new ServiceDetail();
 		detail.setDeployUseTimes("0");
 		detail.setServiceName(service.getName());
+		detail.setVersion(0);
 		service.setDetail(dataCipherHandler.encryptData(detail, service.getSecretKey()));
 		FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(service.getSecretKey());
+		if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
+			throw new RuntimeException("秘钥已过期");
+		}
+		service.setSecretKey(dataCipherHandler.initSecretKey(service.getSecretKey(), detail.getVersion()));
 		service.setCreateTime(new Date().getTime());
 		service.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
 		service.setBusinessType(Integer.parseInt(fileLicenseInfo.getBusinessType()));
@@ -114,8 +121,6 @@ public class ServiceServiceImpl implements ServiceService {
 	@Override
 	@Transactional(readOnly = false)
 	public Integer update(Service service) {
-//		cn.realai.online.core.entity.Service old = selectServiceById(service.getId());
-//		BeanUtils.copyProperties(service, old);
 		return serviceDao.update(service);
 	}
 
@@ -155,6 +160,8 @@ public class ServiceServiceImpl implements ServiceService {
 		}
 		if(secretKey != null) {
 			try {
+				ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(service.getDetail());
+				secretKey = dataCipherHandler.getOriginalSecretKey(secretKey, serviceDetail.getVersion());
 				FileLicenseInfo fileLicenseInfo = serviceLicenseCheck.checkServiceLic(secretKey);
 				fileLicenseInfo.getRangeTimeLower();
 				service.setExpireDate(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), LicenseConstants.DATE_FORMART));
@@ -176,4 +183,8 @@ public class ServiceServiceImpl implements ServiceService {
 		return serviceDao.findListByModelStatus(status);
 	}
 
+	@Override
+	public List<Service> findListByAlreadyPublishModel() {
+		return serviceDao.findListByAlreadyPublishModel();
+	}
 }

@@ -72,6 +72,19 @@ public class FileLicenseInfo {
      */
     private String checkbit;
 
+    /**
+     * 秘钥过期时间
+     */
+    private long overdue;
+
+    public long getOverdue() {
+        return overdue;
+    }
+
+    public void setOverdue(long overdue) {
+        this.overdue = overdue;
+    }
+
 
     public String getBusinessType() {
         return businessType;

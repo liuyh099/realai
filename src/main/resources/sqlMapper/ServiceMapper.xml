@@ -61,6 +61,16 @@
         </where>
     </select>
 
+    <select id="findListByAlreadyPublishModel" resultMap="serviceMap">
+        SELECT * FROM service as a
+        where
+            a.del_flag = 0
+            AND   exists (
+                select * from model as m
+                where m.service_id = a.id and m.release_status in ('online', 'offline')
+            )
+    </select>
+
     <insert id="insert" parameterType="cn.realai.online.core.entity.Service">
         INSERT INTO service (name,type, business_type,create_time,detail,tuning_secret_key,secret_key,online_experiment,batch_times)
         VALUE (#{name},#{type},#{businessType},#{createTime},#{detail},#{tuningSecretKey},#{secretKey},#{onlineExperiment},#{batchTimes})
