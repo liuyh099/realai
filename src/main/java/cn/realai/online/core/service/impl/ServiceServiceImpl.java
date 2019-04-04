@@ -76,12 +76,23 @@ public class ServiceServiceImpl implements ServiceService {
 		}
 
 		searchService = new Service();
-		searchService.setSecretKey(service.getSecretKey());
-		old = list(searchService);
-		if(old != null && old.size() > 0) {
-			logger.error("服务秘钥已被使用！");
-			throw new RuntimeException("服务秘钥已被使用！");
-		}
+//		searchService.setSecretKey(service.getSecretKey());
+//		old = list(searchService);
+//		if(old != null && old.size() > 0) {
+//			logger.error("服务秘钥已被使用！");
+//			throw new RuntimeException("服务秘钥已被使用！");
+//		}
+
+		List<Service> olds = list(searchService);
+		olds.forEach(oldService -> {
+			if(StringUtils.isNotEmpty(oldService.getSecretKey())) {
+				String secretkey = dataCipherHandler.getOriginalSecretKey(oldService.getSecretKey());
+				if(StringUtils.equals(secretkey, service.getSecretKey())) {
+					logger.error("服务秘钥已被使用！");
+					throw new RuntimeException("服务秘钥已被使用！");
+				}
+			}
+		});
 
 
 		ServiceDetail detail = new ServiceDetail();
