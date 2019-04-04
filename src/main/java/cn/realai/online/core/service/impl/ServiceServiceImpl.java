@@ -83,15 +83,6 @@ public class ServiceServiceImpl implements ServiceService {
 			throw new RuntimeException("服务秘钥已被使用！");
 		}
 
-		if(StringUtils.isNotBlank(service.getTuningSecretKey())) {
-			searchService = new Service();
-			searchService.setTuningSecretKey(service.getTuningSecretKey());
-			old = list(searchService);
-			if(old != null && old.size() > 0) {
-				logger.error("调优秘钥已被使用！");
-				throw new RuntimeException("调优秘钥已被使用！");
-			}
-		}
 
 		ServiceDetail detail = new ServiceDetail();
 		detail.setDeployUseTimes("0");
@@ -99,6 +90,9 @@ public class ServiceServiceImpl implements ServiceService {
 		detail.setVersion(0);
 		service.setDetail(dataCipherHandler.encryptData(detail, service.getSecretKey()));
 		FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(service.getSecretKey());
+		if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
+			throw new RuntimeException("秘钥已过期");
+		}
 		service.setSecretKey(dataCipherHandler.initSecretKey(service.getSecretKey(), detail.getVersion()));
 		service.setCreateTime(new Date().getTime());
 		service.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
@@ -116,8 +110,6 @@ public class ServiceServiceImpl implements ServiceService {
 	@Override
 	@Transactional(readOnly = false)
 	public Integer update(Service service) {
-//		cn.realai.online.core.entity.Service old = selectServiceById(service.getId());
-//		BeanUtils.copyProperties(service, old);
 		return serviceDao.update(service);
 	}
 

@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,6 +47,9 @@ public class ServiceBussinessImpl implements ServiceBussiness {
     @Autowired
     private DataCipherHandler dataCipherHandler;
 
+    @Autowired
+    private ServiceLicenseInfoSource serviceLicenseInfoSource;
+
     @Override
     public boolean addService(ServiceBO serviceBO) throws LicenseException {
         Service service = new Service();
@@ -57,6 +61,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public boolean editService(ServiceBO serviceBO) throws LicenseException {
 
         ServiceBO serviceBOold = serviceService.selectServiceById(serviceBO.getId());
@@ -79,7 +84,8 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
         BeanUtils.copyProperties(serviceBO, serviceBOold);
 
-        if(StringUtils.isNotBlank(serviceBO.getSecretKey()) && !StringUtils.equals(dataCipherHandler.getOriginalSecretKey(serviceBOold.getSecretKey()), serviceBO.getSecretKey())) {
+        if(StringUtils.isNotBlank(serviceBO.getSecretKey())
+                && !StringUtils.equals(dataCipherHandler.getOriginalSecretKey(serviceBOold.getSecretKey()), serviceBO.getSecretKey())) {
             searchService = new cn.realai.online.core.entity.Service();
 
 //            ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(searchService.getDetail());
@@ -97,13 +103,17 @@ public class ServiceBussinessImpl implements ServiceBussiness {
                 }
             });
 
-            ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(searchService.getDetail());
+            FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(serviceBO.getSecretKey());
+            if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
+                throw new RuntimeException("秘钥已过期");
+            }
+            ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(serviceBOold.getDetail());
             int version = serviceDetail.getVersion();
             String newkey = dataCipherHandler.initSecretKey(serviceBO.getSecretKey(), version);
             serviceBOold.setSecretKey(newkey);
         }
 
-        if (serviceService.update(serviceBO) <= 0) {
+        if (serviceService.update(serviceBOold) <= 0) {
             return false;
         }
         return true;
@@ -159,6 +169,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void renewalService(ServiceBO serviceBO) throws LicenseException {
         editService(serviceBO);
     }

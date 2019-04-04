@@ -204,7 +204,6 @@ public class ServiceController {
     @RequiresPermissions("service")
     @PostMapping("/list/renewal")
     @ApiOperation(value="服务续期")
-    @Transactional(readOnly = true)
     public Result renewalService(@RequestBody RenewalServiceQuery renewalServiceQuery){
         ServiceBO serviceBO = new ServiceBO();
         try {
