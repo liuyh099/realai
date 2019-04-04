@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Description:
  * <br>
@@ -22,6 +25,12 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
     @Autowired
     private ServiceService serviceService;
 
+    @Autowired
+    private DataCipherHandler dataCipherHandler;
+
+    @Autowired
+    private ServiceLicenseInfoSource serviceLicenseInfoSource;
+
     @Override
     public String getDataCiphertext(long serviceId) {
         Service service = serviceService.selectServiceById(serviceId);
@@ -32,7 +41,8 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
     @Override
     public String getServiceCiphertext(long serviceId, SecretKeyType secretKeyType) throws LicenseException {
         Service service = serviceService.selectServiceById(serviceId);
-        String ciphertext = service.getSecretKey();
+        ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(service.getDetail());
+        String ciphertext = dataCipherHandler.getOriginalSecretKey(service.getSecretKey(), serviceDetail.getVersion());
 //        if(secretKeyType == SecretKeyType.COMMON) {
 //            ciphertext = service.getSecretKey();
 //        }else {
@@ -50,9 +60,11 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
 
     @Override
     @Transactional(readOnly = false)
-    public void updateServiceDetail(long serviceId, String dataCiphertext, String tuningSecretKey, ServiceDetail serviceDetail) throws LicenseException {
+    public void updateServiceDetail(long serviceId, String tuningSecretKey, ServiceDetail serviceDetail) throws LicenseException {
 
         Service service = serviceService.selectServiceById(serviceId);
+        String secretKey = service.getSecretKey();
+        String tuningKeyIds = serviceDetail.getTuningKeyIds();
 
         if(!StringUtils.equals(serviceDetail.getServiceName(), service.getName())) {
             logger.error("调优次数数据异常！");
@@ -60,6 +72,7 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
         }
 
         if(StringUtils.isNotBlank(tuningSecretKey)) {
+            FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
             String tuningKey = service.getTuningSecretKey();
             if(StringUtils.isNotBlank(tuningKey)) {
                 if(tuningKey.indexOf(tuningSecretKey) != -1) {
@@ -70,20 +83,38 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
                 tuningKey = "," + tuningSecretKey + ",";
             }
             service.setTuningSecretKey(tuningKey);
+
+            if(StringUtils.isNotBlank(tuningKeyIds)) {
+                if(tuningKeyIds.indexOf(licenseInfo.getId()) != -1) {
+                    throw new LicenseException("调优秘钥已被使用！");
+                }
+                tuningKeyIds += licenseInfo.getId() + ",";
+            }else {
+                tuningKeyIds = "," + licenseInfo.getId() + ",";
+            }
+
         }
 
+        serviceDetail.setTuningKeyIds(tuningKeyIds);
+        String dataCiphertext = dataCipherHandler.getDataCiphertext(serviceId, serviceDetail);
+        String newSecretKey = dataCipherHandler.updateSecretKey(secretKey, serviceDetail.getVersion());
         service.setDetail(dataCiphertext);
+        service.setSecretKey(newSecretKey);
         serviceService.update(service);
 
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void clearTuningKey(long serviceId, ServiceLicenseInfoSource serviceLicenseInfoSource) {
+    public void clearTuningKey(long serviceId, ServiceLicenseInfoSource serviceLicenseInfoSource) throws LicenseException {
 
         Service service = serviceService.selectServiceById(serviceId);
 
+        ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(service.getDetail());
+        String tuningKeyIds = serviceDetail.getTuningKeyIds();
+
         String tuningKey = service.getTuningSecretKey();
+        List<String> overdueTuningKeyIds = new ArrayList<>();
 
         String[] tuningkeys = tuningKey.split(",");
         for (String key : tuningkeys) {
@@ -91,7 +122,8 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
             if(StringUtils.isNotBlank(key)) {
                 //检查过期
                 try {
-                    serviceLicenseInfoSource.checkSource(key);
+                    FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(key);
+                    overdueTuningKeyIds.add(licenseInfo.getId());
                 } catch (LicenseException e) {
                     tuningKey = tuningKey.replaceAll(","+key+",", ",");
                 }
@@ -101,6 +133,16 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
             tuningKey = "";
         }
 
+        if(!overdueTuningKeyIds.isEmpty() && StringUtils.isNotEmpty(tuningKeyIds)) {
+            for (String overdueId : overdueTuningKeyIds) {
+                if(tuningKeyIds.indexOf(","+overdueId+",") != -1) {
+                    tuningKeyIds = tuningKeyIds.replaceAll(","+overdueId+",", ",");
+                }
+            }
+        }
+        serviceDetail.setTuningKeyIds(tuningKeyIds);
+        String detailCiphertext = dataCipherHandler.getDataCiphertext(serviceId, serviceDetail);
+        service.setDetail(detailCiphertext);
         service.setTuningSecretKey(tuningKey);
         serviceService.update(service);
     }
