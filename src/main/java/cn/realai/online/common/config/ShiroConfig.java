@@ -77,6 +77,7 @@ public class ShiroConfig {
 
     public SessionManager sessionManager() {
         MySessionManager mySessionManager = new MySessionManager();
+        mySessionManager.setGlobalSessionTimeout(1800000*6); //Session时间默认30 分钟 乘以6 为3个小时
         mySessionManager.setSessionDAO(redisSessionDAO());
         mySessionManager.setSessionValidationInterval(7200000); //2小时
         mySessionManager.setSessionValidationSchedulerEnabled(true);
@@ -102,6 +103,7 @@ public class ShiroConfig {
     public RedisSessionDAO redisSessionDAO() {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         redisSessionDAO.setRedisManager(redisManager());
+
 //      Custom your redis key prefix for session management, if you doesn't define this parameter,
 //      shiro-redis will use 'shiro_redis_session:' as default prefix
 //      redisSessionDAO.setKeyPrefix("");
