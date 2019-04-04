@@ -22,4 +22,7 @@ public interface ServiceDao {
     void online(@Param("id") Long serviceId);
 
     List<Service> findListByModelStatus(@Param("status") String status);
+
+    //查询已发布的服务
+    List<Service> findListByAlreadyPublishModel();
 }

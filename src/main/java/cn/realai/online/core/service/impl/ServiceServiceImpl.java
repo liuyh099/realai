@@ -180,4 +180,8 @@ public class ServiceServiceImpl implements ServiceService {
 		return serviceDao.findListByModelStatus(status);
 	}
 
+	@Override
+	public List<Service> findListByAlreadyPublishModel() {
+		return serviceDao.findListByAlreadyPublishModel();
+	}
 }
