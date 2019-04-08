@@ -32,8 +32,8 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 		return batchRecordDao.insert(batchRecord);
 	}
 
-    @Autowired
-    private RedissonLock redissonLock;
+    /*@Autowired
+    private RedissonLock redissonLock;*/
     
     @Autowired
     private ExperimentDao experimentDao;
@@ -62,11 +62,11 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly=false)
 	public BatchRecord getBatchRecordOfDaily(long eid, String date, int batchTypeDaily) {
-		BatchRecord batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, date, batchTypeDaily);
+		/*BatchRecord batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, date, batchTypeDaily);
         if (batchRecord == null) {
         	RLock lock = redissonLock.lock(Constant.BATCH_DAILY_LOCK_PREFIX + eid, 3);
-        	try {
-        		batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, date, batchTypeDaily);
+        	try {*/
+		BatchRecord batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, date, batchTypeDaily);
         		if (batchRecord == null) {
         			batchRecord = new BatchRecord();
         			batchRecord.setExperimentId(eid);
@@ -77,12 +77,12 @@ public class BatchRecordServiceImpl implements BatchRecordService {
         			batchRecord.setBatchType(BatchRecord.BATCH_TYPE_DAILY);
         			batchRecordDao.insert(batchRecord);
         		}
-        	} catch (Exception e) {
+        	/*} catch (Exception e) {
         		e.printStackTrace();
         	} finally {
         		lock.unlock();
 			}
-        }
+        }*/
 		return batchRecord;
 	}
 

@@ -17,10 +17,8 @@ public class RedissonManager {
     @Autowired
     private RedisConfig redisConfig;
 
-    @Bean
+    /*@Bean
     public RedissonClient getRedisson() {
-        //String node = "47.105.113.171:7001,47.105.113.171:7002,47.105.113.171:7003,47.105.113.171:7004,47.105.113.171:7005,47.105.113.171:7006";
-        //String[] nodes = node.split(",");
         String[] nodes = redisConfig.getClusterNodes().split(",");
         //redisson版本是3.5，集群的ip前面要加上“redis://”，不然会报错，3.2版本可不加
         for (int i = 0; i < nodes.length; i++) {
@@ -40,6 +38,6 @@ public class RedissonManager {
         System.out.println("ll");
         //可通过打印redisson.getConfig().toJSON().toString()来检测是否配置成功
         return redisson;
-    }
+    }*/
 
 }

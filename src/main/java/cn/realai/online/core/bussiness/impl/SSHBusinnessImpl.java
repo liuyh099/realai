@@ -65,7 +65,9 @@ public class SSHBusinnessImpl implements SSHBusinness {
         } else {
             command = "sh " + shellPath + " " + offlineRootDir;
         }
+        logger.info("SSHBusinnessImpl getFilePath. command{}", command);
         String filePath = executor.exec(command);
+        logger.info("SSHBusinnessImpl getFilePath. filePath{}", filePath);
         String[] list = filePath.split("\n");
         List<String> aab = new ArrayList<>(list.length);
         for (String aa : list) {

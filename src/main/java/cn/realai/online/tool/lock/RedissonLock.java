@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RedissonLock implements DistributedLocker {
+public class RedissonLock {//implements DistributedLocker {
 
-    @Autowired
+    /*@Autowired
     private RedissonClient redissonClient;  //RedissonClient已经由配置类生成，这里自动装配即可
 
     //lock(), 拿不到lock就不罢休，不然线程就一直block
@@ -52,5 +52,5 @@ public class RedissonLock implements DistributedLocker {
 
     public void unlock(RLock lock) {
         lock.unlock();
-    }
+    }*/
 }
