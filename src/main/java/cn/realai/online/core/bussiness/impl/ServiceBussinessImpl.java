@@ -219,7 +219,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
         Calendar aCalendar = Calendar.getInstance();
         aCalendar.setTime(now);
         int nowDay = aCalendar.get(Calendar.DAY_OF_YEAR);
-        String expireStr = DateUtil.longToString(serviceBO.getExpireDate(), LicenseConstants.DATE_FORMART);
+        String expireStr = DateUtil.milliLongToString(serviceBO.getExpireDate(), LicenseConstants.DATE_FORMART);
         aCalendar.setTime(DateUtil.stringToDate(expireStr, LicenseConstants.DATE_FORMART));
         int expireDay = aCalendar.get(Calendar.DAY_OF_YEAR);
 

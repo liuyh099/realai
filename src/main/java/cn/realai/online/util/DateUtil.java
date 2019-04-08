@@ -148,6 +148,14 @@ public class DateUtil {
         return sDateTime;
     }
 
+    public static String milliLongToString(long date, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+
+        Date dt2 = new Date(date);
+        String sDateTime = sdf.format(dt2);
+        return sDateTime;
+    }
+
     public static Date getTodayZeroHour() {
         Calendar cal = Calendar.getInstance();
         cal.set(13, 0);
