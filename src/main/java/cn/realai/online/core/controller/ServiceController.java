@@ -116,6 +116,8 @@ public class ServiceController {
     @ApiOperation(value="编辑服务")
     public Result editService(@RequestBody EditServiceQuery editServiceQuery){
         ServiceBO serviceBO = new ServiceBO();
+        Service serviceEntity = serviceService.selectServiceById(editServiceQuery.getServiceId());
+        BeanUtils.copyProperties(serviceEntity, serviceBO);
         BeanUtils.copyProperties(editServiceQuery, serviceBO);
         try {
             serviceBO.setId(editServiceQuery.getServiceId());

@@ -85,6 +85,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
         BeanUtils.copyProperties(serviceBO, serviceBOold);
 
         if(StringUtils.isNotBlank(serviceBO.getSecretKey())
+                && !StringUtils.equals(serviceBOold.getSecretKey(), serviceBO.getSecretKey())
                 && !StringUtils.equals(dataCipherHandler.getOriginalSecretKey(serviceBOold.getSecretKey()), serviceBO.getSecretKey())) {
             searchService = new cn.realai.online.core.entity.Service();
 

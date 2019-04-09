@@ -18,9 +18,6 @@ public class EditServiceQuery {
     @ApiModelProperty(value = "服务名称")
     private String name;
 
-    @ApiModelProperty(value = "服务秘钥")
-    private String secretKey;
-
     public long getServiceId() {
         return serviceId;
     }
@@ -37,11 +34,4 @@ public class EditServiceQuery {
         this.name = name;
     }
 
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
 }
