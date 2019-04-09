@@ -136,7 +136,10 @@ public class ServiceServiceImpl implements ServiceService {
 		Service searchService = get(serviceId);
 		if(searchService != null && StringUtils.isNotBlank(searchService.getSecretKey())) {
 			try {
-				serviceLicenseCheck.checkServiceLic(searchService.getSecretKey());
+				ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(searchService.getDetail());
+				int version = serviceDetail.getVersion();
+				String ciphertext = dataCipherHandler.getOriginalSecretKey(searchService.getSecretKey(), version);
+				serviceLicenseCheck.checkServiceLic(ciphertext);
 				return true;
 			} catch (LicenseException e) {
 			}
