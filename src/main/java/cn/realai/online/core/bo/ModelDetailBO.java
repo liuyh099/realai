@@ -23,6 +23,7 @@ public class ModelDetailBO {
     private Integer serviceType;
     private Integer serviceBusinessType;
     private String remark;
+    private String tuningType;
 
     public Long getModelId() {
         return modelId;
@@ -134,5 +135,13 @@ public class ModelDetailBO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getTuningType() {
+        return tuningType;
+    }
+
+    public void setTuningType(String tuningType) {
+        this.tuningType = tuningType;
     }
 }

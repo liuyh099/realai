@@ -87,7 +87,7 @@ public class ModelBussinessImpl implements ModelBussiness {
                 modelIds.add(item.getModelId());
             });
             List<Map> modelPsiList = psiChekcResultService.selectMaxPsiList(modelIds);
-            List<TuningRecord> tuningRecords = tuningRecordService.findLatestListByModelIds(modelIds);
+            //List<TuningRecord> tuningRecords = tuningRecordService.findLatestListByModelIds(modelIds);
             for (ModelListBO item : list) {
                 ModelListVO voItem = new ModelListVO();
                 BeanUtils.copyProperties(item, voItem);
@@ -108,16 +108,11 @@ public class ModelBussinessImpl implements ModelBussiness {
                 }
 
                 //设置调优原因
-                if (tuningRecords != null && !tuningRecords.isEmpty()) {
-                    for (TuningRecord record : tuningRecords) {
-                        if (record.getModelId().equals(item.getModelId())) {
-                            String reason = TuningRecord.TYPE.PSI.value.equalsIgnoreCase(record.getType()) ? "PSI调优":"强制调优";
-                            voItem.setTuningReason(reason);
-                            break;
-                        }
-                    }
-
-                }
+                String reason = Optional.of(item)
+                                    .map(ModelListBO::getTuningType)
+                                    .map(v -> TuningRecord.TYPE.PSI.value.equalsIgnoreCase(v) ? "PSI调优" : "强制调优")
+                                    .orElse("新建");
+                voItem.setTuningReason(reason);
                 voList.add(voItem);
             }
         }
@@ -136,12 +131,11 @@ public class ModelBussinessImpl implements ModelBussiness {
             String serviceTypeName = cn.realai.online.core.entity.Service.getServiceTypeName(detailBO.getServiceType(), detailBO.getServiceBusinessType());
             detailVO.setServiceTypeName(serviceTypeName);
             //处理调优原因
-            detailVO.setTuningReason("新建");
-            List<TuningRecord> tuningRecords = tuningRecordService.findLatestListByModelIds(Arrays.asList(modelId));
-            if (tuningRecords != null && !tuningRecords.isEmpty()) {
-                String reason = TuningRecord.TYPE.PSI.value.equals(tuningRecords.get(0).getType()) ? "PSI调优" : "强制调优";
-                detailVO.setTuningReason(reason);
-            }
+            String reason = Optional.of(detailBO)
+                                .map(ModelDetailBO::getTuningType)
+                                .map(v -> TuningRecord.TYPE.PSI.value.equals(v) ? "PSI调优" : "强制调优")
+                                .orElse("新建");
+            detailVO.setTuningReason(reason);
         }
         //读取模型表现
         List<ModelPerformance> performanceList = modelPerformanceService.selectList(modelId);
@@ -294,6 +288,7 @@ public class ModelBussinessImpl implements ModelBussiness {
      * @return
      */
     private HashMap<String,Object> publishAndTuringReord(ModelBO modelBO, TuningRecord tuningRecord) {
+        modelBO.setTuningRecordId(tuningRecord.getId()); //模型关联调优ID
         HashMap a = publishModel(modelBO);
         if ((boolean)a.get("status")) {
             tuningRecord.setStatus(TuningRecord.STATUS.USED.value);
@@ -318,7 +313,8 @@ public class ModelBussinessImpl implements ModelBussiness {
         //获取服务
         Integer tuningNo = modelService.selectCountByServiceId(experiment.getServiceId());
         modelBO.setTuningNo(tuningNo);
-        int count = modelService.insert(modelBO);
+        int count = 0;
+        modelService.insert(modelBO);
         ServiceDeployRecordBO serviceDeployRecordBO = getServiceDeployRecordBO(modelBO);
         serviceDeployRecordBussiness.insert(serviceDeployRecordBO);
 

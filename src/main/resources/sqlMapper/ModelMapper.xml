@@ -11,11 +11,12 @@
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="create_user_id" property="createUserId" jdbcType="BIGINT"/>
         <result column="tuning_no" property="tuningNo" jdbcType="INTEGER"/>
+        <result column="tuning_record_id" property="tuningRecordId" jdbcType="BIGINT"/>
     </resultMap>
 
     <insert id="insert"  useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        INSERT INTO model (name,create_time,release_status,experiment_id,service_id,remark,create_user_id,tuning_no)
-        VALUE (#{name},#{createTime},#{releaseStatus},#{experimentId},#{serviceId},#{remark},#{createUserId},#{tuningNo})
+        INSERT INTO model (name,create_time,release_status,experiment_id,service_id,remark,create_user_id,tuning_no,tuning_record_id)
+        VALUE (#{name},#{createTime},#{releaseStatus},#{experimentId},#{serviceId},#{remark},#{createUserId},#{tuningNo},#{tuningRecordId})
     </insert>
 
     <select id="findList" parameterType="cn.realai.online.core.entity.Model" resultMap="ModelMap">
@@ -89,6 +90,7 @@
         <result column="releaseTime" property="releaseTime" jdbcType="TIMESTAMP"/>
         <result column="algorithmType" property="algorithmType" jdbcType="VARCHAR"/>
         <result column="tuningNo" property="tuningNo" jdbcType="INTEGER"/>
+        <result column="tuningType" property="tuningType" jdbcType="VARCHAR"/>
     </resultMap>
     <select id="selectList" resultMap="ModelListMap">
         select
@@ -100,10 +102,12 @@
         ep.name as experimentName,
         m.create_time as releaseTime,
         ep.algorithm_type as algorithmType,
-        m.tuning_no as tuningNo
+        m.tuning_no as tuningNo,
+        tr.type as tuningTYpe
         from model as m
         join experiment as ep on m.experiment_id = ep.id
         join service as sv on m.service_id = sv.id
+        left join tuning_record as tr on m.tuning_record_id = tr.id
         <!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错-->
         <where>
             <if test="name!=null and name.trim()!=''">
@@ -113,6 +117,7 @@
                 and sv.id = #{serviceId}
             </if>
         </where>
+        order by m.create_time desc, m.id desc
     </select>
 
 
@@ -126,6 +131,7 @@
         <result column="releaseTime" property="releaseTime" jdbcType="TIMESTAMP"/>
         <result column="algorithmType" property="algorithmType" jdbcType="VARCHAR"/>
         <result column="tuningCount" property="tuningCount" jdbcType="INTEGER"/>
+        <result column="tuningType" property="tuningType" jdbcType="VARCHAR"/>
         <!--<result column="tuningReason" property="tuningReason" jdbcType="VARCHAR"/>-->
         <result column="ydefine" property="ydefine" jdbcType="VARCHAR"/>
         <result column="serviceType" property="serviceType" jdbcType="VARCHAR"/>
@@ -142,6 +148,7 @@
         m.create_time as releaseTime,
         ep.algorithm_type as algorithmType,
         ep.tuning_count as tuningCount,
+        tr.type as tuningType,
         ep.y_table as ydefine,
         sv.type as serviceType,
         sv.business_type as serviceBusinessType,
@@ -149,6 +156,7 @@
         from model as m
         join experiment as ep on m.experiment_id = ep.id
         join service as sv on m.service_id = sv.id
+        left join tuning_record as tr on m.tuning_record_id = tr.id
         <!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错-->
         <where>
             m.id = #{modelId}

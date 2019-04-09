@@ -44,6 +44,8 @@ public class Model {
     //调优序列 同一个服务下的模型再次创建则+1，第一次创建为0
     private Integer tuningNo;
 
+    private Long tuningRecordId;
+
     private String remark;
 
 
@@ -117,5 +119,12 @@ public class Model {
 
     public void setTuningNo(Integer tuningNo) {
         this.tuningNo = tuningNo;
+    }
+    public Long getTuningRecordId() {
+        return tuningRecordId;
+    }
+
+    public void setTuningRecordId(Long tuningRecordId) {
+        this.tuningRecordId = tuningRecordId;
     }
 }
