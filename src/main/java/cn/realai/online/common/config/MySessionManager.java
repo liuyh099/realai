@@ -12,6 +12,7 @@ import org.crazycake.shiro.exception.SerializationException;
 import org.crazycake.shiro.serializer.RedisSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -62,26 +63,34 @@ public class MySessionManager extends DefaultWebSessionManager {
                 }
             }
             for (Session session : sessions) {
+                if(session==null){
+                    continue;
+                }
                 Date date = session.getLastAccessTime();
                 long last = date.getTime();
                 long current = System.currentTimeMillis();
-                //if(current-last>180000){
-                if (current - last > 1800000 * 6) {
-                    Object o = session.getAttribute("userId");
-                    if (o != null) {
-                        String userId = (String) o;
-
-                        String preFix = redisCacheManager.getKeyPrefix();
-                        RedisSerializer redisSerializer = redisCacheManager.getKeySerializer();
-                        try {
-                            byte[] key = redisSerializer.serialize(preFix + a + userId);
-                            redisCacheManager.getRedisManager().del(key);
-                        } catch (SerializationException e) {
-                            e.printStackTrace();
-                        }
+                Object o = session.getAttribute("userId");
+                if(o==null){
+                    if (current - last > getSessionValidationInterval()) {
+                        super.delete(session);
                     }
-                    super.delete(session);
+                }else {
+                    if (current - last > getGlobalSessionTimeout()) {
+                        if (o != null) {
+                            String userId = (String) o;
+                            String preFix = redisCacheManager.getKeyPrefix();
+                            RedisSerializer redisSerializer = redisCacheManager.getKeySerializer();
+                            try {
+                                byte[] key = redisSerializer.serialize(preFix + a + userId);
+                                redisCacheManager.getRedisManager().del(key);
+                            } catch (SerializationException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        super.delete(session);
+                    }
                 }
+
             }
 
         }
@@ -91,6 +100,7 @@ public class MySessionManager extends DefaultWebSessionManager {
      * 根据用户ID删除session
      * @param userId
      */
+    @Async
     public void deleteSessionsByUserId(Long userId) {
         Collection<Session> sessions = getActiveSessions();
         if (!CollectionUtils.isEmpty(sessions)) {
@@ -100,6 +110,9 @@ public class MySessionManager extends DefaultWebSessionManager {
                 }
             }
             for (Session session : sessions) {
+                if(session==null){
+                    continue;
+                }
                 Object o = session.getAttribute("userId");
                 if (o != null) {
                     String rdsUserId = (String) o;

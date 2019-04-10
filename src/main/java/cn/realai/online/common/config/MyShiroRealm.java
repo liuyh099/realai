@@ -7,7 +7,10 @@ import cn.realai.online.userandperm.service.UserService;
 import cn.realai.online.util.EncodingPasswordUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.mgt.SessionsSecurityManager;
@@ -19,8 +22,10 @@ import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.util.CollectionUtils;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.crazycake.shiro.RedisSessionDAO;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,6 +42,9 @@ public class MyShiroRealm extends AuthorizingRealm {
 
     @Resource
     private RedisSessionDAO redisSessionDAO;
+
+    @Resource
+    private SingleLogin singleLogin;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
@@ -84,23 +92,8 @@ public class MyShiroRealm extends AuthorizingRealm {
             return null;
         }
         byte[] salt = HexUtils.fromHexString(user.getPwd().substring(0, 16));
-//        String pwd1 = EncodingPasswordUtils.encodingPassword(pwd, salt);
-//        if (username.equals(user.getName()) && pwd1.equals(user.getPwd())) {
-//            SessionsSecurityManager securityManager = (SessionsSecurityManager) SecurityUtils.getSecurityManager();
-//            DefaultSessionManager sessionManager = (DefaultSessionManager) securityManager.getSessionManager();
-//            // 获取所有session
-//            Collection<Session> sessions = redisSessionDAO.getActiveSessions();
-//            for (Session session : sessions) {
-//                String userId = (String) session.getAttribute("userId");
-//                // 如果session里面有当前登陆的，则证明是重复登陆的，则将其剔除
-//                if (userId != null && !"".equals(userId)) {
-//                    if (userId.equals(user.getId() + "")) {
-//                        session.setTimeout(0);
-//                        sessionManager.getSessionDAO().delete(session);
-//                    }
-//                }
-//            }
-//        }
+        Session session = SecurityUtils.getSubject().getSession();
+        singleLogin.singleLogin(username, pwd, user, salt,session.getId());
 
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user, //用户名
@@ -109,7 +102,7 @@ public class MyShiroRealm extends AuthorizingRealm {
                 getName()  //realm name
         );
 
-        Session session = SecurityUtils.getSubject().getSession();
+
         session.setAttribute("userId", user.getId() + "");
 
         return authenticationInfo;

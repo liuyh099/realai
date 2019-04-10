@@ -1,6 +1,7 @@
 package cn.realai.online.userandperm.controller;
 
 import cn.realai.online.common.config.MySessionManager;
+import cn.realai.online.common.config.SingleLogin;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
@@ -45,6 +46,9 @@ public class UserController {
 
     @Autowired
     private RoleBusiness roleBusiness;
+
+    @Autowired
+    private SingleLogin singleLogin;
 
     @RequiresPermissions("permission:user")
     @GetMapping()
@@ -224,9 +228,7 @@ public class UserController {
             if (!userBusiness.updatePwd(userbo)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
-            SessionsSecurityManager securityManager = (SessionsSecurityManager) SecurityUtils.getSecurityManager();
-            MySessionManager sessionManager = (MySessionManager) securityManager.getSessionManager();
-            sessionManager.deleteSessionsByUserId(userbo.getId());
+            singleLogin.deleteSessionsByUserId(userbo.getId());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             logger.error("更新用户密码异常", e);
