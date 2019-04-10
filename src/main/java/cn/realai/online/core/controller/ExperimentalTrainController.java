@@ -71,7 +71,7 @@ public class ExperimentalTrainController {
 
     }
 
-    //@RequiresPermissions("experimental:train")
+    @RequiresPermissions("experimental:train")
     @DeleteMapping()
     @ApiOperation(value = "删除实验训练列表")
     @ResponseBody
@@ -225,6 +225,9 @@ public class ExperimentalTrainController {
             if (experimentalTrainSelectFileVo.getId() == null) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
+            if (experimentalTrainSelectFileVo.getName().length() > 100) {
+            	return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.PARAM_ERORR.getMsg("实验名称过长，最大长度不能超过100个字符"), null);
+            }
             //检查文件名
             boolean flag = experimentalTrainBussiness.checkTrainName(experimentalTrainSelectFileVo.getName(), experimentalTrainSelectFileVo.getId());
             if (!flag) {
@@ -301,7 +304,6 @@ public class ExperimentalTrainController {
         }
 
     }
-
 
     private boolean checkCanUpdate(Long id) {
         ExperimentBO experiment = experimentalTrainBussiness.selectById(id);
@@ -489,6 +491,9 @@ public class ExperimentalTrainController {
         try {
             ExperimentalTrainDoubleCreateBO bo = JSON.parseObject(JSON.toJSONString(experimentalTrainDoubleCreateVo), ExperimentalTrainDoubleCreateBO.class);
             Long newExperimentId = experimentalTrainBussiness.doubleCreate(bo);
+            if (newExperimentId == -1) {
+            	return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("实验名称过长，最大长度不能超过100个字符"), null);
+            }
             if (newExperimentId == null) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), 1);
             }
