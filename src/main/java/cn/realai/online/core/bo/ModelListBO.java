@@ -24,6 +24,7 @@ public class ModelListBO {
     private String tuningReason;
     private BigDecimal psi;
     private int aler;
+    private String tuningType;
 
     public Long getModelId() {
         return modelId;
@@ -119,5 +120,13 @@ public class ModelListBO {
 
     public void setAler(int aler) {
         this.aler = aler;
+    }
+
+    public String getTuningType() {
+        return tuningType;
+    }
+
+    public void setTuningType(String tuningType) {
+        this.tuningType = tuningType;
     }
 }

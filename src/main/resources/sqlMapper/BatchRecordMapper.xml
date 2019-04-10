@@ -106,9 +106,10 @@
         from batch_record as br
         join service as s on br.service_id = s.id
         join experiment as ep on br.experiment_id = ep.id
-        join model as m on br.experiment_id = m.experiment_id
+        join model as m on br.model_id = m.id
         <where>
             br.del_flag = 0
+            and br.batch_type != 3
             <if test="batchListBO!=null and batchListBO.modelName!=null">
                 and m.name like '%${batchListBO.modelName}%'
             </if>
