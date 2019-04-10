@@ -112,7 +112,13 @@ public class ServiceBussinessImpl implements ServiceBussiness {
             int version = serviceDetail.getVersion();
             String newkey = dataCipherHandler.initSecretKey(serviceBO.getSecretKey(), version);
             serviceBOold.setSecretKey(newkey);
+
         }
+
+        ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(serviceBOold.getDetail());
+        String sk = dataCipherHandler.getOriginalSecretKey(serviceBOold.getSecretKey());
+        serviceDetail.setServiceName(serviceBOold.getName());
+        serviceBOold.setDetail(dataCipherHandler.encryptData(serviceDetail, sk));
 
         if (serviceService.update(serviceBOold) <= 0) {
             return false;
