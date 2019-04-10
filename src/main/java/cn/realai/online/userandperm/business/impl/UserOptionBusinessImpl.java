@@ -73,4 +73,9 @@ public class UserOptionBusinessImpl implements UserOptionBusiness {
         }
         return false;
     }
+
+    @Override
+    public User get(Long id) {
+        return userService.get(id);
+    }
 }

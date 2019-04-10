@@ -1,5 +1,6 @@
 package cn.realai.online.userandperm.business;
 
+import cn.realai.online.userandperm.entity.User;
 import cn.realai.online.userandperm.vo.ChangePwdVO;
 import cn.realai.online.userandperm.vo.ForgetVo;
 
@@ -35,4 +36,11 @@ public interface UserOptionBusiness {
      * @return
      */
     Boolean changePwd(ChangePwdVO changePwdVO);
+
+    /**
+     * 获得用户信息
+     * @param id
+     * @return
+     */
+    User get(Long id);
 }
