@@ -135,6 +135,7 @@ public class UserBusinessImpl implements UserBusiness {
      * @param nameOrPassword
      * @return
      */
+    @Override
     public boolean checkUserNameOrPhoneNumber(String nameOrPassword, Long userId) {
 
         //用户名和手机号码都不可以重复

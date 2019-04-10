@@ -58,6 +58,7 @@ public class UserOptionBusinessImpl implements UserOptionBusiness {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Boolean changePwd(ChangePwdVO changePwdVO) {
         User user = UserUtils.getUser();
         if (ObjectUtils.isEmpty(user)) {

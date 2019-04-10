@@ -5,6 +5,7 @@ import cn.realai.online.userandperm.entity.User;
 import cn.realai.online.userandperm.service.UserService;
 import cn.realai.online.util.EncodingPasswordUtils;
 import cn.realai.online.util.UserUtils;
+import org.apache.tomcat.util.buf.HexUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,9 +71,9 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         user = get(user.getId());
-        String salt = user.getPwd().substring(0, 16);
-        String pwd = EncodingPasswordUtils.encodingPassword(oldPwd, salt.getBytes());
-        if (oldPwd.equals(pwd)) {
+        byte[] salt = HexUtils.fromHexString(user.getPwd().substring(0, 16));
+        String pwd = EncodingPasswordUtils.encodingPassword(oldPwd, salt);
+        if (user.getPwd().equals(pwd)) {
             return true;
         }
         return false;
