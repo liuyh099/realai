@@ -184,7 +184,7 @@ public class ExperimentServiceImpl implements ExperimentService {
                                    String ksValidateImageUrl) {
         return experimentDao.trainResultMaintain(experimentId, status, sampleReview, modelUrl, segmentationStatisticsImageUrl,
                 badTopCountImageUrl, rocTestImageUrl, rocTrainImageUrl, rocValidateImageUrl, ksTestImageUrl,
-                ksTrainImageUrl, ksValidateImageUrl);
+                ksTrainImageUrl, ksValidateImageUrl, System.currentTimeMillis());
     }
 
     @Override

@@ -33,6 +33,9 @@ public class ExperimentalTrainVO {
 
     @ApiModelProperty(value = "发布时间", example = "1552621502000")
     private long releaseTime;
+    
+    @ApiModelProperty(value = "训练结束时间", example = "1552621502000")
+    private long trainingEndTime;
 
     @ApiModelProperty(value = "调优次数", example = "1")
     private int tuningCount;
@@ -156,4 +159,13 @@ public class ExperimentalTrainVO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+	public long getTrainingEndTime() {
+		return trainingEndTime;
+	}
+
+	public void setTrainingEndTime(long trainingEndTime) {
+		this.trainingEndTime = trainingEndTime;
+	}
+    
 }

@@ -63,7 +63,7 @@ public class Experiment {
     //训练删除
     public static final int STATUS_DELETE = 7;
     
-    //训练第一步结束
+    //训练第一步结束   评估完毕
     public static final int STATUS_TRAINING_STAGE_ONE = 8;
 
     //算法类型
@@ -116,6 +116,9 @@ public class Experiment {
 
     //训练时间
     private Long trainingTime;
+    
+    //训练结束时间
+    private Long trainingEndTime;
 
     //发布时间
     private Long releaseTime;
@@ -463,6 +466,14 @@ public class Experiment {
 
 	public void setParentId(Long parentId) {
 		this.parentId = parentId;
+	}
+
+	public Long getTrainingEndTime() {
+		return trainingEndTime;
+	}
+
+	public void setTrainingEndTime(Long trainingEndTime) {
+		this.trainingEndTime = trainingEndTime;
 	}
 
 }

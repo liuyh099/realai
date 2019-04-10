@@ -26,6 +26,13 @@ public class ShiroConfig {
     @Value("${spring.redis.cache.clusterNodes}")
     private String host;
 
+
+    @Value("${session.timeout}")
+    private Long sessionTimeout;
+
+    @Value("${session.sessionValidationInterval}")
+    private Long sessionValidationInterval;
+
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
 
@@ -77,9 +84,9 @@ public class ShiroConfig {
 
     public SessionManager sessionManager() {
         MySessionManager mySessionManager = new MySessionManager();
-        mySessionManager.setGlobalSessionTimeout(1800000*6); //Session时间默认30 分钟 乘以6 为3个小时
+        mySessionManager.setGlobalSessionTimeout(sessionTimeout); //Session时间默认30 分钟 乘以6 为3个小时
         mySessionManager.setSessionDAO(redisSessionDAO());
-        mySessionManager.setSessionValidationInterval(60000);
+        mySessionManager.setSessionValidationInterval(sessionValidationInterval);
         mySessionManager.setSessionValidationSchedulerEnabled(true);
         return mySessionManager;
     }

@@ -57,7 +57,8 @@ public interface ExperimentDao {
                             @Param("rocValidateImageUrl") String rocValidateImageUrl,
                             @Param("ksTestImageUrl") String ksTestImageUrl,
                             @Param("ksTrainImageUrl") String ksTrainImageUrl,
-                            @Param("ksValidateImageUrl") String ksValidateImageUrl);
+                            @Param("ksValidateImageUrl") String ksValidateImageUrl,
+                            @Param("trainingEndTime")Long trainingEndTime);
 
     /**
      * 更新选择的文件
