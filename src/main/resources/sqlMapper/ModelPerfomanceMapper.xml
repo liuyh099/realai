@@ -58,7 +58,7 @@
     <select id="selectList" resultMap="ModelPerformanceMap">
         select mp.*
         from model_performance as mp
-        join model as m on mp.experiment_id = mp.experiment_id
+        join model as m on mp.experiment_id = m.experiment_id
         <!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错-->
         <where>
             <if test="modelId!=null">
