@@ -76,10 +76,10 @@
                 AND a.personal_id = #{personalId}
             </if>
             <if test="inputStartDate!=null ">
-                AND a.order_date &gt;= #{inputStartDate}
+                AND STR_TO_DATE(a.order_date,"%Y-%m-%d") &gt;= FROM_UNIXTIME( #{inputStartDate}/1000, "%Y-%m-%d")
             </if>
             <if test="inputEndDate!=null">
-                AND a.order_date &lt;= #{inputEndDate}
+                AND STR_TO_DATE(a.order_date,"%Y-%m-%d") &lt;= FROM_UNIXTIME( #{inputEndDate}/1000, "%Y-%m-%d")
             </if>
             <if test="searchType!=null and searchType!=''">
                 <if test="searchType='thousandsFace'">
