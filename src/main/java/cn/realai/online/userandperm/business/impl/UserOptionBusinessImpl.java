@@ -64,7 +64,7 @@ public class UserOptionBusinessImpl implements UserOptionBusiness {
         if (ObjectUtils.isEmpty(user)) {
             return false;
         }
-        String pwd = changePwdVO.getOldPwd();
+        String pwd = changePwdVO.getNewPwd();
         pwd = EncodingPasswordUtils.encodingPassword(pwd);
         user.setPwd(pwd);
 
