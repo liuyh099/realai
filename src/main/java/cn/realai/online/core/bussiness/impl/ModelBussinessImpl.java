@@ -172,6 +172,13 @@ public class ModelBussinessImpl implements ModelBussiness {
         return list;
     }
 
+    @Override
+    public List<ModelBO> findLastModelSelect() {
+        List<Model> modelList = modelService.findLastModelSelect();
+        List<ModelBO> result = JSON.parseArray(JSON.toJSONString(modelList),ModelBO.class);
+        return result;
+    }
+
 
     @Override
     public ModelSelectVO selectRecentModelNameList() {

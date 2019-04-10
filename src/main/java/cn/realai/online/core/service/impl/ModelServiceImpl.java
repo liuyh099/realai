@@ -83,4 +83,9 @@ public class ModelServiceImpl implements ModelService {
     public List<Model> selectAllModelNameList(Long serviceId) {
         return modelDao.selectAllModelNameList(serviceId);
     }
+
+    @Override
+    public List<Model> findLastModelSelect() {
+        return modelDao.findLastModelSelect();
+    }
 }

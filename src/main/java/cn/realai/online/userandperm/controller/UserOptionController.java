@@ -7,7 +7,9 @@ import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
 import cn.realai.online.userandperm.bo.MenuTreeNodeBO;
 import cn.realai.online.userandperm.business.RoleBusiness;
 import cn.realai.online.userandperm.business.UserOptionBusiness;
+import cn.realai.online.userandperm.entity.User;
 import cn.realai.online.userandperm.vo.*;
+import cn.realai.online.util.UserUtils;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +21,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
@@ -50,7 +53,7 @@ public class UserOptionController {
         UsernamePasswordToken token = new UsernamePasswordToken(userLoginVo.getName(), userLoginVo.getPwd());
         try {
             subject.login(token);
-            Serializable serializable=subject.getSession().getId();
+            Serializable serializable = subject.getSession().getId();
             MySessionVo sessionVo = new MySessionVo();
             sessionVo.setSessionId(serializable);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), sessionVo);
@@ -158,10 +161,26 @@ public class UserOptionController {
     @ApiOperation(value = "psi检测提醒接口")
     public Result<Boolean> psiCheckNotice() {
         try {
-            Boolean flag=psiCheckResultBussiness.psiCheckNotice();
+            Boolean flag = psiCheckResultBussiness.psiCheckNotice();
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), flag);
         } catch (Exception e) {
             logger.error("psi检测提醒接口", e);
+            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
+        }
+
+    }
+
+
+    @GetMapping("getUserInfo")
+    @ApiOperation(value = "获得用户信息接口")
+    public Result<UserVO> getUserInfo() {
+        try {
+            UserVO userVO = new UserVO();
+            User user = UserUtils.getUser();
+            BeanUtils.copyProperties(user, userVO);
+            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), userVO);
+        } catch (Exception e) {
+            logger.error("获得用户信息接口", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
 

@@ -38,7 +38,7 @@ public class PersonalInformationVO {
     private long createTime;
 
     @ApiModelProperty(value = "订单日期")
-    private long orderDate;
+    private String orderDate;
 
 
     public long getId() {
@@ -105,11 +105,11 @@ public class PersonalInformationVO {
         this.createTime = createTime;
     }
 
-    public long getOrderDate() {
+    public String getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(long orderDate) {
+    public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
     }
 }

@@ -58,6 +58,7 @@ public class UserOptionBusinessImpl implements UserOptionBusiness {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Boolean changePwd(ChangePwdVO changePwdVO) {
         User user = UserUtils.getUser();
         if (ObjectUtils.isEmpty(user)) {
@@ -71,5 +72,10 @@ public class UserOptionBusinessImpl implements UserOptionBusiness {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public User get(Long id) {
+        return userService.get(id);
     }
 }

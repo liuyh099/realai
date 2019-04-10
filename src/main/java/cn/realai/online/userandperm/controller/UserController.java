@@ -1,5 +1,6 @@
 package cn.realai.online.userandperm.controller;
 
+import cn.realai.online.common.config.MySessionManager;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.common.vo.Result;
 import cn.realai.online.common.vo.ResultCode;
@@ -15,7 +16,10 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.mgt.SessionsSecurityManager;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -220,6 +224,9 @@ public class UserController {
             if (!userBusiness.updatePwd(userbo)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
+            SessionsSecurityManager securityManager = (SessionsSecurityManager) SecurityUtils.getSecurityManager();
+            MySessionManager sessionManager = (MySessionManager) securityManager.getSessionManager();
+            sessionManager.deleteSessionsByUserId(userbo.getId());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
             logger.error("更新用户密码异常", e);
