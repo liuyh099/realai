@@ -65,9 +65,7 @@ public class UserOptionBusinessImpl implements UserOptionBusiness {
             return false;
         }
         String pwd = changePwdVO.getNewPwd();
-        pwd = EncodingPasswordUtils.encodingPassword(pwd);
         user.setPwd(pwd);
-
         if (userService.updatePwd(user) > 0) {
             return true;
         }
