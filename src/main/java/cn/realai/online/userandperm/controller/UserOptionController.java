@@ -80,6 +80,9 @@ public class UserOptionController {
     @ApiOperation("忘记密码")
     public Result forget(@Validated @RequestBody ForgetVo forgetVo) {
         try {
+            if("admin".equals(forgetVo.getName())){
+                return new Result(ResultCode.DATA_ERROR.getCode(), "联系RealAI商务人员，重置您的密码", null);
+            }
             Boolean flag = userOptionBusiness.forget(forgetVo);
             if (flag) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);

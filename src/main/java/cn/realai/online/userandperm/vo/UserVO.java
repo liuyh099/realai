@@ -28,6 +28,31 @@ public class UserVO {
     @ApiModelProperty(value = "创建时间")
     private Long createTime;
 
+    @ApiModelProperty(value = "是否是忘记密码 true:忘记密码 false:不是忘记密码")
+    private boolean forgetFlag;
+
+    private Integer forget;
+
+    public boolean getForgetFlag() {
+        if(forget!=null && forget>0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public void setForgetFlag(boolean forgetFlag) {
+        this.forgetFlag = forgetFlag;
+    }
+
+    public Integer getForget() {
+        return forget;
+    }
+
+    public void setForget(Integer forget) {
+        this.forget = forget;
+    }
+
     public Long getId() {
         return id;
     }
