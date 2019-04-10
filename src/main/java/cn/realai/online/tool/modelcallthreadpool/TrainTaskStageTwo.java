@@ -99,8 +99,8 @@ public class TrainTaskStageTwo implements Runnable {
 	        }
 	
 	        //分组对比
-	        /*analysisGroupDif(redisClientTemplate.get(redisKey.getGroupDif()));
-	        redisClientTemplate.delete(redisKey.getGroupDif());*/
+	        analysisGroupDif(redisClientTemplate.get(redisKey.getGroupDif()));
+	        redisClientTemplate.delete(redisKey.getGroupDif());
 	        
 	        //样本权重
 	        analysisSampleWeight(redisClientTemplate.get(redisKey.getSampleWeight()), sgMap, vdMap);

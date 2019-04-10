@@ -3,7 +3,6 @@ package cn.realai.online.core.bussiness.impl;
 import cn.realai.online.core.bussiness.GroupDifBussiness;
 import cn.realai.online.core.entity.GroupDif;
 import cn.realai.online.core.service.GroupDifService;
-import cn.realai.online.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

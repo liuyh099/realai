@@ -527,8 +527,12 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         if (experiment == null) {
             return null;
         }
+        String experimentName = experiment.getName() + "二次创建实验" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
+        if (experimentName.length() > 100) {
+        	return -1L;
+        }
+        experiment.setName(experimentName);
         experiment.setId(null);
-        experiment.setName(experiment.getName() + "二次创建实验" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
         experiment.setParentId(bo.getTrainId());
         experiment.setStatus(Experiment.STATUS_FILTER);
         experiment.setReleasStatus(Experiment.RELEAS_NO);
