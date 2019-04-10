@@ -60,4 +60,10 @@ public interface ModelDao {
      * @return
      */
     List<Model> selectAllModelNameList(@Param("serviceId")Long serviceId);
+
+    /**
+     * 获得根据发布时间排序的模型ID
+     * @return
+     */
+    List<Model> findLastModelSelect();
 }

@@ -76,6 +76,12 @@
         limit 1
     </select>
 
+    <select id="findLastModelSelect" resultMap="ModelMap">
+        select m.* from model as m
+        where m.release_status in ('online', 'offline')
+        order by m.create_time desc
+    </select>
+
     <select id="findModelOptionHistory" parameterType="java.lang.Long">
         SELECT a.* FROM model a LEFT JOIN experiment b ON a.experiment_id = b.id LEFT JOIN service c ON a.service_id = c.id LEFT JOIN sys_user d ON a.create_user_id =d.id
     </select>

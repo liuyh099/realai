@@ -55,4 +55,10 @@ public interface ModelBussiness {
      * @return
      */
     List<ModelNameSelectVO> selectAllModelNameList(Long serviceId);
+
+    /**
+     * 获得根据发布时间排序的模型下拉
+     * @return
+     */
+    List<ModelBO> findLastModelSelect();
 }
