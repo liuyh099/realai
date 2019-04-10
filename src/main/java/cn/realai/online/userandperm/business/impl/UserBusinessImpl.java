@@ -1,5 +1,6 @@
 package cn.realai.online.userandperm.business.impl;
 
+import cn.realai.online.common.config.SingleLogin;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.userandperm.bo.UserBO;
 import cn.realai.online.userandperm.business.UserBusiness;
@@ -27,6 +28,9 @@ public class UserBusinessImpl implements UserBusiness {
 
     @Autowired
     private SysForgetNoticeService sysForgetNoticeService;
+
+    @Autowired
+    private SingleLogin singleLogin;
 
     @Override
     public PageBO<UserBO> list(UserPageQuery pageQuery) {
@@ -105,11 +109,15 @@ public class UserBusinessImpl implements UserBusiness {
     @Override
     @Transactional(readOnly = false)
     public boolean update(UserBO userBO) {
-        //if (checkUserNameOrPhoneNumber(userBO)) return false;
+        User userDao = userService.get(userBO.getId());
         User user = new User();
         BeanUtils.copyProperties(userBO, user);
         if (userService.update(user) <= 0) {
             return false;
+        }
+        if(!userDao.getRoleId().equals(user.getRoleId())){
+            //动态清除权限
+            singleLogin.clearPermissionByUserId(user.getId());
         }
         return true;
     }

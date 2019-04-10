@@ -73,4 +73,11 @@ public class SingleLogin {
         MySessionManager sessionManager = (MySessionManager) securityManager.getSessionManager();
         sessionManager.deleteSessionsByUserId(userId);
     }
+
+    @Async
+    public void clearPermissionByUserId(Long userId) {
+        SessionsSecurityManager securityManager = (SessionsSecurityManager) SecurityUtils.getSecurityManager();
+        MySessionManager sessionManager = (MySessionManager) securityManager.getSessionManager();
+        sessionManager.clearPermissionByUserId(userId+"");
+    }
 }

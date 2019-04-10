@@ -28,7 +28,7 @@ public class MySessionManager extends DefaultWebSessionManager {
 
     private static String a = "cn.realai.online.common.config.MyShiroRealm.authorizationCache:";
 
-    RedisCacheManager redisCacheManager;
+    private RedisCacheManager redisCacheManager;
 
     private static final String AUTHORIZATION = "mySessionId";
 
@@ -57,11 +57,7 @@ public class MySessionManager extends DefaultWebSessionManager {
         super.validateSessions();
         Collection<Session> sessions = getActiveSessions();
         if (!CollectionUtils.isEmpty(sessions)) {
-            if (redisCacheManager == null) {
-                synchronized (a) {
-                    redisCacheManager = (RedisCacheManager) SpringContextUtils.getBean("myRedisCacheManager");
-                }
-            }
+            initRedisCacheManager();
             for (Session session : sessions) {
                 if(session==null){
                     continue;
@@ -77,22 +73,33 @@ public class MySessionManager extends DefaultWebSessionManager {
                 }else {
                     if (current - last > getGlobalSessionTimeout()) {
                         if (o != null) {
-                            String userId = (String) o;
-                            String preFix = redisCacheManager.getKeyPrefix();
-                            RedisSerializer redisSerializer = redisCacheManager.getKeySerializer();
-                            try {
-                                byte[] key = redisSerializer.serialize(preFix + a + userId);
-                                redisCacheManager.getRedisManager().del(key);
-                            } catch (SerializationException e) {
-                                e.printStackTrace();
-                            }
+                            clearPermissionByUserId((String) o);
                         }
                         super.delete(session);
                     }
                 }
-
             }
 
+        }
+    }
+
+    public void clearPermissionByUserId(String userId) {
+        initRedisCacheManager();
+        String preFix = redisCacheManager.getKeyPrefix();
+        RedisSerializer redisSerializer = redisCacheManager.getKeySerializer();
+        try {
+            byte[] key = redisSerializer.serialize(preFix + a + userId);
+            redisCacheManager.getRedisManager().del(key);
+        } catch (SerializationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void initRedisCacheManager() {
+        if (redisCacheManager == null) {
+            synchronized (a) {
+                redisCacheManager = (RedisCacheManager) SpringContextUtils.getBean("myRedisCacheManager");
+            }
         }
     }
 
@@ -104,11 +111,7 @@ public class MySessionManager extends DefaultWebSessionManager {
     public void deleteSessionsByUserId(Long userId) {
         Collection<Session> sessions = getActiveSessions();
         if (!CollectionUtils.isEmpty(sessions)) {
-            if (redisCacheManager == null) {
-                synchronized (a) {
-                    redisCacheManager = (RedisCacheManager) SpringContextUtils.getBean("myRedisCacheManager");
-                }
-            }
+            initRedisCacheManager();
             for (Session session : sessions) {
                 if(session==null){
                     continue;
