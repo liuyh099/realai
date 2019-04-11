@@ -23,10 +23,10 @@ public class Experiment {
     private Integer testSampleType;
 
     //时间
-    public static final int SAMPLE_SPLIT_TYPE_TIME = 1;
+    public static final int SAMPLE_SPLIT_TYPE_TIME = 2;
 
     //随机
-    public static final int SAMPLE_SPLIT_TYPE_RANDOM = 2;
+    public static final int SAMPLE_SPLIT_TYPE_RANDOM = 1;
 
     //训练比例  trainRatio + trainTest + trainValid = 10
     private Integer trainRatio;

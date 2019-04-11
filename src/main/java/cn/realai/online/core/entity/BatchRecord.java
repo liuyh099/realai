@@ -29,6 +29,9 @@ public class BatchRecord {
 	//创建时间
 	private Long createTime;  
 	
+	//每日跑批 批次日期
+	private String batchDate;
+	
 	//结果下载路径
 	private String downUrl;
 	
@@ -206,4 +209,13 @@ public class BatchRecord {
 	public void setDelFlag(int delFlag) {
 		this.delFlag = delFlag;
 	}
+
+	public String getBatchDate() {
+		return batchDate;
+	}
+
+	public void setBatchDate(String batchDate) {
+		this.batchDate = batchDate;
+	}
+	
 }

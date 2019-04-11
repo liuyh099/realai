@@ -35,7 +35,7 @@ public interface BatchRecordDao {
     List<BatchRecord> findBatchRecordList(BatchRecordBO batchRecordBO);
     
 	BatchRecord getBatchRecordByEidAndDate(@Param("eid")long eid, 
-			@Param("date")String date, 
+			@Param("batchDate")String batchDate, 
 			@Param("batchType")int batchType);
 
 	void maintainDownUrl(@Param("batchId")Long batchId, @Param("downUrl")String downUrl);

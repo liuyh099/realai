@@ -128,13 +128,6 @@ public class TrainTaskStageOne implements Runnable {
 			e.printStackTrace();
 		}
         
-        //释放MLock锁
-		MLockService mLockService = SpringContextUtils.getBean(MLockService.class);
-		MLock mLock = mLockService.getLock(experimentId, MLock.MLOCK_TYPE_TRAIN);
-		if (mLock != null) {
-			mLock.unLock();
-		}
-        
         logger.info("TrainTask run, 实验回调处理结束， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
         
     }

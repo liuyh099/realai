@@ -144,7 +144,7 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public int executeBatchRecord(BatchRecord batchRecord) {
-    	int ret = trainService.runBatchOfOffline(batchRecord);
+    	int ret = trainService.runBatchOffLine(batchRecord);
     	if (ret == 1) {
     		batchRecordService.updateBatchRecordStatus(batchRecord.getId(), BatchRecord.BATCH_STATUS_EXECUTING);
     	}

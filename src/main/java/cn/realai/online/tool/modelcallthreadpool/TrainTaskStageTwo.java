@@ -148,7 +148,7 @@ public class TrainTaskStageTwo implements Runnable {
         
         //释放MLock锁
 		MLockService mLockService = SpringContextUtils.getBean(MLockService.class);
-		MLock mLock = mLockService.getLock(experimentId, MLock.MLOCK_TYPE_TRAIN);
+		MLock mLock = mLockService.getLock(MLock.TRAIN_MLOCK_LOCK, MLock.TRAIN_MLOCK_PREFIX, experimentId);
 		if (mLock != null) {
 			mLock.unLock();
 		}

@@ -30,19 +30,6 @@ public class Constant {
   //实验删除
     public static final String COMMAND_BATCH = "batch";
     
-    //任意时间系统只能跑一个训练,在进行训练之前先获取锁
-    //实验训练mlock锁
-    public static final String TRAIN_MLOCK_LOCK = "TRAINING_LOCK";
-
-    //实验训练锁的前缀
-    public static final String TRAIN_MLOCK_PREFIX = "EXPERIMENT_TRAIN_";
-    
-    //批次处理锁前缀
-    public static final String BATCH_MLOCK_PREFIX = "BATCH_MLOCK_";
-
-    //实验训练mlock锁,过期时间
-    public static final int MLOCK_LEASE_TIME = 60 * 60 * 3 * 1000;
-    
     //每日跑批批次创建前缀
     public static final String BATCH_DAILY_LOCK_PREFIX = "BATCH_DAILY_LOCK_";
     

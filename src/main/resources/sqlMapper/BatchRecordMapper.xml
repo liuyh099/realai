@@ -13,7 +13,7 @@
         <result column="down_url" property="downUrl" jdbcType="VARCHAR"/>
         <result column="batch_type" property="batchType" jdbcType="INTEGER"/>
         <result column="batch_name" property="batchName" jdbcType="VARCHAR"/>
-  
+  		<result column="batch_date" property="batchDate" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="err_msg" property="errorMsg" jdbcType="VARCHAR"/>
         <result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
@@ -23,10 +23,10 @@
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO batch_record (y_table , x_table_homo, x_table_heter, model_id, experiment_id, service_id,
-        	create_time, down_url, batch_type, batch_name, status, err_msg, del_flag, remark, offline_times)
+        	create_time, down_url, batch_type, batch_name, status, err_msg, del_flag, remark, offline_times, batch_date)
         VALUE (#{ytableDataSource},#{xtableHomogeneousDataSource},#{xtableHeterogeneousDataSource},
         	#{modelId},#{experimentId},#{serviceId},#{createTime},#{downUrl},#{batchType},
-        	#{batchName}, #{status}, #{errorMsg}, #{delFlag}, #{remark},#{offlineTimes})
+        	#{batchName}, #{status}, #{errorMsg}, #{delFlag}, #{remark},#{offlineTimes},#{batchDate})
     </insert>
 
     <select id="findBatchRecordList" resultMap="BatchRecordMap" parameterType="cn.realai.online.core.bo.BatchRecordBO">
@@ -186,7 +186,7 @@
     	select * 
     	from batch_record
     	where experiment_id = #{eid}
-		and FROM_UNIXTIME(create_time/1000,'%Y%m%d') = #{date}
+		and batch_date = #{batchDate}
 		and batchType = #{batchType}
     </select>
 

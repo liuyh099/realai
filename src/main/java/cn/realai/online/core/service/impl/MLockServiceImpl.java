@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import cn.realai.online.common.Constant;
 import cn.realai.online.core.dao.MLockDao;
 import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.service.MLockService;
@@ -31,16 +30,13 @@ public class MLockServiceImpl implements MLockService {
     }
 
 	@Override
-	public MLock getLock(Long id, int type) {
-		if (type == MLock.MLOCK_TYPE_TRAIN) {
-			return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.TRAIN_MLOCK_PREFIX + id,
-					Constant.MLOCK_LEASE_TIME);
-		}
-		if (type == MLock.MLOCK_TYPE_BATCH) {
-			return new MLock(Constant.TRAIN_MLOCK_LOCK, Constant.BATCH_MLOCK_PREFIX + id,
-					Constant.MLOCK_LEASE_TIME);
-		}
-		return null;
+	public MLock getLock(String lockKey, String lockValue, Long id, long expiredTime) {
+		return new MLock(lockKey, lockValue + id, expiredTime);
+	}
+	
+	@Override
+	public MLock getLock(String lockKey, String lockValue, Long id) {
+		return new MLock(lockKey, lockValue + id, MLock.MLOCK_LEASE_TIME);
 	}
 
 }

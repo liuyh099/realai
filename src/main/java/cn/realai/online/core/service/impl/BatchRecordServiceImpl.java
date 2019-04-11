@@ -59,20 +59,25 @@ public class BatchRecordServiceImpl implements BatchRecordService {
      */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly=false)
-	public BatchRecord getBatchRecordOfDaily(long eid, String date, int batchTypeDaily) {
-		BatchRecord batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, date, batchTypeDaily);
+	public BatchRecord getBatchRecordOfDaily(long eid, String batchDate, int batchTypeDaily,
+			String xtableHeterogeneousDataSource, String xtableHomogeneousDataSource, String ytableDataSource) {
+		BatchRecord batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, batchDate, batchTypeDaily);
         if (batchRecord == null) {
         	RLock lock = redissonLock.lock(Constant.BATCH_DAILY_LOCK_PREFIX + eid, 3);
         	try {
-        		batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, date, batchTypeDaily);
+        		batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, batchDate, batchTypeDaily);
         		if (batchRecord == null) {
         			batchRecord = new BatchRecord();
         			batchRecord.setExperimentId(eid);
         			Experiment e = experimentDao.selectExperimentById(eid);
         			batchRecord.setServiceId(e.getServiceId());
         			batchRecord.setCreateTime(System.currentTimeMillis());
-        			batchRecord.setBatchName(Constant.BATCH_DAILY_NAME_PREFIX + e.getName() + "_" + date);
+        			batchRecord.setBatchName(Constant.BATCH_DAILY_NAME_PREFIX + e.getName() + "_" + batchDate);
         			batchRecord.setBatchType(BatchRecord.BATCH_TYPE_DAILY);
+        			batchRecord.setBatchDate(batchDate);
+        			batchRecord.setXtableHeterogeneousDataSource(xtableHeterogeneousDataSource);
+        			batchRecord.setXtableHomogeneousDataSource(xtableHomogeneousDataSource);
+        			batchRecord.setYtableDataSource(ytableDataSource);
         			batchRecordDao.insert(batchRecord);
         		}
         	} catch (Exception e) {

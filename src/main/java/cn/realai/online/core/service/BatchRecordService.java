@@ -31,7 +31,8 @@ public interface BatchRecordService {
 	 */
     List<BatchRecord> findBatchRecordList(BatchRecordBO batchRecordBO);
     
-	BatchRecord getBatchRecordOfDaily(long eid, String date, int batchTypeDaily);
+	BatchRecord getBatchRecordOfDaily(long eid, String date, int batchTypeDaily,
+			String xtableHeterogeneousDataSource, String xtableHomogeneousDataSource, String ytableDataSource);
 
 	/**
 	 * 维护得分下载地址
