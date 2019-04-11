@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,25 +151,25 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
 
     @Override
     public void checkSecretKeyApply(long serviceId, String tuningSecretKey, ServiceDetail serviceDetail) throws LicenseException {
+        Assert.notNull(tuningSecretKey, "调优密钥不能为空");
         Service service = serviceService.selectServiceById(serviceId);
         String tuningKeyIds = serviceDetail.getTuningKeyIds();
 
-        if(StringUtils.isNotBlank(tuningSecretKey)) {
-            FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
-            String tuningKey = service.getTuningSecretKey();
-            if(StringUtils.isNotBlank(tuningKey)) {
-                if(tuningKey.indexOf(tuningSecretKey) != -1) {
-                    throw new LicenseException("调优秘钥已被使用！");
-                }
+        FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
+        String tuningKey = service.getTuningSecretKey();
+        if(StringUtils.isNotBlank(tuningKey)) {
+            if(tuningKey.indexOf(tuningSecretKey) != -1) {
+                throw new LicenseException("调优秘钥已被使用！");
             }
-
-            if(StringUtils.isNotBlank(tuningKeyIds)) {
-                if(tuningKeyIds.indexOf(licenseInfo.getId()) != -1) {
-                    throw new LicenseException("调优秘钥已被使用！");
-                }
-            }
-
         }
+
+        if(StringUtils.isNotBlank(tuningKeyIds)) {
+            if(tuningKeyIds.indexOf(licenseInfo.getId()) != -1) {
+                throw new LicenseException("调优秘钥已被使用！");
+            }
+        }
+
+
     }
 
 
