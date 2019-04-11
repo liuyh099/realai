@@ -17,4 +17,6 @@ public interface ExperimentResultSetDao {
      * @return
      */
     List<ExperimentResultSet> findList(ExperimentResultSet experimentResultSet);
+
+	int deleteByExperimentId(@Param("experimentId")Long experimentId);
 }

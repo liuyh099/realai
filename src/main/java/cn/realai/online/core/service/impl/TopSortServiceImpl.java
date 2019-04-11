@@ -31,4 +31,9 @@ public class TopSortServiceImpl implements TopSortService {
         return topSortDao.findList(topSort);
     }
 
+	@Override
+	public int deleteByExperimentId(Long experimentId) {
+		return topSortDao.deleteByExperimentId(experimentId);
+	}
+
 }

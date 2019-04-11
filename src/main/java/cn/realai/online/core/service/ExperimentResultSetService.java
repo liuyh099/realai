@@ -15,4 +15,6 @@ public interface ExperimentResultSetService {
      * @return
      */
     List<ExperimentResultSet> findList(ExperimentResultSet experimentResultSet);
+
+	int deleteByExperimentId(Long experimentId);
 }

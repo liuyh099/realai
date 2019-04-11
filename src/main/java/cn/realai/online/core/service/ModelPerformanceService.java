@@ -18,4 +18,6 @@ public interface ModelPerformanceService {
      * @return
      */
     List<ModelPerformance> findList(ModelPerformance modelPerformance);
+
+	int deleteByExperimentId(Long experimentId);
 }

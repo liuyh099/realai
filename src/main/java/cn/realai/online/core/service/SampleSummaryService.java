@@ -15,4 +15,6 @@ public interface SampleSummaryService {
      * @return
      */
     List<SampleSummary> findList(SampleSummary sampleSummary);
+
+	int deleteByExperimentId(Long experimentId);
 }
