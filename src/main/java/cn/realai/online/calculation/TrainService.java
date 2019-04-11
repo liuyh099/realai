@@ -35,10 +35,17 @@ public interface TrainService {
 	/**
 	 * 离线跑批
 	 */
-	int runBatchOfOffline(BatchRecord batchRecord);
+	int runBatchOffLine(BatchRecord batchRecord);
 	
 	/**
 	 * 删除实验
 	 */
 	int deleteExperiment(Long experimentId);
+
+	/**
+	 * 每日跑批
+	 * @param batchRecord
+	 * @return
+	 */
+	int runBatchDaily(BatchRecord batchRecord);
 }

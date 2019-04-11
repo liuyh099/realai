@@ -4,7 +4,6 @@ import cn.realai.online.userandperm.entity.User;
 import cn.realai.online.userandperm.service.MenuService;
 import cn.realai.online.userandperm.service.RoleService;
 import cn.realai.online.userandperm.service.UserService;
-import cn.realai.online.util.EncodingPasswordUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -13,20 +12,15 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.mgt.SessionsSecurityManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.util.CollectionUtils;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.crazycake.shiro.RedisSessionDAO;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 public class MyShiroRealm extends AuthorizingRealm {

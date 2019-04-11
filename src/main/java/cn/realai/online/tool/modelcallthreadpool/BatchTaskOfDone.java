@@ -28,19 +28,32 @@ public class BatchTaskOfDone extends BaseBatchTask {
 	@Override
 	public void run() {
 		logger.info("BatchTaskOfDone run. experimentId{}, batchId{}, redisKey{}", experimentId, batchId, redisKey);
+		
+		BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
+		BatchRecord batchRecord = new BatchRecord();
+		batchRecord.setId(batchId);
+		batchRecord = batchRecordService.getByEntity(batchRecord);
+		
 		//释放批次锁
 		MLockService mLockService = SpringContextUtils.getBean(MLockService.class);
-		MLock mLock = mLockService.getLock(batchId, MLock.MLOCK_TYPE_BATCH);
+		MLock mLock;
+		if (batchRecord.getBatchType() == BatchRecord.BATCH_TYPE_DAILY) {
+			mLock = mLockService.getLock(MLock.ONLINE_MLOCK_LOCK, MLock.BATCH_MLOCK_PREFIX, batchId);
+		} else if (batchRecord.getBatchType() == BatchRecord.BATCH_TYPE_OFFLINE) {
+			mLock = mLockService.getLock(MLock.TRAIN_MLOCK_LOCK, MLock.BATCH_MLOCK_PREFIX, batchId);
+		} else {
+			mLock = null;
+		}
+		
 		if (mLock != null) {
 			mLock.unLock();
 		}
 		
 		//修改批次状态
-		BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
 		if (done) {
-			batchRecordService.updateBatchRecordStatus(batchId, BatchRecord.BATCH_STATUS_OVER);
+			batchRecordService.updateBatchRecordStatus(batchId, batchRecord.BATCH_STATUS_OVER);
 		} else {
-			batchRecordService.updateBatchRecordStatus(batchId, BatchRecord.BATCH_STATUS_ERROR);
+			batchRecordService.updateBatchRecordStatus(batchId, batchRecord.BATCH_STATUS_ERROR);
 		}
 	}
 

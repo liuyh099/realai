@@ -67,7 +67,7 @@ public class TrainServiceImpl implements TrainService {
 	public int training(Experiment experiment, Long oldEid, List<VariableData> homoList, 
 			List<VariableData> hetroList, int delOrAdd) {
 		//获取训练锁
-        if (!getLock(experiment.getId(), MLock.MLOCK_TYPE_TRAIN)) {
+        if (!getLock(MLock.TRAIN_MLOCK_LOCK, MLock.TRAIN_MLOCK_PREFIX, experiment.getId())) {
             return -1;
         }
 		
@@ -128,28 +128,26 @@ public class TrainServiceImpl implements TrainService {
         return 1;
 	}
 
+	/*
+	 * 跑批
+	 */
 	@Override
-	public int runBatchOfOffline(BatchRecord batchRecord) {
+	public int runBatchOffLine(BatchRecord batchRecord) {
 		//获取锁
-    	if (!getLock(batchRecord.getId(), MLock.MLOCK_TYPE_BATCH)) {
+    	if (!getLock(MLock.TRAIN_MLOCK_LOCK, MLock.BATCH_MLOCK_PREFIX, batchRecord.getId())) {
     		return -1;
     	}
-		
 		BatchOfOfflineRequestBO boorbo = new BatchOfOfflineRequestBO();
 		boorbo.setBatchId(batchRecord.getId());
 		boorbo.setCommand(Constant.COMMAND_BATCH);
 		boorbo.setModelId(batchRecord.getExperimentId());
-		//boorbo.setModelId(2L);
 		if (batchRecord.getXtableHeterogeneousDataSource() != null) {
 			boorbo.setXtableHeterogeneousDataSource("/" + batchRecord.getXtableHeterogeneousDataSource());
-			//boorbo.setXtableHeterogeneousDataSource(batchRecord.getXtableHeterogeneousDataSource());
 		}
 		if (batchRecord.getXtableHomogeneousDataSource() != null) {
 			boorbo.setXtableHomogeneousDataSource("/" + batchRecord.getXtableHomogeneousDataSource());
-			//boorbo.setXtableHomogeneousDataSource(batchRecord.getXtableHomogeneousDataSource());
 		}
 		if (batchRecord.getYtableDataSource() != null) {
-			//boorbo.setYtableDataSource(batchRecord.getYtableDataSource());
 			boorbo.setYtableDataSource("/" + batchRecord.getYtableDataSource());
 		}
 		String ret = HttpUtil.postRequest(config.getModelOfflineBatch(), JSON.toJSONString(boorbo));
@@ -159,9 +157,38 @@ public class TrainServiceImpl implements TrainService {
 		return 1;
 	}
 
-	public boolean getLock(Long id, int type) {
+	/*
+	 * 每日跑批
+	 */
+	@Override
+	public int runBatchDaily(BatchRecord batchRecord) {
 		//获取锁
-		MLock mLock = mLockService.getLock(id, type);
+    	if (!getLock(MLock.TRAIN_MLOCK_LOCK, MLock.BATCH_MLOCK_PREFIX, batchRecord.getId())) {
+    		return -1;
+    	}
+		BatchOfOfflineRequestBO boorbo = new BatchOfOfflineRequestBO();
+		boorbo.setBatchId(batchRecord.getId());
+		boorbo.setCommand(Constant.COMMAND_BATCH);
+		boorbo.setModelId(batchRecord.getExperimentId());
+		if (batchRecord.getXtableHeterogeneousDataSource() != null) {
+			boorbo.setXtableHeterogeneousDataSource("/" + batchRecord.getXtableHeterogeneousDataSource());
+		}
+		if (batchRecord.getXtableHomogeneousDataSource() != null) {
+			boorbo.setXtableHomogeneousDataSource("/" + batchRecord.getXtableHomogeneousDataSource());
+		}
+		if (batchRecord.getYtableDataSource() != null) {
+			boorbo.setYtableDataSource("/" + batchRecord.getYtableDataSource());
+		}
+		String ret = HttpUtil.postRequest(config.getModelOfflineBatch(), JSON.toJSONString(boorbo));
+        if (ret == null) {
+            throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(boorbo));
+        }
+		return 1;
+	}
+	
+	private boolean getLock(String lockKey, String lockValue, long id) {
+		//获取锁
+		MLock mLock = mLockService.getLock(lockKey, lockValue, id);
 		if (mLock == null) {
 			return false;
 		}
@@ -210,4 +237,5 @@ public class TrainServiceImpl implements TrainService {
 		}
 		return "OK";
 	}
+
 }

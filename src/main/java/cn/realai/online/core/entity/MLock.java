@@ -27,9 +27,22 @@ public class MLock {
 	
 	private int type;
 	
-	public static final int MLOCK_TYPE_TRAIN = 1;
-	
-	public static final int MLOCK_TYPE_BATCH = 2;
+	//训练环境的lock
+    //任意时间系统只能跑一个训练,在进行训练之前先获取锁
+    //实验训练mlock锁
+    public static final String TRAIN_MLOCK_LOCK = "TRAINING_LOCK";
+    
+    //线上环境的lock
+    public static final String ONLINE_MLOCK_LOCK = "ONLINE_LOCK";
+
+    //实验训练锁的前缀
+    public static final String TRAIN_MLOCK_PREFIX = "EXPERIMENT_TRAIN_";
+    
+    //批次处理锁前缀
+    public static final String BATCH_MLOCK_PREFIX = "BATCH_MLOCK_";
+
+    //实验训练mlock锁,过期时间
+    public static final int MLOCK_LEASE_TIME = 60 * 60 * 3 * 1000;
 	
 	MLockService mlockService = SpringContextUtils.getBean(MLockService.class);
 	

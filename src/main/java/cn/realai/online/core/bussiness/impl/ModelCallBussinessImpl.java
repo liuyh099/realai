@@ -88,7 +88,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
 		
 		BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
 		
-        BatchRecord batchRecord = batchRecordService.getBatchRecordOfDaily(experimentId, date, BatchRecord.BATCH_TYPE_DAILY);
+        BatchRecord batchRecord = null;//batchRecordService.getBatchRecordOfDaily(experimentId, date, BatchRecord.BATCH_TYPE_DAILY);
         if (batchRecord == null) {
         	throw new RuntimeException("batchRecord getBatchId. 批次创建错误. eid = " + experimentId + " date =+ " + date);
         }
@@ -178,7 +178,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
     public void trainErrorDealWith(Long experimentId, String errMsg, String task) {
     	//释放掉锁
     	if (experimentId != null ) {
-            MLock mlock = mLockService.getLock(experimentId, MLock.MLOCK_TYPE_TRAIN);
+            MLock mlock = mLockService.getLock(MLock.TRAIN_MLOCK_LOCK, MLock.TRAIN_MLOCK_PREFIX, experimentId);
             if (mlock != null) {
             	mlock.unLock();
             }
@@ -194,7 +194,17 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
 	@Override
 	public void batchErrorDealWith(Long batchId, String errorMsg) {
 		if (batchId != null) {
-			MLock mLock = mLockService.getLock(batchId, MLock.MLOCK_TYPE_BATCH);
+			BatchRecord batchRecord = new BatchRecord();
+			batchRecord.setId(batchId);
+			batchRecord = batchRecordService.getByEntity(batchRecord);
+			MLock mLock;
+			if (batchRecord.getBatchType() == BatchRecord.BATCH_TYPE_DAILY) {
+				mLock = mLockService.getLock(MLock.ONLINE_MLOCK_LOCK, MLock.BATCH_MLOCK_PREFIX, batchId);
+			} else if (batchRecord.getBatchType() == BatchRecord.BATCH_TYPE_OFFLINE) {
+				mLock = mLockService.getLock(MLock.TRAIN_MLOCK_LOCK, MLock.BATCH_MLOCK_PREFIX, batchId);
+			} else {
+				mLock = null;
+			}
 			if (mLock != null) {
 				mLock.unLock();
 			}

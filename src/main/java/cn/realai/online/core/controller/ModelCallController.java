@@ -14,7 +14,6 @@ import com.alibaba.fastjson.JSON;
 
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.bo.model.OfflineBatchRequestStructure;
-import cn.realai.online.core.bo.model.BatchRequestBase;
 import cn.realai.online.core.bo.model.ModelRequestStructure;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
 import cn.realai.online.common.Constant;
