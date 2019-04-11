@@ -35,7 +35,7 @@ public class UserBusinessImpl implements UserBusiness {
     @Override
     public PageBO<UserBO> list(UserPageQuery pageQuery) {
         Page page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
-        PageHelper.orderBy("forgetCount DESC,id ASC");
+        PageHelper.orderBy("create_time desc,id ASC");
         User user = new User();
         user.setForget(pageQuery.getForget());
         List<User> list = userService.list(user);
