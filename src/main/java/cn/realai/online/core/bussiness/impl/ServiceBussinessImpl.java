@@ -86,6 +86,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
         BeanUtils.copyProperties(serviceBO, serviceBOold);
 
+        //续期
         if(StringUtils.isNotBlank(serviceBO.getSecretKey())
                 && !StringUtils.equals(oldKey, serviceBO.getSecretKey())
                 && !StringUtils.equals(dataCipherHandler.getOriginalSecretKey(oldKey), serviceBO.getSecretKey())) {
@@ -108,8 +109,15 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
             FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(serviceBO.getSecretKey());
             if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
-                throw new RuntimeException("秘钥已过期");
+                throw new RuntimeException("秘钥已过期！");
             }
+
+            FileLicenseInfo fileLicenseInfoOld = serviceLicenseInfoSource.checkSource(dataCipherHandler.getOriginalSecretKey(oldKey));
+            if(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), LicenseConstants.DATE_FORMART) < DateUtil.stringToLong(fileLicenseInfoOld.getRangeTimeUpper(), LicenseConstants.DATE_FORMART)
+                    || Integer.parseInt(fileLicenseInfo.getDeployTimesUpper()) < Integer.parseInt(fileLicenseInfoOld.getDeployTimesUpper())) {
+                throw new RuntimeException("当前服务有效期限或使用次数高于续期秘钥！");
+            }
+
             ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(serviceBOold.getDetail());
             int version = serviceDetail.getVersion();
             String newkey = dataCipherHandler.initSecretKey(serviceBO.getSecretKey(), version);

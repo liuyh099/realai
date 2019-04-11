@@ -45,6 +45,18 @@ public class ServiceLicenseCheck {
     }
 
     /**
+     * 调优秘钥检查是否可用
+     *
+     * @param secretKey  秘钥
+     */
+    public void checkTuningServiceLic(String secretKey, long serviceId) throws LicenseException {
+        String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId, SecretKeyType.COMMON);
+        FileLicenseInfo licInfo = checkServiceLic(serviceCiphertext);
+        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId, serviceCiphertext);
+        licenseCheckHandler.checkSecretKeyApply(serviceId, secretKey, serviceDetail);
+    }
+
+    /**
      *
      * 服务使用（普通调优）
      *

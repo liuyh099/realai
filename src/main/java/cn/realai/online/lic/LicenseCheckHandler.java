@@ -42,4 +42,11 @@ public interface LicenseCheckHandler {
      */
     void clearTuningKey(long serviceId, ServiceLicenseInfoSource serviceLicenseInfoSource) throws LicenseException;
 
+    /**
+     * 检查调优秘钥是否使用过
+     *
+     * @param serviceId
+     * @param secretKey
+     */
+    void checkSecretKeyApply(long serviceId, String secretKey, ServiceDetail sd) throws LicenseException;
 }

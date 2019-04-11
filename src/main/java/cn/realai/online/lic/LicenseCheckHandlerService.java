@@ -66,10 +66,10 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
         String secretKey = service.getSecretKey();
         String tuningKeyIds = serviceDetail.getTuningKeyIds();
 
-        if(!StringUtils.equals(serviceDetail.getServiceName(), service.getName())) {
-            logger.error("调优次数数据异常！");
-            throw new LicenseException("系统异常！数据错误！");
-        }
+//        if(!StringUtils.equals(serviceDetail.getServiceName(), service.getName())) {
+//            logger.error("调优次数数据异常！");
+//            throw new LicenseException("系统异常！数据错误！");
+//        }
 
         if(StringUtils.isNotBlank(tuningSecretKey)) {
             FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
@@ -146,6 +146,29 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
         service.setDetail(detailCiphertext);
         service.setTuningSecretKey(tuningKey);
         serviceService.update(service);
+    }
+
+    @Override
+    public void checkSecretKeyApply(long serviceId, String tuningSecretKey, ServiceDetail serviceDetail) throws LicenseException {
+        Service service = serviceService.selectServiceById(serviceId);
+        String tuningKeyIds = serviceDetail.getTuningKeyIds();
+
+        if(StringUtils.isNotBlank(tuningSecretKey)) {
+            FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
+            String tuningKey = service.getTuningSecretKey();
+            if(StringUtils.isNotBlank(tuningKey)) {
+                if(tuningKey.indexOf(tuningSecretKey) != -1) {
+                    throw new LicenseException("调优秘钥已被使用！");
+                }
+            }
+
+            if(StringUtils.isNotBlank(tuningKeyIds)) {
+                if(tuningKeyIds.indexOf(licenseInfo.getId()) != -1) {
+                    throw new LicenseException("调优秘钥已被使用！");
+                }
+            }
+
+        }
     }
 
 
