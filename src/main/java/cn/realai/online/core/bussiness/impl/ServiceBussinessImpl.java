@@ -71,6 +71,8 @@ public class ServiceBussinessImpl implements ServiceBussiness {
             return false;
         }
 
+        String oldKey = serviceBOold.getSecretKey();
+
         cn.realai.online.core.entity.Service searchService = new cn.realai.online.core.entity.Service();
 
         if(StringUtils.isNotBlank(serviceBO.getName()) && !StringUtils.equals(serviceBOold.getName(), serviceBO.getName())) {
@@ -85,8 +87,8 @@ public class ServiceBussinessImpl implements ServiceBussiness {
         BeanUtils.copyProperties(serviceBO, serviceBOold);
 
         if(StringUtils.isNotBlank(serviceBO.getSecretKey())
-                && !StringUtils.equals(serviceBOold.getSecretKey(), serviceBO.getSecretKey())
-                && !StringUtils.equals(dataCipherHandler.getOriginalSecretKey(serviceBOold.getSecretKey()), serviceBO.getSecretKey())) {
+                && !StringUtils.equals(oldKey, serviceBO.getSecretKey())
+                && !StringUtils.equals(dataCipherHandler.getOriginalSecretKey(oldKey), serviceBO.getSecretKey())) {
             searchService = new cn.realai.online.core.entity.Service();
 
 //            ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(searchService.getDetail());
@@ -116,7 +118,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
         }
 
         ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(serviceBOold.getDetail());
-        String sk = dataCipherHandler.getOriginalSecretKey(serviceBOold.getSecretKey());
+        String sk = dataCipherHandler.getOriginalSecretKey(oldKey);
         serviceDetail.setServiceName(serviceBOold.getName());
         serviceBOold.setDetail(dataCipherHandler.encryptData(serviceDetail, sk));
 
