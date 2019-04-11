@@ -78,7 +78,6 @@
 
     <select id="findLastModelSelect" resultMap="ModelMap">
         select m.* from model as m
-        where m.release_status in ('online', 'offline')
         order by m.create_time desc
     </select>
 
