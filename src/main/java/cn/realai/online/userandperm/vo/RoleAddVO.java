@@ -17,6 +17,7 @@ public class RoleAddVO {
     private String name;
     //创建备注
     @ApiModelProperty(value = "备注")
+    @Length(max = 100, message = "备注为100个字节")
     private String notes;
 
     @ApiModelProperty(value = "半选的菜单ID集合")

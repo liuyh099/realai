@@ -20,8 +20,10 @@ public class RoleEditVO {
     @Length(max = 20, min = 1, message = "角色名称为1-20个字节")
     @ApiModelProperty(value = "角色名称")
     private String name;
+
     //创建备注
     @ApiModelProperty(value = "备注")
+    @Length(max = 100, message = "备注为100个字节")
     private String notes;
 
     @ApiModelProperty(value = "半选的菜单ID集合")
