@@ -21,6 +21,7 @@ import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.VariableData;
+import cn.realai.online.core.query.realtime.RealTimeData;
 import cn.realai.online.core.service.MLockService;
 import cn.realai.online.util.ConvertJavaBean;
 import cn.realai.online.util.HttpUtil;
@@ -179,7 +180,7 @@ public class TrainServiceImpl implements TrainService {
 		if (batchRecord.getYtableDataSource() != null) {
 			boorbo.setYtableDataSource("/" + batchRecord.getYtableDataSource());
 		}
-		String ret = HttpUtil.postRequest(config.getModelOfflineBatch(), JSON.toJSONString(boorbo));
+		String ret = HttpUtil.postRequest(config.getModelDailyBatch(), JSON.toJSONString(boorbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(boorbo));
         }
@@ -220,22 +221,20 @@ public class TrainServiceImpl implements TrainService {
 	 * 线上实时算法
 	 */
 	@Override
-	public String realTimeForecast(Long modelId, String jsonData) {
+	public String realTimeForecast(RealTimeData realTimeData) {
 		RealTimeRequestBO rtrbo = new RealTimeRequestBO();
-		rtrbo.setModelId(modelId);
-		rtrbo.setJsonData(jsonData);
-		/*String url = config.getPythonUrl();
-		String ret = HttpUtil.postRequest(url, JSON.toJSONString(rtrbo));
+		String url = config.getRealtimeUrl();
+		String ret = HttpUtil.postRequest(url, JSON.toJSONString(realTimeData));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl realTimeForecast. 调用python线上实时接口失败. rtrbo{}" + JSON.toJSONString(rtrbo));
         }
-		return ret;*/
-		try {
+		return ret;
+		/*try {
 			Thread.sleep(3000L);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return "OK";
+		return "OK";*/
 	}
 
 }

@@ -5,10 +5,11 @@ import java.util.List;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.VariableData;
+import cn.realai.online.core.query.realtime.RealTimeData;
 
 public interface TrainService {
 	
-	String realTimeForecast(Long modelId, String jsonData);
+	String realTimeForecast(RealTimeData realTimeData);
 
 	/**
 	 * 预处理

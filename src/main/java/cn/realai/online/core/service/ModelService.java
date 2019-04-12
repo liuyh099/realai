@@ -80,4 +80,11 @@ public interface ModelService {
      * @return
      */
     List<Model> findLastModelSelect();
+
+    /**
+     * 查询指定服务的线上部署模型
+     * @param serviceId
+     * @return
+     */
+	Model selectOnlineModelByServiceId(Long serviceId);
 }

@@ -88,4 +88,9 @@ public class ModelServiceImpl implements ModelService {
     public List<Model> findLastModelSelect() {
         return modelDao.findLastModelSelect();
     }
+
+	@Override
+	public Model selectOnlineModelByServiceId(Long serviceId) {
+		return modelDao.selectModelByServiceIdAndStatus(serviceId, Model.RELEASE_STATUS.ONLINE.value);
+	}
 }

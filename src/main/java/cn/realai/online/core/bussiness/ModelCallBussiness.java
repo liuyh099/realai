@@ -1,6 +1,9 @@
 package cn.realai.online.core.bussiness;
 
+import java.util.List;
+
 import cn.realai.online.core.bo.TrainResultRedisKey;
+import cn.realai.online.core.bo.model.DailyBatchRequest;
 
 public interface ModelCallBussiness {
 
@@ -8,7 +11,7 @@ public interface ModelCallBussiness {
      * 每日跑批
      * @param brs 
      */
-    void runBatchDaily(Long experimentId, String redisKey, String type, String date);
+    void runBatchDaily(List<DailyBatchRequest> sbrList);
     
     /*
      * 离线跑批
