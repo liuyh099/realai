@@ -26,6 +26,16 @@ public class ExperimentalPublishDetailVO {
     @ApiModelProperty(value = "模型表现数据")
     private List<ModelPerformanceVO> modelPerformanceList;
 
+    @ApiModelProperty(value = "服务名称")
+    private String serviceName;
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
 
     public String getModelName() {
         return modelName;
