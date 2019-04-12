@@ -232,6 +232,11 @@
             <if test="serviceId!=null">
                 AND a.service_id= #{serviceId}
             </if>
+            <if test="searchStatusList!=null and searchStatusList.size()>0">
+                <foreach collection="searchStatusList" open="AND a.status in (" close=")" separator="," item="searchStatus">
+                    #{searchStatus}
+                </foreach>
+            </if>
             AND a.status !=7
         </where>
         ORDER BY a.create_time DESC

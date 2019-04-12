@@ -268,4 +268,11 @@ public interface ExperimentalTrainBussiness {
      * @return
      */
     List<Long> findNotPublishExperimentIds(List<Long> ids);
+
+    /**
+     * 根据状态查询
+     * @param status
+     * @return
+     */
+    List<ExperimentBO> listByStatus(List<Integer> status);
 }

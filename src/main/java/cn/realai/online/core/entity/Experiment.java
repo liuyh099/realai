@@ -1,5 +1,7 @@
 package cn.realai.online.core.entity;
 
+import java.util.List;
+
 /**
  * 实验
  *
@@ -41,6 +43,8 @@ public class Experiment {
 
     //状态
     private Integer status;
+
+    private List<Integer> searchStatusList;
 
     //选择文件
     public static final int STATUS_FILE = 1;
@@ -476,4 +480,12 @@ public class Experiment {
 		this.trainingEndTime = trainingEndTime;
 	}
 
+
+    public List<Integer> getSearchStatusList() {
+        return searchStatusList;
+    }
+
+    public void setSearchStatusList(List<Integer> searchStatusList) {
+        this.searchStatusList = searchStatusList;
+    }
 }
