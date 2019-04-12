@@ -171,9 +171,7 @@ public class RoleBusinessImpl implements RoleBusiness {
         if (count <= 0) {
             return false;
         }
-        List<Long> ids = new ArrayList<>();
-        ids.add(sysRole.getId());
-        roleMenuService.deleteByRoleIds(ids);
+        roleMenuService.deleteByRoleId(sysRole.getId());
 
         List<Long> menuIds = roleBO.getHalfMenu();
         if (!CollectionUtils.isEmpty(menuIds)) {

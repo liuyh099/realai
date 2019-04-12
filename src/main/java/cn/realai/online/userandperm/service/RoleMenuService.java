@@ -36,4 +36,7 @@ public interface RoleMenuService {
      * @return
      */
     List<Long> findIdsByRoleIdAndStatus(Long id, int i);
+
+
+    void deleteByRoleId(Long id);
 }
