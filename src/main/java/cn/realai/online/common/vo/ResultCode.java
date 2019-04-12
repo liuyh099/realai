@@ -22,8 +22,16 @@ public enum ResultCode {
 
     MULTI_REQUEST(900),
 
-    NO_PERMISSION(600);
+    NO_PERMISSION(600),
 
+    REAL_TIME_ERROR(700),
+    
+    REAL_TIME_NO_RELEASE(701),
+    
+    REAL_TIME_EXPIRED(702),
+    
+	REAL_TIME_TIME_OUT(703);
+	
     private int code;
 
     private ResultCode(int code) {

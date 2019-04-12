@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -77,7 +77,7 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
             String tuningKey = service.getTuningSecretKey();
             if(StringUtils.isNotBlank(tuningKey)) {
                 if(tuningKey.indexOf(tuningSecretKey) != -1) {
-                    throw new LicenseException("调优秘钥已被使用！");
+                    throw new LicenseException("该秘钥已作废！");
                 }
                 tuningKey += tuningSecretKey + ",";
             }else {
@@ -87,13 +87,19 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
 
             if(StringUtils.isNotBlank(tuningKeyIds)) {
                 if(tuningKeyIds.indexOf(licenseInfo.getId()) != -1) {
-                    throw new LicenseException("调优秘钥已被使用！");
+                    throw new LicenseException("该秘钥已作废！");
                 }
                 tuningKeyIds += licenseInfo.getId() + ",";
             }else {
                 tuningKeyIds = "," + licenseInfo.getId() + ",";
             }
 
+            List<String> cancelSecretKeyList = getCancelSecretKeyList(licenseInfo);
+            if(!cancelSecretKeyList.isEmpty()) {
+                for (String cancelSecretKey : cancelSecretKeyList) {
+                    tuningKeyIds += cancelSecretKey + ",";
+                }
+            }
         }
 
         serviceDetail.setTuningKeyIds(tuningKeyIds);
@@ -151,7 +157,6 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
 
     @Override
     public void checkSecretKeyApply(long serviceId, String tuningSecretKey, ServiceDetail serviceDetail) throws LicenseException {
-        Assert.notNull(tuningSecretKey, "调优密钥不能为空");
         Service service = serviceService.selectServiceById(serviceId);
         String tuningKeyIds = serviceDetail.getTuningKeyIds();
 
@@ -159,17 +164,51 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
         String tuningKey = service.getTuningSecretKey();
         if(StringUtils.isNotBlank(tuningKey)) {
             if(tuningKey.indexOf(tuningSecretKey) != -1) {
-                throw new LicenseException("调优秘钥已被使用！");
+                throw new LicenseException("该秘钥已作废！");
             }
         }
 
         if(StringUtils.isNotBlank(tuningKeyIds)) {
             if(tuningKeyIds.indexOf(licenseInfo.getId()) != -1) {
-                throw new LicenseException("调优秘钥已被使用！");
+                throw new LicenseException("该秘钥已作废！");
             }
         }
 
+    }
 
+    @Override
+    public void cancelSecretKeyCheck(String secretKey) throws LicenseException {
+        List<Service> olds = serviceService.list(new Service());
+        FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(secretKey);
+
+        if(olds != null && !olds.isEmpty()) {
+            for (Service oldService : olds) {
+                if(StringUtils.isNotEmpty(oldService.getDetail())) {
+                    ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(oldService.getDetail());
+                    String tuningKeyIds = serviceDetail.getTuningKeyIds();
+
+                    if(StringUtils.isNotBlank(tuningKeyIds)) {
+                        if(tuningKeyIds.indexOf(licenseInfo.getId()) != -1) {
+                            throw new LicenseException("该秘钥已作废！");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public List<String> getCancelSecretKeyList(FileLicenseInfo fileLicenseInfo) {
+        String cancelKeys = fileLicenseInfo.getCancelSecretKey();
+        List<String> cancelKeyList = new ArrayList<>();
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(cancelKeys)) {
+            for(String s : cancelKeys.split(",")) {
+                if(StringUtils.isNotEmpty(s)) {
+                    cancelKeyList.add(s);
+                }
+            }
+
+        }
+        return cancelKeyList;
     }
 
 

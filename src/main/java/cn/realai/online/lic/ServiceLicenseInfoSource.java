@@ -1,6 +1,8 @@
 package cn.realai.online.lic;
 
+import cn.realai.online.util.DateUtil;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +12,10 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Description:  服务授权检查
@@ -63,8 +68,6 @@ public class ServiceLicenseInfoSource {
         md5saltCheck(licenseInfo);
         logger.info("授权有效期检验...");
         verifyLimit(licenseInfo);
-//        logger.info("授权业务检验...");
-//        licenseCheck(licenseInfo);
         return licenseInfo;
     }
 
@@ -109,7 +112,7 @@ public class ServiceLicenseInfoSource {
     }
 
     protected void verifyLimit(FileLicenseInfo licenseInfo) throws LicenseException {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat df = new SimpleDateFormat(LicenseConstants.DATE_FORMART);
         Date begin = null;
         Date end = null;
         try {
@@ -120,14 +123,18 @@ public class ServiceLicenseInfoSource {
         }
 
         if(new Date().before(begin)) {
-            throw new LicenseException("授权未到使用时间! 生效时间：" + licenseInfo.getRangeTimeLower());
+            throw new LicenseException("密钥可使用期限为" + DateUtil.formatDateToString(begin, LicenseConstants.DATE_FORMART)
+                    + " 至 " + DateUtil.formatDateToString(end, LicenseConstants.DATE_FORMART));
         }
 
         if(end.before(new Date())) {
-            throw new LicenseException("授权过期! 过期时间："+ licenseInfo.getRangeTimeUpper());
+            throw new LicenseException("密钥可使用期限为" + DateUtil.formatDateToString(begin, LicenseConstants.DATE_FORMART)
+                    + " 至 " + DateUtil.formatDateToString(end, LicenseConstants.DATE_FORMART));
         }
 
     }
+
+
 
     /**
      * 检查授权使用并返回服务描述

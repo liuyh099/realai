@@ -13,6 +13,7 @@ import cn.realai.online.common.Constant;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.bo.model.BatchRequestBase;
+import cn.realai.online.core.bo.model.DailyBatchRequest;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
@@ -22,6 +23,8 @@ import cn.realai.online.core.service.BatchRecordService;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.MLockService;
 import cn.realai.online.core.service.VariableDataService;
+import cn.realai.online.tool.dailybatchtaskthreadpool.DailyBatchTask;
+import cn.realai.online.tool.dailybatchtaskthreadpool.DailyBatchTaskQueue;
 import cn.realai.online.tool.modelcallthreadpool.BaseBatchTask;
 import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfCombo;
 import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfDone;
@@ -33,7 +36,6 @@ import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
 import cn.realai.online.tool.modelcallthreadpool.TrainTaskStageOne;
 import cn.realai.online.tool.modelcallthreadpool.TrainTaskStageTwo;
 import cn.realai.online.tool.redis.RedisClientTemplate;
-import cn.realai.online.util.SpringContextUtils;
 
 /**
  * @author lyh
@@ -62,39 +64,17 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
      * 处理每日跑批任务
      */
     @Override
-    public void runBatchDaily(Long experimentId, String redisKey, String type, String date) {
-    	Long batchId = getBatchId(experimentId, date);
-        BaseBatchTask bbt;
-        
-        if (BatchRequestBase.TYPE_PERSONALCOMBORESULTSET.equals(type)) {
-        	bbt = new BatchTaskOfCombo(experimentId, batchId, redisKey);
-        } else if (BatchRequestBase.TYPE_PERSONALHETRORESULTSET.equals(type)) {
-        	bbt = new BatchTaskOfHetro(experimentId,batchId, redisKey);
-        } else if (BatchRequestBase.TYPE_PERSONALHOMORESULTSET.equals(type)) {
-        	bbt = new BatchTaskOfHomo(experimentId,batchId, redisKey);
-        } else if (BatchRequestBase.TYPE_PERSONALINFORMATION.equals(type)) {
-        	bbt = new BatchTaskOfPersonalInfo(experimentId,batchId, redisKey);
-        } else if (BatchRequestBase.TYPE_PSICHECKRESULT.equals(type)) {
-        	bbt = new BatchTaskOfPSI(experimentId,batchId, redisKey);
-        } else {
-        	logger.error("BatchTask run. 跑批数据类型不能识别. type{}, experimentId{}", type, experimentId);
-        	return ;
+    public void runBatchDaily(List<DailyBatchRequest> dbrList) {
+        for (DailyBatchRequest dbr : dbrList) {
+        	DailyBatchTask dbt = new DailyBatchTask(dbr.getModelId(), dbr.getBatchDate(), dbr.getXtableHetro(),
+        			dbr.getXtableHomo(), dbr.getYtable());
+        	DailyBatchTaskQueue.queue.execute(dbt);
         }
-        
-        ModelCallPool.modelCallPool.execute(bbt);
     }
     
-    private Long getBatchId(Long experimentId, String date) {
-		
-		BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
-		
-        BatchRecord batchRecord = null;//batchRecordService.getBatchRecordOfDaily(experimentId, date, BatchRecord.BATCH_TYPE_DAILY);
-        if (batchRecord == null) {
-        	throw new RuntimeException("batchRecord getBatchId. 批次创建错误. eid = " + experimentId + " date =+ " + date);
-        }
-		return batchRecord.getId();
-	}
-    
+    /*
+     * 批次处理结果信息处理
+     */
     @Override
 	public void runBatchOffline(Long experimentId, String redisKey, String type, String downUrl, 
 			Long batchId, Boolean done) {
@@ -109,6 +89,8 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
         	bbt = new BatchTaskOfPersonalInfo(experimentId, batchId, redisKey);
         } else if (BatchRequestBase.TYPE_DONE.equals(type)) {
         	bbt = new BatchTaskOfDone(experimentId, batchId, done);
+        } else if (BatchRequestBase.TYPE_PSICHECKRESULT.equals(type)) {
+        	bbt = new BatchTaskOfPSI(experimentId,batchId, redisKey);
         } else if (BatchRequestBase.TYPE_DOENURL.equals(type)) {
         	if (downUrl != null && !"".equals(downUrl)) {
         		batchRecordService.maintainDownUrl(batchId, downUrl);
@@ -144,7 +126,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
         for (VariableData vd : vdList) {
             vd.setDelete(VariableData.DELETE_NO);
         }
-
+        variableDataService.deleteVariableDataByExperimentId(experimentId);
         int ret = variableDataService.insertVariableDataList(vdList);
 
         //修改实验的预处理状态
@@ -172,7 +154,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
     }
 
     /*
-     * 错误处理
+     * 训练错误处理
      */
     @Override
     public void trainErrorDealWith(Long experimentId, String errMsg, String task) {
@@ -191,6 +173,9 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
         } 
     }
 
+    /*
+     * 批次错误处理
+     */
 	@Override
 	public void batchErrorDealWith(Long batchId, String errorMsg) {
 		if (batchId != null) {

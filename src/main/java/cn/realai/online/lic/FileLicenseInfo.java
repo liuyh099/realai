@@ -2,6 +2,10 @@ package cn.realai.online.lic;
 
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 
  * <p>Title: 文件授权信息类        </p>
@@ -76,6 +80,19 @@ public class FileLicenseInfo {
      * 秘钥过期时间
      */
     private long overdue;
+
+    /**
+     * 作废秘钥
+     */
+    private String cancelSecretKey;
+
+    public String getCancelSecretKey() {
+        return cancelSecretKey;
+    }
+
+    public void setCancelSecretKey(String cancelSecretKey) {
+        this.cancelSecretKey = cancelSecretKey;
+    }
 
     public long getOverdue() {
         return overdue;

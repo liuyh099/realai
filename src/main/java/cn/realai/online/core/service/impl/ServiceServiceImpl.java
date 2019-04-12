@@ -36,6 +36,9 @@ public class ServiceServiceImpl implements ServiceService {
 	@Autowired
 	private ServiceLicenseInfoSource serviceLicenseInfoSource;
 
+	@Autowired
+	private LicenseCheckHandler licenseCheckHandler;
+
 	@Override
 	public Service get(Long serviceId) {
 		return serviceDao.get(serviceId);
@@ -94,22 +97,27 @@ public class ServiceServiceImpl implements ServiceService {
 			}
 		});
 
+		licenseCheckHandler.cancelSecretKeyCheck(service.getSecretKey());
 
 		ServiceDetail detail = new ServiceDetail();
 		detail.setDeployUseTimes("0");
 		detail.setServiceName(service.getName());
 		detail.setVersion(0);
-		service.setDetail(dataCipherHandler.encryptData(detail, service.getSecretKey()));
 		FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(service.getSecretKey());
+		if(StringUtils.isNotEmpty(fileLicenseInfo.getCancelSecretKey())) {
+			detail.setTuningKeyIds(fileLicenseInfo.getCancelSecretKey());
+		}
 		if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
 			throw new RuntimeException("秘钥已过期");
 		}
+		service.setDetail(dataCipherHandler.encryptData(detail, service.getSecretKey()));
 		service.setSecretKey(dataCipherHandler.initSecretKey(service.getSecretKey(), detail.getVersion()));
 		service.setCreateTime(new Date().getTime());
 		service.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
 		service.setBusinessType(Integer.parseInt(fileLicenseInfo.getBusinessType()));
 		return serviceDao.insert(service);
 	}
+
 
 	@Override
 	@Transactional(readOnly = false)

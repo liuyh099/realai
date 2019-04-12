@@ -1,6 +1,8 @@
 package cn.realai.online.lic;
 
 
+import java.util.List;
+
 /**
  * Description: 授权检查扩展逻辑
  * <br>
@@ -49,4 +51,10 @@ public interface LicenseCheckHandler {
      * @param secretKey
      */
     void checkSecretKeyApply(long serviceId, String secretKey, ServiceDetail sd) throws LicenseException;
+
+
+    void cancelSecretKeyCheck(String secretKey) throws LicenseException;
+
+    List<String> getCancelSecretKeyList(FileLicenseInfo fileLicenseInfo);
+
 }

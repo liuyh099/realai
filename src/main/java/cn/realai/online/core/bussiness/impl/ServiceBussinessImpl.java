@@ -19,10 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Description:
@@ -49,6 +46,9 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
     @Autowired
     private ServiceLicenseInfoSource serviceLicenseInfoSource;
+
+    @Autowired
+    private LicenseCheckHandler licenseCheckHandler;
 
     @Override
     public boolean addService(ServiceBO serviceBO) throws LicenseException {
@@ -86,16 +86,14 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
         BeanUtils.copyProperties(serviceBO, serviceBOold);
 
+        ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(serviceBOold.getDetail());
+        String sk = dataCipherHandler.getOriginalSecretKey(oldKey);
+        serviceDetail.setServiceName(serviceBOold.getName());
+
         //续期
-        if(StringUtils.isNotBlank(serviceBO.getSecretKey())
-                && !StringUtils.equals(oldKey, serviceBO.getSecretKey())
-                && !StringUtils.equals(dataCipherHandler.getOriginalSecretKey(oldKey), serviceBO.getSecretKey())) {
+        if(serviceBO.isRenewal()) {
             searchService = new cn.realai.online.core.entity.Service();
 
-//            ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(searchService.getDetail());
-//            int version = serviceDetail.getVersion();
-//            dataCipherHandler.initSecretKey(serviceBO.getSecretKey(), version);
-//            searchService.setSecretKey(serviceBO.getSecretKey());
             List<Service> old = serviceService.list(searchService);
             old.forEach(service -> {
                 if(StringUtils.isNotEmpty(service.getSecretKey())) {
@@ -112,22 +110,51 @@ public class ServiceBussinessImpl implements ServiceBussiness {
                 throw new RuntimeException("秘钥已过期！");
             }
 
+            int version = serviceDetail.getVersion();
+            String newkey = dataCipherHandler.initSecretKey(serviceBO.getSecretKey(), version);
+            serviceBOold.setSecretKey(newkey);
+
+            licenseCheckHandler.cancelSecretKeyCheck(serviceBO.getSecretKey());
+
             FileLicenseInfo fileLicenseInfoOld = serviceLicenseInfoSource.checkSource(dataCipherHandler.getOriginalSecretKey(oldKey));
             if(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), LicenseConstants.DATE_FORMART) < DateUtil.stringToLong(fileLicenseInfoOld.getRangeTimeUpper(), LicenseConstants.DATE_FORMART)
                     || Integer.parseInt(fileLicenseInfo.getDeployTimesUpper()) < Integer.parseInt(fileLicenseInfoOld.getDeployTimesUpper())) {
                 throw new RuntimeException("当前服务有效期限或使用次数高于续期秘钥！");
             }
 
-            ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(serviceBOold.getDetail());
-            int version = serviceDetail.getVersion();
-            String newkey = dataCipherHandler.initSecretKey(serviceBO.getSecretKey(), version);
-            serviceBOold.setSecretKey(newkey);
+            if(!StringUtils.equals(fileLicenseInfo.getServiceName(),fileLicenseInfoOld.getServiceName())
+                    || !StringUtils.equals(fileLicenseInfo.getCompanyName(), fileLicenseInfoOld.getCompanyName())) {
+                throw new RuntimeException("当前续期秘钥与服务秘钥不匹配！");
+            }
 
+            List<String> cancelSecretKeyList = licenseCheckHandler.getCancelSecretKeyList(fileLicenseInfo);
+
+            cancelSecretKeyList.add(fileLicenseInfoOld.getId());
+
+            Set<String> cancelSecretKeySet = new HashSet<>();
+
+            cancelSecretKeySet.addAll(cancelSecretKeyList);
+
+            List<String> cancelSecretKeyListnew = new ArrayList<>();
+
+            cancelSecretKeyListnew.addAll(cancelSecretKeySet);
+
+            if(!cancelSecretKeyListnew.isEmpty()) {
+                String cancelKeys = serviceDetail.getTuningKeyIds();
+
+                for (String cancelSecretKey : cancelSecretKeyListnew) {
+                    if(StringUtils.isNotEmpty(cancelSecretKey)
+                            && cancelKeys.indexOf(cancelSecretKey) == -1) {
+                        cancelKeys += cancelSecretKey + ",";
+                    }
+                }
+                if(!cancelKeys.startsWith(",")) {
+                    cancelKeys = "," + cancelKeys;
+                }
+                serviceDetail.setTuningKeyIds(cancelKeys);
+            }
         }
 
-        ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(serviceBOold.getDetail());
-        String sk = dataCipherHandler.getOriginalSecretKey(oldKey);
-        serviceDetail.setServiceName(serviceBOold.getName());
         serviceBOold.setDetail(dataCipherHandler.encryptData(serviceDetail, sk));
 
         if (serviceService.update(serviceBOold) <= 0) {
@@ -188,6 +215,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
     @Override
     @Transactional(readOnly = false)
     public void renewalService(ServiceBO serviceBO) throws LicenseException {
+        serviceBO.setRenewal(true);
         editService(serviceBO);
     }
 
