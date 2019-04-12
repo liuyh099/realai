@@ -111,7 +111,7 @@ public class MySessionManager extends DefaultWebSessionManager {
      * 根据用户ID删除session
      * @param userId
      */
-    @Async
+    @Async(value = "myTaskAsyncPool")
     public void deleteSessionsByUserId(Long userId) {
         Collection<Session> sessions = getActiveSessions();
         if (!CollectionUtils.isEmpty(sessions)) {
@@ -140,7 +140,7 @@ public class MySessionManager extends DefaultWebSessionManager {
         }
     }
 
-    @Async
+    @Async(value = "myTaskAsyncPool")
     public void clearPermissionByUserId(List<Long> userIds) {
         if(CollectionUtils.isEmpty(userIds)){
             return;

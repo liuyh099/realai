@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,16 +32,18 @@ public class SingleLogin {
     @Resource
     private RedisSessionDAO redisSessionDAO;
 
+
     /**
      * 排他登录
+     *
      * @param username
      * @param pwd
      * @param user
      * @param salt
      */
-    @Async
+    @Async(value = "myTaskAsyncPool")
     public void singleLogin(String username, String pwd, User user, byte[] salt, Serializable sessionId) {
-        if(singleLogin){
+        if (singleLogin) {
             String pwd1 = EncodingPasswordUtils.encodingPassword(pwd, salt);
             if (username.equals(user.getName()) && pwd1.equals(user.getPwd())) {
                 SessionsSecurityManager securityManager = (SessionsSecurityManager) SecurityUtils.getSecurityManager();
@@ -48,13 +51,13 @@ public class SingleLogin {
                 // 获取所有session
                 Collection<Session> sessions = redisSessionDAO.getActiveSessions();
                 for (Session session : sessions) {
-                    if(session==null || sessionId.equals(session.getId())){
+                    if (session == null || sessionId.equals(session.getId())) {
                         continue;
                     }
-                    Object o =  session.getAttribute("userId");
+                    Object o = session.getAttribute("userId");
                     // 如果session里面有当前登陆的，则证明是重复登陆的，则将其剔除
-                    if(o!=null){
-                        String userId= (String) o;
+                    if (o != null) {
+                        String userId = (String) o;
                         if (userId != null && !"".equals(userId)) {
                             if (userId.equals(user.getId() + "")) {
                                 session.setTimeout(0);
@@ -68,21 +71,21 @@ public class SingleLogin {
         }
     }
 
-    @Async
-    public void deleteSessionsByUserId(Long userId){
+    @Async(value = "myTaskAsyncPool")
+    public void deleteSessionsByUserId(Long userId) {
         SessionsSecurityManager securityManager = (SessionsSecurityManager) SecurityUtils.getSecurityManager();
         MySessionManager sessionManager = (MySessionManager) securityManager.getSessionManager();
         sessionManager.deleteSessionsByUserId(userId);
     }
 
-    @Async
+    @Async(value = "myTaskAsyncPool")
     public void clearPermissionByUserId(Long userId) {
-        SessionsSecurityManager securityManager = (SessionsSecurityManager) SecurityUtils.getSecurityManager();
-        MySessionManager sessionManager = (MySessionManager) securityManager.getSessionManager();
-        sessionManager.clearPermissionByUserId(userId);
+        List<Long> userIds = new ArrayList<>();
+        userIds.add(userId);
+        clearPermissionByUserIds(userIds);
     }
 
-    @Async
+    @Async(value = "myTaskAsyncPool")
     public void clearPermissionByUserIds(List<Long> userIds) {
         SessionsSecurityManager securityManager = (SessionsSecurityManager) SecurityUtils.getSecurityManager();
         MySessionManager sessionManager = (MySessionManager) securityManager.getSessionManager();
