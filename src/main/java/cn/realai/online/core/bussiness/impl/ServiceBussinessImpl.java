@@ -19,10 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Description:
@@ -132,10 +129,20 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
             List<String> cancelSecretKeyList = licenseCheckHandler.getCancelSecretKeyList(fileLicenseInfo);
 
-            if(!cancelSecretKeyList.isEmpty()) {
+            cancelSecretKeyList.add(fileLicenseInfoOld.getId());
+
+            Set<String> cancelSecretKeySet = new HashSet<>();
+
+            cancelSecretKeySet.addAll(cancelSecretKeyList);
+
+            List<String> cancelSecretKeyListnew = new ArrayList<>();
+
+            cancelSecretKeyListnew.addAll(cancelSecretKeySet);
+
+            if(!cancelSecretKeyListnew.isEmpty()) {
                 String cancelKeys = serviceDetail.getTuningKeyIds();
 
-                for (String cancelSecretKey : cancelSecretKeyList) {
+                for (String cancelSecretKey : cancelSecretKeyListnew) {
                     if(StringUtils.isNotEmpty(cancelSecretKey)
                             && cancelKeys.indexOf(cancelSecretKey) == -1) {
                         cancelKeys += cancelSecretKey + ",";
