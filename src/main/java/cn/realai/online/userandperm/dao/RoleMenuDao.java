@@ -35,4 +35,10 @@ public interface RoleMenuDao {
      * @return
      */
     List<Long> findIdsByRoleIdAndStatus(@Param("id") Long id, @Param("status")int i);
+
+    /**
+     * 根据角色名称删除角色
+     * @param roleId
+     */
+    void deleteByRoleId(@Param("roleId")Long roleId);
 }

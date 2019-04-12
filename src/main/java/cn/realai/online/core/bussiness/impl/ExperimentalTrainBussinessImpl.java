@@ -610,6 +610,16 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     }
 
     @Override
+    public List<ExperimentBO> listByStatus(List<Integer> status) {
+        Experiment experiment = new Experiment();
+        experiment.setSearchStatusList(status);
+        List<Experiment> list = experimentService.findList(experiment);
+        List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
+        return result;
+    }
+
+
+    @Override
     public Long getLastServerId() {
         return experimentService.getLastServerId();
     }
@@ -637,6 +647,8 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public List<Long> findNotPublishExperimentIds(List<Long> ids) {
         return experimentService.findNotPublishExperimentIds(ids);
     }
+
+
 
 
     private PersonalInformation buildQueryCondition(BatchRecord batchRecord, FaceListDataQuery query) {

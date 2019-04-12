@@ -145,6 +145,7 @@ public class TrainTaskStageOne implements Runnable {
         	mp.setExperimentId(experimentId);
         }
         ModelPerformanceService modelPerformanceService = SpringContextUtils.getBean(ModelPerformanceService.class);
+        modelPerformanceService.deleteByExperimentId(experimentId);
         modelPerformanceService.insertList(mpList);
     }
 
@@ -161,6 +162,7 @@ public class TrainTaskStageOne implements Runnable {
         	ts.setExperimentId(experimentId);
         }
         TopSortService topSortService = SpringContextUtils.getBean(TopSortService.class);
+        topSortService.deleteByExperimentId(experimentId);
         topSortService.insertList(tsList);
     }
 
@@ -177,6 +179,7 @@ public class TrainTaskStageOne implements Runnable {
         	ss.setExperimentId(experimentId);
         }
         SampleSummaryService sampleSummaryService = SpringContextUtils.getBean(SampleSummaryService.class);
+        sampleSummaryService.deleteByExperimentId(experimentId);
         sampleSummaryService.insertList(ssList);
     }
 
@@ -190,6 +193,7 @@ public class TrainTaskStageOne implements Runnable {
         	ers.setExperimentId(experimentId);
         }
         ExperimentResultSetService experimentResultSetService = SpringContextUtils.getBean(ExperimentResultSetService.class);
+        experimentResultSetService.deleteByExperimentId(experimentId);
         experimentResultSetService.insertList(ersList);
     }
 

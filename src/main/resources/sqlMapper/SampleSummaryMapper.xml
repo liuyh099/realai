@@ -35,4 +35,9 @@
         </where>
     </select>
 
+	<delete id="deleteByExperimentId">
+		delete from sample_summary
+		where experiment_id = #{experimentId}
+	</delete>
+
 </mapper>

@@ -64,7 +64,7 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
         } else {
             Assert.isTrue(checkVO.isKeyFlag(), checkVO.getKeyReason());
             //校验密钥串是否可用
-            serviceLicenseCheck.checkServiceLic(securityKey);
+            serviceLicenseCheck.checkTuningServiceLic(securityKey, model.getServiceId());
         }
 
         //创建新的调优记录

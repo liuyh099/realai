@@ -11,6 +11,7 @@ import cn.realai.online.core.bussiness.TuningRecordBussiness;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.TuningRecord;
 import cn.realai.online.core.query.ModelListQuery;
+import cn.realai.online.core.query.TuningKeyCheckVO;
 import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.vo.*;
 import cn.realai.online.lic.ServiceLicenseCheck;
@@ -174,14 +175,13 @@ public class ModelController {
     @RequiresPermissions("model:better")
     @PostMapping("/checkSecurityKey")
     @ApiOperation(value = "模型调优-强制调优校验密钥")
-    @ApiImplicitParam(name = "pkstr", value = "密钥串", required = true, dataType = "String", paramType = "query")
     @ResponseBody
-    public Result<Void> checkSecurityKey(@RequestParam String pkstr) {
+    public Result<Void> checkSecurityKey(@RequestBody @Validated TuningKeyCheckVO checkVO) {
         try {
-            serviceLicenseCheck.checkServiceLic(pkstr);
+            serviceLicenseCheck.checkTuningServiceLic(checkVO.getTuningKey(), checkVO.getServiceId());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
         } catch (Exception e) {
-            log.error("根据模型ID获取PSI结果集异常", e);
+            log.error("模型调优-强制调优校验密钥", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), e.getMessage(), null);
         }
     }

@@ -35,4 +35,9 @@ public class ModelPerformanceServiceImpl implements ModelPerformanceService {
     public List<ModelPerformance> findList(ModelPerformance modelPerformance) {
         return modelPerfomanceDao.findList(modelPerformance);
     }
+
+	@Override
+	public int deleteByExperimentId(Long experimentId) {
+		return modelPerfomanceDao.deleteByExperimentId(experimentId);
+	}
 }
