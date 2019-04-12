@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -51,7 +53,15 @@ public class ServiceLicenseCheck {
      */
     public void checkTuningServiceLic(String secretKey, long serviceId) throws LicenseException {
         String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId, SecretKeyType.COMMON);
-        FileLicenseInfo licInfo = checkServiceLic(serviceCiphertext);
+        FileLicenseInfo tuningLicInfo = checkServiceLic(secretKey);
+        FileLicenseInfo licInfo = checkServiceLic(secretKey);
+
+        if(Integer.parseInt(tuningLicInfo.getSecretKeyType()) != SecretKeyType.TUNING.getCode()) {
+            throw new LicenseException("秘钥类型不匹配，普通秘钥不能用于强制调优！");
+        }
+
+        checkLic(serviceCiphertext, secretKey);
+
         ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId, serviceCiphertext);
         licenseCheckHandler.checkSecretKeyApply(serviceId, secretKey, serviceDetail);
     }
@@ -78,13 +88,14 @@ public class ServiceLicenseCheck {
     public void applyService(long serviceId, String tuningSecretKey) throws LicenseException {
         String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId, SecretKeyType.COMMON);
         FileLicenseInfo tuningLicInfo = checkServiceLic(tuningSecretKey);
+        FileLicenseInfo licInfo = checkServiceLic(serviceCiphertext);
 
         if(Integer.parseInt(tuningLicInfo.getSecretKeyType()) != SecretKeyType.TUNING.getCode()) {
             throw new LicenseException("秘钥类型不匹配，普通秘钥不能用于强制调优！");
         }
 
         checkLic(serviceCiphertext, tuningSecretKey);
-        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(tuningLicInfo, serviceId, serviceCiphertext);
+        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId, serviceCiphertext);
         licenseCheckHandler.updateServiceDetail(serviceId, tuningSecretKey, serviceDetail);
         licenseCheckHandler.clearTuningKey(serviceId, serviceLicenseInfoSource);
     }

@@ -10,6 +10,18 @@ public class ServiceBO extends Service {
      */
     private boolean renewable;
 
+    /**
+     * 是否续期
+     */
+    private boolean renewal = false;
+
+    public boolean isRenewal() {
+        return renewal;
+    }
+
+    public void setRenewal(boolean renewal) {
+        this.renewal = renewal;
+    }
 
     public boolean isRenewable() {
         return renewable;
