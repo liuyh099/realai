@@ -60,4 +60,12 @@ public interface UserDao {
      * @return
      */
     User findByNameOrPhoneNumber(String username);
+
+    /**
+     * 根据角色ID获得用户ID
+     *
+     * @param roleId
+     * @return
+     */
+    List<Long> getUserIdsByRoleId(Long roleId);
 }

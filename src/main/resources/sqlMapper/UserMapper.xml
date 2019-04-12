@@ -29,6 +29,11 @@
         </where>
     </select>
 
+    <select id="getUserIdsByRoleId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT id FROM sys_user WHERE role_id = #{roleId}
+    </select>
+
+
     <select id="findList" resultMap="UserMap" parameterType="cn.realai.online.userandperm.entity.User">
         SELECT DISTINCT a.* ,b.name AS group1,(SELECT count(1) FROM sys_forget_notice where user_id=a.id ) AS forgetCount
         FROM sys_user a

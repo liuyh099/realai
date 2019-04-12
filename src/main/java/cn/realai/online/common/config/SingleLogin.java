@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author hyx
@@ -78,6 +79,13 @@ public class SingleLogin {
     public void clearPermissionByUserId(Long userId) {
         SessionsSecurityManager securityManager = (SessionsSecurityManager) SecurityUtils.getSecurityManager();
         MySessionManager sessionManager = (MySessionManager) securityManager.getSessionManager();
-        sessionManager.clearPermissionByUserId(userId+"");
+        sessionManager.clearPermissionByUserId(userId);
+    }
+
+    @Async
+    public void clearPermissionByUserIds(List<Long> userIds) {
+        SessionsSecurityManager securityManager = (SessionsSecurityManager) SecurityUtils.getSecurityManager();
+        MySessionManager sessionManager = (MySessionManager) securityManager.getSessionManager();
+        sessionManager.clearPermissionByUserId(userIds);
     }
 }

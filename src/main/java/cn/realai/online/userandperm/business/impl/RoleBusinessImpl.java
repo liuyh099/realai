@@ -1,5 +1,6 @@
 package cn.realai.online.userandperm.business.impl;
 
+import cn.realai.online.common.config.SingleLogin;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.query.PageQuery;
 import cn.realai.online.userandperm.bo.MenuTreeNodeBO;
@@ -43,6 +44,9 @@ public class RoleBusinessImpl implements RoleBusiness {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SingleLogin singleLogin;
 
     @Override
     public PageBO<RoleBO> list(PageQuery pageQuery) {
@@ -160,10 +164,6 @@ public class RoleBusinessImpl implements RoleBusiness {
     @Transactional(readOnly = false)
     public boolean update(RoleBO roleBO) {
 
-        /*if (!checkName(roleBO.getName())) {
-            return false;
-        }*/
-
         SysRole sysRole = new SysRole();
         BeanUtils.copyProperties(roleBO, sysRole);
 
@@ -181,6 +181,12 @@ public class RoleBusinessImpl implements RoleBusiness {
         if (!CollectionUtils.isEmpty(menuIds)) {
             batchInsertRoleMenu(sysRole, menuIds, 1);
         }
+
+        List<Long> userIds = userService.getUserIdsByRoleId(sysRole.getId());
+        if(!CollectionUtils.isEmpty(userIds)){
+            singleLogin.clearPermissionByUserIds(userIds);
+        }
+
         return true;
     }
 
@@ -208,6 +214,22 @@ public class RoleBusinessImpl implements RoleBusiness {
         List<SysRole> list = roleService.list(sysRole);
         List<RoleBO> result = JSON.parseArray(JSON.toJSONString(list), RoleBO.class);
         return result;
+    }
+
+    @Override
+    public boolean checkNameByIdAndName(Long id, String name) {
+        SysRole sysRole = new SysRole();
+        sysRole.setName(name);
+        List<SysRole> list = roleService.list(sysRole);
+        if(CollectionUtils.isEmpty(list)){
+            return true;
+        }else if(list.size()==1){
+            SysRole sysRole1=list.get(0);
+            if(name.equals(sysRole1.getName())){
+                return true;
+            }
+        }
+        return false;
     }
 
 
