@@ -28,4 +28,9 @@ public class ExperimentResultSetServiceImpl implements ExperimentResultSetServic
         return experimentResultSetDao.findList(experimentResultSet);
     }
 
+	@Override
+	public int deleteByExperimentId(Long experimentId) {
+		return experimentResultSetDao.deleteByExperimentId(experimentId);
+	}
+
 }

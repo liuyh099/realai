@@ -72,4 +72,9 @@
         ORDER BY id ASC
     </select>
 
+	<delete id="deleteByExperimentId">
+		delete from result_set
+		where experiment_id=#{experimentId}
+	</delete>
+
 </mapper> 

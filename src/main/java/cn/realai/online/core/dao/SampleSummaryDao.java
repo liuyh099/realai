@@ -17,4 +17,6 @@ public interface SampleSummaryDao {
      * @return
      */
     List<SampleSummary> findList(SampleSummary sampleSummary);
+
+	int deleteByExperimentId(@Param("experimentId")Long experimentId);
 }

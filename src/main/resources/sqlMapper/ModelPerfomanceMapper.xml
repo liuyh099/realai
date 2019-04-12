@@ -67,5 +67,9 @@
         </where>
     </select>
 
+	<delete id="deleteByExperimentId">
+		delete from model_performance 
+		where experiment_id = #{experimentId}
+	</delete>
 
 </mapper>

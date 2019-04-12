@@ -15,4 +15,6 @@ public interface TopSortService {
      * @return
      */
     List<TopSort> findList(TopSort topSort);
+
+	int deleteByExperimentId(Long experimentId);
 }

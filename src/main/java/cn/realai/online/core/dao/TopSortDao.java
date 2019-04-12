@@ -17,4 +17,6 @@ public interface TopSortDao {
      * @return
      */
     List<TopSort> findList(TopSort topSort);
+
+	int deleteByExperimentId(@Param("experimentId")Long experimentId);
 }

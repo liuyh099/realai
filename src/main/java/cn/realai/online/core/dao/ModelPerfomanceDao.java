@@ -27,4 +27,6 @@ public interface ModelPerfomanceDao {
      * @return
      */
     List<ModelPerformance> findList(ModelPerformance modelPerformance);
+
+	int deleteByExperimentId(@Param("experimentId")Long experimentId);
 }

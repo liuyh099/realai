@@ -42,5 +42,10 @@
             </if>
         </where>
     </select>
+    
+    <delete id="deleteByExperimentId">
+    	delete from top_sort
+    	where experiment_id = #{experimentId}
+    </delete>
 
 </mapper>

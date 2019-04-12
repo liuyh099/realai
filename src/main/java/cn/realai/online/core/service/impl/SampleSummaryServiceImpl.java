@@ -28,4 +28,9 @@ public class SampleSummaryServiceImpl implements SampleSummaryService {
         return sampleSummaryDao.findList(sampleSummary);
     }
 
+	@Override
+	public int deleteByExperimentId(Long experimentId) {
+		return sampleSummaryDao.deleteByExperimentId(experimentId);
+	}
+
 }
