@@ -166,6 +166,12 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     	ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
     	logger.info("ExperimentalTrainBussinessImpl train. experimentBO{}", JSON.toJSONString(experimentBO));
+    	
+    	//验证服务密钥是否过期
+    	if (!serviceService.checkService(experimentBO.getServiceId())) {
+    		return -2;
+    	}
+    	
         int deleteStatus = VariableData.DELETE_YES;
         Long parentId = null;
         
@@ -226,6 +232,9 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public ExperimentBO selectById(Long trainId) {
         Experiment experiment = experimentService.selectExperimentById(trainId);
         ExperimentBO experimentBO = new ExperimentBO();
+        if(experiment==null){
+            return null;
+        }
         BeanUtils.copyProperties(experiment, experimentBO);
         return experimentBO;
     }
@@ -265,7 +274,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
             PageBO<VariableDataBO> pageBO = new PageBO<VariableDataBO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
             return pageBO;
         }
-        return null;
+        return new PageBO<VariableDataBO>(query);
     }
 
     @Override
