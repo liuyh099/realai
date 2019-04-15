@@ -115,10 +115,17 @@ public class RoleBusinessImpl implements RoleBusiness {
     @Transactional(readOnly = false)
     public Integer delete(List<Long> ids) {
 
+        //清除用户角色
+        List<Long> userIds = userService.findUserIdByRoleIds(ids);
+        if(!CollectionUtils.isEmpty(userIds)){
+            userService.updateRoleIdNull(userIds);
+            singleLogin.clearPermissionByUserIds(userIds);
+        }
+
         //删除角色表
         int count = roleService.delete(ids);
         //删除角色菜单表
-        if(count>0){
+        if (count > 0) {
             roleMenuService.deleteByRoleIds(ids);
         }
         return count;
@@ -183,7 +190,7 @@ public class RoleBusinessImpl implements RoleBusiness {
         }
 
         List<Long> userIds = userService.getUserIdsByRoleId(sysRole.getId());
-        if(!CollectionUtils.isEmpty(userIds)){
+        if (!CollectionUtils.isEmpty(userIds)) {
             singleLogin.clearPermissionByUserIds(userIds);
         }
 
@@ -200,7 +207,7 @@ public class RoleBusinessImpl implements RoleBusiness {
         List<Long> menuIds = null;
         if (UserUtils.isAdmin(user)) {
             //admin 获得所有的菜单
-             menuIds = menuService.getAllMenuIds();
+            menuIds = menuService.getAllMenuIds();
         } else {
             menuIds = roleMenuService.findIdsByRoleId(user.getRoleId());
         }
@@ -221,11 +228,11 @@ public class RoleBusinessImpl implements RoleBusiness {
         SysRole sysRole = new SysRole();
         sysRole.setName(name);
         List<SysRole> list = roleService.list(sysRole);
-        if(CollectionUtils.isEmpty(list)){
+        if (CollectionUtils.isEmpty(list)) {
             return true;
-        }else if(list.size()==1){
-            SysRole sysRole1=list.get(0);
-            if(name.equals(sysRole1.getName())){
+        } else if (list.size() == 1) {
+            SysRole sysRole1 = list.get(0);
+            if (name.equals(sysRole1.getName())) {
                 return true;
             }
         }

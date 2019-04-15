@@ -73,4 +73,12 @@ public interface UserService {
      * @return
      */
     List<Long> getUserIdsByRoleId(Long id);
+    /**
+     * 根据角色ID获得用户ID
+     * @param ids
+     * @return
+     */
+    List<Long> findUserIdByRoleIds(List<Long> ids);
+
+    void updateRoleIdNull(List<Long> userIds);
 }

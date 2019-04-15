@@ -68,4 +68,8 @@ public interface UserDao {
      * @return
      */
     List<Long> getUserIdsByRoleId(Long roleId);
+
+    List<Long> findUserIdByRoleIds(@Param("ids")List<Long> ids);
+
+    void updateRoleIdNull(@Param("ids")List<Long> userIds);
 }
