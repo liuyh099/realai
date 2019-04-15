@@ -77,7 +77,7 @@ public class RoleController {
             if (roleBusiness.delete(ids) > 0) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             } else {
-                return new Result(ResultCode.DATA_ERROR.getCode(), "角色不存在或者角色正在使用,无法删除", null);
+                return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }
         } catch (Exception e) {
             logger.error("删除角色异常", e);
@@ -90,9 +90,7 @@ public class RoleController {
     @ApiOperation("增加角色")
     public Result add(@Validated @RequestBody RoleAddVO roleAddVO) {
         try {
-            //RoleBO roleBO = new RoleBO();
             RoleBO roleBO =JSON.parseObject(JSON.toJSONString(roleAddVO),RoleBO.class);
-          //  BeanUtils.copyProperties(roleAddVO, roleBO);
             if (roleBusiness.insert(roleBO)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             } else {
@@ -155,6 +153,10 @@ public class RoleController {
     @ApiOperation("更新角色")
     public Result update(@Validated @RequestBody RoleEditVO editVO) {
         try {
+            boolean flag = roleBusiness.checkNameByIdAndName(editVO.getId(),editVO.getName());
+            if(!flag){
+                return new Result(ResultCode.DATA_ERROR.getCode(), "角色名称已经存在", null);
+            }
             RoleBO roleBo =JSON.parseObject(JSON.toJSONString(editVO),RoleBO.class);
             if (!roleBusiness.update(roleBo)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);

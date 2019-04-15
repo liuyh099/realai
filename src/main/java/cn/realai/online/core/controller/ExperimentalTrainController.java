@@ -58,9 +58,6 @@ public class ExperimentalTrainController {
     public Result<PageBO<ExperimentalTrainVO>> list(ExperimentalTrainQuery query) {
         try {
             PageBO<ExperimentBO> page = experimentalTrainBussiness.pageList(query);
-            if (page == null) {
-                return null;
-            }
             List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), ExperimentalTrainVO.class);
             PageBO<ExperimentalTrainVO> pageBO = new PageBO<ExperimentalTrainVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);

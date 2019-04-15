@@ -52,6 +52,9 @@ public class ExperimentServiceImpl implements ExperimentService {
 //            return null;
 //        }
         //封装成BO
+        if (experiment == null) {
+            return null;
+        }
         ExperimentBO experimentBO = convertBO(experiment);
         return experimentBO;
     }

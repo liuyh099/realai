@@ -89,4 +89,12 @@ public interface RoleBusiness {
      * @return
      */
     List<RoleBO> findList();
+
+    /**
+     * 检查角色名称
+     * @param id
+     * @param name
+     * @return
+     */
+    boolean checkNameByIdAndName(Long id, String name);
 }

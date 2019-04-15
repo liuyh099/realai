@@ -34,6 +34,14 @@ public class UserDetailVO {
     @ApiModelProperty(value = "备注")
     private String note;
 
+    public String getStatus(){
+        if(this.getRoleId()==null){
+            return "待分配";
+        }else {
+            return "已分配";
+        }
+    }
+
 
     public String getName() {
         return name;

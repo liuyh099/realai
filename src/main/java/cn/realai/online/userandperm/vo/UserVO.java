@@ -1,7 +1,9 @@
 package cn.realai.online.userandperm.vo;
 
+import cn.realai.online.util.StringUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.StringUtils;
 
 @ApiModel
 public class UserVO {
@@ -40,6 +42,15 @@ public class UserVO {
             return false;
         }
     }
+
+    public String getStatus() {
+        if(StringUtils.isBlank(this.getGroup())){
+            return "待分配";
+        }else {
+            return "已分配";
+        }
+    }
+
 
     public void setForgetFlag(boolean forgetFlag) {
         this.forgetFlag = forgetFlag;

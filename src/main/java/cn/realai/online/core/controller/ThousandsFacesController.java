@@ -138,11 +138,11 @@ public class ThousandsFacesController {
         try {
             //没有传入batchId直接返回空
             if(query.getBatchId()==null){
-                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), new PageBO<PersonalInformationVO>(query));
             }
             Model model = modelBussiness.getTrainByModelId(query.getId());
             if (ObjectUtils.isEmpty(model)) {
-                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), new PageBO<PersonalInformationVO>(query));
             }
             query.setId(model.getExperimentId());
             query.setSearchType("thousandsFace");
@@ -251,9 +251,6 @@ public class ThousandsFacesController {
     public Result<PageBO<PersonalHetroResultSetTopTenVO>> listDiff(@Validated IdQuery query) {
         try {
             PageBO<PersonalHetroResultSetBO> page = experimentalTrainBussiness.listPersonalHetroResultSet(query);
-            if (page == null) {
-                return null;
-            }
             List<PersonalHetroResultSetTopTenVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), PersonalHetroResultSetTopTenVO.class);
             PageBO<PersonalHetroResultSetTopTenVO> pageBO = new PageBO<PersonalHetroResultSetTopTenVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
