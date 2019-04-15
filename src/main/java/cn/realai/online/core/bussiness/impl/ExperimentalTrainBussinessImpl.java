@@ -226,6 +226,9 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public ExperimentBO selectById(Long trainId) {
         Experiment experiment = experimentService.selectExperimentById(trainId);
         ExperimentBO experimentBO = new ExperimentBO();
+        if(experiment==null){
+            return null;
+        }
         BeanUtils.copyProperties(experiment, experimentBO);
         return experimentBO;
     }
@@ -265,7 +268,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
             PageBO<VariableDataBO> pageBO = new PageBO<VariableDataBO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
             return pageBO;
         }
-        return null;
+        return new PageBO<VariableDataBO>(query);
     }
 
     @Override
