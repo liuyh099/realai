@@ -277,7 +277,7 @@ public class ExperimentalResultController {
             query.setSearchType("thousandsFace");
             PageBO<PersonalInformationBO> page = experimentalTrainBusiness.personalInformationPage(query, BatchRecord.BATCH_TYPE_TRAIN);
             if (page == null) {
-                return null;
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), new PageBO<PersonalInformationVO>(query));
             }
             List<PersonalInformationVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), PersonalInformationVO.class);
             PageBO<PersonalInformationVO> pageBO = new PageBO<PersonalInformationVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());

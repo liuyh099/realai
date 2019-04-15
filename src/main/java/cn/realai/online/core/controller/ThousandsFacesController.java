@@ -138,11 +138,11 @@ public class ThousandsFacesController {
         try {
             //没有传入batchId直接返回空
             if(query.getBatchId()==null){
-                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), new PageBO<PersonalInformationVO>(query));
             }
             Model model = modelBussiness.getTrainByModelId(query.getId());
             if (ObjectUtils.isEmpty(model)) {
-                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
+                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), new PageBO<PersonalInformationVO>(query));
             }
             query.setId(model.getExperimentId());
             query.setSearchType("thousandsFace");
