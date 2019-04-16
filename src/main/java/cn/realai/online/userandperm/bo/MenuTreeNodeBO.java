@@ -14,7 +14,17 @@ public class MenuTreeNodeBO {
 
     private Boolean check;
 
+    private Integer assignment;
+
     private List<MenuTreeNodeBO> children;
+
+    public Integer getAssignment() {
+        return assignment;
+    }
+
+    public void setAssignment(Integer assignment) {
+        this.assignment = assignment;
+    }
 
     public Boolean getCheck() {
         return check;

@@ -24,6 +24,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -90,7 +91,7 @@ public class RoleController {
     @ApiOperation("增加角色")
     public Result add(@Validated @RequestBody RoleAddVO roleAddVO) {
         try {
-            RoleBO roleBO =JSON.parseObject(JSON.toJSONString(roleAddVO),RoleBO.class);
+            RoleBO roleBO = JSON.parseObject(JSON.toJSONString(roleAddVO), RoleBO.class);
             if (roleBusiness.insert(roleBO)) {
                 return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
             } else {
@@ -108,10 +109,22 @@ public class RoleController {
     public Result<MenuTreeNodeVo> menuTree() {
         try {
             List<MenuTreeNodeBO> resultBO = roleBusiness.menuTree();
-            for (MenuTreeNodeBO menuTreeNodeBO:resultBO){
-                if(menuTreeNodeBO.getId().equals(12L)){
-                    resultBO.remove(menuTreeNodeBO);
-                    break;
+
+            Iterator<MenuTreeNodeBO> iterator = resultBO.iterator();
+            while (iterator.hasNext()) {
+                MenuTreeNodeBO menuTreeNodeBO = iterator.next();
+                if (1 == menuTreeNodeBO.getAssignment()) {
+                    iterator.remove();
+                }else {
+                    if(menuTreeNodeBO.getChildren()!=null){
+                        Iterator<MenuTreeNodeBO> childIterator = menuTreeNodeBO.getChildren().iterator();
+                        while (childIterator.hasNext()) {
+                            menuTreeNodeBO = childIterator.next();
+                            if (1 == menuTreeNodeBO.getAssignment()) {
+                                childIterator.remove();
+                            }
+                        }
+                    }
                 }
             }
             List<MenuTreeNodeVo> result = JSON.parseArray(JSON.toJSONString(resultBO), MenuTreeNodeVo.class);
@@ -135,6 +148,7 @@ public class RoleController {
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }
+
     @RequiresPermissions("permission:role")
     @GetMapping("edit")
     @ApiOperation("获得编辑角色详情")
@@ -148,16 +162,17 @@ public class RoleController {
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }
+
     @RequiresPermissions("permission:role")
     @PutMapping()
     @ApiOperation("更新角色")
     public Result update(@Validated @RequestBody RoleEditVO editVO) {
         try {
-            boolean flag = roleBusiness.checkNameByIdAndName(editVO.getId(),editVO.getName());
-            if(!flag){
+            boolean flag = roleBusiness.checkNameByIdAndName(editVO.getId(), editVO.getName());
+            if (!flag) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "角色名称已经存在", null);
             }
-            RoleBO roleBo =JSON.parseObject(JSON.toJSONString(editVO),RoleBO.class);
+            RoleBO roleBo = JSON.parseObject(JSON.toJSONString(editVO), RoleBO.class);
             if (!roleBusiness.update(roleBo)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
             }

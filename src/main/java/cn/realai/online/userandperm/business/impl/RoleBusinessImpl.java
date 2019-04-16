@@ -51,6 +51,7 @@ public class RoleBusinessImpl implements RoleBusiness {
     @Override
     public PageBO<RoleBO> list(PageQuery pageQuery) {
         Page page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
+        PageHelper.orderBy("create_time desc");
         List<SysRole> list = roleService.list(new SysRole());
         List<RoleBO> result = JSON.parseArray(JSON.toJSONString(list), RoleBO.class);
         return new PageBO<RoleBO>(result, pageQuery.getPageSize(), pageQuery.getPageNum(), page.getTotal(), page.getPages());
