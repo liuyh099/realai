@@ -25,4 +25,8 @@ public interface TuningRecordService {
 
     List<TuningRecord> findLatestListByModelIds(List<Long> modelIds);
 
+    List<TuningRecord> findBySecretKeyAndStatus(String secretKey, String status);
+
+    void invalidateBySecretKey(String secretKey);
+
 }

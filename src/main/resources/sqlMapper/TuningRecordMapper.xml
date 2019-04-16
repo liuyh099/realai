@@ -86,4 +86,10 @@
         )
     </select>
 
+    <select id="findBySecretKeyAndStatus" resultMap="TuningRecordMap">
+        select * from tuning_record
+        where security_key = #{secretKey}
+        and status = #{status}
+    </select>
+
 </mapper>
