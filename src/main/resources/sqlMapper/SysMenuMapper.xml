@@ -8,6 +8,7 @@
         <result column="sort" property="sort" jdbcType="INTEGER"/>
         <result column="icon" property="icon" jdbcType="INTEGER"/>
         <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="assignment" property="assignment" jdbcType="INTEGER"/>
     </resultMap>
 
     <select id="findList" parameterType="cn.realai.online.userandperm.entity.SysMenu" resultMap="SysMenuMap">
