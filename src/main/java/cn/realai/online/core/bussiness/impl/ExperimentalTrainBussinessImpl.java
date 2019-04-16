@@ -262,7 +262,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
             Page page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
             List<VariableData> list = variableDataService.findVariableDataList(variableData);
             if (CollectionUtils.isEmpty(list)) {
-                return null;
+                return new PageBO<VariableDataBO>(query);
             }
             List<VariableDataBO> result = JSON.parseArray(JSON.toJSONString(list), VariableDataBO.class);
             PageBO<VariableDataBO> pageBO = new PageBO<VariableDataBO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
