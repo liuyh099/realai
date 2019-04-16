@@ -31,9 +31,8 @@ public class DailyBatchTask implements Runnable {
 	
 	private String ytableDataSource;
 	
-	public DailyBatchTask(String command, Long experimentId, String batchDate, String xtableHeterogeneousDataSource, 
+	public DailyBatchTask(Long experimentId, String batchDate, String xtableHeterogeneousDataSource, 
 			String xtableHomogeneousDataSource, String ytableDataSource) {
-		this.command = command;
 		this.experimentId = experimentId;
 		this.batchDate = batchDate;
 		this.xtableHeterogeneousDataSource = xtableHeterogeneousDataSource;

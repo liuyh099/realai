@@ -43,8 +43,19 @@ public class ServiceVO {
     @ApiModelProperty(value = "是否可续期", example = "true: 可续期 false: 不可续期")
     private boolean renewable;
 
+    @ApiModelProperty(value = "是否可用", example = "true: 可用 false: 不可用")
+    private boolean available;
+
     @ApiModelProperty(value = "发布次数上限")
     private Integer deployTimesUpper;
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
 
     public String getName() {
         return name;

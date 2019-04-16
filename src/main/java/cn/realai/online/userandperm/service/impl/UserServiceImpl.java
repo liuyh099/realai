@@ -78,4 +78,19 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public List<Long> getUserIdsByRoleId(Long roleId) {
+        return userDao.getUserIdsByRoleId(roleId);
+    }
+
+    @Override
+    public List<Long> findUserIdByRoleIds(List<Long> ids) {
+        return userDao.findUserIdByRoleIds(ids);
+    }
+
+    @Override
+    public void updateRoleIdNull(List<Long> userIds) {
+        userDao.updateRoleIdNull(userIds);
+    }
 }

@@ -5,7 +5,7 @@ package cn.realai.online.core.bo.model;
  *
  * @author 86183
  */
-public class ModelRequestStructure {
+public class ModelRequest {
 
     private Long experimentId;
 

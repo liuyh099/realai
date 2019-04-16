@@ -116,7 +116,7 @@ public class UserBusinessImpl implements UserBusiness {
         if (userService.update(user) <= 0) {
             return false;
         }
-        if(!userDao.getRoleId().equals(user.getRoleId())){
+        if(userDao.getRoleId()!=null && !user.getRoleId().equals(userDao.getRoleId())){
             //动态清除权限
             singleLogin.clearPermissionByUserId(user.getId());
         }

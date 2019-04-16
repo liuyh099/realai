@@ -1,5 +1,6 @@
 package cn.realai.online.userandperm.business.impl;
 
+import cn.realai.online.common.config.SingleLogin;
 import cn.realai.online.common.page.PageBO;
 import cn.realai.online.core.query.PageQuery;
 import cn.realai.online.userandperm.bo.MenuTreeNodeBO;
@@ -44,9 +45,13 @@ public class RoleBusinessImpl implements RoleBusiness {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SingleLogin singleLogin;
+
     @Override
     public PageBO<RoleBO> list(PageQuery pageQuery) {
         Page page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
+        PageHelper.orderBy("create_time desc");
         List<SysRole> list = roleService.list(new SysRole());
         List<RoleBO> result = JSON.parseArray(JSON.toJSONString(list), RoleBO.class);
         return new PageBO<RoleBO>(result, pageQuery.getPageSize(), pageQuery.getPageNum(), page.getTotal(), page.getPages());
@@ -111,10 +116,17 @@ public class RoleBusinessImpl implements RoleBusiness {
     @Transactional(readOnly = false)
     public Integer delete(List<Long> ids) {
 
+        //清除用户角色
+        List<Long> userIds = userService.findUserIdByRoleIds(ids);
+        if(!CollectionUtils.isEmpty(userIds)){
+            userService.updateRoleIdNull(userIds);
+            singleLogin.clearPermissionByUserIds(userIds);
+        }
+
         //删除角色表
         int count = roleService.delete(ids);
         //删除角色菜单表
-        if(count>0){
+        if (count > 0) {
             roleMenuService.deleteByRoleIds(ids);
         }
         return count;
@@ -160,10 +172,6 @@ public class RoleBusinessImpl implements RoleBusiness {
     @Transactional(readOnly = false)
     public boolean update(RoleBO roleBO) {
 
-        /*if (!checkName(roleBO.getName())) {
-            return false;
-        }*/
-
         SysRole sysRole = new SysRole();
         BeanUtils.copyProperties(roleBO, sysRole);
 
@@ -181,6 +189,12 @@ public class RoleBusinessImpl implements RoleBusiness {
         if (!CollectionUtils.isEmpty(menuIds)) {
             batchInsertRoleMenu(sysRole, menuIds, 1);
         }
+
+        List<Long> userIds = userService.getUserIdsByRoleId(sysRole.getId());
+        if (!CollectionUtils.isEmpty(userIds)) {
+            singleLogin.clearPermissionByUserIds(userIds);
+        }
+
         return true;
     }
 
@@ -194,7 +208,7 @@ public class RoleBusinessImpl implements RoleBusiness {
         List<Long> menuIds = null;
         if (UserUtils.isAdmin(user)) {
             //admin 获得所有的菜单
-             menuIds = menuService.getAllMenuIds();
+            menuIds = menuService.getAllMenuIds();
         } else {
             menuIds = roleMenuService.findIdsByRoleId(user.getRoleId());
         }
@@ -208,6 +222,22 @@ public class RoleBusinessImpl implements RoleBusiness {
         List<SysRole> list = roleService.list(sysRole);
         List<RoleBO> result = JSON.parseArray(JSON.toJSONString(list), RoleBO.class);
         return result;
+    }
+
+    @Override
+    public boolean checkNameByIdAndName(Long id, String name) {
+        SysRole sysRole = new SysRole();
+        sysRole.setName(name);
+        List<SysRole> list = roleService.list(sysRole);
+        if (CollectionUtils.isEmpty(list)) {
+            return true;
+        } else if (list.size() == 1) {
+            SysRole sysRole1 = list.get(0);
+            if (name.equals(sysRole1.getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

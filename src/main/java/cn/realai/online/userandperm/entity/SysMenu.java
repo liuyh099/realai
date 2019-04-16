@@ -17,6 +17,16 @@ public class SysMenu {
 
     private String url;
 
+    private Integer assignment;
+
+    public Integer getAssignment() {
+        return assignment;
+    }
+
+    public void setAssignment(Integer assignment) {
+        this.assignment = assignment;
+    }
+
     public Long getId() {
         return id;
     }

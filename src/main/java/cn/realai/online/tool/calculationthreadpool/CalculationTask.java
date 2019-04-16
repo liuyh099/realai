@@ -8,24 +8,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.realai.online.calculation.TrainService;
+import cn.realai.online.core.query.realtime.RealTimeData;
 import cn.realai.online.util.SpringContextUtils;
 
 public class CalculationTask implements Callable<String> {
 	
 	private static Logger logger = LoggerFactory.getLogger(CalculationTask.class);
 
-    //实时数据
-    private String jsonData;
-
+	private RealTimeData realTimeData;
+	
     //任务
     private FutureTask<String> futureTask;
 
-    //模型code
-    private Long modelId;
-
-    public CalculationTask(String jsonData, long modelId) {
-        this.jsonData = jsonData;
-        this.modelId = modelId;
+    public CalculationTask(RealTimeData realTimeData) {
+    	this.realTimeData = realTimeData;
     }
 
     public FutureTask<String> getFutureTask() {
@@ -42,9 +38,9 @@ public class CalculationTask implements Callable<String> {
     @Override
     public String call() throws Exception {
     	String uuId = UUID.randomUUID().toString();
-    	logger.info("CalculationTask call. 线上任务开始. jsonData{}, modelId{}, uuId{}", jsonData, modelId, uuId);
+    	logger.info("CalculationTask call. 线上任务开始. realTimeData{}, uuId{}", realTimeData, uuId);
     	TrainService trainService = SpringContextUtils.getBean(TrainService.class);
-    	String ret = trainService.realTimeForecast(modelId, jsonData);
+    	String ret = trainService.realTimeForecast(realTimeData);
     	logger.info("CalculationTask call. 线上任务获取返回值. uuId{}", uuId);
         return ret;
     }

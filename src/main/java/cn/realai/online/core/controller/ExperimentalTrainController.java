@@ -58,9 +58,6 @@ public class ExperimentalTrainController {
     public Result<PageBO<ExperimentalTrainVO>> list(ExperimentalTrainQuery query) {
         try {
             PageBO<ExperimentBO> page = experimentalTrainBussiness.pageList(query);
-            if (page == null) {
-                return null;
-            }
             List<ExperimentalTrainVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), ExperimentalTrainVO.class);
             PageBO<ExperimentalTrainVO> pageBO = new PageBO<ExperimentalTrainVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);
@@ -442,9 +439,6 @@ public class ExperimentalTrainController {
     public Result<PageBO<ExperimentalTrainCreateModelDataVO>> createModelGetData(@Validated ExperimentalTrainCreateModelDataQuery query) {
         try {
             PageBO<VariableDataBO> page = experimentalTrainBussiness.pageHomOrHemeList(query);
-            if (page == null) {
-                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
-            }
             List<ExperimentalTrainCreateModelDataVO> result = JSON.parseArray(JSON.toJSONString(page.getPageContent()), ExperimentalTrainCreateModelDataVO.class);
             PageBO<ExperimentalTrainCreateModelDataVO> pageBO = new PageBO<ExperimentalTrainCreateModelDataVO>(result, query.getPageSize(), query.getPageNum(), page.getCount(), page.getTotalPage());
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), pageBO);

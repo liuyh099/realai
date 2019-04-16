@@ -67,4 +67,18 @@ public interface UserService {
      */
     Boolean checkOldPwd(String oldPwd);
 
+    /**
+     * 根据角色ID获得用户ID
+     * @param id
+     * @return
+     */
+    List<Long> getUserIdsByRoleId(Long id);
+    /**
+     * 根据角色ID获得用户ID
+     * @param ids
+     * @return
+     */
+    List<Long> findUserIdByRoleIds(List<Long> ids);
+
+    void updateRoleIdNull(List<Long> userIds);
 }

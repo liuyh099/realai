@@ -92,7 +92,7 @@ public class ServiceServiceImpl implements ServiceService {
 				String secretkey = dataCipherHandler.getOriginalSecretKey(oldService.getSecretKey());
 				if(StringUtils.equals(secretkey, service.getSecretKey())) {
 					logger.error("服务秘钥已被使用！");
-					throw new RuntimeException("服务秘钥已被使用！");
+					throw new RuntimeException("秘钥与该服务类型不匹配！");
 				}
 			}
 		});
@@ -173,7 +173,7 @@ public class ServiceServiceImpl implements ServiceService {
 			try {
 				ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(service.getDetail());
 				secretKey = dataCipherHandler.getOriginalSecretKey(secretKey, serviceDetail.getVersion());
-				FileLicenseInfo fileLicenseInfo = serviceLicenseCheck.checkServiceLic(secretKey);
+				FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.servicLicDecrypt(secretKey);
 				fileLicenseInfo.getRangeTimeLower();
 				service.setExpireDate(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), LicenseConstants.DATE_FORMART));
 				service.setStartTime(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeLower(), LicenseConstants.DATE_FORMART));
@@ -182,6 +182,15 @@ public class ServiceServiceImpl implements ServiceService {
 				if(StringUtils.isNotBlank(fileLicenseInfo.getBusinessType())) {
 					service.setBusinessType(Integer.parseInt(fileLicenseInfo.getBusinessType()));
 				}
+
+				service.setAvailable(true);
+				try {
+					serviceLicenseInfoSource.verifyLimit(fileLicenseInfo);
+					serviceLicenseInfoSource.timesUpperCheck(fileLicenseInfo, serviceDetail);
+				}catch (Exception e) {
+					service.setAvailable(false);
+				}
+
 			} catch (LicenseException e) { 
 				logger.error("非法秘钥 secretKey："+secretKey, e);
 			}

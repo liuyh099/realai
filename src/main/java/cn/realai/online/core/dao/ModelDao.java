@@ -66,4 +66,6 @@ public interface ModelDao {
      * @return
      */
     List<Model> findLastModelSelect();
+
+	Model selectModelByServiceIdAndStatus(@Param("serviceId")Long serviceId, @Param("status")String status);
 }

@@ -173,5 +173,12 @@
         select count(1) from model  as m
         where m.service_id = #{serviceId}
     </select>
+    
+    <select id="selectModelByServiceIdAndStatus" resultMap="ModelMap">
+    	select * 
+    	from model
+    	where service_id = #{serviceId}
+    	and release_status = #{status}
+    </select>
 
 </mapper>

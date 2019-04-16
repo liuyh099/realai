@@ -1,5 +1,6 @@
 package cn.realai.online.core.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -13,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 
 import cn.realai.online.core.bo.TrainResultRedisKey;
-import cn.realai.online.core.bo.model.OfflineBatchRequestStructure;
-import cn.realai.online.core.bo.model.ModelRequestStructure;
+import cn.realai.online.core.bo.model.OfflineBatchRequest;
+import cn.realai.online.core.bo.model.DailyBatchRequest;
+import cn.realai.online.core.bo.model.ModelRequest;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
 import cn.realai.online.common.Constant;
 import cn.realai.online.common.base.BaseController;
@@ -44,7 +46,7 @@ public class ModelCallController extends BaseController{
     @RequestMapping(value = "/offlineBatch", method = RequestMethod.POST)
     public String runBatchOffline(@RequestBody String param) {
     	logger.info("ModelCallController runBatchOffline. 离线跑批. param{}", JSON.toJSONString(param));
-    	OfflineBatchRequestStructure obrs = JSON.parseObject(param, OfflineBatchRequestStructure.class);
+    	OfflineBatchRequest obrs = JSON.parseObject(param, OfflineBatchRequest.class);
     	if (obrs.getCode() != 200) {
     		modelCallBussiness.batchErrorDealWith(obrs.getBatchId(), obrs.getMsg());
     		return ResultUtils.generateResultStr(ResultCode.SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
@@ -55,11 +57,6 @@ public class ModelCallController extends BaseController{
         String redisKey = obrs.getRedisKey();
         String downUrl = obrs.getDownUrl();
         Long batchId = obrs.getBatchId();
-       /* if (type == null || "".equals(type) || experimentId == null || redisKey == null || "".equals(redisKey)) {
-            logger.error("ModelCallController runBatchDaily:date定时任务发生错误，参数格式错误. "
-                    + "experimentId{}, redisKey{}", experimentId, type);
-            return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("文件地址不能为空或null"), null);
-        }       */
         modelCallBussiness.runBatchOffline(experimentId, redisKey, type, downUrl, batchId, obrs.getDone());
         return ResultUtils.generateResultStr(ResultCode.PYTHON_SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
@@ -70,19 +67,29 @@ public class ModelCallController extends BaseController{
      * @return
      */
     @RequestMapping(value = "/dailyBatch", method = RequestMethod.POST)
-    public String runBatchDaily(@RequestBody String param) {
-    	OfflineBatchRequestStructure brs = JSON.parseObject(param, OfflineBatchRequestStructure.class);
-    	Long experimentId = brs.getModelId();
-    	String type = brs.getType();
-        String redisKey = brs.getRedisKey();
-        String date = brs.getDate();
-         
-        if (redisKey != null || "".equals(redisKey) || experimentId == null) {
-            logger.error("ModelCallController runBatchDaily:date定时任务发生错误，参数格式错误. batchStr{}, "
-                    + "experimentId{}, redisKey{}", date, experimentId, redisKey);
-            return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("文件地址不能为空或null"), null);
-        }
-        modelCallBussiness.runBatchDaily(experimentId, redisKey, type, date);
+    public String runBatchDaily(@RequestBody String dbrListJson) {
+    	logger.info("ModelCallController runBatchDaily. 每日跑批批次任务. dbrListJson{}", dbrListJson);
+    	List<DailyBatchRequest> dbrList = JSON.parseArray(dbrListJson, DailyBatchRequest.class);
+    	for (DailyBatchRequest dbr : dbrList) {
+    		if (dbr.getBatchDate() == null) {
+    			logger.info("ModelCallController runBatchDaily. 每日跑批批次任务,批次日期不能为空. dbr{}", JSON.toJSONString(dbr));
+    			return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("批次日期不能为空"), null);
+    		}
+    		if (dbr.getModelId() == null) {
+    			logger.info("ModelCallController runBatchDaily. 每日跑批批次任务,模型id不能为空. dbr{}", JSON.toJSONString(dbr));
+    			return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("模型id不能为空"), null);
+    		}
+    		if (dbr.getYtable() == null) {
+    			logger.info("ModelCallController runBatchDaily. 每日跑批批次任务,Y轴数据源不能为空. dbr{}", JSON.toJSONString(dbr));
+    			return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("Y轴数据源不能为空"), null);
+    		}
+    		if ((dbr.getXtableHetro() == null && dbr.getXtableHomo() == null) || 
+    				(dbr.getXtableHetro() != null && dbr.getXtableHomo() != null)) {
+    			logger.info("ModelCallController runBatchDaily. 每日跑批批次任务,X轴数据源不能为空,并且同质或异质只能有一个有值. dbr{}", JSON.toJSONString(dbr));
+    			return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("X轴数据源不能为空,并且同质或异质只能有一个有值"), null);
+    		}
+    	}
+    	modelCallBussiness.runBatchDaily(dbrList);
         return ResultUtils.generateResultStr(ResultCode.SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
 
@@ -96,7 +103,7 @@ public class ModelCallController extends BaseController{
     	logger.info("ModelCallController callback. param{}, time{}", JSON.toJSONString(param), System.currentTimeMillis() + "");
     	System.out.println(getRequestIp());
     	try {
-    		ModelRequestStructure request = JSON.parseObject(param, ModelRequestStructure.class);
+    		ModelRequest request = JSON.parseObject(param, ModelRequest.class);
             Integer code = request.getCode();
             Long experimentId = request.getExperimentId();
             String task = request.getTask();

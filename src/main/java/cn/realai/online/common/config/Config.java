@@ -16,8 +16,8 @@ public class Config {
     @Value("${python.port}")
     private String PYTHON_PORT;
 
-    @Value("${python.url}")
-    private String PYTHON_URL;
+    @Value("${train.url}")
+    private String TRAIN_URL;
     
     @Value("${experiment.drop}")
     private String EXPERIMENT_DROP;
@@ -37,8 +37,14 @@ public class Config {
     @Value("${nginx.port}")
     private String NGINX_PORT;
     
+    @Value("${realtime.url}")
+    private String REALTIME_URL;
+    
+    @Value("${model.daily.batch}")
+    private String MODEL_DAILY_BATCH;
+    
     public String getPythonUrl() {
-        return http + PYTHON_HOST + ":" + PYTHON_PORT + PYTHON_URL;
+        return http + PYTHON_HOST + ":" + PYTHON_PORT + TRAIN_URL;
     }
     
     public String getExperimentDrop() {
@@ -59,6 +65,14 @@ public class Config {
     
     public String getModelOfflineBatch() {
     	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_OFFLINE_BATCH;
+    }
+    
+    public String getRealtimeUrl() {
+    	return http + PYTHON_HOST + ":" + PYTHON_PORT + REALTIME_URL;
+    } 
+    
+    public String getModelDailyBatch() {
+    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_DAILY_BATCH;
     }
     
 }

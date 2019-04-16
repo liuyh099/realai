@@ -47,7 +47,6 @@
                     <foreach collection="ids" item="id" separator="," open="id in(" close=")">
                         #{id}
                     </foreach>
-                    AND id NOT IN (SELECT DISTINCT role_id FROM sys_user)
                 </when>
                 <otherwise>
                     1=2

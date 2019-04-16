@@ -29,6 +29,25 @@
         </where>
     </select>
 
+    <select id="getUserIdsByRoleId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT id FROM sys_user WHERE role_id = #{roleId}
+    </select>
+
+    <select id="findUserIdByRoleIds" parameterType="java.lang.Long" resultType="java.lang.Long">
+         SELECT id FROM sys_user WHERE role_id in
+         <foreach collection="ids" item="id" open="(" close=")" separator=",">
+           #{id}
+         </foreach>
+    </select>
+
+    <update id="updateRoleIdNull" parameterType="java.lang.Long">
+        UPDATE sys_user SET role_id=NULL WHERE id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+
     <select id="findList" resultMap="UserMap" parameterType="cn.realai.online.userandperm.entity.User">
         SELECT DISTINCT a.* ,b.name AS group1,(SELECT count(1) FROM sys_forget_notice where user_id=a.id ) AS forgetCount
         FROM sys_user a
