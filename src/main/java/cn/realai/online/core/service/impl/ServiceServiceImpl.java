@@ -2,6 +2,7 @@ package cn.realai.online.core.service.impl;
 
 import cn.realai.online.core.dao.ServiceDao;
 import cn.realai.online.core.entity.Service;
+import cn.realai.online.core.service.TuningRecordService;
 import cn.realai.online.lic.*;
 import cn.realai.online.util.DateUtil;
 import com.alibaba.fastjson.JSON;
@@ -38,6 +39,9 @@ public class ServiceServiceImpl implements ServiceService {
 
 	@Autowired
 	private LicenseCheckHandler licenseCheckHandler;
+
+	@Autowired
+	private TuningRecordService tuningRecordService;
 
 	@Override
 	public Service get(Long serviceId) {
@@ -106,6 +110,16 @@ public class ServiceServiceImpl implements ServiceService {
 		FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(service.getSecretKey());
 		if(StringUtils.isNotEmpty(fileLicenseInfo.getCancelSecretKey())) {
 			detail.setTuningKeyIds(fileLicenseInfo.getCancelSecretKey());
+
+			List<String> cancelSecretKeyList = licenseCheckHandler.getCancelSecretKeyList(fileLicenseInfo);
+
+			for (String cancelSecretKey : cancelSecretKeyList) {
+				if(StringUtils.isNotEmpty(cancelSecretKey)) {
+					tuningRecordService.invalidateBySecretKey(cancelSecretKey);
+				}
+			}
+
+
 		}
 		if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
 			throw new RuntimeException("秘钥已过期");

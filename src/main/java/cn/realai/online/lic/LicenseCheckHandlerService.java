@@ -2,6 +2,7 @@ package cn.realai.online.lic;
 
 import cn.realai.online.core.entity.Service;
 import cn.realai.online.core.service.ServiceService;
+import cn.realai.online.core.service.TuningRecordService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,9 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
 
     @Autowired
     private ServiceLicenseInfoSource serviceLicenseInfoSource;
+
+    @Autowired
+    private TuningRecordService tuningRecordService;
 
     @Override
     public String getDataCiphertext(long serviceId) {
@@ -74,6 +78,9 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
 
         if(StringUtils.isNotBlank(tuningSecretKey)) {
             FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
+
+            tuningRecordService.invalidateBySecretKey(tuningSecretKey);
+
             String tuningKey = service.getTuningSecretKey();
             if(StringUtils.isNotBlank(tuningKey)) {
                 if(tuningKey.indexOf(tuningSecretKey) != -1) {
@@ -98,6 +105,7 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
             if(!cancelSecretKeyList.isEmpty()) {
                 for (String cancelSecretKey : cancelSecretKeyList) {
                     tuningKeyIds += cancelSecretKey + ",";
+                    tuningRecordService.invalidateBySecretKey(cancelSecretKey);
                 }
             }
         }

@@ -6,6 +6,7 @@ import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.Service;
 import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.service.ServiceService;
+import cn.realai.online.core.service.TuningRecordService;
 import cn.realai.online.core.vo.service.SecretKeyInfoVO;
 import cn.realai.online.core.vo.service.ServiceVO;
 import cn.realai.online.lic.*;
@@ -49,6 +50,9 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
     @Autowired
     private LicenseCheckHandler licenseCheckHandler;
+
+    @Autowired
+    private TuningRecordService tuningRecordService;
 
     @Override
     public boolean addService(ServiceBO serviceBO) throws LicenseException {
@@ -146,6 +150,8 @@ public class ServiceBussinessImpl implements ServiceBussiness {
                     if(StringUtils.isNotEmpty(cancelSecretKey)
                             && cancelKeys.indexOf(cancelSecretKey) == -1) {
                         cancelKeys += cancelSecretKey + ",";
+
+                        tuningRecordService.invalidateBySecretKey(cancelSecretKey);
                     }
                 }
                 if(!cancelKeys.startsWith(",")) {
