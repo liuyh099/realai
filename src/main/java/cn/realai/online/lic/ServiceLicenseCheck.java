@@ -62,8 +62,13 @@ public class ServiceLicenseCheck {
 
         checkLic(serviceCiphertext, secretKey);
 
-        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId, serviceCiphertext);
-        licenseCheckHandler.checkSecretKeyApply(serviceId, secretKey, serviceDetail);
+        try {
+            ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId, serviceCiphertext);
+            licenseCheckHandler.checkSecretKeyApply(serviceId, secretKey, serviceDetail);
+        }catch (Exception e) {
+            throw new LicenseException("当前秘钥与该服务类型不匹配！");
+        }
+
     }
 
     /**
@@ -94,10 +99,15 @@ public class ServiceLicenseCheck {
             throw new LicenseException("秘钥类型不匹配，普通秘钥不能用于强制调优！");
         }
 
-        checkLic(serviceCiphertext, tuningSecretKey);
-        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId, serviceCiphertext);
-        licenseCheckHandler.updateServiceDetail(serviceId, tuningSecretKey, serviceDetail);
-        licenseCheckHandler.clearTuningKey(serviceId, serviceLicenseInfoSource);
+        try {
+            checkLic(serviceCiphertext, tuningSecretKey);
+            ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId, serviceCiphertext);
+            licenseCheckHandler.updateServiceDetail(serviceId, tuningSecretKey, serviceDetail);
+            licenseCheckHandler.clearTuningKey(serviceId, serviceLicenseInfoSource);
+        }catch (Exception e) {
+            throw new LicenseException("当前秘钥与该服务类型不匹配！");
+        }
+
     }
 
 

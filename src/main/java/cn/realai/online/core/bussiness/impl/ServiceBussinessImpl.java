@@ -100,7 +100,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
                     String secretkey = dataCipherHandler.getOriginalSecretKey(service.getSecretKey());
                     if(StringUtils.equals(secretkey, serviceBO.getSecretKey())) {
                         logger.error("服务秘钥已被使用！");
-                        throw new RuntimeException("服务秘钥已被使用！");
+                        throw new RuntimeException("当前秘钥与该服务类型不匹配！");
                     }
                 }
             });

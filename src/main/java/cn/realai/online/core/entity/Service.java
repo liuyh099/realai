@@ -74,6 +74,19 @@ public class Service {
 
 	private int delFlag;  //删除标记 0 : 未删除   1：已删除
 
+	/**
+	 * 是否可用
+	 */
+	private boolean available;
+
+	public boolean isAvailable() {
+		return available;
+	}
+
+	public void setAvailable(boolean available) {
+		this.available = available;
+	}
+
 	public int getDelFlag() {
 		return delFlag;
 	}
