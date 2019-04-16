@@ -60,7 +60,7 @@ public class ServiceLicenseInfoSource {
 
         /* 检查秘钥是否仍然存在或在是否被篡改 */
         if (licenseInfo == null) {
-            throw new LicenseException("秘钥非法! ciphertext = "+ciphertext);
+            throw new LicenseException("秘钥与该服务类型不匹配！");
         }
 
         //指纹检验
@@ -82,7 +82,7 @@ public class ServiceLicenseInfoSource {
             logger.debug("授权信息..." +licenseInfo);
         } catch (Exception e) {
             logger.error("授权解密失败！", e);
-            throw new LicenseException("授权解密失败！");
+            throw new LicenseException("秘钥与该服务类型不匹配！");
         }
         return licenseInfo;
     }
@@ -111,7 +111,7 @@ public class ServiceLicenseInfoSource {
         }
     }
 
-    protected void verifyLimit(FileLicenseInfo licenseInfo) throws LicenseException {
+    public void verifyLimit(FileLicenseInfo licenseInfo) throws LicenseException {
         SimpleDateFormat df = new SimpleDateFormat(LicenseConstants.DATE_FORMART);
         Date begin = null;
         Date end = null;
@@ -162,6 +162,15 @@ public class ServiceLicenseInfoSource {
             serviceDetail.setDeployUseTimes(deployUseTimes+"");
             serviceDetail.setVersion(version);
             return serviceDetail;
+        }
+    }
+
+    public void timesUpperCheck(FileLicenseInfo licenseInfo, ServiceDetail serviceDetail) throws LicenseException {
+        int deployUseTimes = Integer.parseInt(serviceDetail.getDeployUseTimes());
+        int version = serviceDetail.getVersion();
+
+        if(deployUseTimes >= Integer.parseInt(licenseInfo.getDeployTimesUpper())) {
+            throw new LicenseException("部署使用次数超过最大限制！");
         }
     }
 
