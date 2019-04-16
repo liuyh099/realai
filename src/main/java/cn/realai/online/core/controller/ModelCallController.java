@@ -83,10 +83,9 @@ public class ModelCallController extends BaseController{
     			logger.info("ModelCallController runBatchDaily. 每日跑批批次任务,Y轴数据源不能为空. dbr{}", JSON.toJSONString(dbr));
     			return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("Y轴数据源不能为空"), null);
     		}
-    		if ((dbr.getXtableHetro() == null && dbr.getXtableHomo() == null) || 
-    				(dbr.getXtableHetro() != null && dbr.getXtableHomo() != null)) {
-    			logger.info("ModelCallController runBatchDaily. 每日跑批批次任务,X轴数据源不能为空,并且同质或异质只能有一个有值. dbr{}", JSON.toJSONString(dbr));
-    			return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("X轴数据源不能为空,并且同质或异质只能有一个有值"), null);
+    		if (dbr.getXtableHetro() == null && dbr.getXtableHomo() == null) {
+    			logger.info("ModelCallController runBatchDaily. 每日跑批批次任务,X轴数据源不能为空. dbr{}", JSON.toJSONString(dbr));
+    			return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.PARAM_ERORR.getMsg("X轴数据源不能为空"), null);
     		}
     	}
     	modelCallBussiness.runBatchDaily(dbrList);
