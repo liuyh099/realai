@@ -35,6 +35,12 @@ public class ModelListVO {
     @ApiModelProperty(value = "上线时间")
     private Long releaseTime;
 
+    @ApiModelProperty(value = "模型状态")
+    private String releaseStatus;
+
+    @ApiModelProperty(value = "模型状态名称")
+    private String releaseStatusName;
+
     @ApiModelProperty(value = "算法")
     private String algorithm;
 
@@ -104,6 +110,22 @@ public class ModelListVO {
 
     public void setReleaseTime(Long releaseTime) {
         this.releaseTime = releaseTime;
+    }
+
+    public String getReleaseStatus() {
+        return releaseStatus;
+    }
+
+    public void setReleaseStatus(String releaseStatus) {
+        this.releaseStatus = releaseStatus;
+    }
+
+    public String getReleaseStatusName() {
+        return releaseStatusName;
+    }
+
+    public void setReleaseStatusName(String releaseStatusName) {
+        this.releaseStatusName = releaseStatusName;
     }
 
     public String getAlgorithm() {

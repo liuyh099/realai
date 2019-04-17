@@ -104,7 +104,7 @@ public interface ExperimentDao {
      * @param experimentId
      * @param releasYes
      */
-    void updateExperimentTrainStatus(@Param("id")Long experimentId, @Param("status")int releasYes,@Param("publishTime")Long publishTime);
+    void updateExperimentTrainStatus(@Param("id")Long experimentId, @Param("status")int releasYes,@Param("publishTime")Long publishTime,@Param("tuningNo")Integer tuningNo);
 
     /**
      * 实验训练

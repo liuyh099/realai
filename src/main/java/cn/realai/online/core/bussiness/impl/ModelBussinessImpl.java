@@ -107,6 +107,13 @@ public class ModelBussinessImpl implements ModelBussiness {
                     }
                 }
 
+                //设置模型状态名称
+                String releaseStatusName = Optional.of(item)
+                                            .map(ModelListBO::getReleaseStatus)
+                                            .map(v -> Model.RELEASE_STATUS.valueOf(v.toUpperCase()).desc)
+                                            .orElse(null);
+                voItem.setReleaseStatusName(releaseStatusName);
+
                 //设置调优原因
                 String reason = Optional.of(item)
                                     .map(ModelListBO::getTuningType)
@@ -311,14 +318,17 @@ public class ModelBussinessImpl implements ModelBussiness {
      */
     private HashMap<String,Object> publishModel(ModelBO modelBO) {
         Experiment experiment = experimentService.selectExperimentById(modelBO.getExperimentId());
-        experimentService.updateExperimentTrainStatus(modelBO.getExperimentId(), modelBO.getStatus(),System.currentTimeMillis());
-        experimentService.updateExperimentOffline(modelBO.getExperimentId(), experiment.getServiceId(), Experiment.RELEAS_OFFINE);
-        //serviceService.online(modelBO.getServiceId());
+
         modelBO.setServiceId(experiment.getServiceId());
         modelBO.setCreateTime(System.currentTimeMillis());
         modelBO.setCreateUserId(UserUtils.getUser().getId());
         //获取服务
         Integer tuningNo = modelService.selectCountByServiceId(experiment.getServiceId());
+        if(tuningNo!=null && tuningNo==0){
+            tuningNo=null;
+        }
+        experimentService.updateExperimentTrainStatus(modelBO.getExperimentId(), modelBO.getStatus(),System.currentTimeMillis(),tuningNo);
+        experimentService.updateExperimentOffline(modelBO.getExperimentId(), experiment.getServiceId(), Experiment.RELEAS_OFFINE);
         modelBO.setTuningNo(tuningNo);
         int count = 0;
         modelService.insert(modelBO);

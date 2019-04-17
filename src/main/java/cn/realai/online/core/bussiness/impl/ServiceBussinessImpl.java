@@ -147,9 +147,16 @@ public class ServiceBussinessImpl implements ServiceBussiness {
                 String cancelKeys = serviceDetail.getTuningKeyIds();
 
                 for (String cancelSecretKey : cancelSecretKeyListnew) {
-                    if(StringUtils.isNotEmpty(cancelSecretKey)
-                            && cancelKeys.indexOf(cancelSecretKey) == -1) {
-                        cancelKeys += cancelSecretKey + ",";
+                    if(StringUtils.isNotEmpty(cancelSecretKey)) {
+
+                        if (StringUtils.isNotEmpty(cancelKeys)) {
+                            if(cancelKeys.indexOf(cancelSecretKey) == -1) {
+                                cancelKeys += cancelSecretKey + ",";
+                            }
+                        }else {
+                            cancelKeys = cancelSecretKey + ",";
+                        }
+
 
                         tuningRecordService.invalidateBySecretKey(cancelSecretKey);
                     }

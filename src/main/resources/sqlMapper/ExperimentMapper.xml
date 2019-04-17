@@ -158,12 +158,15 @@
     <update id="updateExperimentOffline">
         update experiment
 		set releas_status = #{status}
-		where id != #{id} and service_id = #{serviceId}
+		where id != #{id} and service_id = #{serviceId} AND releas_status in (2,3)
     </update>
 
     <update id="updateExperimentTrainStatus">
         update experiment
 		set releas_status = #{status},release_time =#{publishTime}
+		<if test="tuningNo!=null">
+            ,tuning_count=#{tuningNo}
+        </if>
 		where id = #{id}
     </update>
 
