@@ -93,6 +93,7 @@
         <result column="experimentId" property="experimentId" jdbcType="BIGINT"/>
         <result column="experimentName" property="experimentName" jdbcType="VARCHAR"/>
         <result column="releaseTime" property="releaseTime" jdbcType="TIMESTAMP"/>
+        <result column="releaseStatus" property="releaseStatus" jdbcType="VARCHAR"/>
         <result column="algorithmType" property="algorithmType" jdbcType="VARCHAR"/>
         <result column="tuningNo" property="tuningNo" jdbcType="INTEGER"/>
         <result column="tuningType" property="tuningType" jdbcType="VARCHAR"/>
@@ -106,6 +107,7 @@
         ep.id as experimentId,
         ep.name as experimentName,
         m.create_time as releaseTime,
+        m.release_status as releaseStatus,
         ep.algorithm_type as algorithmType,
         m.tuning_no as tuningNo,
         tr.type as tuningTYpe
