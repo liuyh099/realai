@@ -204,6 +204,9 @@ public class TrainServiceImpl implements TrainService {
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl deleteExperiment. 调用python删除接口失败. derbo{}" + JSON.toJSONString(derbo));
         }
+        //删除python实验成功之后在释放训练所，如果当前训练的实验是当前删除的实验，则释放训练锁，如不是则释放动作并不生效
+        MLock mLock = mLockService.getLock(MLock.TRAIN_MLOCK_LOCK, MLock.BATCH_MLOCK_PREFIX, experimentId);
+        mLock.unLock();
 		return 1;
 	}
 	

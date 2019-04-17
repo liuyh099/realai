@@ -286,6 +286,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     @Override
     @Transactional(readOnly = false)
     public void deleteVariableDataWithRecommend(Long experimentId, List<Long> excludeIds) {
+        experimentService.updateExperimentStatus(experimentId,Experiment.STATUS_FILTER);
         variableDataService.deleteByRecommendAndExcludeIds(experimentId, excludeIds);
     }
 
@@ -293,7 +294,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
     public ExperimentalResultQuatoBO quota(Long experimentId) {
 
 
-        //TODO 去获取服务
+
         List<ExperimentResultSetBO> trainResultSetListBO = quotaCommon(Experiment.DATA_SET_TRAIN, experimentId, "parent");
         List<ExperimentResultSetBO> testResultSetListBO = quotaCommon(Experiment.DATA_SET_TEST, experimentId, "parent");
         List<ExperimentResultSetBO> validResultSetListBO = quotaCommon(Experiment.DATA_SET_VALID, experimentId, "parent");
