@@ -164,6 +164,9 @@
     <update id="updateExperimentTrainStatus">
         update experiment
 		set releas_status = #{status},release_time =#{publishTime}
+		<if test="tuningNo!=null">
+            ,tuning_count=#{tuningNo}
+        </if>
 		where id = #{id}
     </update>
 

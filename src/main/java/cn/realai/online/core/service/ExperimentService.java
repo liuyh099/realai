@@ -118,7 +118,7 @@ public interface ExperimentService {
      * @param releasYes
      * @param publishTime
      */
-    void updateExperimentTrainStatus(Long experimentId, int releasYes,Long publishTime);
+    void updateExperimentTrainStatus(Long experimentId, int releasYes,Long publishTime,Integer tuningNo);
 
     /**
      * 获得最近的服务ID
