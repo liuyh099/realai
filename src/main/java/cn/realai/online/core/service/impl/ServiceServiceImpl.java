@@ -96,7 +96,7 @@ public class ServiceServiceImpl implements ServiceService {
 				String secretkey = dataCipherHandler.getOriginalSecretKey(oldService.getSecretKey());
 				if(StringUtils.equals(secretkey, service.getSecretKey())) {
 					logger.error("服务秘钥已被使用！");
-					throw new RuntimeException("秘钥与该服务类型不匹配！");
+					throw new RuntimeException("服务秘钥已被使用！");
 				}
 			}
 		});
