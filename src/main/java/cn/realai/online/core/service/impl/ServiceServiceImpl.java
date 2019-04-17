@@ -108,6 +108,12 @@ public class ServiceServiceImpl implements ServiceService {
 		detail.setServiceName(service.getName());
 		detail.setVersion(0);
 		FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(service.getSecretKey());
+
+
+		if(SecretKeyType.COMMON.getCode() != Integer.parseInt(fileLicenseInfo.getSecretKeyType())) {
+			throw new RuntimeException("当前秘钥与该服务类型不匹配！");
+		}
+
 		if(StringUtils.isNotEmpty(fileLicenseInfo.getCancelSecretKey())) {
 			detail.setTuningKeyIds(fileLicenseInfo.getCancelSecretKey());
 
