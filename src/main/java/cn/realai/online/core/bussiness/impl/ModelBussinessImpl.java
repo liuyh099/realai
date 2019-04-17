@@ -329,7 +329,7 @@ public class ModelBussinessImpl implements ModelBussiness {
         }
         experimentService.updateExperimentTrainStatus(modelBO.getExperimentId(), modelBO.getStatus(),System.currentTimeMillis(),tuningNo);
         experimentService.updateExperimentOffline(modelBO.getExperimentId(), experiment.getServiceId(), Experiment.RELEAS_OFFINE);
-        modelBO.setTuningNo(tuningNo);
+        modelBO.setTuningNo(Optional.ofNullable(tuningNo).orElse(0));
         int count = 0;
         modelService.insert(modelBO);
         ServiceDeployRecordBO serviceDeployRecordBO = getServiceDeployRecordBO(modelBO);
