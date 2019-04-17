@@ -311,14 +311,17 @@ public class ModelBussinessImpl implements ModelBussiness {
      */
     private HashMap<String,Object> publishModel(ModelBO modelBO) {
         Experiment experiment = experimentService.selectExperimentById(modelBO.getExperimentId());
-        experimentService.updateExperimentTrainStatus(modelBO.getExperimentId(), modelBO.getStatus(),System.currentTimeMillis());
-        experimentService.updateExperimentOffline(modelBO.getExperimentId(), experiment.getServiceId(), Experiment.RELEAS_OFFINE);
-        //serviceService.online(modelBO.getServiceId());
+
         modelBO.setServiceId(experiment.getServiceId());
         modelBO.setCreateTime(System.currentTimeMillis());
         modelBO.setCreateUserId(UserUtils.getUser().getId());
         //获取服务
         Integer tuningNo = modelService.selectCountByServiceId(experiment.getServiceId());
+        if(tuningNo!=null && tuningNo==0){
+            tuningNo=null;
+        }
+        experimentService.updateExperimentTrainStatus(modelBO.getExperimentId(), modelBO.getStatus(),System.currentTimeMillis(),tuningNo);
+        experimentService.updateExperimentOffline(modelBO.getExperimentId(), experiment.getServiceId(), Experiment.RELEAS_OFFINE);
         modelBO.setTuningNo(tuningNo);
         int count = 0;
         modelService.insert(modelBO);
