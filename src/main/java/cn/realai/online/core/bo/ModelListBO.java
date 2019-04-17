@@ -19,6 +19,7 @@ public class ModelListBO {
     private Long experimentId;
     private String experimentName;
     private Long releaseTime;
+    private String releaseStatus;
     private String algorithmType;
     private Integer tuningNo;
     private String tuningReason;
@@ -80,6 +81,14 @@ public class ModelListBO {
 
     public void setReleaseTime(Long releaseTime) {
         this.releaseTime = releaseTime;
+    }
+
+    public String getReleaseStatus() {
+        return releaseStatus;
+    }
+
+    public void setReleaseStatus(String releaseStatus) {
+        this.releaseStatus = releaseStatus;
     }
 
     public String getAlgorithmType() {

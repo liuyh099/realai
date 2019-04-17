@@ -22,9 +22,9 @@ public class Model {
     private Long createUserId;
 
     public static enum RELEASE_STATUS {
-        NONE("none", "未发布"),
+        NONE("none", "已下线"),
         ONLINE("online", "线上发布"),
-        OFFLINE("offline", "线下发布");
+        OFFLINE("offline", "离线发布");
 
         public String value;
         public String desc;
