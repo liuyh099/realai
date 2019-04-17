@@ -107,6 +107,13 @@ public class ModelBussinessImpl implements ModelBussiness {
                     }
                 }
 
+                //设置模型状态名称
+                String releaseStatusName = Optional.of(item)
+                                            .map(ModelListBO::getReleaseStatus)
+                                            .map(v -> Model.RELEASE_STATUS.valueOf(v.toUpperCase()).desc)
+                                            .orElse(null);
+                voItem.setReleaseStatusName(releaseStatusName);
+
                 //设置调优原因
                 String reason = Optional.of(item)
                                     .map(ModelListBO::getTuningType)
