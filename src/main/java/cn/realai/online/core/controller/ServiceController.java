@@ -248,7 +248,13 @@ public class ServiceController {
     @PostMapping("/test/applyService")
     public Result applyService(@RequestBody ApplyServiceQuery applyServiceQuery){
         try {
-            serviceLicenseCheck.applyService(applyServiceQuery.getId(), applyServiceQuery.getSecretKey());
+
+            if(StringUtils.isEmpty(applyServiceQuery.getSecretKey())) {
+                serviceLicenseCheck.applyService(applyServiceQuery.getId());
+            }else {
+                serviceLicenseCheck.applyService(applyServiceQuery.getId(), applyServiceQuery.getSecretKey());
+            }
+
         } catch (Exception e) {
             logger.error("部署调优异常！", e);
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg()+e.getMessage(), null);
