@@ -46,6 +46,11 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
     @Override
     public String getServiceCiphertext(long serviceId, SecretKeyType secretKeyType) throws LicenseException {
         Service service = serviceService.selectServiceById(serviceId);
+
+        if(service == null) {
+            throw new LicenseException("服务不存在！");
+        }
+
         ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(service.getDetail());
         String ciphertext = dataCipherHandler.getOriginalSecretKey(service.getSecretKey(), serviceDetail.getVersion());
 //        if(secretKeyType == SecretKeyType.COMMON) {
@@ -76,8 +81,8 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
 //            throw new LicenseException("系统异常！数据错误！");
 //        }
 
+        FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
         if(StringUtils.isNotBlank(tuningSecretKey)) {
-            FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
 
             tuningRecordService.invalidateBySecretKey(tuningSecretKey);
 
@@ -108,6 +113,7 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
                     tuningRecordService.invalidateBySecretKey(cancelSecretKey);
                 }
             }
+
         }
 
         serviceDetail.setTuningKeyIds(tuningKeyIds);
@@ -116,6 +122,10 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
         service.setDetail(dataCiphertext);
         service.setSecretKey(newSecretKey);
         serviceService.update(service);
+
+        if(StringUtils.isNotBlank(tuningSecretKey)) {
+            serviceService.secretKeyHandler(licenseInfo);
+        }
 
     }
 
@@ -207,6 +217,20 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
 
     public List<String> getCancelSecretKeyList(FileLicenseInfo fileLicenseInfo) {
         String cancelKeys = fileLicenseInfo.getCancelSecretKey();
+        List<String> cancelKeyList = new ArrayList<>();
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(cancelKeys)) {
+            for(String s : cancelKeys.split(",")) {
+                if(StringUtils.isNotEmpty(s)) {
+                    cancelKeyList.add(s);
+                }
+            }
+
+        }
+        return cancelKeyList;
+    }
+
+    public List<String> getStopSecretKeyList(FileLicenseInfo fileLicenseInfo) {
+        String cancelKeys = fileLicenseInfo.getStopSecretKey();
         List<String> cancelKeyList = new ArrayList<>();
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(cancelKeys)) {
             for(String s : cancelKeys.split(",")) {

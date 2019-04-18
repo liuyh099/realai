@@ -17,6 +17,20 @@ public class ServiceDetail {
 
     private String tuningKeyIds;
 
+    private int status = STATUS_NORMAL;
+
+    public static final Integer STATUS_STOP = 0;
+
+    public static final Integer STATUS_NORMAL = 1;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public int getVersion() {
         return version;
     }

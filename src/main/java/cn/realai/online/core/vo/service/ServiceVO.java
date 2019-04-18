@@ -43,11 +43,22 @@ public class ServiceVO {
     @ApiModelProperty(value = "是否可续期", example = "true: 可续期 false: 不可续期")
     private boolean renewable;
 
-    @ApiModelProperty(value = "是否可用", example = "true: 可用 false: 不可用")
+    @ApiModelProperty(value = "是否可用（到期或者次数用完）", example = "true: 可用 false: 不可用")
     private boolean available;
+
+    @ApiModelProperty(value = "是否废弃（秘钥废弃）", example = "true: 已废弃 false: 秘钥正常")
+    private boolean discard;
 
     @ApiModelProperty(value = "发布次数上限")
     private Integer deployTimesUpper;
+
+    public boolean isDiscard() {
+        return discard;
+    }
+
+    public void setDiscard(boolean discard) {
+        this.discard = discard;
+    }
 
     public boolean isAvailable() {
         return available;

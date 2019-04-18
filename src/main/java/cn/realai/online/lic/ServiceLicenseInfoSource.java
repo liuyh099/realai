@@ -135,6 +135,16 @@ public class ServiceLicenseInfoSource {
     }
 
 
+    public void licenseDiscardCheck(long serviceId) throws LicenseException {
+        String dataCiphertext = licenseCheckHandler.getDataCiphertext(serviceId);
+        ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(dataCiphertext);
+
+        if(serviceDetail.getStatus() == ServiceDetail.STATUS_STOP) {
+            throw new LicenseException("该服务已作废！");
+        }
+
+    }
+
 
     /**
      * 检查授权使用并返回服务描述
