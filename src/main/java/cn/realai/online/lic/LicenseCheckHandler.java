@@ -57,4 +57,6 @@ public interface LicenseCheckHandler {
 
     List<String> getCancelSecretKeyList(FileLicenseInfo fileLicenseInfo);
 
+    public List<String> getStopSecretKeyList(FileLicenseInfo fileLicenseInfo);
+
 }

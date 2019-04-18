@@ -79,6 +79,16 @@ public class Service {
 	 */
 	private boolean available;
 
+	private boolean discard = false;
+
+	public boolean isDiscard() {
+		return discard;
+	}
+
+	public void setDiscard(boolean discard) {
+		this.discard = discard;
+	}
+
 	public boolean isAvailable() {
 		return available;
 	}
