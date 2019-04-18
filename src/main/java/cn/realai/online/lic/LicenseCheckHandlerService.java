@@ -79,8 +79,8 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
 //            throw new LicenseException("系统异常！数据错误！");
 //        }
 
-        FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
         if(StringUtils.isNotBlank(tuningSecretKey)) {
+            FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
 
             tuningRecordService.invalidateBySecretKey(tuningSecretKey);
 
@@ -129,6 +129,7 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
         serviceService.update(service);
 
         if(StringUtils.isNotBlank(tuningSecretKey)) {
+            FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
             serviceService.secretKeyHandler(licenseInfo);
         }
 
