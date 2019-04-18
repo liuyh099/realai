@@ -16,8 +16,7 @@ import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.service.ServiceService;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @org.springframework.stereotype.Service
 @Transactional(readOnly = true)
@@ -112,8 +111,15 @@ public class ServiceServiceImpl implements ServiceService {
 			detail.setTuningKeyIds(fileLicenseInfo.getCancelSecretKey());
 
 			List<String> cancelSecretKeyList = licenseCheckHandler.getCancelSecretKeyList(fileLicenseInfo);
+			List<String> stopSecretKeyList = licenseCheckHandler.getStopSecretKeyList(fileLicenseInfo);
 
-			for (String cancelSecretKey : cancelSecretKeyList) {
+			Set<String> cancelSecretKeySet = new HashSet<>();
+			cancelSecretKeySet.addAll(cancelSecretKeyList);
+			cancelSecretKeySet.addAll(stopSecretKeyList);
+			List<String> cancelSecretKeyListnew = new ArrayList<>();
+			cancelSecretKeyListnew.addAll(cancelSecretKeySet);
+
+			for (String cancelSecretKey : cancelSecretKeyListnew) {
 				if(StringUtils.isNotEmpty(cancelSecretKey)) {
 					tuningRecordService.invalidateBySecretKey(cancelSecretKey);
 				}

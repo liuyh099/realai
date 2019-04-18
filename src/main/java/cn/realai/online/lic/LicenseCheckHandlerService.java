@@ -9,9 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Description:
@@ -107,8 +105,15 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
             }
 
             List<String> cancelSecretKeyList = getCancelSecretKeyList(licenseInfo);
-            if(!cancelSecretKeyList.isEmpty()) {
-                for (String cancelSecretKey : cancelSecretKeyList) {
+            List<String> stopSecretKeyList = getStopSecretKeyList(licenseInfo);
+
+            Set<String> cancelSecretKeySet = new HashSet<>();
+            cancelSecretKeySet.addAll(cancelSecretKeyList);
+            cancelSecretKeySet.addAll(stopSecretKeyList);
+            List<String> cancelSecretKeyListnew = new ArrayList<>();
+            cancelSecretKeyListnew.addAll(cancelSecretKeySet);
+            if(!cancelSecretKeyListnew.isEmpty()) {
+                for (String cancelSecretKey : cancelSecretKeyListnew) {
                     tuningKeyIds += cancelSecretKey + ",";
                     tuningRecordService.invalidateBySecretKey(cancelSecretKey);
                 }
