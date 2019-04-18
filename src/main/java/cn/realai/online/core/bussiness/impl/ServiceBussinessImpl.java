@@ -134,10 +134,12 @@ public class ServiceBussinessImpl implements ServiceBussiness {
             }
 
             List<String> cancelSecretKeyList = licenseCheckHandler.getCancelSecretKeyList(fileLicenseInfo);
+            List<String> stopSecretKeyList = licenseCheckHandler.getStopSecretKeyList(fileLicenseInfo);
 
             cancelSecretKeyList.add(fileLicenseInfoOld.getId());
             Set<String> cancelSecretKeySet = new HashSet<>();
             cancelSecretKeySet.addAll(cancelSecretKeyList);
+            cancelSecretKeySet.addAll(stopSecretKeyList);
             List<String> cancelSecretKeyListnew = new ArrayList<>();
             cancelSecretKeySet.add(fileLicenseInfoOld.getId());
             cancelSecretKeyListnew.addAll(cancelSecretKeySet);
