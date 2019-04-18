@@ -12,10 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Description:  服务授权检查
@@ -118,6 +115,10 @@ public class ServiceLicenseInfoSource {
         try {
             begin = df.parse(licenseInfo.getRangeTimeLower());
             end = df.parse(licenseInfo.getRangeTimeUpper());
+            Calendar cend = Calendar.getInstance();
+            cend.setTime(end);
+            cend.add(Calendar.DAY_OF_MONTH, 1);
+            end = cend.getTime();
         } catch (ParseException e) {
             throw new LicenseException("授权时间格式不正确");
         }
