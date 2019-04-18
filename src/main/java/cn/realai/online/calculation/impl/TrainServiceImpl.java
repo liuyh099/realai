@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import cn.realai.online.calculation.TrainService;
 import cn.realai.online.calculation.requestbo.BatchOfOfflineRequestBO;
@@ -117,11 +118,16 @@ public class TrainServiceImpl implements TrainService {
 	}
 
 	@Override
-	public int experimentDeploy(Long experimentId, Long originalId) {
+	public int experimentDeploy(Long experimentId, Long originalId, String type) {
 		DeployRequestBO drbo = new DeployRequestBO();
 		drbo.setModelId(experimentId);
 		//drbo.setOriginalId(originalId);
-        String url = config.getModelPublish();
+		String url = null;
+		if ("online".equals(type)) {
+			url = config.getModelOnlinePublish();
+		} else {
+			url = config.getModelOfflinePublish();
+		}
         String ret = HttpUtil.postRequest(url, JSON.toJSONString(drbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl preprocess. 调用python发布接口失败. drbo{}" + JSON.toJSONString(drbo));
@@ -227,7 +233,7 @@ public class TrainServiceImpl implements TrainService {
 	public String realTimeForecast(RealTimeData realTimeData) {
 		RealTimeRequestBO rtrbo = new RealTimeRequestBO();
 		String url = config.getRealtimeUrl();
-		String ret = HttpUtil.postRequest(url, JSON.toJSONString(realTimeData));
+		String ret = HttpUtil.postRequest(url, JSON.toJSONString(realTimeData, SerializerFeature.WriteMapNullValue));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl realTimeForecast. 调用python线上实时接口失败. rtrbo{}" + JSON.toJSONString(rtrbo));
         }

@@ -2,6 +2,7 @@ package cn.realai.online.core.bussiness.impl;
 
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
     private ModelService modelService;
 
     @Override
-    public String getForecastResult(RealTimeData realTimeData) {
+    public String getForecastResult(RealTimeData realTimeData) throws Exception {
 
     	if (serviceService.checkService(realTimeData.getServiceId())) {
         	return "EXPIRED";
@@ -48,11 +49,13 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
         CalculationQueue.queue.submit(ft);
         String ret = null;
         try {
-            ret = ft.get(Constant.TIMEOUT_CALCULATION, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            ft.cancel(true);
+			ret = ft.get(Constant.TIMEOUT_CALCULATION, TimeUnit.SECONDS);
+		} catch (TimeoutException e1) {
+			ft.cancel(true);
             logger.error("RealTimeBussinessImpl getForecastResult timeoutException");
             return "TIME_OUT";
+		} catch (Exception e) {
+            throw e;
         }
         return ret;
     }

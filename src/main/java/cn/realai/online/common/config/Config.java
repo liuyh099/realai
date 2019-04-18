@@ -22,8 +22,11 @@ public class Config {
     @Value("${experiment.drop}")
     private String EXPERIMENT_DROP;
     
-    @Value("${model.publish}")
-    private String MODEL_PUBLISH;
+    @Value("${model.online.publish}")
+    private String MODEL_ONLINE_PUBLISH;
+    
+    @Value("${model.offline.publish}")
+    private String MODEL_OFFLINE_PUBLISH;
     
     @Value("${model.drop}")
     private String MODEL_DROP;
@@ -55,8 +58,12 @@ public class Config {
     	return http + NGINX_URL + ":" + NGINX_PORT;
     }
 
-    public String getModelPublish() {
-    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_PUBLISH;
+    public String getModelOfflinePublish() {
+    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_OFFLINE_PUBLISH;
+    }
+    
+    public String getModelOnlinePublish() {
+    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_ONLINE_PUBLISH;
     }
     
     public String getModelDrop() {

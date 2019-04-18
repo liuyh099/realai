@@ -329,13 +329,13 @@ public class ModelBussinessImpl implements ModelBussiness {
         }
         experimentService.updateExperimentTrainStatus(modelBO.getExperimentId(), modelBO.getStatus(),System.currentTimeMillis(),tuningNo);
         experimentService.updateExperimentOffline(modelBO.getExperimentId(), experiment.getServiceId(), Experiment.RELEAS_OFFINE);
-        modelBO.setTuningNo(tuningNo);
+        modelBO.setTuningNo(Optional.ofNullable(tuningNo).orElse(0));
         int count = 0;
         modelService.insert(modelBO);
         ServiceDeployRecordBO serviceDeployRecordBO = getServiceDeployRecordBO(modelBO);
         serviceDeployRecordBussiness.insert(serviceDeployRecordBO);
 
-        count = trainService.experimentDeploy(modelBO.getExperimentId(), null);
+        count = trainService.experimentDeploy(modelBO.getExperimentId(), null, modelBO.getReleaseStatus());
         HashMap<String,Object> hashMap =new HashMap<>();
         if(count>0){
             modelService.offline(modelBO.getServiceId(),modelBO.getId(),Model.RELEASE_STATUS.NONE.value);

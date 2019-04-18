@@ -1,5 +1,7 @@
 package cn.realai.online.core.query.realtime;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * 数据载体
  * @author lyh
@@ -7,25 +9,25 @@ package cn.realai.online.core.query.realtime;
 public class XData {
 
 	//异质数据源
-	private String hetro;
+	private JSONObject hetro;
 	
 	//同质数据源
-	private String homo;
+	private JSONObject homo;
 
-	public String getHetro() {
+	public JSONObject getHetro() {
 		return hetro;
 	}
 
-	public void setHetro(String hetro) {
+	public void setHetro(JSONObject hetro) {
 		this.hetro = hetro;
 	}
 
-	public String getHomo() {
+	public JSONObject getHomo() {
 		return homo;
 	}
 
-	public void setHomo(String homo) {
+	public void setHomo(JSONObject homo) {
 		this.homo = homo;
 	}
-	
+
 }
