@@ -122,7 +122,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
             licenseCheckHandler.cancelSecretKeyCheck(serviceBO.getSecretKey());
 
-            FileLicenseInfo fileLicenseInfoOld = serviceLicenseInfoSource.checkSource(dataCipherHandler.getOriginalSecretKey(oldKey));
+            FileLicenseInfo fileLicenseInfoOld = serviceLicenseInfoSource.servicLicDecrypt(dataCipherHandler.getOriginalSecretKey(oldKey));
             if(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), LicenseConstants.DATE_FORMART) < DateUtil.stringToLong(fileLicenseInfoOld.getRangeTimeUpper(), LicenseConstants.DATE_FORMART)
                     || Integer.parseInt(fileLicenseInfo.getDeployTimesUpper()) < Integer.parseInt(fileLicenseInfoOld.getDeployTimesUpper())) {
                 throw new RuntimeException("当前服务有效期限或使用次数高于续期秘钥！");
