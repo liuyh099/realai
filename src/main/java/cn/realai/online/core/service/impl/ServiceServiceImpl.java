@@ -240,10 +240,16 @@ public class ServiceServiceImpl implements ServiceService {
 
 				service.setAvailable(true);
 				try {
-					serviceLicenseInfoSource.verifyLimit(fileLicenseInfo);
 					serviceLicenseInfoSource.timesUpperCheck(fileLicenseInfo, serviceDetail);
 				}catch (Exception e) {
 					service.setAvailable(false);
+				}
+
+				try {
+					serviceLicenseInfoSource.verifyLimit(fileLicenseInfo);
+				}catch (Exception e) {
+					service.setAvailable(false);
+					service.setExpired(true);
 				}
 
 			} catch (LicenseException e) { 
@@ -260,7 +266,7 @@ public class ServiceServiceImpl implements ServiceService {
 		while(it.hasNext()){
 			Service s = it.next();
 			convertData(s);
-			if(!s.isAvailable() || s.isDiscard()) {
+			if(s.isExpired() || s.isDiscard()) {
 				it.remove();
 			}
 		}
