@@ -252,7 +252,16 @@ public class ServiceServiceImpl implements ServiceService {
 
 	@Override
 	public List<Service> findListByModelStatus(String status) {
-		return serviceDao.findListByModelStatus(status);
+		List<Service> services = serviceDao.findListByModelStatus(status);
+		Iterator<Service> it = services.iterator();
+		while(it.hasNext()){
+			Service s = it.next();
+			convertData(s);
+			if(!s.isAvailable() || s.isDiscard()) {
+				it.remove();
+			}
+		}
+		return services;
 	}
 
 	@Override
