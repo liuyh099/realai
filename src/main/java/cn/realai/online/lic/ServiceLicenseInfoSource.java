@@ -112,13 +112,14 @@ public class ServiceLicenseInfoSource {
         SimpleDateFormat df = new SimpleDateFormat(LicenseConstants.DATE_FORMART);
         Date begin = null;
         Date end = null;
+        Date theEnd = null;
         try {
             begin = df.parse(licenseInfo.getRangeTimeLower());
             end = df.parse(licenseInfo.getRangeTimeUpper());
             Calendar cend = Calendar.getInstance();
             cend.setTime(end);
             cend.add(Calendar.DAY_OF_MONTH, 1);
-            end = cend.getTime();
+            theEnd = cend.getTime();
         } catch (ParseException e) {
             throw new LicenseException("授权时间格式不正确");
         }
@@ -128,7 +129,7 @@ public class ServiceLicenseInfoSource {
                     + " 至 " + DateUtil.formatDateToString(end, LicenseConstants.DATE_FORMART));
         }
 
-        if(end.before(new Date())) {
+        if(theEnd.before(new Date())) {
             throw new LicenseException("密钥可使用期限为" + DateUtil.formatDateToString(begin, LicenseConstants.DATE_FORMART)
                     + " 至 " + DateUtil.formatDateToString(end, LicenseConstants.DATE_FORMART));
         }
