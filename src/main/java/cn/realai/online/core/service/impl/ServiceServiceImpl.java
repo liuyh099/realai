@@ -197,6 +197,9 @@ public class ServiceServiceImpl implements ServiceService {
 				int version = serviceDetail.getVersion();
 				String ciphertext = dataCipherHandler.getOriginalSecretKey(searchService.getSecretKey(), version);
 				serviceLicenseCheck.checkServiceLic(ciphertext);
+
+				serviceLicenseInfoSource.licenseDiscardCheck(serviceId);
+
 				return true;
 			} catch (LicenseException e) {
 			}
