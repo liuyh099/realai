@@ -86,6 +86,20 @@ public class FileLicenseInfo {
      */
     private String cancelSecretKey;
 
+    /**
+     * 停用秘钥
+     */
+    private String stopSecretKey;
+
+
+    public String getStopSecretKey() {
+        return stopSecretKey;
+    }
+
+    public void setStopSecretKey(String stopSecretKey) {
+        this.stopSecretKey = stopSecretKey;
+    }
+
     public String getCancelSecretKey() {
         return cancelSecretKey;
     }

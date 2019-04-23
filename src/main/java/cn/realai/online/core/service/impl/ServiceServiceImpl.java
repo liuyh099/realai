@@ -16,8 +16,7 @@ import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.service.ServiceService;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @org.springframework.stereotype.Service
 @Transactional(readOnly = true)
@@ -83,12 +82,6 @@ public class ServiceServiceImpl implements ServiceService {
 		}
 
 		searchService = new Service();
-//		searchService.setSecretKey(service.getSecretKey());
-//		old = list(searchService);
-//		if(old != null && old.size() > 0) {
-//			logger.error("服务秘钥已被使用！");
-//			throw new RuntimeException("服务秘钥已被使用！");
-//		}
 
 		List<Service> olds = list(searchService);
 		olds.forEach(oldService -> {
@@ -118,24 +111,60 @@ public class ServiceServiceImpl implements ServiceService {
 			detail.setTuningKeyIds(fileLicenseInfo.getCancelSecretKey());
 
 			List<String> cancelSecretKeyList = licenseCheckHandler.getCancelSecretKeyList(fileLicenseInfo);
+			List<String> stopSecretKeyList = licenseCheckHandler.getStopSecretKeyList(fileLicenseInfo);
 
-			for (String cancelSecretKey : cancelSecretKeyList) {
+			Set<String> cancelSecretKeySet = new HashSet<>();
+			cancelSecretKeySet.addAll(cancelSecretKeyList);
+			cancelSecretKeySet.addAll(stopSecretKeyList);
+			List<String> cancelSecretKeyListnew = new ArrayList<>();
+			cancelSecretKeyListnew.addAll(cancelSecretKeySet);
+
+			for (String cancelSecretKey : cancelSecretKeyListnew) {
 				if(StringUtils.isNotEmpty(cancelSecretKey)) {
 					tuningRecordService.invalidateBySecretKey(cancelSecretKey);
 				}
 			}
+		}
 
 
-		}
-		if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
-			throw new RuntimeException("秘钥已过期");
-		}
+//		if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
+//			throw new RuntimeException("秘钥已过期");
+//		}
 		service.setDetail(dataCipherHandler.encryptData(detail, service.getSecretKey()));
 		service.setSecretKey(dataCipherHandler.initSecretKey(service.getSecretKey(), detail.getVersion()));
 		service.setCreateTime(new Date().getTime());
 		service.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
 		service.setBusinessType(Integer.parseInt(fileLicenseInfo.getBusinessType()));
-		return serviceDao.insert(service);
+		Integer result = serviceDao.insert(service);
+
+		secretKeyHandler(fileLicenseInfo);
+
+		return result;
+	}
+
+
+	public void secretKeyHandler (FileLicenseInfo fileLicenseInfo) {
+		List<Service> targetServices = serviceDao.findList(new Service());
+		List<String> stopSecretKeyList = licenseCheckHandler.getStopSecretKeyList(fileLicenseInfo);
+		if(stopSecretKeyList != null && !stopSecretKeyList.isEmpty()) {
+			for (String stopSecretKey : stopSecretKeyList) {
+				if(targetServices != null && !targetServices.isEmpty()) {
+					for(Service targetService : targetServices) {
+						String targetSecretkey = dataCipherHandler.getOriginalSecretKey(targetService.getSecretKey());
+						try {
+							FileLicenseInfo targetLicInfo = serviceLicenseInfoSource.checkSource(targetSecretkey);
+							if(StringUtils.equals(stopSecretKey, targetLicInfo.getId())) {
+								ServiceDetail targetServiceDetail = dataCipherHandler.getDateJsonByCiphertext(targetService.getDetail());
+								targetServiceDetail.setStatus(ServiceDetail.STATUS_STOP);
+								targetService.setDetail(dataCipherHandler.encryptData(targetServiceDetail, targetSecretkey));
+								serviceDao.update(targetService);
+							}
+						} catch (LicenseException e) {
+						}
+					}
+				}
+			}
+		}
 	}
 
 
@@ -168,6 +197,9 @@ public class ServiceServiceImpl implements ServiceService {
 				int version = serviceDetail.getVersion();
 				String ciphertext = dataCipherHandler.getOriginalSecretKey(searchService.getSecretKey(), version);
 				serviceLicenseCheck.checkServiceLic(ciphertext);
+
+				serviceLicenseInfoSource.licenseDiscardCheck(serviceId);
+
 				return true;
 			} catch (LicenseException e) {
 			}
@@ -199,16 +231,25 @@ public class ServiceServiceImpl implements ServiceService {
 				service.setStartTime(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeLower(), LicenseConstants.DATE_FORMART));
 				service.setDeployTimesUpper(Integer.parseInt(fileLicenseInfo.getDeployTimesUpper()));
 				service.setType(Integer.parseInt(fileLicenseInfo.getServiceType()));
+				if(serviceDetail.getStatus() == ServiceDetail.STATUS_STOP) {
+					service.setDiscard(true);
+				}
 				if(StringUtils.isNotBlank(fileLicenseInfo.getBusinessType())) {
 					service.setBusinessType(Integer.parseInt(fileLicenseInfo.getBusinessType()));
 				}
 
 				service.setAvailable(true);
 				try {
-					serviceLicenseInfoSource.verifyLimit(fileLicenseInfo);
 					serviceLicenseInfoSource.timesUpperCheck(fileLicenseInfo, serviceDetail);
 				}catch (Exception e) {
 					service.setAvailable(false);
+				}
+
+				try {
+					serviceLicenseInfoSource.verifyLimit(fileLicenseInfo);
+				}catch (Exception e) {
+					service.setAvailable(false);
+					service.setExpired(true);
 				}
 
 			} catch (LicenseException e) { 
@@ -220,7 +261,16 @@ public class ServiceServiceImpl implements ServiceService {
 
 	@Override
 	public List<Service> findListByModelStatus(String status) {
-		return serviceDao.findListByModelStatus(status);
+		List<Service> services = serviceDao.findListByModelStatus(status);
+		Iterator<Service> it = services.iterator();
+		while(it.hasNext()){
+			Service s = it.next();
+			convertData(s);
+			if(s.isExpired() || s.isDiscard()) {
+				it.remove();
+			}
+		}
+		return services;
 	}
 
 	@Override

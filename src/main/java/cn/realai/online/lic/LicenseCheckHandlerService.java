@@ -9,9 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Description:
@@ -46,6 +44,11 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
     @Override
     public String getServiceCiphertext(long serviceId, SecretKeyType secretKeyType) throws LicenseException {
         Service service = serviceService.selectServiceById(serviceId);
+
+        if(service == null) {
+            throw new LicenseException("服务不存在！");
+        }
+
         ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(service.getDetail());
         String ciphertext = dataCipherHandler.getOriginalSecretKey(service.getSecretKey(), serviceDetail.getVersion());
 //        if(secretKeyType == SecretKeyType.COMMON) {
@@ -102,12 +105,20 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
             }
 
             List<String> cancelSecretKeyList = getCancelSecretKeyList(licenseInfo);
-            if(!cancelSecretKeyList.isEmpty()) {
-                for (String cancelSecretKey : cancelSecretKeyList) {
+            List<String> stopSecretKeyList = getStopSecretKeyList(licenseInfo);
+
+            Set<String> cancelSecretKeySet = new HashSet<>();
+            cancelSecretKeySet.addAll(cancelSecretKeyList);
+            cancelSecretKeySet.addAll(stopSecretKeyList);
+            List<String> cancelSecretKeyListnew = new ArrayList<>();
+            cancelSecretKeyListnew.addAll(cancelSecretKeySet);
+            if(!cancelSecretKeyListnew.isEmpty()) {
+                for (String cancelSecretKey : cancelSecretKeyListnew) {
                     tuningKeyIds += cancelSecretKey + ",";
                     tuningRecordService.invalidateBySecretKey(cancelSecretKey);
                 }
             }
+
         }
 
         serviceDetail.setTuningKeyIds(tuningKeyIds);
@@ -116,6 +127,11 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
         service.setDetail(dataCiphertext);
         service.setSecretKey(newSecretKey);
         serviceService.update(service);
+
+        if(StringUtils.isNotBlank(tuningSecretKey)) {
+            FileLicenseInfo licenseInfo = serviceLicenseInfoSource.checkSource(tuningSecretKey);
+            serviceService.secretKeyHandler(licenseInfo);
+        }
 
     }
 
@@ -207,6 +223,20 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
 
     public List<String> getCancelSecretKeyList(FileLicenseInfo fileLicenseInfo) {
         String cancelKeys = fileLicenseInfo.getCancelSecretKey();
+        List<String> cancelKeyList = new ArrayList<>();
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(cancelKeys)) {
+            for(String s : cancelKeys.split(",")) {
+                if(StringUtils.isNotEmpty(s)) {
+                    cancelKeyList.add(s);
+                }
+            }
+
+        }
+        return cancelKeyList;
+    }
+
+    public List<String> getStopSecretKeyList(FileLicenseInfo fileLicenseInfo) {
+        String cancelKeys = fileLicenseInfo.getStopSecretKey();
         List<String> cancelKeyList = new ArrayList<>();
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(cancelKeys)) {
             for(String s : cancelKeys.split(",")) {

@@ -98,6 +98,8 @@ public class ServiceBussinessImpl implements ServiceBussiness {
         if(serviceBO.isRenewal()) {
             searchService = new cn.realai.online.core.entity.Service();
 
+            serviceLicenseInfoSource.licenseDiscardCheck(serviceBO.getId());
+
             List<Service> old = serviceService.list(searchService);
             old.forEach(service -> {
                 if(StringUtils.isNotEmpty(service.getSecretKey())) {
@@ -110,9 +112,9 @@ public class ServiceBussinessImpl implements ServiceBussiness {
             });
 
             FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(serviceBO.getSecretKey());
-            if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
-                throw new RuntimeException("秘钥已过期！");
-            }
+//            if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
+//                throw new RuntimeException("秘钥已过期！");
+//            }
 
             int version = serviceDetail.getVersion();
             String newkey = dataCipherHandler.initSecretKey(serviceBO.getSecretKey(), version);
@@ -120,7 +122,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
             licenseCheckHandler.cancelSecretKeyCheck(serviceBO.getSecretKey());
 
-            FileLicenseInfo fileLicenseInfoOld = serviceLicenseInfoSource.checkSource(dataCipherHandler.getOriginalSecretKey(oldKey));
+            FileLicenseInfo fileLicenseInfoOld = serviceLicenseInfoSource.servicLicDecrypt(dataCipherHandler.getOriginalSecretKey(oldKey));
             if(DateUtil.stringToLong(fileLicenseInfo.getRangeTimeUpper(), LicenseConstants.DATE_FORMART) < DateUtil.stringToLong(fileLicenseInfoOld.getRangeTimeUpper(), LicenseConstants.DATE_FORMART)
                     || Integer.parseInt(fileLicenseInfo.getDeployTimesUpper()) < Integer.parseInt(fileLicenseInfoOld.getDeployTimesUpper())) {
                 throw new RuntimeException("当前服务有效期限或使用次数高于续期秘钥！");
@@ -132,15 +134,14 @@ public class ServiceBussinessImpl implements ServiceBussiness {
             }
 
             List<String> cancelSecretKeyList = licenseCheckHandler.getCancelSecretKeyList(fileLicenseInfo);
+            List<String> stopSecretKeyList = licenseCheckHandler.getStopSecretKeyList(fileLicenseInfo);
 
             cancelSecretKeyList.add(fileLicenseInfoOld.getId());
-
             Set<String> cancelSecretKeySet = new HashSet<>();
-
             cancelSecretKeySet.addAll(cancelSecretKeyList);
-
+            cancelSecretKeySet.addAll(stopSecretKeyList);
             List<String> cancelSecretKeyListnew = new ArrayList<>();
-
+            cancelSecretKeySet.add(fileLicenseInfoOld.getId());
             cancelSecretKeyListnew.addAll(cancelSecretKeySet);
 
             if(!cancelSecretKeyListnew.isEmpty()) {
@@ -166,6 +167,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
                 }
                 serviceDetail.setTuningKeyIds(cancelKeys);
             }
+
         }
 
         serviceBOold.setDetail(dataCipherHandler.encryptData(serviceDetail, sk));
@@ -173,6 +175,12 @@ public class ServiceBussinessImpl implements ServiceBussiness {
         if (serviceService.update(serviceBOold) <= 0) {
             return false;
         }
+
+        if(serviceBO.isRenewal()) {
+            FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(serviceBO.getSecretKey());
+            serviceService.secretKeyHandler(fileLicenseInfo);
+        }
+
         return true;
     }
 

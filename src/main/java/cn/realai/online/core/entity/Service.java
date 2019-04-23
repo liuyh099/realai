@@ -79,6 +79,26 @@ public class Service {
 	 */
 	private boolean available;
 
+	private boolean discard = false;
+
+	private boolean expired = false;  // true 过期
+
+	public boolean isExpired() {
+		return expired;
+	}
+
+	public void setExpired(boolean expired) {
+		this.expired = expired;
+	}
+
+	public boolean isDiscard() {
+		return discard;
+	}
+
+	public void setDiscard(boolean discard) {
+		this.discard = discard;
+	}
+
 	public boolean isAvailable() {
 		return available;
 	}

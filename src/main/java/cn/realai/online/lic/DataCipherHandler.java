@@ -51,7 +51,7 @@ public class DataCipherHandler {
     }
 
     public String encryptData(ServiceDetail serviceDetail, String secretKey) throws LicenseException {
-        FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(secretKey);
+        FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.servicLicDecrypt(secretKey);
         try {
             return RSAUtils.encryptByPublicKey(JSONObject.toJSONString(serviceDetail), fileLicenseInfo.getSecretPublicKey());
         } catch (Exception e) {

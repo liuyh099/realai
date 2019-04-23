@@ -12,10 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Description:  服务授权检查
@@ -115,9 +112,14 @@ public class ServiceLicenseInfoSource {
         SimpleDateFormat df = new SimpleDateFormat(LicenseConstants.DATE_FORMART);
         Date begin = null;
         Date end = null;
+        Date theEnd = null;
         try {
             begin = df.parse(licenseInfo.getRangeTimeLower());
             end = df.parse(licenseInfo.getRangeTimeUpper());
+            Calendar cend = Calendar.getInstance();
+            cend.setTime(end);
+            cend.add(Calendar.DAY_OF_MONTH, 1);
+            theEnd = cend.getTime();
         } catch (ParseException e) {
             throw new LicenseException("授权时间格式不正确");
         }
@@ -127,13 +129,23 @@ public class ServiceLicenseInfoSource {
                     + " 至 " + DateUtil.formatDateToString(end, LicenseConstants.DATE_FORMART));
         }
 
-        if(end.before(new Date())) {
+        if(theEnd.before(new Date())) {
             throw new LicenseException("密钥可使用期限为" + DateUtil.formatDateToString(begin, LicenseConstants.DATE_FORMART)
                     + " 至 " + DateUtil.formatDateToString(end, LicenseConstants.DATE_FORMART));
         }
 
     }
 
+
+    public void licenseDiscardCheck(long serviceId) throws LicenseException {
+        String dataCiphertext = licenseCheckHandler.getDataCiphertext(serviceId);
+        ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(dataCiphertext);
+
+        if(serviceDetail.getStatus() == ServiceDetail.STATUS_STOP) {
+            throw new LicenseException("该服务已作废！");
+        }
+
+    }
 
 
     /**

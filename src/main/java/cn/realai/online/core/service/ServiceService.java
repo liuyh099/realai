@@ -2,6 +2,7 @@ package cn.realai.online.core.service;
 
 import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.entity.Service;
+import cn.realai.online.lic.FileLicenseInfo;
 import cn.realai.online.lic.LicenseException;
 
 import java.util.List;
@@ -36,5 +37,7 @@ public interface ServiceService {
 	List<Service> findListByModelStatus(String status);
 
 	List<Service> findListByAlreadyPublishModel();
+
+	void secretKeyHandler (FileLicenseInfo fileLicenseInfo);
 
 }

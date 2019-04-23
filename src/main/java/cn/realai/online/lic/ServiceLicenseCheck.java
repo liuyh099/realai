@@ -80,6 +80,9 @@ public class ServiceLicenseCheck {
     public void applyService(long serviceId) throws LicenseException {
         String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId, SecretKeyType.COMMON);
         FileLicenseInfo licInfo = checkServiceLic(serviceCiphertext);
+
+        serviceLicenseInfoSource.licenseDiscardCheck(serviceId);
+
         ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId, serviceCiphertext);
         licenseCheckHandler.updateServiceDetail(serviceId, null, serviceDetail);
     }
@@ -99,14 +102,17 @@ public class ServiceLicenseCheck {
             throw new LicenseException("秘钥类型不匹配，普通秘钥不能用于强制调优！");
         }
 
+        serviceLicenseInfoSource.licenseDiscardCheck(serviceId);
+
         try {
             checkLic(serviceCiphertext, tuningSecretKey);
-            ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId, serviceCiphertext);
-            licenseCheckHandler.updateServiceDetail(serviceId, tuningSecretKey, serviceDetail);
-            licenseCheckHandler.clearTuningKey(serviceId, serviceLicenseInfoSource);
         }catch (Exception e) {
             throw new LicenseException("当前秘钥与该服务类型不匹配！");
         }
+
+        ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId, serviceCiphertext);
+        licenseCheckHandler.updateServiceDetail(serviceId, tuningSecretKey, serviceDetail);
+        licenseCheckHandler.clearTuningKey(serviceId, serviceLicenseInfoSource);
 
     }
 
