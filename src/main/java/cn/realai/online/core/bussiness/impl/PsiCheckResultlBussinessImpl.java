@@ -44,6 +44,8 @@ public class PsiCheckResultlBussinessImpl implements PsiCheckResultBussiness {
             psiResultBOList.forEach(psi -> {
                 PsiResultVO itemVO = new PsiResultVO();
                 BeanUtils.copyProperties(psi, itemVO);
+                itemVO.setVarSource(psi.getName());
+                itemVO.setMean(psi.getMeaning());
                 itemVO.setAlerName(PSICheckResult.STATUS.getDesc(itemVO.getAler()));
                 psiResultVOList.add(itemVO);
             });
