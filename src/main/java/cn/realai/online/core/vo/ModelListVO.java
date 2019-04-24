@@ -56,6 +56,9 @@ public class ModelListVO {
     @ApiModelProperty(value = "是否预警(true: 预警； false：不预警)")
     private boolean aler;
 
+    @ApiModelProperty(value = "是否可操作(0:可操作 1:不可操作)")
+    private Integer handle;
+
     public long getModelId() {
         return modelId;
     }
@@ -166,5 +169,13 @@ public class ModelListVO {
 
     public void setAler(boolean aler) {
         this.aler = aler;
+    }
+
+    public Integer getHandle() {
+        return handle;
+    }
+
+    public void setHandle(Integer handle) {
+        this.handle = handle;
     }
 }

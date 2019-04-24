@@ -107,6 +107,15 @@ public class ModelBussinessImpl implements ModelBussiness {
                     }
                 }
 
+                //判断此模型是否可操作
+                voItem.setHandle(1);
+                if (Model.RELEASE_STATUS.ONLINE.value.equals(item.getReleaseStatus())) {
+                    if (!serviceService.checkDiscard(item.getServiceId())) {
+                        voItem.setHandle(0);
+                    }
+                }
+
+
                 //设置模型状态名称
                 String releaseStatusName = Optional.of(item)
                                             .map(ModelListBO::getReleaseStatus)

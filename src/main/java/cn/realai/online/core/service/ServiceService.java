@@ -34,6 +34,9 @@ public interface ServiceService {
      */
 	boolean checkService(long serviceId);
 
+	//判断服务是否已作废
+	boolean checkDiscard(Long serviceId);
+
 	List<Service> findListByModelStatus(String status);
 
 	List<Service> findListByAlreadyPublishModel();

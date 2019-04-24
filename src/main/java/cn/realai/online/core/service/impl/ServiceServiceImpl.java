@@ -206,6 +206,17 @@ public class ServiceServiceImpl implements ServiceService {
 		}
 		return false;
 	}
+
+	@Override
+	public boolean checkDiscard(Long serviceId) {
+		try {
+			serviceLicenseInfoSource.licenseDiscardCheck(serviceId);
+		} catch (LicenseException e) {
+			return true;
+		}
+		return false;
+	}
+
 	/*@Override
 	public void online(Long serviceId) {
 		 serviceDao.online(serviceId);
