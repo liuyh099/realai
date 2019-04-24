@@ -9,7 +9,7 @@ public class RealTimeData {
 	//服务id
 	private Long serviceId;
 	
-	//实验id,请求方不用送,服务器自动复制
+	//实验id,请求方不用送,服务器自动赋值
 	private Long modelId;
 	
 	//银行用户id

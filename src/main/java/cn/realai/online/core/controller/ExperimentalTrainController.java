@@ -508,11 +508,12 @@ public class ExperimentalTrainController {
         }
     }
 
-    @PutMapping("/testPreprocess/{experimentId}")
+    @GetMapping("/testPreprocess")
     @ResponseBody
-    public Result testPreprocess(@PathVariable long experimentId) {
+    public Result testPreprocess(String test) {
         try {
-            experimentalTrainBussiness.testPreprocess(experimentId);
+        	System.out.println(test);
+            //experimentalTrainBussiness.testPreprocess(experimentId);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
         } catch (Exception e) {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);

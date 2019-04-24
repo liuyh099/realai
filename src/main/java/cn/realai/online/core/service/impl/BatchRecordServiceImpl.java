@@ -1,6 +1,9 @@
 package cn.realai.online.core.service.impl;
 
 import org.redisson.api.RLock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.realai.online.core.bo.BatchListBO;
 import cn.realai.online.core.bo.BatchRecordBO;  
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import cn.realai.online.core.dao.ExperimentDao;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.service.BatchRecordService;
+import cn.realai.online.tool.calculationthreadpool.CalculationTask;
 import cn.realai.online.tool.lock.RedissonLock;
 
 import java.util.List;
@@ -21,6 +25,8 @@ import java.util.List;
 @Service
 public class BatchRecordServiceImpl implements BatchRecordService {
 
+	private static Logger logger = LoggerFactory.getLogger(BatchRecordServiceImpl.class);
+	
 	@Autowired
 	private BatchRecordDao batchRecordDao;
 	
@@ -61,6 +67,7 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly=false)
 	public BatchRecord getBatchRecordOfDaily(long eid, String batchDate, int batchTypeDaily,
 			String xtableHeterogeneousDataSource, String xtableHomogeneousDataSource, String ytableDataSource) {
+		logger.info("BatchRecordServiceImpl getBatchRecordOfDaily, eid{}, batchDate{}, batchTypeDaily{}", eid, batchDate, batchTypeDaily);
 		BatchRecord batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, batchDate, batchTypeDaily);
         if (batchRecord == null) {
         	RLock lock = redissonLock.lock(Constant.BATCH_DAILY_LOCK_PREFIX + eid, 3);
@@ -79,9 +86,11 @@ public class BatchRecordServiceImpl implements BatchRecordService {
         			batchRecord.setXtableHomogeneousDataSource(xtableHomogeneousDataSource);
         			batchRecord.setYtableDataSource(ytableDataSource);
         			batchRecordDao.insert(batchRecord);
+        			logger.info("BatchRecordServiceImpl getBatchRecordOfDaily insert, batchRecord{}", batchRecord);
         		}
         	} catch (Exception e) {
         		e.printStackTrace();
+        		throw e;
         	} finally {
         		lock.unlock();
 			}

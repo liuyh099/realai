@@ -8,6 +8,8 @@ public interface PersonalInformationService {
 
     void insertList(List<PersonalInformation> piList);
 
+    Long insert(PersonalInformation personalInformation);
+    
     List<PersonalInformation> findListByExperimentIdAndBatchId(Long experimentId, Long batchId);
 
     /**
@@ -25,4 +27,5 @@ public interface PersonalInformationService {
      * @return
      */
     PersonalInformation get(Long id);
+
 }

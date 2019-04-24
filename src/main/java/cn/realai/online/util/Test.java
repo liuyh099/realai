@@ -3,6 +3,7 @@ package cn.realai.online.util;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
@@ -14,9 +15,17 @@ public class Test {
 
 	public static void main(String[] args) {
 	//	String str = "[{'max': 41.25, 'min': 0.0, 'mean': 0.5073635291232935, 'median': 0.0, 'percent25': 0.0, 'percent75': 0.666666667, 'count': 118, 'recommendedDelete': 1, 'dataType': 'number', 'name': '\\xe4\\xba\\xa4\\xe5\\x8f\\x89\\xe6\\xb1\\x87\\xe6\\x80\\xbb_\\xe6\\x9c\\x80\\xe8\\xbf\\x916\\xe4\\xb8\\xaa\\xe6\\x9c\\x88\\xe8\\xb4\\xb7\\xe6\\xac\\xbe\\xe7\\x94\\xb3\\xe8\\xaf\\xb7\\xe9\\x80\\x9a\\xe8\\xbf\\x87\\xe7\\x8e\\x87', 'experimentId': '276', 'variableType': 1, 'meaning': ''}, {'max': 124.0, 'min': 0.0, 'mean': 0.8677481253526618, 'median': 0.5, 'percent25': 0.0, 'percent75': 1.0, 'count': 230, 'recommendedDelete': 1, 'dataType': 'number', 'name': '\\xe4\\xba\\xa4\\xe5\\x8f\\x89\\xe6\\xb1\\x87\\xe6\\x80\\xbb_\\xe6\\x9c\\x80\\xe8\\xbf\\x9112\\xe6\\x9c\\x88\\xe8\\xb4\\xb7\\xe6\\xac\\xbe\\xe7\\x94\\xb3\\xe8\\xaf\\xb7\\xe9\\x80\\x9a\\xe8\\xbf\\x87\\xe7\\x8e\\x87', 'experimentId': '276', 'variableType': 1, 'meaning': ''}, {'max': 171.33333330000005, 'min': 0.0, 'mean': 1.0016742139642945, 'median': 0.666666667, 'percent25': 0.14285714300000002, 'percent75': 1.0, 'count': 379, 'recommendedDelete': 1, 'dataType': 'number', 'name': '\\xe4\\xba\\xa4\\xe5\\x8f\\x89\\xe6\\xb1\\x87\\xe6\\x80\\xbb_\\xe6\\x9c\\x80\\xe8\\xbf\\x9124\\xe6\\x9c\\x88\\xe8\\xb4\\xb7\\xe6\\xac\\xbe\\xe7\\x94\\xb3\\xe8\\xaf\\xb7\\xe9\\x80\\x9a\\xe8\\xbf\\x87\\xe7\\x8e\\x87', 'experimentId': '276', 'variableType': 1, 'meaning': ''}, {'max': 19.0, 'min': 0.0, 'mean': 0.7355521775307247, 'median': 0.0, 'percent25': 0.0, 'percent75': 1.0, 'count': 66, 'recommendedDelete': 1, 'dataType': 'number', 'name': '\\xe4\\xba\\xa4\\xe5\\x8f\\x89\\xe6\\xb1\\x87\\xe6\\x80\\xbb_\\xe6\\x9c\\x80\\xe8\\xbf\\x913\\xe4\\xb8\\xaa\\xe6\\x9c\\x88\\xe4\\xbf\\xa1\\xe7\\x94\\xa8\\xe5\\x8d\\xa1\\xe7\\x94\\xb3\\xe8\\xaf\\xb7\\xe9\\x80\\x9a\\xe8\\xbf\\x87\\xe7\\x8e\\x87', 'experimentId': '276', 'variableType': 1, 'meaning': ''}, {'max': 11.0, 'min': 0.0, 'mean': 0.8633586096487044, 'median': 0.5, 'percent25': 0.0, 'percent75': 1.0, 'count': 107, 'recommendedDelete': 1, 'dataType': 'number', 'name': '\\xe4\\xba\\xa4\\xe5\\x8f\\x89\\xe6\\xb1\\x87\\xe6\\x80\\xbb_\\xe6\\x9c\\x80\\xe8\\xbf\\x916\\xe4\\xb8\\xaa\\xe6\\x9c\\x88\\xe4\\xbf\\xa1\\xe7\\x94\\xa8\\xe5\\x8d\\xa1\\xe7\\x94\\xb3\\xe8\\xaf\\xb7\\xe9\\x80\\x9a\\xe8\\xbf\\x87\\xe7\\x8e\\x87', 'experimentId': '276', 'variableType': 1, 'meaning': ''}, {'max': 18.0, 'min': 0.0, 'mean': 0.901798926373009, 'median': 0.5, 'percent25': 0.0, 'percent75': 1.0, 'count': 181, 'recommendedDelete': 1, 'dataType': 'number', 'name': '\\xe4\\xba\\xa4\\xe5\\x8f\\x89\\xe6\\xb1\\x87\\xe6\\x80\\xbb_\\xe6\\x9c\\x80\\xe8\\xbf\\x9112\\xe4\\xb8\\xaa\\xe6\\x9c\\x88\\xe4\\xbf\\xa1\\xe7\\x94\\xa8\\xe5\\x8d\\xa1\\xe7\\x94\\xb3\\xe8\\xaf\\xb7\\xe9\\x80\\x9a\\xe8\\xbf\\x87\\xe7\\x8e\\x87', 'experimentId': '276', 'variableType': 1, 'meaning': ''}, {'max': 11.0, 'min': 0.0, 'mean': 0.8665015961986469, 'median': 0.666666667, 'percent25': 0.222222222, 'percent75': 1.0, 'count': 261, 'recommendedDelete': 1, 'dataType': 'number', 'name': '\\xe4\\xba\\xa4\\xe5\\x8f\\x89\\xe6\\xb1\\x87\\xe6\\x80\\xbb_\\xe6\\x9c\\x80\\xe8\\xbf\\x9124\\xe4\\xb8\\xaa\\xe6\\x9c\\x88\\xe4\\xbf\\xa1\\xe7\\x94\\xa8\\xe5\\x8d\\xa1\\xe7\\x94\\xb3\\xe8\\xaf\\xb7\\xe9\\x80\\x9a\\xe8\\xbf\\x87\\xe7\\x8e\\x87', 'experimentId': '276', 'variableType': 1, 'meaning': ''}, {'max': '-', 'min': '-', 'mean': '-', 'median': '-', 'percent25': '-', 'percent75': '-', 'count': 6, 'recommendedDelete': 1, 'dataType': 'category', 'name': '\\xe5\\x9c\\xa8\\xe6\\x9c\\xac\\xe6\\x9c\\xba\\xe6\\x9e\\x84\\xe6\\x8b\\x85\\xe4\\xbf\\x9d\\xe6\\x95\\xb0\\xe9\\x87\\x8f', 'experimentId': '276', 'variableType': 1, 'meaning': ''}, {'max': '-', 'min': '-', 'mean': '-', 'median': '-', 'percent25': '-', 'percent75': '-', 'count': 9, 'recommendedDelete': 1, 'dataType': 'category', 'name': '\\xe5\\x9c\\xa8\\xe6\\x9c\\xac\\xe6\\x9c\\xba\\xe6\\x9e\\x84\\xe8\\xb4\\xb7\\xe6\\xac\\xbe\\xe6\\x95\\xb0\\xe9\\x87\\x8f', 'experimentId': '276', 'variableType': 1, 'meaning': ''}]";
-		String str = readFile();
+		/*String str = readFile();
 		List<GroupDif> list = JSON.parseArray(str, GroupDif.class);
-		System.out.println(list);
+		System.out.println(list);*/
+		
+		try {
+            InetAddress address = InetAddress.getLocalHost();
+            System.out.println(address.getHostAddress());
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+
 	}
 	
     public static String readFile() {

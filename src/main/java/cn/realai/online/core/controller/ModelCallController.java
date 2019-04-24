@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.bo.model.OfflineBatchRequest;
+import cn.realai.online.core.bo.model.PeoplelInformetion;
 import cn.realai.online.core.bo.model.DailyBatchRequest;
 import cn.realai.online.core.bo.model.ModelRequest;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
@@ -43,13 +44,13 @@ public class ModelCallController extends BaseController{
      * 离线跑批任务
      * @return
      */
-    @RequestMapping(value = "/offlineBatch", method = RequestMethod.POST)
+    @RequestMapping(value = "/batchTask", method = RequestMethod.POST)
     public String runBatchOffline(@RequestBody String param) {
     	logger.info("ModelCallController runBatchOffline. 离线跑批. param{}", JSON.toJSONString(param));
     	OfflineBatchRequest obrs = JSON.parseObject(param, OfflineBatchRequest.class);
     	if (obrs.getCode() != 200) {
     		modelCallBussiness.batchErrorDealWith(obrs.getBatchId(), obrs.getMsg());
-    		return ResultUtils.generateResultStr(ResultCode.SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
+    		return ResultUtils.generateResultStr(ResultCode.PYTHON_SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
     	}
     	
     	Long experimentId = obrs.getModelId();
@@ -89,7 +90,7 @@ public class ModelCallController extends BaseController{
     		}
     	}
     	modelCallBussiness.runBatchDaily(dbrList);
-        return ResultUtils.generateResultStr(ResultCode.SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
+        return ResultUtils.generateResultStr(ResultCode.PYTHON_SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
 
     /**

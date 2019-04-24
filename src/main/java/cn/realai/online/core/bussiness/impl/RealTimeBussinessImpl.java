@@ -32,7 +32,7 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
     @Override
     public String getForecastResult(RealTimeData realTimeData) throws Exception {
 
-    	if (serviceService.checkService(realTimeData.getServiceId())) {
+    	if (!serviceService.checkService(realTimeData.getServiceId())) {
         	return "EXPIRED";
         }
     	
@@ -42,6 +42,7 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
         }
         
         realTimeData.setModelId(model.getExperimentId());
+        realTimeData.setServiceId(model.getExperimentId());//只是测试，要去掉
         
         //放到队列里去python计算
         CalculationTask ct = new CalculationTask(realTimeData);

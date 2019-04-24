@@ -1,12 +1,18 @@
 package cn.realai.online.common.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import cn.realai.online.util.HttpUtil;
+
 @Configuration
 @PropertySource({"classpath:config.properties"})
 public class Config {
+	
+	private Logger logger = LoggerFactory.getLogger(Config.class);
 	
 	private static final String http = "http://"; 
 	

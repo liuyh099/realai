@@ -436,16 +436,19 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
 
     @Override
     public PageBO<PersonalHetroResultSetBO> listPersonalHetroResultSet(IdQuery query) {
+    	Long startTime = System.currentTimeMillis();
         PersonalHetroResultSet queryCondition = new PersonalHetroResultSet();
         queryCondition.setPid(query.getId());
         Page page = PageHelper.startPage(query.getPageNum(), query.getPageSize());
         List<PersonalHetroResultSet> list = personalHetroResultSetService.findList(queryCondition);
         List<PersonalHetroResultSetBO> result = JSON.parseArray(JSON.toJSONString(list), PersonalHetroResultSetBO.class);
+        logger.info("ExperimentalTrainBussinessImpl PersonalHetroResultSetBO findList, 耗时{}毫秒, 共{}条", System.currentTimeMillis() - startTime, list.size());
         for (PersonalHetroResultSetBO boTep : result) {
             VariableData variableData = variableDataService.getById(boTep.getVariableId());
             boTep.setVariableName(variableData.getName());
             boTep.setVariableMeaning(variableData.getMeaning());
         }
+        logger.info("ExperimentalTrainBussinessImpl PersonalHetroResultSetBO, 查询变量信息耗时{}毫秒", System.currentTimeMillis() - startTime);
         PageBO<PersonalHetroResultSetBO> pageBO = new PageBO<PersonalHetroResultSetBO>(result, query.getPageSize(), query.getPageNum(), page.getTotal(), page.getPages());
         return pageBO;
     }

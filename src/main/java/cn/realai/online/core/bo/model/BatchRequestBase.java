@@ -1,12 +1,7 @@
 package cn.realai.online.core.bo.model;
 
-public class BatchRequestBase {
+public class BatchRequestBase extends BatchRequest{
 
-	private Integer code;
-	
-	private String msg;
-	
-	private Long modelId;
 	
 	private boolean done;
 	
@@ -18,40 +13,17 @@ public class BatchRequestBase {
 	public static final String TYPE_PERSONALHETRORESULTSET = "personalHetroResultSet";
 	public static final String TYPE_PERSONALHOMORESULTSET = "personalHomoResultSet";
 	public static final String TYPE_PERSONALINFORMATION = "personalInformation";
+	public static final String TYPE_THOUSANDPEOPLE_INFORMATION = "thousandPeopleInformation";
 	public static final String TYPE_PSICHECKRESULT = "psiCheckResult";
 	public static final String TYPE_DOENURL = "downUrl";
 	public static final String TYPE_DONE = "done";
 	
-	public Integer getCode() {
-		return code;
-	}
-
-	public void setCode(Integer code) {
-		this.code = code;
-	}
-
-	public String getMsg() {
-		return msg;
-	}
-
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
-
 	public boolean getDone() {
 		return done;
 	}
 
 	public void setDone(boolean done) {
 		this.done = done;
-	}
-
-	public Long getModelId() {
-		return modelId;
-	}
-
-	public void setModelId(Long modelId) {
-		this.modelId = modelId;
 	}
 
 	public String getType() {

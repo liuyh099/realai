@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,17 @@ public class HttpUtil {
 
     private static Logger logger = LoggerFactory.getLogger(HttpUtil.class);
 
+    public static String getIp(){
+    	try {
+            InetAddress address = InetAddress.getLocalHost();
+            return address.getHostAddress();
+        } catch (Exception e) {
+        	e.printStackTrace();
+        	return null;
+        }
+    }
+    
+    
     /**
      * post方式的http请求，返回T对象
      *

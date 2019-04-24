@@ -8,7 +8,7 @@ import cn.realai.online.core.entity.PersonalInformation;
 
 public interface PersonalInformationDao {
 
-    void insertList(@Param("piList") List<PersonalInformation> piList);
+    void insertList(List<PersonalInformation> list);
 
     List<PersonalInformation> findListByExperimentIdAndBatchId(@Param("experimentId") Long experimentId,
     		@Param("batchId")Long batchId);
@@ -28,4 +28,6 @@ public interface PersonalInformationDao {
      * @return
      */
     PersonalInformation get(Long id);
+
+	void insert(PersonalInformation personalInformation);
 }

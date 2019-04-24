@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.realai.online.core.dao.PersonalHomoResultSetDao;
+import cn.realai.online.core.entity.PersonalHetroResultSet;
 import cn.realai.online.core.entity.PersonalHomoResultSet;
 import cn.realai.online.core.service.PersonalHomoResultSetService;
+import cn.realai.online.util.CollectionUtil;
 
 @Service
 public class PersonalHomoResultSetServiceImpl implements PersonalHomoResultSetService {
@@ -20,7 +22,10 @@ public class PersonalHomoResultSetServiceImpl implements PersonalHomoResultSetSe
         if (homoList == null || homoList.size() == 0) {
             return;
         }
-        personalHomoResultSetDao.insertList(homoList);
+        List<List<PersonalHomoResultSet>> collectionList = CollectionUtil.segmentationList((List) homoList, PersonalHomoResultSet.class, 1000);
+        for (List<PersonalHomoResultSet> list : collectionList) {
+        	personalHomoResultSetDao.insertList(list);
+        }
     }
 
     @Override
