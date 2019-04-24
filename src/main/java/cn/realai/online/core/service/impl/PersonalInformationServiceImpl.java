@@ -41,4 +41,14 @@ public class PersonalInformationServiceImpl implements PersonalInformationServic
         return personalInformationDao.get(id);
     }
 
+	@Override
+	public Long insert(PersonalInformation personalInformation) {
+		if (personalInformation == null) {
+            return null;
+        }
+		personalInformation.setCreateTime(System.currentTimeMillis());
+        personalInformationDao.insert(personalInformation);
+        return personalInformation.getId();
+	}
+
 }

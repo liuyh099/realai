@@ -20,6 +20,7 @@ import cn.realai.online.core.controller.RealTimeController;
 import cn.realai.online.core.dao.VariableDataDao;
 import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.service.VariableDataService;
+import cn.realai.online.util.CollectionUtil;
 
 @Service
 public class VariableDataServiceImpl implements VariableDataService {
@@ -41,7 +42,13 @@ public class VariableDataServiceImpl implements VariableDataService {
             vd.setCreateTime(System.currentTimeMillis());
         }
 
-        int ret = variableDataDao.insertList(vdList);
+        int ret = 0;
+        
+        List<List<VariableData>> collectionList = CollectionUtil.segmentationList((List) vdList, VariableData.class, 500);
+        for (List<VariableData> list : collectionList) {
+        	ret = variableDataDao.insertList(list) + ret;
+        }
+        
         if (ret != vdList.size()) {
             logger.error("VariableDataServiceImpl insertVariableDataList, 预处理失败, vdList{}" + JSON.toJSONString(vdList));
             throw new RuntimeException("预处理失败");

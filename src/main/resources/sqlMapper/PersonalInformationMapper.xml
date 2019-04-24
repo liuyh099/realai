@@ -18,14 +18,24 @@
         <result column="groupName" property="groupName" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <insert id="insertList">
+    <insert id="insertList" useGeneratedKeys="true" keyProperty="id" keyColumn="id"
+    	parameterType="java.util.List">
         INSERT INTO personal_information(experiment_id,group_id,batch_id,personal_name,stage,personal_card_id,
         phone_num,personal_id,create_time,order_date,label,probability)
         VALUES
-        <foreach collection="piList" separator="," item="pi">
+        <foreach collection="list" separator="," item="pi" index="index">
             (#{pi.experimentId},#{pi.groupId},#{pi.batchId},#{pi.personalName},#{pi.stage},#{pi.personalCardId},#{pi.phoneNum},
             #{pi.personalId},#{pi.createTime},#{pi.orderDate},#{pi.label},#{pi.probability})
         </foreach>
+    </insert>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id" 
+    	parameterType="cn.realai.online.core.entity.PersonalInformation">
+     INSERT INTO personal_information(experiment_id,group_id,batch_id,personal_name,stage,personal_card_id,
+        phone_num,personal_id,create_time,order_date,label,probability)
+        VALUES
+           (#{experimentId},#{groupId},#{batchId},#{personalName},#{stage},#{personalCardId},#{phoneNum},
+           #{personalId},#{createTime},#{orderDate},#{label},#{probability})
     </insert>
 
     <select id="findListByExperimentIdAndBatchId" resultMap="PersonalInformationMap">

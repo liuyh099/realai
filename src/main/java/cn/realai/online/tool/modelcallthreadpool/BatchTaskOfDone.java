@@ -46,7 +46,8 @@ public class BatchTaskOfDone extends BaseBatchTask {
 		}
 		
 		if (mLock != null) {
-			mLock.unLock();
+			boolean b = mLock.unLock();
+			logger.info("BatchTaskOfDone run, unlock. batchId{}, b{}", batchId, b);
 		}
 		
 		//修改批次状态

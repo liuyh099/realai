@@ -61,9 +61,9 @@ public class SSHBusinnessImpl implements SSHBusinness {
         // 执行myTest.sh 参数为java Know dummy
         String command;
         if ("experiment".equalsIgnoreCase(type)) {
-            command = "sh " + shellPath + " " + rootDir;
+            command = "/" + shellPath + " " + rootDir;
         } else {
-            command = "sh " + shellPath + " " + offlineRootDir;
+            command = "/" + shellPath + " " + offlineRootDir;
         }
         logger.info("SSHBusinnessImpl getFilePath. command{}", command);
         String filePath = executor.exec(command);

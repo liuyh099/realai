@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import cn.realai.online.calculation.TrainService;
 import cn.realai.online.calculation.requestbo.BatchOfOfflineRequestBO;
@@ -117,11 +118,16 @@ public class TrainServiceImpl implements TrainService {
 	}
 
 	@Override
-	public int experimentDeploy(Long experimentId, Long originalId) {
+	public int experimentDeploy(Long experimentId, Long originalId, String type) {
 		DeployRequestBO drbo = new DeployRequestBO();
 		drbo.setModelId(experimentId);
 		//drbo.setOriginalId(originalId);
-        String url = config.getModelPublish();
+		String url = null;
+		if ("online".equals(type)) {
+			url = config.getModelOnlinePublish();
+		} else {
+			url = config.getModelOfflinePublish();
+		}
         String ret = HttpUtil.postRequest(url, JSON.toJSONString(drbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl preprocess. 调用python发布接口失败. drbo{}" + JSON.toJSONString(drbo));
@@ -164,22 +170,16 @@ public class TrainServiceImpl implements TrainService {
 	@Override
 	public int runBatchDaily(BatchRecord batchRecord) {
 		//获取锁
-    	if (!getLock(MLock.TRAIN_MLOCK_LOCK, MLock.BATCH_MLOCK_PREFIX, batchRecord.getId())) {
+    	if (!getLock(MLock.ONLINE_MLOCK_LOCK, MLock.BATCH_MLOCK_PREFIX, batchRecord.getId())) {
     		return -1;
     	}
 		BatchOfOfflineRequestBO boorbo = new BatchOfOfflineRequestBO();
 		boorbo.setBatchId(batchRecord.getId());
 		boorbo.setCommand(Constant.COMMAND_BATCH);
 		boorbo.setModelId(batchRecord.getExperimentId());
-		if (batchRecord.getXtableHeterogeneousDataSource() != null) {
-			boorbo.setXtableHeterogeneousDataSource("/" + batchRecord.getXtableHeterogeneousDataSource());
-		}
-		if (batchRecord.getXtableHomogeneousDataSource() != null) {
-			boorbo.setXtableHomogeneousDataSource("/" + batchRecord.getXtableHomogeneousDataSource());
-		}
-		if (batchRecord.getYtableDataSource() != null) {
-			boorbo.setYtableDataSource("/" + batchRecord.getYtableDataSource());
-		}
+		boorbo.setXtableHeterogeneousDataSource(batchRecord.getXtableHeterogeneousDataSource());
+		boorbo.setXtableHomogeneousDataSource(batchRecord.getXtableHomogeneousDataSource());
+		boorbo.setYtableDataSource(batchRecord.getYtableDataSource());
 		String ret = HttpUtil.postRequest(config.getModelDailyBatch(), JSON.toJSONString(boorbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(boorbo));
@@ -204,6 +204,9 @@ public class TrainServiceImpl implements TrainService {
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl deleteExperiment. 调用python删除接口失败. derbo{}" + JSON.toJSONString(derbo));
         }
+        //删除python实验成功之后在释放训练所，如果当前训练的实验是当前删除的实验，则释放训练锁，如不是则释放动作并不生效
+        MLock mLock = mLockService.getLock(MLock.TRAIN_MLOCK_LOCK, MLock.BATCH_MLOCK_PREFIX, experimentId);
+        mLock.unLock();
 		return 1;
 	}
 	
@@ -224,7 +227,7 @@ public class TrainServiceImpl implements TrainService {
 	public String realTimeForecast(RealTimeData realTimeData) {
 		RealTimeRequestBO rtrbo = new RealTimeRequestBO();
 		String url = config.getRealtimeUrl();
-		String ret = HttpUtil.postRequest(url, JSON.toJSONString(realTimeData));
+		String ret = HttpUtil.postRequest(url, JSON.toJSONString(realTimeData, SerializerFeature.WriteMapNullValue));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl realTimeForecast. 调用python线上实时接口失败. rtrbo{}" + JSON.toJSONString(rtrbo));
         }

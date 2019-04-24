@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import cn.realai.online.core.dao.PersonalHetroResultSetDao;
 import cn.realai.online.core.entity.PersonalHetroResultSet;
 import cn.realai.online.core.service.PersonalHetroResultSetService;
+import cn.realai.online.util.CollectionUtil;
 
 @Service
 public class PersonalHetroResultSetServiceImpl implements PersonalHetroResultSetService {
@@ -20,7 +21,11 @@ public class PersonalHetroResultSetServiceImpl implements PersonalHetroResultSet
         if (hetroList == null || hetroList.size() == 0) {
             return;
         }
-        personalHetroResultSetDao.insertList(hetroList);
+        
+        List<List<PersonalHetroResultSet>> collectionList = CollectionUtil.segmentationList((List) hetroList, PersonalHetroResultSet.class, 1000);
+        for (List<PersonalHetroResultSet> list : collectionList) {
+        	personalHetroResultSetDao.insertList(list);
+        }
     }
 
     @Override

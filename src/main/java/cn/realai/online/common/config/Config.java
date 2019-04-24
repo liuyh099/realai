@@ -1,12 +1,18 @@
 package cn.realai.online.common.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import cn.realai.online.util.HttpUtil;
+
 @Configuration
 @PropertySource({"classpath:config.properties"})
 public class Config {
+	
+	private Logger logger = LoggerFactory.getLogger(Config.class);
 	
 	private static final String http = "http://"; 
 	
@@ -22,8 +28,11 @@ public class Config {
     @Value("${experiment.drop}")
     private String EXPERIMENT_DROP;
     
-    @Value("${model.publish}")
-    private String MODEL_PUBLISH;
+    @Value("${model.online.publish}")
+    private String MODEL_ONLINE_PUBLISH;
+    
+    @Value("${model.offline.publish}")
+    private String MODEL_OFFLINE_PUBLISH;
     
     @Value("${model.drop}")
     private String MODEL_DROP;
@@ -55,8 +64,12 @@ public class Config {
     	return http + NGINX_URL + ":" + NGINX_PORT;
     }
 
-    public String getModelPublish() {
-    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_PUBLISH;
+    public String getModelOfflinePublish() {
+    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_OFFLINE_PUBLISH;
+    }
+    
+    public String getModelOnlinePublish() {
+    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_ONLINE_PUBLISH;
     }
     
     public String getModelDrop() {

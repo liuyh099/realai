@@ -16,13 +16,11 @@ import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.ExperimentResultSet;
-import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.ModelPerformance;
 import cn.realai.online.core.entity.SampleSummary;
 import cn.realai.online.core.entity.TopSort;
 import cn.realai.online.core.service.ExperimentResultSetService;
 import cn.realai.online.core.service.ExperimentService;
-import cn.realai.online.core.service.MLockService;
 import cn.realai.online.core.service.ModelPerformanceService;
 import cn.realai.online.core.service.SampleSummaryService;
 import cn.realai.online.core.service.TopSortService;
@@ -59,11 +57,11 @@ public class TrainTaskStageOne implements Runnable {
 		ExperimentService experimentService = SpringContextUtils.getBean(ExperimentService.class);
     	
 		try {
-	    	logger.info("TrainTask run, 实验回调处理开始， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
+	    	logger.info("TrainTaskStageOne run, 实验评估回调处理开始， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
 	        //查询实验信息
 	        ExperimentBO experiment = experimentService.selectExperimentById(experimentId);
 	        if (experiment == null) {
-	            logger.error("TrainTask run. experiment信息不存在. experimentId{}", experimentId);
+	            logger.error("TrainTaskStageOne run. experiment信息不存在. experimentId{}", experimentId);
 	            throw new RuntimeException("实验id不存在  experimentId = " + experimentId);
 	        }
 	
@@ -122,13 +120,13 @@ public class TrainTaskStageOne implements Runnable {
 	        
 	        txManager.commit(ts);
 		} catch (Exception e) {
-			logger.info("TrainTask run, 实验回调处理异常， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
+			logger.info("TrainTaskStageOne run, 实验评估回调处理异常， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
 			txManager.rollback(ts);
-			experimentService.maintainErrorMsg(experimentId, Experiment.STATUS_TRAINING_ERROR, "训练失败");
+			experimentService.maintainErrorMsg(experimentId, Experiment.STATUS_TRAINING_ERROR, "评估失败");
 			e.printStackTrace();
 		}
         
-        logger.info("TrainTask run, 实验回调处理结束， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
+        logger.info("TrainTaskStageOne run, 实验评估回调处理结束， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
         
     }
 
@@ -137,7 +135,7 @@ public class TrainTaskStageOne implements Runnable {
      */
     private void analysisModelPerformance(String redisValue) {
         if (redisValue == null || "".equals(redisValue)) {
-            logger.error("TrainTask analysisModelPerformance. 训练结果没有模型表现数据. experimentId{}", experimentId);
+            logger.error("TrainTaskStageOne analysisModelPerformance. 训练结果没有模型表现数据. experimentId{}", experimentId);
             throw new RuntimeException("训练结果没有模型表现数据experimentId = " + experimentId);
         }
         List<ModelPerformance> mpList = JSON.parseArray(redisValue, ModelPerformance.class);
@@ -154,7 +152,7 @@ public class TrainTaskStageOne implements Runnable {
      */
     private void analysisTopSort(String redisValue) {
         if (redisValue == null || "".equals(redisValue)) {
-            logger.error("TrainTask analysisModelPerformance. 训练结果没有top排序数据. experimentId{}", experimentId);
+            logger.error("TrainTaskStageOne analysisModelPerformance. 训练结果没有top排序数据. experimentId{}", experimentId);
             throw new RuntimeException("训练结果没有top排序数据experimentId = " + experimentId);
         }
         List<TopSort> tsList = JSON.parseArray(redisValue, TopSort.class);
@@ -171,7 +169,7 @@ public class TrainTaskStageOne implements Runnable {
      */
     private void analysisSampleSummary(String redisValue) {
         if (redisValue == null || "".equals(redisValue)) {
-            logger.error("TrainTask analysisModelPerformance. 训练结果没有样本摘要数据. experimentId{}", experimentId);
+            logger.error("TrainTaskStageOne analysisModelPerformance. 训练结果没有样本摘要数据. experimentId{}", experimentId);
             throw new RuntimeException("训练结果没有样本摘要数据experimentId = " + experimentId);
         }
         List<SampleSummary> ssList = JSON.parseArray(redisValue, SampleSummary.class);
@@ -185,7 +183,7 @@ public class TrainTaskStageOne implements Runnable {
 
     private void analysisExperimentResultSet(String redisValue) {
         if (redisValue == null || "".equals(redisValue)) {
-            logger.error("TrainTask analysisExperimentResultSet. 训练结果没有风控或营销信息数据. experimentId{}", experimentId);
+            logger.error("TrainTaskStageOne analysisExperimentResultSet. 训练结果没有风控或营销信息数据. experimentId{}", experimentId);
             throw new RuntimeException("训练结果没有风控或营销信息数据experimentId = " + experimentId);
         }
         List<ExperimentResultSet> ersList = JSON.parseArray(redisValue, ExperimentResultSet.class);

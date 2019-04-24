@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ModelCallPool {
 
-    public final static ThreadPoolExecutor modelCallPool = new ThreadPoolExecutor(10, 10, 10,
+    public final static ThreadPoolExecutor modelCallPool = new ThreadPoolExecutor(1, 1, 10,
             TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
             new ThreadPoolExecutor.DiscardOldestPolicy());
 

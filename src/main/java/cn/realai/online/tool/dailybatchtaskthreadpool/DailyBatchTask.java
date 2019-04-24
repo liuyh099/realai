@@ -45,6 +45,8 @@ public class DailyBatchTask implements Runnable {
 	 */
 	@Override
 	public void run() {
+		Long time = System.currentTimeMillis();
+		logger.info("DailyBatchTask run. this{}, time{}", JSON.toJSON(this), time);
 		//获取批次信息
 		BatchRecordService batchRecordService = SpringContextUtils.getBean(BatchRecordService.class);
 		BatchRecord batchRecord = batchRecordService.getBatchRecordOfDaily(experimentId, batchDate, BatchRecord.BATCH_TYPE_DAILY,
@@ -61,7 +63,10 @@ public class DailyBatchTask implements Runnable {
 		
 		//如果因为没有获取锁而调用失败则将任务重新放回队列
 		if (ret == -1) {
+			logger.info("DailyBatchTask run. again this{}, time", JSON.toJSON(this), time);
 			DailyBatchTaskQueue.queue.execute(this);
+		} else {
+			logger.info("DailyBatchTask run. end this{}, time", JSON.toJSON(this), time);
 		}
 		
 		try {

@@ -26,12 +26,9 @@ import cn.realai.online.core.service.VariableDataService;
 import cn.realai.online.tool.dailybatchtaskthreadpool.DailyBatchTask;
 import cn.realai.online.tool.dailybatchtaskthreadpool.DailyBatchTaskQueue;
 import cn.realai.online.tool.modelcallthreadpool.BaseBatchTask;
-import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfCombo;
 import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfDone;
-import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfHetro;
-import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfHomo;
 import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfPSI;
-import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfPersonalInfo;
+import cn.realai.online.tool.modelcallthreadpool.BatckTaskOfThousandPeople;
 import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
 import cn.realai.online.tool.modelcallthreadpool.TrainTaskStageOne;
 import cn.realai.online.tool.modelcallthreadpool.TrainTaskStageTwo;
@@ -79,18 +76,12 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
 	public void runBatchOffline(Long experimentId, String redisKey, String type, String downUrl, 
 			Long batchId, Boolean done) {
     	BaseBatchTask bbt;
-    	if (BatchRequestBase.TYPE_PERSONALCOMBORESULTSET.equals(type)) {
-        	bbt = new BatchTaskOfCombo(experimentId, batchId, redisKey);
-        } else if (BatchRequestBase.TYPE_PERSONALHETRORESULTSET.equals(type)) {
-        	bbt = new BatchTaskOfHetro(experimentId, batchId, redisKey);
-        } else if (BatchRequestBase.TYPE_PERSONALHOMORESULTSET.equals(type)) {
-        	bbt = new BatchTaskOfHomo(experimentId, batchId, redisKey);
-        } else if (BatchRequestBase.TYPE_PERSONALINFORMATION.equals(type)) {
-        	bbt = new BatchTaskOfPersonalInfo(experimentId, batchId, redisKey);
-        } else if (BatchRequestBase.TYPE_DONE.equals(type)) {
+    	if (BatchRequestBase.TYPE_DONE.equals(type)) {
         	bbt = new BatchTaskOfDone(experimentId, batchId, done);
         } else if (BatchRequestBase.TYPE_PSICHECKRESULT.equals(type)) {
         	bbt = new BatchTaskOfPSI(experimentId,batchId, redisKey);
+        } else if (BatchRequestBase.TYPE_THOUSANDPEOPLE_INFORMATION.equals(type)) {
+        	bbt = new BatckTaskOfThousandPeople(experimentId, batchId, redisKey);
         } else if (BatchRequestBase.TYPE_DOENURL.equals(type)) {
         	if (downUrl != null && !"".equals(downUrl)) {
         		batchRecordService.maintainDownUrl(batchId, downUrl);
@@ -127,10 +118,10 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
             vd.setDelete(VariableData.DELETE_NO);
         }
         variableDataService.deleteVariableDataByExperimentId(experimentId);
-        int ret = variableDataService.insertVariableDataList(vdList);
+        variableDataService.insertVariableDataList(vdList);
 
         //修改实验的预处理状态
-        ret = experimentService.maintainPreprocessStatus(experimentId, Experiment.PREFINISH_YES, "");
+        int ret = experimentService.maintainPreprocessStatus(experimentId, Experiment.PREFINISH_YES, "");
 
         redisClientTemplate.delete(redisKey);
         logger.info("ModelCallBussinessImpl preprocessCallback. 预处正常结束， experimentId{}, redisKey{} ", experimentId, redisKey);
@@ -179,6 +170,7 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
 	@Override
 	public void batchErrorDealWith(Long batchId, String errorMsg) {
 		if (batchId != null) {
+			logger.info("ModelCallBussinessImpl batchErrorDealWith, batchId{}, errorMsg{}", batchId, errorMsg);
 			BatchRecord batchRecord = new BatchRecord();
 			batchRecord.setId(batchId);
 			batchRecord = batchRecordService.getByEntity(batchRecord);
@@ -191,7 +183,8 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
 				mLock = null;
 			}
 			if (mLock != null) {
-				mLock.unLock();
+				boolean b = mLock.unLock();
+				logger.info("ModelCallBussinessImpl batchErrorDealWith unLock, batchId{}, b{}", batchId, b);
 			}
 		}
 		

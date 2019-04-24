@@ -467,8 +467,11 @@ public class ExperimentalTrainController {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "实验已经完成或者正在进行中，不可以修改实验", null);
             }
             int ret = experimentalTrainBussiness.train(trainId);
+            if (ret == -2) { //返回-2表示服务密钥验证不通过
+            	return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("服务密钥验证失败"), null);
+            }
             if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
-                return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
+                return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), null);
             }
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), ret);
         } catch (Exception e) {
@@ -492,7 +495,10 @@ public class ExperimentalTrainController {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), 1);
             }
             int ret = experimentalTrainBussiness.train(newExperimentId);
-            if (ret == -1) {
+            if (ret == -2) { //返回-2表示服务密钥验证不通过
+            	return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("服务密钥验证失败"), null);
+            }
+            if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
                 return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
             }
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
@@ -502,11 +508,12 @@ public class ExperimentalTrainController {
         }
     }
 
-    @PutMapping("/testPreprocess/{experimentId}")
+    @GetMapping("/testPreprocess")
     @ResponseBody
-    public Result testPreprocess(@PathVariable long experimentId) {
+    public Result testPreprocess(String test) {
         try {
-            experimentalTrainBussiness.testPreprocess(experimentId);
+        	System.out.println(test);
+            //experimentalTrainBussiness.testPreprocess(experimentId);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
         } catch (Exception e) {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);

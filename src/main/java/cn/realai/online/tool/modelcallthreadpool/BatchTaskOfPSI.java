@@ -29,11 +29,14 @@ public class BatchTaskOfPSI extends BaseBatchTask {
 	
 	@Override
 	public void run() {
+		logger.info("BatchTaskOfPSI run. 当前线程信息, 线程数{}, 任务数{}", 
+				ModelCallPool.modelCallPool.getPoolSize(), ModelCallPool.modelCallPool.getQueue().size());
 		logger.info("BatchTaskOfPSI run. experimentId{}, batchId{}, redisKey{}", experimentId, batchId, redisKey);
 		RedisClientTemplate redisClientTemplate = SpringContextUtils.getBean(RedisClientTemplate.class);
         String redisValue = redisClientTemplate.get(redisKey);
         List<PSICheckResult> list = JSON.parseArray(redisValue, PSICheckResult.class);
     	if (list == null || list.size() == 0) {
+    		logger.info("BatchTaskOfPSI run psiValue is null, rediskey{}", redisKey);
     		return ;
     	}
     	
@@ -49,8 +52,10 @@ public class BatchTaskOfPSI extends BaseBatchTask {
 		for (PSICheckResult psi : list) {
 			psi.setAler(psi.getPsi() > Constant.PSI_ALER_VALUE ? 2 : 1);//1.不预警 2.预警
 			psi.setVariableId(vdMap.get(psi.getVariableName() + psi.getVariableType()));
+			psi.setExperimentId(experimentId);
 		}
 		psiCheckResultService.insertList(list);
+		logger.info("BatchTaskOfPSI run. experimentId{}, batchId{}, size{}", experimentId, batchId, list.size());
 		redisClientTemplate.delete(redisKey);
 	}
 

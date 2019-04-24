@@ -4,6 +4,6 @@ import cn.realai.online.core.query.realtime.RealTimeData;
 
 public interface RealTimeBussiness {
 
-    String getForecastResult(RealTimeData realTimeData);
+    String getForecastResult(RealTimeData realTimeData)  throws Exception;
 
 }

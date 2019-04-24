@@ -17,8 +17,8 @@
 	<insert id="insertList">
 		INSERT INTO psi_check_result (psi,variable_id,experiment_id,aler)
 		values
-		<foreach collection="list" open="(" close=")" separator="," item="psi">
-			#{psi.psi}, #{psi.variable_id}, #{psi.experiment_id}, #{psi.aler}
+		<foreach collection="list" separator="," item="psi">
+			(#{psi.psi}, #{psi.variableId}, #{psi.experimentId}, #{psi.aler})
 		</foreach>
 	</insert>
 

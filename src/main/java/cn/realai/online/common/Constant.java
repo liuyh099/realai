@@ -10,7 +10,7 @@ public class Constant {
     /*
      * 为了给Python计算削峰，每次单个服务最多只能同时有两个计算任务发送给python
      */
-    public static final int COUNT_SYNCHRONIZE_CALCULATION = 2;
+    public static final int COUNT_SYNCHRONIZE_CALCULATION = 8;
 
     //预处理任务
     public static final String COMMAND_PREPROCESS = "preprocess";

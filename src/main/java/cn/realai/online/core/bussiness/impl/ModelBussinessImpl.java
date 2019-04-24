@@ -344,7 +344,7 @@ public class ModelBussinessImpl implements ModelBussiness {
         ServiceDeployRecordBO serviceDeployRecordBO = getServiceDeployRecordBO(modelBO);
         serviceDeployRecordBussiness.insert(serviceDeployRecordBO);
 
-        count = trainService.experimentDeploy(modelBO.getExperimentId(), null);
+        count = trainService.experimentDeploy(modelBO.getExperimentId(), null, modelBO.getReleaseStatus());
         HashMap<String,Object> hashMap =new HashMap<>();
         if(count>0){
             modelService.offline(modelBO.getServiceId(),modelBO.getId(),Model.RELEASE_STATUS.NONE.value);

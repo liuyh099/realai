@@ -5,15 +5,11 @@ package cn.realai.online.core.bo.model;
  *
  * @author 86183
  */
-public class ModelRequest {
+public class ModelRequest extends BatchRequest {
 
     private Long experimentId;
 
     private String task;
-
-    private Integer code;
-
-    private String msg;
 
     private String data;
     
@@ -42,22 +38,6 @@ public class ModelRequest {
 
     public void setTask(String task) {
         this.task = task;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
     }
 
     public String getData() {

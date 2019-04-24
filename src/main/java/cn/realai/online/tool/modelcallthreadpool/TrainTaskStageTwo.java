@@ -71,11 +71,11 @@ public class TrainTaskStageTwo implements Runnable {
 		ExperimentService experimentService = SpringContextUtils.getBean(ExperimentService.class);
     	
 		try {
-	    	logger.info("TrainTask run, 实验回调处理开始， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
+	    	logger.info("TrainTaskStageTwo run, 实验千人千面解释回调处理开始， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
 	        //查询实验信息
 	        ExperimentBO experiment = experimentService.selectExperimentById(experimentId);
 	        if (experiment == null) {
-	            logger.error("TrainTask run. experiment信息不存在. experimentId{}", experimentId);
+	            logger.error("TrainTaskStageTwo run. experiment信息不存在. experimentId{}", experimentId);
 	            throw new RuntimeException("实验id不存在  experimentId = " + experimentId);
 	        }
 	
@@ -140,7 +140,7 @@ public class TrainTaskStageTwo implements Runnable {
 	        
 	        txManager.commit(ts);
 		} catch (Exception e) {
-			logger.info("TrainTask run, 实验回调处理异常， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
+			logger.info("TrainTaskStageTwo run, 实验千人千面解释处理异常， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
 			txManager.rollback(ts);
 			experimentService.maintainErrorMsg(experimentId, Experiment.STATUS_TRAINING_ERROR, "训练失败");
 			e.printStackTrace();
@@ -153,7 +153,7 @@ public class TrainTaskStageTwo implements Runnable {
 			mLock.unLock();
 		}
         
-        logger.info("TrainTask run, 实验回调处理结束， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
+        logger.info("TrainTaskStageTwo run, 实验千人千面解释处理结束， experimentId{}, redisKey{}", experimentId, JSON.toJSONString(redisKey));
         
     }
 
@@ -163,7 +163,7 @@ public class TrainTaskStageTwo implements Runnable {
      */
     private List<SampleGrouping> analysisSampleGrouping(String redisValue) {
         if (redisValue == null || "".equals(redisValue)) {
-            logger.error("TrainTask analysisModelPerformance. 训练结果没有样本分组数据. experimentId{}", experimentId);
+            logger.error("TrainTaskStageTwo analysisModelPerformance. 训练结果没有样本分组数据. experimentId{}", experimentId);
             throw new RuntimeException("训练结果没有样本分组数据experimentId = " + experimentId);
         }
         List<SampleGrouping> sgList = JSON.parseArray(redisValue, SampleGrouping.class);
@@ -200,7 +200,7 @@ public class TrainTaskStageTwo implements Runnable {
      */
     private void analysisSampleWeight(String redisValue, Map<String, Long> sgMap, Map<String, Long> vdMap) {
         if (redisValue == null || "".equals(redisValue)) {
-            logger.error("TrainTask analysisSampleWeight. 训练结果没有样本权重数据. experimentId{}", experimentId);
+            logger.error("TrainTaskStageTwo analysisSampleWeight. 训练结果没有样本权重数据. experimentId{}", experimentId);
             throw new RuntimeException("训练结果没有样本权重数据experimentId = " + experimentId);
         }
         List<SampleWeight> swList = JSON.parseArray(redisValue, SampleWeight.class);
@@ -210,13 +210,13 @@ public class TrainTaskStageTwo implements Runnable {
             sw.setExperimentId(experimentId);
             Long sgId = sgMap.get(sw.getGroupName());
             if (sgId == null) {
-                logger.error("TrainTask analysisSampleWeight. 训练结果数据错误,分组名称不存在. experimentId{}, groupName{}", experimentId, sw.getGroupName());
+                logger.error("TrainTaskStageTwo analysisSampleWeight. 训练结果数据错误,分组名称不存在. experimentId{}, groupName{}", experimentId, sw.getGroupName());
                 throw new RuntimeException("训练结果数据错误,分组名称不存在.");
             }
             sw.setGroupId(sgId);
             Long vdId = vdMap.get(sw.getVariableName() + sw.getVariableType());
             if (vdId == null) {
-                logger.error("TrainTask analysisSampleWeight. 训练结果数据错误,变量名称不存在. experimentId{}, groupName{}", experimentId, sw.getVariableName());
+                logger.error("TrainTaskStageTwo analysisSampleWeight. 训练结果数据错误,变量名称不存在. experimentId{}, groupName{}", experimentId, sw.getVariableName());
                 throw new RuntimeException("训练结果数据错误,变量名称不存在.");
             }
             sw.setVariableId(vdId);
@@ -230,7 +230,7 @@ public class TrainTaskStageTwo implements Runnable {
      */
     private List<PersonalInformation> analysisPersonalInformation(String redisValue, Map<String, Long> sgMap, Long batchRecordId) {
         if (redisValue == null || "".equals(redisValue)) {
-            logger.error("TrainTask analysisModelPerformance. 训练结果没有千人千面人员信息数据. experimentId{}", experimentId);
+            logger.error("TrainTaskStageTwo analysisModelPerformance. 训练结果没有千人千面人员信息数据. experimentId{}", experimentId);
             throw new RuntimeException("训练结果没有千人千面人员信息数据experimentId = " + experimentId);
         }
         List<PersonalInformation> piList = JSON.parseArray(redisValue, PersonalInformation.class);
@@ -238,7 +238,7 @@ public class TrainTaskStageTwo implements Runnable {
             pi.setExperimentId(experimentId);
             Long sgId = sgMap.get(pi.getGroupName());
             if (sgId == null) {
-                logger.error("TrainTask analysisPersonalInformation. 训练结果数据错误,分组名称不存在. experimentId{}, groupName{}", experimentId, pi.getGroupName());
+                logger.error("TrainTaskStageTwo analysisPersonalInformation. 训练结果数据错误,分组名称不存在. experimentId{}, groupName{}", experimentId, pi.getGroupName());
                 throw new RuntimeException("训练结果数据错误,分组名称不存在.");
             }
             pi.setGroupId(sgId);
@@ -258,7 +258,7 @@ public class TrainTaskStageTwo implements Runnable {
      */
     private void analysisPersonalResultSet(String homoValue, String HetroValue, Map<String, Long> piMap, Map<String, Long> vdMap, Long batchRecordId) {
         if ((homoValue == null || "".equals(homoValue)) && (HetroValue == null || "".equals(HetroValue))) {
-            logger.error("TrainTask analysisPersonalResultSet. 训练结果没有千人千面同质和异质信息数据. experimentId{}", experimentId);
+            logger.error("TrainTaskStageTwo analysisPersonalResultSet. 训练结果没有千人千面同质和异质信息数据. experimentId{}", experimentId);
             throw new RuntimeException("训练结果没有千人千面同质和异质信息数据experimentId = " + experimentId);
         }
         if (homoValue != null && !"".equals(homoValue)) {
@@ -268,7 +268,7 @@ public class TrainTaskStageTwo implements Runnable {
         		PersonalHomoResultSet phrs = homoList.get(i);
                 Long piId = piMap.get(phrs.getPersonalId());
                 if (piId == null) {
-                    logger.error("TrainTask analysisPersonalResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, phrs.getPersonalId());
+                    logger.error("TrainTaskStageTwo analysisPersonalResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, phrs.getPersonalId());
                     throw new RuntimeException("训练结果数据错误,千人千面信息不存在.");
                 }
                 
@@ -291,7 +291,7 @@ public class TrainTaskStageTwo implements Runnable {
             	
             	Long piId = piMap.get(phrs.getPersonalId());
                 if (piId == null) {
-                    logger.error("TrainTask analysisPersonalResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, phrs.getPersonalId());
+                    logger.error("TrainTaskStageTwo analysisPersonalResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, phrs.getPersonalId());
                     throw new RuntimeException("训练结果数据错误,千人千面信息不存在.");
                 }
                 Long vId = vdMap.get(phrs.getVariableName() + VariableData.VARIABLE_TYPE_HETRO);
@@ -317,7 +317,7 @@ public class TrainTaskStageTwo implements Runnable {
         for (PersonalComboResultSet pcrs : comboList) {
             Long piId = piMap.get(pcrs.getPersonalId());
             if (piId == null) {
-                logger.error("TrainTask analysisPersonalComboResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, pcrs.getPersonalId());
+                logger.error("TrainTaskStageTwo analysisPersonalComboResultSet. 训练结果数据错误,千人千面信息不存在. experimentId{}, groupName{}", experimentId, pcrs.getPersonalId());
                 throw new RuntimeException("训练结果数据错误,千人千面信息不存在.");
             }
             pcrs.setPid(piId);
