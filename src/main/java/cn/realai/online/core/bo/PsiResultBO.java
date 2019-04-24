@@ -18,6 +18,10 @@ public class PsiResultBO {
 
     private int aler;
 
+    private String groupName;
+
+    private Double variableWeight;
+
     public long getPsiId() {
         return psiId;
     }
@@ -56,5 +60,21 @@ public class PsiResultBO {
 
     public void setAler(int aler) {
         this.aler = aler;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public Double getVariableWeight() {
+        return variableWeight;
+    }
+
+    public void setVariableWeight(Double variableWeight) {
+        this.variableWeight = variableWeight;
     }
 }

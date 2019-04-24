@@ -16,7 +16,7 @@ import java.util.Map;
 public interface PsiCheckResultService {
 
     //查询模型列表
-    List<PsiResultBO> selectList(Long modelId);
+    List<PsiResultBO> selectList(Long modelId, Integer variableType, Integer maxNum);
 
     //获取最大Psi
     Double selectMaxPsi(long modelId);

@@ -23,8 +23,8 @@ public class PsiCheckResultServiceImpl implements PsiCheckResultService {
     private PSICheckResultDao psiCheckResultDao;
 
     @Override
-    public List<PsiResultBO> selectList(Long modelId) {
-        return psiCheckResultDao.selectList(modelId);
+    public List<PsiResultBO> selectList(Long modelId, Integer variableType, Integer maxNum) {
+        return psiCheckResultDao.selectList(modelId, variableType, maxNum);
     }
 
     @Override

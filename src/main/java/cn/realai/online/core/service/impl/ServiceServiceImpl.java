@@ -275,6 +275,15 @@ public class ServiceServiceImpl implements ServiceService {
 
 	@Override
 	public List<Service> findListByAlreadyPublishModel() {
-		return serviceDao.findListByAlreadyPublishModel();
+		List<Service> services = serviceDao.findListByAlreadyPublishModel();
+		Iterator<Service> it = services.iterator();
+		while(it.hasNext()){
+			Service s = it.next();
+			convertData(s);
+			if(s.isExpired() || s.isDiscard()) {
+				it.remove();
+			}
+		}
+		return services;
 	}
 }

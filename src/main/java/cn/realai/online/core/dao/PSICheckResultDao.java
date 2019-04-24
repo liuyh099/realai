@@ -23,7 +23,7 @@ public interface PSICheckResultDao {
     List<Map> selectMaxPsiList(List<Long> modelIds);
 
     //查询PSI列表
-    List<PsiResultBO> selectList(@Param("modelId") Long modelId);
+    List<PsiResultBO> selectList(@Param("modelId") Long modelId, @Param("variableType") Integer variableType, @Param("maxNum") Integer maxNum);
 
 	int deletePSIByExperimentId(@Param("experimentId")Long experimentId);
 
@@ -36,4 +36,6 @@ public interface PSICheckResultDao {
     Integer findMaxPsiTotal();
 
     Double selectPsiByServiceId(@Param("serviceId")Long experimentId);
+
+
 }

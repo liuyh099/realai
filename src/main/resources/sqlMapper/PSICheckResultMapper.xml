@@ -85,14 +85,20 @@
         <result column="meaning" property="meaning" jdbcType="VARCHAR"/>
     </resultMap>
     <select id="selectList" resultMap="PsiResultMap">
-        select psi.id as psiId, psi.psi, psi.aler, vd.name, vd.meaning
+        select psi.id as psiId, psi.psi, psi.aler, psi.variable_id as varId, vd.name, vd.meaning, sg.group_name as groupName, sw.variable_weight as variableweight
         from psi_check_result as psi
         join variable_data as vd on psi.variable_id = vd.id
+        join sample_weight as sw on vd.id = sw.variable_id
+        join sample_grouping as sg on sw.group_id = sg.id
         join model as m on psi.experiment_id = m.experiment_id
         <where>
-            m.id = #{modelId}
+            sg.group_name = '全局'
+            and m.release_status != 'none'
+            and m.id = #{modelId}
+            and vd.variable_type = #{variableType}
         </where>
-        order by psi.id
+        order by abs(sw.variable_weight) desc, psi.id asc
+        limit #{maxNum}
     </select>
 
 </mapper>

@@ -6,6 +6,7 @@ import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.PSICheckResult;
 import cn.realai.online.core.entity.TuningRecord;
+import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.service.PsiCheckResultService;
 import cn.realai.online.core.service.TuningRecordService;
@@ -39,9 +40,28 @@ public class PsiCheckResultlBussinessImpl implements PsiCheckResultBussiness {
     @Override
     public List<PsiResultVO> selectList(Long modelId) {
         List<PsiResultVO> psiResultVOList = new ArrayList<>();
-        List<PsiResultBO> psiResultBOList = psiChekcResultService.selectList(modelId);
-        if (psiResultBOList != null && !psiResultBOList.isEmpty()) {
-            psiResultBOList.forEach(psi -> {
+
+        List<PsiResultBO> hetroList = psiChekcResultService.selectList(modelId, VariableData.VARIABLE_TYPE_HETRO, 50);
+        List<PsiResultBO> homoList = psiChekcResultService.selectList(modelId, VariableData.VARIABLE_TYPE_HOMO, 20);
+        List<PsiResultBO> psiBOList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(hetroList)) {
+            psiBOList.addAll(hetroList);
+        }
+        if (!CollectionUtils.isEmpty(homoList)) {
+            psiBOList.addAll(homoList);
+        }
+
+        if (!psiBOList.isEmpty()) {
+            psiBOList.sort((v1, v2) -> {
+                if (v1.getVariableWeight() > v2.getVariableWeight()) {
+                    return -1;
+                } else if (v1.getVariableWeight() == v2.getVariableWeight()) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            });
+            psiBOList.forEach(psi -> {
                 PsiResultVO itemVO = new PsiResultVO();
                 BeanUtils.copyProperties(psi, itemVO);
                 itemVO.setVarSource(psi.getName());
