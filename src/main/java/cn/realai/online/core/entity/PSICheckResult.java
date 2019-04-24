@@ -28,7 +28,7 @@ public class PSICheckResult {
     
     public static enum STATUS {
         YES(1, "不预警"),
-        NO(2, "不预警");
+        NO(2, "预警");
 
         private int value;
         private String desc;
