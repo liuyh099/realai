@@ -1,6 +1,5 @@
 package cn.realai.online.core.service;
 
-import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.TuningRecord;
 
 import java.util.List;

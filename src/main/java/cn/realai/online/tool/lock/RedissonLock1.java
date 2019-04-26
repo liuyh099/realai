@@ -2,19 +2,23 @@ package cn.realai.online.tool.lock;
 
 import java.util.concurrent.TimeUnit;
 
+import org.redisson.RedissonLock;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RedissonLock implements DistributedLocker {
+public class RedissonLock1 implements DistributedLocker {
 
-    @Autowired
-    private RedissonClient redissonClient;  //RedissonClient已经由配置类生成，这里自动装配即可
+    //@Autowired
+    //private RedissonClient redissonClient;  //RedissonClient已经由配置类生成，这里自动装配即可
 
+	@Autowired
+    RedissonLock redissonLock;
+	
     //lock(), 拿不到lock就不罢休，不然线程就一直block
-    public RLock lock(String lockKey) {
+    /*public RLock lock(String lockKey) {
         RLock lock = redissonClient.getLock(lockKey);
         lock.lock();
         return lock;
@@ -52,5 +56,5 @@ public class RedissonLock implements DistributedLocker {
 
     public void unlock(RLock lock) {
         lock.unlock();
-    }
+    }*/
 }

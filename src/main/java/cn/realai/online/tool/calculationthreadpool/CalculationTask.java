@@ -38,10 +38,11 @@ public class CalculationTask implements Callable<String> {
     @Override
     public String call() throws Exception {
     	String uuId = UUID.randomUUID().toString();
-    	logger.info("CalculationTask call. 线上任务开始. realTimeData{}, uuId{}", realTimeData, uuId);
+    	logger.info("CalculationTask call. 线上任务开始. realTimeData{}, uuId{}, 当前线程信息, 线程数{}, 任务数{}", realTimeData, uuId, 
+    			CalculationQueue.queue.getPoolSize(), CalculationQueue.queue.getQueue().size());
     	TrainService trainService = SpringContextUtils.getBean(TrainService.class);
     	String ret = trainService.realTimeForecast(realTimeData);
-    	logger.info("CalculationTask call. 线上任务获取返回值. uuId{}", uuId);
+    	logger.info("CalculationTask call. 线上任务获取返回值. uuId{} ", uuId);
         return ret;
     }
 

@@ -11,7 +11,7 @@ import org.redisson.api.RLock;
  */
 public interface DistributedLocker {
 
-    RLock lock(String lockKey);
+   /* RLock lock(String lockKey);
 
     RLock lock(String lockKey, long timeout);
 
@@ -21,6 +21,6 @@ public interface DistributedLocker {
 
     void unlock(String lockKey);
 
-    void unlock(RLock lock);
+    void unlock(RLock lock);*/
 
 }

@@ -16,7 +16,7 @@ public class JedisClusterClient {
     @Autowired
     private RedisConfig redisConfig;
 
-    public JedisCluster getJedisCluster() {
+    /*public JedisCluster getJedisCluster() {
         String[] serverArray = redisConfig.getClusterNodes().split(",");
         Set<HostAndPort> nodes = new HashSet<>();
 
@@ -25,6 +25,6 @@ public class JedisClusterClient {
             nodes.add(new HostAndPort(ipPortPair[0].trim(), Integer.valueOf(ipPortPair[1].trim())));
         }
         return new JedisCluster(nodes, redisConfig.getCommandTimeout());
-    }
+    }*/
 
 }

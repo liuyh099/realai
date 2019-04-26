@@ -7,6 +7,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisClusterManager;
+import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -32,6 +33,9 @@ public class ShiroConfig {
 
     @Value("${session.sessionValidationInterval}")
     private Long sessionValidationInterval;
+
+    @Value("${spring.redis.cache.redisAlone:true}")
+    private boolean redisAlone;
 
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
@@ -92,25 +96,38 @@ public class ShiroConfig {
     }
 
 
-    public RedisClusterManager redisManager() {
+    public RedisClusterManager clusterRedisManager() {
         RedisClusterManager redisClusterManager = new RedisClusterManager();
         redisClusterManager.setHost(host);
         return redisClusterManager;
+    }
+
+    public RedisManager aloneRedisManager() {
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost(host);
+        return redisManager;
     }
 
 
     @Bean("myRedisCacheManager")
     public RedisCacheManager cacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager());
+        if(redisAlone){
+            redisCacheManager.setRedisManager(aloneRedisManager());
+        }else {
+            redisCacheManager.setRedisManager(clusterRedisManager());
+        }
         return redisCacheManager;
     }
 
     @Bean
     public RedisSessionDAO redisSessionDAO() {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-        redisSessionDAO.setRedisManager(redisManager());
-
+        if(redisAlone){
+            redisSessionDAO.setRedisManager(aloneRedisManager());
+        }else {
+            redisSessionDAO.setRedisManager(clusterRedisManager());
+        }
 //      Custom your redis key prefix for session management, if you doesn't define this parameter,
 //      shiro-redis will use 'shiro_redis_session:' as default prefix
 //      redisSessionDAO.setKeyPrefix("");

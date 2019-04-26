@@ -17,7 +17,7 @@ import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.OfflineBatchCreateVO;
 import cn.realai.online.core.vo.OfflineBatchListVO;
-import cn.realai.online.tool.lock.RedissonLock;
+import cn.realai.online.tool.lock.RedissonLock1;
 import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
 import cn.realai.online.util.DateUtil;
 import com.github.pagehelper.Page;
@@ -56,7 +56,7 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
     @Autowired
     private TrainService trainService;
     @Autowired
-    private RedissonLock redissonLock;
+    private RedissonLock1 redissonLock;
     @Autowired
     private ModelService modelService;
     @Autowired

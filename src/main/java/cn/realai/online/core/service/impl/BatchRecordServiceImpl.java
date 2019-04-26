@@ -1,5 +1,7 @@
 package cn.realai.online.core.service.impl;
 
+import org.redisson.Redisson;
+import org.redisson.RedissonLock;
 import org.redisson.api.RLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +19,6 @@ import cn.realai.online.core.dao.ExperimentDao;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.service.BatchRecordService;
-import cn.realai.online.tool.calculationthreadpool.CalculationTask;
-import cn.realai.online.tool.lock.RedissonLock;
 
 import java.util.List;
 
@@ -30,15 +30,15 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 	@Autowired
 	private BatchRecordDao batchRecordDao;
 	
+	@Autowired
+	private Redisson redisson;
+	
 	@Override
 	public Integer insert(BatchRecord batchRecord) {
 		batchRecord.setCreateTime(System.currentTimeMillis());
 		return batchRecordDao.insert(batchRecord);
 	}
 
-    @Autowired
-    private RedissonLock redissonLock;
-    
     @Autowired
     private ExperimentDao experimentDao;
     
@@ -70,7 +70,8 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 		logger.info("BatchRecordServiceImpl getBatchRecordOfDaily, eid{}, batchDate{}, batchTypeDaily{}", eid, batchDate, batchTypeDaily);
 		BatchRecord batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, batchDate, batchTypeDaily);
         if (batchRecord == null) {
-        	RLock lock = redissonLock.lock(Constant.BATCH_DAILY_LOCK_PREFIX + eid, 3);
+        	RLock lock =  redisson.getLock(Constant.BATCH_DAILY_LOCK_PREFIX + eid);
+        	lock.lock();
         	try {
         		batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, batchDate, batchTypeDaily);
         		if (batchRecord == null) {

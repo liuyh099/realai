@@ -1,11 +1,13 @@
 package cn.realai.online.tool.redis;
 
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
-
-import com.alibaba.fastjson.JSON;
 
 import cn.realai.online.common.Constant;
 
@@ -14,8 +16,11 @@ public class RedisClientTemplate {
 
     private static Logger logger = LoggerFactory.getLogger(RedisClientTemplate.class);
 
-    @Autowired
-    private JedisClusterClient jedisClusterClient;
+    /*@Autowired
+    private JedisClusterClient jedisClusterClient;*/
+    
+	@Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
 
     /*
      * 设置key-value
@@ -26,13 +31,12 @@ public class RedisClientTemplate {
      */
     public boolean set(String key, Object value, int expiredTime) {
         try {
-            String str = jedisClusterClient.getJedisCluster().set(key, String.valueOf(value));
             if (expiredTime != -1) {
-                jedisClusterClient.getJedisCluster().expire(key, expiredTime);
+            	redisTemplate.opsForValue().set("name", "tomcat", expiredTime, TimeUnit.SECONDS);
+            } else {
+            	redisTemplate.opsForValue().set("name", "tomcat");
             }
-            if ("OK".equals(str)) {
-                return true;
-            }
+            return true;
         } catch (Exception ex) {
             logger.error("setToRedis:{Key:" + key + ",value" + value + "}", ex);
         }
@@ -55,26 +59,12 @@ public class RedisClientTemplate {
     public String get(String key) {
         String str = null;
         try {
-            str = jedisClusterClient.getJedisCluster().get(key);
+        	ValueOperations<Object, Object> value = redisTemplate.opsForValue();
+        	str = value.get(key).toString();
         } catch (Exception ex) {
             logger.error("getRedis:{Key:" + key + "}", ex);
         }
         return str;
-    }
-
-    /*
-     * 通过key获取value,并转换成指定类型
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public <T> T get(String key, Class clazz) {
-        T obj = null;
-        try {
-            String str = jedisClusterClient.getJedisCluster().get(key);
-            obj = (T) JSON.parseObject(str, clazz.getClass());
-        } catch (Exception ex) {
-            logger.error("getRedis:{Key:" + key + "}", ex);
-        }
-        return obj;
     }
 
     /*
@@ -84,10 +74,9 @@ public class RedisClientTemplate {
      */
     public boolean delete(String key) {
         try {
-            jedisClusterClient.getJedisCluster().del(key);
-            return true;
+            return redisTemplate.delete(key);
         } catch (Exception ex) {
-            logger.error("setToRedis:{Key:" + key, ex);
+            logger.error("delete:{Key:" + key, ex);
         }
         return false;
     }

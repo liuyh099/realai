@@ -304,7 +304,9 @@ public class ExperimentalTrainController {
 
     private boolean checkCanUpdate(Long id) {
         ExperimentBO experiment = experimentalTrainBussiness.selectById(id);
-        if (experiment.getStatus() == Experiment.STATUS_TRAINING || experiment.getStatus() == Experiment.STATUS_TRAINING_OVER) {
+        if (experiment.getStatus() == Experiment.STATUS_TRAINING 
+        		|| experiment.getStatus() == Experiment.STATUS_TRAINING_OVER
+        		|| experiment.getStatus() == Experiment.STATUS_TRAINING_STAGE_ONE) {
             return false;
         }
         return true;
@@ -491,13 +493,13 @@ public class ExperimentalTrainController {
             if (newExperimentId == -1) {
             	return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("实验名称过长，最大长度不能超过100个字符"), null);
             }
+            if (newExperimentId == -2) { //返回-2表示服务密钥验证不通过
+            	return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("服务密钥验证失败"), null);
+            }
             if (newExperimentId == null) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), 1);
             }
             int ret = experimentalTrainBussiness.train(newExperimentId);
-            if (ret == -2) { //返回-2表示服务密钥验证不通过
-            	return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg("服务密钥验证失败"), null);
-            }
             if (ret == -1) { //返回-1表示有实验正在进行，现在不能进行实验
                 return new Result(ResultCode.PYTHON_WAIT.getCode(), ResultMessage.PYTHON_WAIT.getMsg(), 1);
             }

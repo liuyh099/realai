@@ -3,6 +3,8 @@ package cn.realai.online.calculation.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,8 @@ import cn.realai.online.util.HttpUtil;
 @Service
 public class TrainServiceImpl implements TrainService {
 
+	private static Logger logger = LoggerFactory.getLogger(TrainServiceImpl.class);
+	
     @Autowired
     private Config config;
 
@@ -227,17 +231,12 @@ public class TrainServiceImpl implements TrainService {
 	public String realTimeForecast(RealTimeData realTimeData) {
 		RealTimeRequestBO rtrbo = new RealTimeRequestBO();
 		String url = config.getRealtimeUrl();
+		logger.info("TrainServiceImpl realTimeForecast, 线上实时接口调用 url{}" + url);
 		String ret = HttpUtil.postRequest(url, JSON.toJSONString(realTimeData, SerializerFeature.WriteMapNullValue));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl realTimeForecast. 调用python线上实时接口失败. rtrbo{}" + JSON.toJSONString(rtrbo));
         }
 		return ret;
-		/*try {
-			Thread.sleep(3000L);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return "OK";*/
 	}
 
 }

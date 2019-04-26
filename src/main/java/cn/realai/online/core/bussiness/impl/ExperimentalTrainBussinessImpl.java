@@ -540,6 +540,11 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         if (experiment == null) {
             return null;
         }
+        //验证服务密钥是否过期
+    	if (!serviceService.checkService(experiment.getServiceId())) {
+    		return -2L;
+    	}
+        
         String experimentName = experiment.getName() + "二次创建实验" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
         if (experimentName.length() > 100) {
         	return -1L;
