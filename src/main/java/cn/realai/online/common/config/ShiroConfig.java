@@ -149,7 +149,7 @@ public class ShiroConfig {
     }
 
     /**
-     * 注册全局异常处理
+     * 注册全局异常处理   
      *
      * @return
      */
