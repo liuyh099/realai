@@ -65,7 +65,15 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
         return ciphertext;
     }
 
-
+    /**
+     * 更新服务扩展信息，并检查调优秘钥是否作废，并将已使用秘钥作废
+     * （作废检查同时获取调优秘钥内部携带的作废秘钥执行作废）
+     *
+     * @param serviceId
+     * @param tuningSecretKey
+     * @param serviceDetail
+     * @throws LicenseException
+     */
     @Override
     @Transactional(readOnly = false)
     public void updateServiceDetail(long serviceId, String tuningSecretKey, ServiceDetail serviceDetail) throws LicenseException {

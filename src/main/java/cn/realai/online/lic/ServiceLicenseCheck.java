@@ -89,19 +89,23 @@ public class ServiceLicenseCheck {
 
 
     /**
-     * 服务使用(强制调优)
+     * 服务使用(强制调优)  秘钥验证
      *
      * @param serviceId
      */
     public void applyService(long serviceId, String tuningSecretKey) throws LicenseException {
+        //获取服务密文
         String serviceCiphertext = licenseCheckHandler.getServiceCiphertext(serviceId, SecretKeyType.COMMON);
+        //解密调优秘钥
         FileLicenseInfo tuningLicInfo = checkServiceLic(tuningSecretKey);
+        //解密服务秘钥
         FileLicenseInfo licInfo = checkServiceLic(serviceCiphertext);
 
         if(Integer.parseInt(tuningLicInfo.getSecretKeyType()) != SecretKeyType.TUNING.getCode()) {
             throw new LicenseException("秘钥类型不匹配，普通秘钥不能用于强制调优！");
         }
 
+        //作废秘钥检查
         serviceLicenseInfoSource.licenseDiscardCheck(serviceId);
 
         try {
@@ -110,8 +114,11 @@ public class ServiceLicenseCheck {
             throw new LicenseException("当前秘钥与该服务类型不匹配！");
         }
 
+        //获取服务扩展信息并且使用调优次数
         ServiceDetail serviceDetail = serviceLicenseInfoSource.licenseCheck(licInfo, serviceId, serviceCiphertext);
+        //更新服务扩展信息
         licenseCheckHandler.updateServiceDetail(serviceId, tuningSecretKey, serviceDetail);
+        //清除过期
         licenseCheckHandler.clearTuningKey(serviceId, serviceLicenseInfoSource);
 
     }

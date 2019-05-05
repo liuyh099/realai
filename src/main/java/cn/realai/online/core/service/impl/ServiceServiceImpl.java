@@ -70,10 +70,19 @@ public class ServiceServiceImpl implements ServiceService {
 		return services;
 	}
 
+	/**
+	 * 新建服务
+	 *
+	 * @param service
+	 * @return
+	 * @throws LicenseException
+     */
 	@Override
 	@Transactional(readOnly = false)
 	public Integer insert(Service service) throws LicenseException {
 		Service searchService = new Service();
+
+		//服务重名校验
 		searchService.setName(service.getName());
 		List old = list(searchService);
 		if(old != null && old.size() > 0) {
@@ -83,6 +92,7 @@ public class ServiceServiceImpl implements ServiceService {
 
 		searchService = new Service();
 
+		//秘钥重复使用校验
 		List<Service> olds = list(searchService);
 		olds.forEach(oldService -> {
 			if(StringUtils.isNotEmpty(oldService.getSecretKey())) {
@@ -94,19 +104,24 @@ public class ServiceServiceImpl implements ServiceService {
 			}
 		});
 
+		//废弃秘钥校验
 		licenseCheckHandler.cancelSecretKeyCheck(service.getSecretKey());
 
+		//新建服务初始化服务扩展字段信息
 		ServiceDetail detail = new ServiceDetail();
 		detail.setDeployUseTimes("0");
 		detail.setServiceName(service.getName());
 		detail.setVersion(0);
+
+		//秘钥正确性校验解密（包括秘钥是否已过期检查）
 		FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(service.getSecretKey());
 
-
+		//秘钥类型校验
 		if(SecretKeyType.COMMON.getCode() != Integer.parseInt(fileLicenseInfo.getSecretKeyType())) {
 			throw new RuntimeException("当前秘钥与该服务类型不匹配！");
 		}
 
+		//检查秘钥中携带的废弃秘钥信息并通知
 		if(StringUtils.isNotEmpty(fileLicenseInfo.getCancelSecretKey())) {
 			detail.setTuningKeyIds(fileLicenseInfo.getCancelSecretKey());
 
@@ -121,11 +136,11 @@ public class ServiceServiceImpl implements ServiceService {
 
 			for (String cancelSecretKey : cancelSecretKeyListnew) {
 				if(StringUtils.isNotEmpty(cancelSecretKey)) {
+					//通知秘钥已作废
 					tuningRecordService.invalidateBySecretKey(cancelSecretKey);
 				}
 			}
 		}
-
 
 //		if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
 //			throw new RuntimeException("秘钥已过期");
@@ -142,7 +157,11 @@ public class ServiceServiceImpl implements ServiceService {
 		return result;
 	}
 
-
+	/**
+	 * 检查秘钥中携带的废弃秘钥，并使其废弃（包括使用中）
+	 *
+	 * @param fileLicenseInfo
+     */
 	public void secretKeyHandler (FileLicenseInfo fileLicenseInfo) {
 		List<Service> targetServices = serviceDao.findList(new Service());
 		List<String> stopSecretKeyList = licenseCheckHandler.getStopSecretKeyList(fileLicenseInfo);
@@ -188,6 +207,12 @@ public class ServiceServiceImpl implements ServiceService {
 		return list;
 	}
 
+	/**
+	 * 服务可用性检查
+	 *
+	 * @param serviceId
+	 * @return
+     */
 	@Override
 	public boolean checkService(long serviceId) {
 		Service searchService = get(serviceId);
