@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * Description:
+ * Description: 秘钥混淆处理
+ *
  * <br>
  * <br>Author:  Shunping.Fu
  * <br>Date: 2019/3/15
@@ -80,21 +81,40 @@ public class DataCipherHandler {
 
     }
 
-
+    /**
+     * 初始化秘钥混淆
+     *
+     * @param secretkey  非混淆秘钥
+     * @param detailVersion
+     * @return
+     */
     public String initSecretKey(String secretkey, int detailVersion) {
         String versionKey = MD5Util.MD5Encrypt(detailVersion+"", M_KEY);
         secretkey = secretkey.substring(0, KEY_INDEX) + versionKey +secretkey.substring(KEY_INDEX);
         return secretkey;
     }
 
-
+    /**
+     * 更新秘钥混淆
+     *
+     * @param secretkey  非混淆秘钥
+     * @param detailVersion
+     * @return
+     * @throws LicenseException
+     */
     public String updateSecretKey(String secretkey, int detailVersion) throws LicenseException {
         String versionKey = MD5Util.MD5Encrypt(detailVersion+"", M_KEY);
         secretkey = secretkey.substring(0, KEY_INDEX) + versionKey +secretkey.substring(KEY_INDEX + KEY_LEN);
         return secretkey;
     }
 
-
+    /**
+     * 检查混淆秘钥是否被串改
+     *
+     * @param secretkey
+     * @param detailVersion
+     * @throws LicenseException
+     */
     public void checkVersionSecretKey(String secretkey, int detailVersion) throws LicenseException {
         String versionKey = MD5Util.MD5Encrypt(detailVersion+"", M_KEY);
         String versionSecretKey = secretkey.substring(KEY_INDEX, KEY_INDEX+KEY_LEN);
@@ -103,12 +123,26 @@ public class DataCipherHandler {
         }
     }
 
+    /**
+     * 根据服务扩展信息  提取原秘钥
+     *
+     * @param secretkey 混淆秘钥
+     * @param deailVersion
+     * @return
+     * @throws LicenseException
+     */
     public String getOriginalSecretKey(String secretkey, int deailVersion) throws LicenseException {
         checkVersionSecretKey(secretkey, deailVersion);
         secretkey = secretkey.substring(0, KEY_INDEX) + secretkey.substring(KEY_INDEX + KEY_LEN);
         return secretkey;
     }
 
+    /**
+     * 提取原秘钥
+     *
+     * @param secretkey
+     * @return
+     */
     public String getOriginalSecretKey(String secretkey) {
         if(secretkey.length() < (KEY_INDEX + KEY_LEN))return secretkey;
         secretkey = secretkey.substring(0, KEY_INDEX) + secretkey.substring(KEY_INDEX + KEY_LEN);

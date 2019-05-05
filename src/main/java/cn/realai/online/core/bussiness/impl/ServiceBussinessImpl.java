@@ -64,6 +64,13 @@ public class ServiceBussinessImpl implements ServiceBussiness {
         return true;
     }
 
+    /**
+     * 服务更新与续期
+     *
+     * @param serviceBO
+     * @return
+     * @throws LicenseException
+     */
     @Override
     @Transactional(readOnly = false)
     public boolean editService(ServiceBO serviceBO) throws LicenseException {
@@ -79,6 +86,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
         cn.realai.online.core.entity.Service searchService = new cn.realai.online.core.entity.Service();
 
+        //服务名称重复性检查
         if(StringUtils.isNotBlank(serviceBO.getName()) && !StringUtils.equals(serviceBOold.getName(), serviceBO.getName())) {
             searchService.setName(serviceBO.getName());
             List old = serviceService.list(searchService);
@@ -90,7 +98,9 @@ public class ServiceBussinessImpl implements ServiceBussiness {
 
         BeanUtils.copyProperties(serviceBO, serviceBOold);
 
+        //获取原服务扩展信息
         ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(serviceBOold.getDetail());
+        //原服务秘钥
         String sk = dataCipherHandler.getOriginalSecretKey(oldKey);
         serviceDetail.setServiceName(serviceBOold.getName());
 
@@ -98,8 +108,10 @@ public class ServiceBussinessImpl implements ServiceBussiness {
         if(serviceBO.isRenewal()) {
             searchService = new cn.realai.online.core.entity.Service();
 
+            //服务作废检查
             serviceLicenseInfoSource.licenseDiscardCheck(serviceBO.getId());
 
+            //秘钥类型检查
             List<Service> old = serviceService.list(searchService);
             old.forEach(service -> {
                 if(StringUtils.isNotEmpty(service.getSecretKey())) {
@@ -111,6 +123,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
                 }
             });
 
+            //续期秘钥解密（包含了过期检查）
             FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(serviceBO.getSecretKey());
 //            if(fileLicenseInfo.getOverdue() > 0 && (new Date().getTime() > fileLicenseInfo.getOverdue())) {
 //                throw new RuntimeException("秘钥已过期！");
@@ -120,6 +133,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
             String newkey = dataCipherHandler.initSecretKey(serviceBO.getSecretKey(), version);
             serviceBOold.setSecretKey(newkey);
 
+            //续期秘钥作废检查
             licenseCheckHandler.cancelSecretKeyCheck(serviceBO.getSecretKey());
 
             FileLicenseInfo fileLicenseInfoOld = serviceLicenseInfoSource.servicLicDecrypt(dataCipherHandler.getOriginalSecretKey(oldKey));
@@ -133,6 +147,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
                 throw new RuntimeException("当前续期秘钥与服务秘钥不匹配！");
             }
 
+            //获取续期秘钥汇中携带的废弃秘钥
             List<String> cancelSecretKeyList = licenseCheckHandler.getCancelSecretKeyList(fileLicenseInfo);
             List<String> stopSecretKeyList = licenseCheckHandler.getStopSecretKeyList(fileLicenseInfo);
 
@@ -144,6 +159,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
             cancelSecretKeySet.add(fileLicenseInfoOld.getId());
             cancelSecretKeyListnew.addAll(cancelSecretKeySet);
 
+            //废弃秘钥通知
             if(!cancelSecretKeyListnew.isEmpty()) {
                 String cancelKeys = serviceDetail.getTuningKeyIds();
 
@@ -176,6 +192,7 @@ public class ServiceBussinessImpl implements ServiceBussiness {
             return false;
         }
 
+        //更新服务扩展信息，将续约秘钥中携带的废弃秘钥生效
         if(serviceBO.isRenewal()) {
             FileLicenseInfo fileLicenseInfo = serviceLicenseInfoSource.checkSource(serviceBO.getSecretKey());
             serviceService.secretKeyHandler(fileLicenseInfo);

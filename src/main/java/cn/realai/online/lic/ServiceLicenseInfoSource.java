@@ -51,7 +51,13 @@ public class ServiceLicenseInfoSource {
         return licenseInfo;
     }
 
-
+    /**
+     * 秘钥解密 并检查秘钥的有效期是否有效
+     *
+     * @param ciphertext
+     * @return
+     * @throws LicenseException
+     */
     public FileLicenseInfo checkSource(String ciphertext) throws LicenseException {
         FileLicenseInfo licenseInfo = servicLicDecrypt(ciphertext);
 
@@ -136,9 +142,16 @@ public class ServiceLicenseInfoSource {
 
     }
 
-
+    /**
+     * 秘钥作废检查
+     *
+     * @param serviceId
+     * @throws LicenseException
+     */
     public void licenseDiscardCheck(long serviceId) throws LicenseException {
+        //获取服务秘钥
         String dataCiphertext = licenseCheckHandler.getDataCiphertext(serviceId);
+        //获取服务扩展字段信息
         ServiceDetail serviceDetail = dataCipherHandler.getDateJsonByCiphertext(dataCiphertext);
 
         if(serviceDetail.getStatus() == ServiceDetail.STATUS_STOP) {
