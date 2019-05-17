@@ -14,7 +14,7 @@ public class Config {
     private String PYTHON_OFFLINE_HOST;
 
     @Value("${python.offline.port}")
-    private String PYTHON_OFFLINE_PORT;
+    private String PYTHON_OFFLINE_PORT;  
     
     @Value("${python.online.host}")
     private String PYTHON_ONLINE_HOST;

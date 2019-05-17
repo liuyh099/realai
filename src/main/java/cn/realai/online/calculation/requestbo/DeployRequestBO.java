@@ -20,7 +20,7 @@ public class DeployRequestBO {
 	}
 
 	public void setModelId(Long modelId) {
-		this.modelId = modelId;
+		this.modelId = modelId;  
 	}
 
 	public String getCommand() {

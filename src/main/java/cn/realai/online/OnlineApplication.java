@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAsync
 public class OnlineApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { 
         ApplicationContext applicationContext = SpringApplication.run(OnlineApplication.class, args);
         SpringContextUtils.setApplicationContext(applicationContext);
     }

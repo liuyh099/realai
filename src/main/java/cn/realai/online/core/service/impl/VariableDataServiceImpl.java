@@ -19,7 +19,7 @@ import cn.realai.online.core.controller.RealTimeController;
 import cn.realai.online.core.dao.VariableDataDao;
 import cn.realai.online.core.entity.VariableData;
 import cn.realai.online.core.service.VariableDataService;
-import cn.realai.online.util.CollectionUtil;
+import cn.realai.online.util.CollectionUtil;  
 
 @Service
 public class VariableDataServiceImpl implements VariableDataService {

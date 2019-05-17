@@ -18,7 +18,7 @@ import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.tool.realtimethreadpool.CalculationQueue;
 import cn.realai.online.tool.realtimethreadpool.CalculationTask;
-import cn.realai.online.common.Constant;
+import cn.realai.online.common.Constant;  
 
 @Service
 public class RealTimeBussinessImpl implements RealTimeBussiness {

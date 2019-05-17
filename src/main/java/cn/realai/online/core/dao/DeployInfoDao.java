@@ -10,6 +10,6 @@ public interface DeployInfoDao {
 
 	int insertDeployInfo(@Param("di")DeployInfo deployInfo);
 
-	int updateDeployInfo(@Param("di")DeployInfo deployInfo);
+	int updateDeployInfo(@Param("di")DeployInfo deployInfo);  
 
 }

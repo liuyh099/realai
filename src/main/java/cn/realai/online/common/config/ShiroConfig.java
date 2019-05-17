@@ -48,7 +48,7 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        filterChainDefinitionMap.put("/user/logout", "anon");
+        filterChainDefinitionMap.put("/user/logout", "anon");  
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/user/forget", "anon");
         filterChainDefinitionMap.put("/offlineBatch/**", "anon");

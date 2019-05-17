@@ -12,7 +12,7 @@ public interface ModelDao {
     Integer insert(Model model);
 
     //更新模型
-    Integer update(Model model);
+    Integer update(Model model);  
 
     //获取模型
     Model get(Long id);

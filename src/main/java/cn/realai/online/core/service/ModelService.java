@@ -16,7 +16,7 @@ import java.util.List;
 public interface ModelService {
 
     //查询模型
-    Model get(Long modelId);
+    Model get(Long modelId);  
 
     //查询模型列表
     List<ModelListBO> selectList(String name, Long serviceId);

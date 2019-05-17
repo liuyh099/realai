@@ -17,7 +17,7 @@ public class Model {
 
     //模型状态
     private String releaseStatus;
-
+  
     //在线发布的模型下载地址
     private String modelDownUrl;
 

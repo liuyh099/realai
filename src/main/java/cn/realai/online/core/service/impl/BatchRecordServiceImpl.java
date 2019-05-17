@@ -28,7 +28,7 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 	private static Logger logger = LoggerFactory.getLogger(BatchRecordServiceImpl.class);
 	
 	@Autowired
-	private BatchRecordDao batchRecordDao;
+	private BatchRecordDao batchRecordDao;  
 	
 	@Autowired
 	private Redisson redisson;

@@ -18,7 +18,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.util.CollectionUtils;
 import org.apache.tomcat.util.buf.HexUtils;
-import org.crazycake.shiro.RedisSessionDAO;
+import org.crazycake.shiro.RedisSessionDAO;  
 
 import javax.annotation.Resource;
 import java.util.List;

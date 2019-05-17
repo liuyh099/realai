@@ -10,6 +10,6 @@ public interface DeployInfoService {
 
 	int updateDeployInfo(DeployInfo deployInfo);
 
-	boolean checkgetSecretKey(String licKey);
+	boolean checkgetSecretKey(String licKey);  
 
 }

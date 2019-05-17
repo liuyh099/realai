@@ -24,7 +24,7 @@ public interface ModelCallBussiness {
     /*
      * 预处理回调处理
      */
-    int preprocessCallback(Long experimentId, String redisKey);
+    int preprocessCallback(Long experimentId, String redisKey); 
 
     /*
      * 训练回调处理

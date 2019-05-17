@@ -13,7 +13,7 @@ public class RealTimeData {
 	private Long modelId;
 	
 	//银行用户id
-	private String personalId;
+	private String personalId;  
 	
 	//用户姓名
 	private String name;

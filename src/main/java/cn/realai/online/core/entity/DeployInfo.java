@@ -19,7 +19,7 @@ public class DeployInfo {
 	/**
 	 * 密钥
 	 */
-	private String secretKey;
+	private String secretKey;  
 	
 	/**
 	 * 原信息

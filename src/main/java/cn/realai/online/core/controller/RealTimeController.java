@@ -16,7 +16,7 @@ import cn.realai.online.common.vo.ResultCode;
 import cn.realai.online.common.vo.ResultMessage;
 import cn.realai.online.common.vo.ResultUtils;
 import cn.realai.online.core.bussiness.RealTimeBussiness;
-import cn.realai.online.core.query.realtime.RealTimeData;
+import cn.realai.online.core.query.realtime.RealTimeData;  
 
 /**
  * 实时返回行方请求的类

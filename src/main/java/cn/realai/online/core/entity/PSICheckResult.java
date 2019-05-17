@@ -13,7 +13,7 @@ public class PSICheckResult {
     private double psi;
 
     //模型id
-    private Long modelId;
+    private Long modelId;  
     
     //变量Id
     private Long variableId;

@@ -36,7 +36,7 @@ public class DeployInfoServiceImpl implements DeployInfoService {
 	@Override
 	public int updateDeployInfo(DeployInfo deployInfo) {
 		if (checkgetSecretKey(deployInfo.getSecretKey())) { 
-			return -1;
+			return -1;  
 		}
 		deployInfo.setUpdateTime(System.currentTimeMillis());
 		return deployInfoDao.updateDeployInfo(deployInfo);

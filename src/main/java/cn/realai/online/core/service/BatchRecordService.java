@@ -10,7 +10,7 @@ public interface BatchRecordService {
 
 	Integer insert(BatchRecord batchRecord);
 
-	Integer delete(List<Long> idList);  
+	Integer delete(List<Long> idList);    
 
     /**
      * 根据ID和其他条件查询批次信息

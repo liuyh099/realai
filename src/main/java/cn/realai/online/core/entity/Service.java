@@ -15,7 +15,7 @@ public class Service {
 	//服务名称
 	private String name;
 	
-	public static final int STATUS_ONLINE = 1; //上线
+	public static final int STATUS_ONLINE = 1; //上线  
 	
 	public static final int STATUS_OFFLINE = 2; //下线
 

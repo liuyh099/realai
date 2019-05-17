@@ -11,7 +11,7 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource({"classpath:config.properties"})
 public class RedisConfig {
 
-	@Value("${spring.redis.database}")
+	@Value("${spring.redis.database}")  
     private int database;
 	
 	@Value("${spring.redis.host}")

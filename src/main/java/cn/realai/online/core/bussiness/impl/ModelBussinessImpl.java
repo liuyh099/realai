@@ -57,7 +57,7 @@ public class ModelBussinessImpl implements ModelBussiness {
     @Autowired
     private PsiCheckResultService psiChekcResultService;
     @Autowired
-    private TuningRecordService tuningRecordService;
+    private TuningRecordService tuningRecordService;  
 
     @Autowired
     private TuningRecordBussiness tuningRecordBussiness;

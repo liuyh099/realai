@@ -20,7 +20,7 @@ import java.util.*;
 @org.springframework.stereotype.Service
 public class LicenseCheckHandlerService implements LicenseCheckHandler {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());  
 
     @Autowired
     private ServiceService serviceService;

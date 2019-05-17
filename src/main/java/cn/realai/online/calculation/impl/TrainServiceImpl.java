@@ -44,7 +44,7 @@ public class TrainServiceImpl implements TrainService {
      * 预处理
      */
     @Override
-    public void preprocess(Experiment experiment) {
+    public void preprocess(Experiment experiment) {  
         PreprocessRequestBO prbo = new PreprocessRequestBO();
         prbo.setExperimentId(experiment.getId());
         if (experiment.getXtableHeterogeneousDataSource() != null) {

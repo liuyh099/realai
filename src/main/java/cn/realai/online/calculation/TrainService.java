@@ -15,7 +15,7 @@ public interface TrainService {
 	 * 预处理
 	 * @param experimentBO
 	 */
-	void preprocess(Experiment experiment);
+	void preprocess(Experiment experiment);  
 	
 	/**
 	 * 训练

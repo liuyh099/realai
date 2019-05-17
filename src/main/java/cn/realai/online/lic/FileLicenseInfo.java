@@ -12,7 +12,7 @@ public class FileLicenseInfo {
     /**
      * 服务名称
      */
-    private String serviceName;
+    private String serviceName;  
 
     /**
      * 公司名称

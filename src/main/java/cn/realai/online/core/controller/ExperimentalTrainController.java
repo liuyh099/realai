@@ -14,7 +14,7 @@ import cn.realai.online.core.bussiness.VariableDataBussiness;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.query.ExperimentalTrainCreateModelDataQuery;
 import cn.realai.online.core.query.ExperimentalTrainQuery;
-import cn.realai.online.core.query.VariableDataQuery;
+import cn.realai.online.core.query.VariableDataQuery;  
 import cn.realai.online.core.vo.*;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;

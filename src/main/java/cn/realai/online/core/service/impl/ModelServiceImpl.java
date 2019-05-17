@@ -21,7 +21,7 @@ import java.util.List;
 public class ModelServiceImpl implements ModelService {
 
     @Autowired
-    private ModelDao modelDao;
+    private ModelDao modelDao;  
 
     @Override
     public Model get(Long modelId) {

@@ -10,7 +10,7 @@ import java.util.List;
 public class ReturnStructure<T> {
 
     //返回码
-    private int code;
+    private int code;  
 
     //返回信息
     private String msg;
