@@ -12,6 +12,9 @@ public class PSICheckResult {
     //值
     private double psi;
 
+    //模型id
+    private Long modelId;
+    
     //变量Id
     private Long variableId;
     
@@ -102,6 +105,14 @@ public class PSICheckResult {
 
 	public void setVariableType(int variableType) {
 		this.variableType = variableType;
+	}
+
+	public Long getModelId() {
+		return modelId;
+	}
+
+	public void setModelId(Long modelId) {
+		this.modelId = modelId;
 	}
     
 }

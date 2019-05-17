@@ -9,6 +9,10 @@ public class DeployRequestBO {
 	private Long originalId;
 	
 	private final String command = Constant.COMMAND_DEPLOY;
+	
+	private String secretKey;
+	
+	private Long serviceId;
 
 
 	public Long getModelId() {
@@ -29,6 +33,22 @@ public class DeployRequestBO {
 
 	public void setOriginalId(Long originalId) {
 		this.originalId = originalId;
+	}
+
+	public String getSecretKey() {
+		return secretKey;
+	}
+
+	public void setSecretKey(String secretKey) {
+		this.secretKey = secretKey;
+	}
+
+	public Long getServiceId() {
+		return serviceId;
+	}
+
+	public void setServiceId(Long serviceId) {
+		this.serviceId = serviceId;
 	}
 	
 }

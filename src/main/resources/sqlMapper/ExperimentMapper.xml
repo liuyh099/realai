@@ -129,7 +129,8 @@
 
     <select id="selectExperimentById" resultMap="ExperimentMap">
 		select * ,b.name AS "serviceName"
-		from experiment a  LEFT JOIN service b ON a.service_id = b.id
+		from experiment a  
+		LEFT JOIN service b ON a.service_id = b.id
 		where a.id = #{id}
 	</select>
 
@@ -220,7 +221,9 @@
 
 
     <select id="findList" resultMap="ExperimentListMap" parameterType="cn.realai.online.core.entity.Experiment">
-        SELECT *,b.name AS "serviceName",(SELECT count(1) FROM experiment c WHERE c.service_id =a.service_id AND c.releas_status IN (2,3)) AS publish_count FROM experiment a LEFT JOIN service b ON a.service_id = b.id
+        SELECT *,b.name AS "serviceName",(SELECT count(1) FROM experiment c WHERE c.service_id =a.service_id AND c.releas_status IN (2,3)) AS publish_count 
+        FROM experiment a 
+        LEFT JOIN service b ON a.service_id = b.id
         <where>
             1=1
             <if test="name!=null and name!=''">

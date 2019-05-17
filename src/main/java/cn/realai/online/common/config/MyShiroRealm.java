@@ -88,7 +88,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         }
         byte[] salt = HexUtils.fromHexString(user.getPwd().substring(0, 16));
         Session session = SecurityUtils.getSubject().getSession();
-        singleLogin.singleLogin(username, pwd, user, salt,session.getId());
+        singleLogin.singleLogin(username, pwd, user, salt, session.getId());
 
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user, //用户名

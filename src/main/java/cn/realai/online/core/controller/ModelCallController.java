@@ -15,10 +15,11 @@ import com.alibaba.fastjson.JSON;
 
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.bo.model.OfflineBatchRequest;
-import cn.realai.online.core.bo.model.PeoplelInformetion;
 import cn.realai.online.core.bo.model.DailyBatchRequest;
 import cn.realai.online.core.bo.model.ModelRequest;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
+import cn.realai.online.core.entity.DeployInfo;
+import cn.realai.online.util.FileUtil;
 import cn.realai.online.common.Constant;
 import cn.realai.online.common.base.BaseController;
 import cn.realai.online.common.vo.Result;
@@ -41,11 +42,41 @@ public class ModelCallController extends BaseController{
     private ModelCallBussiness modelCallBussiness;
 
     /**
-     * 离线跑批任务
+     * 线上部署
+     * @return
+     */
+    @RequestMapping(value = "/deploy", method = RequestMethod.POST)
+    public String deployServiceModel(String path) {
+    	List<String> strList = FileUtil.readFile(path);
+		if (strList == null || strList.size() == 0) {//服务密钥不存在或不合法
+			return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.OPT_FAILURE.getMsg("密钥文件不存在"), null);
+		}
+
+		String deployInfoStr = strList.get(0);
+		DeployInfo deployInfo = null;
+		try {
+			deployInfo = JSON.parseObject(deployInfoStr, DeployInfo.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.OPT_FAILURE.getMsg("密钥信息格式有误"), null);
+		}
+		deployInfo.setHistoryInfo(deployInfoStr);
+    	int ret = modelCallBussiness.deployServiceModel(deployInfo);
+    	if (ret == -1) {
+    		return ResultUtils.generateResultStr(ResultCode.PARAM_ERROR, ResultMessage.OPT_FAILURE.getMsg("密钥验证失败，密钥信息有误"), null);
+    	}
+    	if (ret == 1) {
+    		return ResultUtils.generateResultStr(ResultCode.PYTHON_SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
+    	}
+    	return ResultUtils.generateResultStr(ResultCode.DATA_ERROR, ResultMessage.OPT_FAILURE.getMsg(), null);
+    }
+    
+    /**
+     * 跑批任务
      * @return
      */
     @RequestMapping(value = "/batchTask", method = RequestMethod.POST)
-    public String runBatchOffline(@RequestBody String param) {
+    public String runBatchTask(@RequestBody String param) {
     	logger.info("ModelCallController runBatchOffline. 离线跑批. param{}", JSON.toJSONString(param));
     	OfflineBatchRequest obrs = JSON.parseObject(param, OfflineBatchRequest.class);
     	if (obrs.getCode() != 200) {

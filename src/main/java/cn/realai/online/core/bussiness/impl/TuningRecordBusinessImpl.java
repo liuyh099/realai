@@ -3,7 +3,6 @@ package cn.realai.online.core.bussiness.impl;
 import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
 import cn.realai.online.core.bussiness.TuningRecordBussiness;
 import cn.realai.online.core.entity.Model;
-import cn.realai.online.core.entity.Service;
 import cn.realai.online.core.entity.TuningRecord;
 import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.service.ServiceService;
@@ -50,7 +49,7 @@ public class TuningRecordBusinessImpl implements TuningRecordBussiness {
         Model model = modelService.get(modelId);
         Assert.notNull(model, "没有对应的模型可以调优");
         serviceService.checkService(model.getServiceId());
-        Service service = serviceService.get(model.getServiceId());
+        //Service service = serviceService.get(model.getServiceId());
 
         PsiCheckVO checkVO = psiCheckResultBussiness.checkPsi(modelId);
         if (!StringUtils.isNotEmpty(securityKey)) {

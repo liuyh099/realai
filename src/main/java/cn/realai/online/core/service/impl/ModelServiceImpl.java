@@ -90,7 +90,10 @@ public class ModelServiceImpl implements ModelService {
     }
 
 	@Override
-	public Model selectOnlineModelByServiceId(Long serviceId) {
-		return modelDao.selectModelByServiceIdAndStatus(serviceId, Model.RELEASE_STATUS.ONLINE.value);
+	public Model selectOnlineModel(Long serviceId, Long experimentId) {
+		if (serviceId == null && experimentId  == null) {
+			return null;
+		}
+		return modelDao.selectModelByServiceIdAndStatus(serviceId, experimentId, Model.RELEASE_STATUS.ONLINE.value);
 	}
 }

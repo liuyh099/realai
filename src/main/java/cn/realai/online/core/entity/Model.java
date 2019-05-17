@@ -18,6 +18,8 @@ public class Model {
     //模型状态
     private String releaseStatus;
 
+    //在线发布的模型下载地址
+    private String modelDownUrl;
 
     private Long createUserId;
 
@@ -127,4 +129,13 @@ public class Model {
     public void setTuningRecordId(Long tuningRecordId) {
         this.tuningRecordId = tuningRecordId;
     }
+
+	public String getModelDownUrl() {
+		return modelDownUrl;
+	}
+
+	public void setModelDownUrl(String modelDownUrl) {
+		this.modelDownUrl = modelDownUrl;
+	}
+    
 }

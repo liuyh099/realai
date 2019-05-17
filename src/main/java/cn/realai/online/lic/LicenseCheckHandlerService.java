@@ -257,5 +257,4 @@ public class LicenseCheckHandlerService implements LicenseCheckHandler {
         return cancelKeyList;
     }
 
-
 }

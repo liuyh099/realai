@@ -13,6 +13,7 @@ import cn.realai.online.core.bussiness.TuningRecordBussiness;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.entity.ModelPerformance;
+import cn.realai.online.core.entity.Service;
 import cn.realai.online.core.entity.TuningRecord;
 import cn.realai.online.core.query.ModelListQuery;
 import cn.realai.online.core.service.*;
@@ -29,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -42,7 +43,7 @@ import java.util.*;
  * @author admin
  * @create 2019-03-19 18:10
  */
-@Service
+@Component
 public class ModelBussinessImpl implements ModelBussiness {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -339,20 +340,19 @@ public class ModelBussinessImpl implements ModelBussiness {
         experimentService.updateExperimentTrainStatus(modelBO.getExperimentId(), modelBO.getStatus(),System.currentTimeMillis(),tuningNo);
         experimentService.updateExperimentOffline(modelBO.getExperimentId(), experiment.getServiceId(), Experiment.RELEAS_OFFINE);
         modelBO.setTuningNo(Optional.ofNullable(tuningNo).orElse(0));
-        int count = 0;
-        modelService.insert(modelBO);
+        
         ServiceDeployRecordBO serviceDeployRecordBO = getServiceDeployRecordBO(modelBO);
         serviceDeployRecordBussiness.insert(serviceDeployRecordBO);
-
-        count = trainService.experimentDeploy(modelBO.getExperimentId(), null, modelBO.getReleaseStatus());
+        
+        String modelDownUrl = trainService.experimentDeploy(modelBO.getExperimentId(), null, modelBO.getReleaseStatus(), 
+        		serviceService.get(modelBO.getServiceId()).getSecretKey(), modelBO.getServiceId());
         HashMap<String,Object> hashMap =new HashMap<>();
-        if(count>0){
-            modelService.offline(modelBO.getServiceId(),modelBO.getId(),Model.RELEASE_STATUS.NONE.value);
-            hashMap.put("status",true);
-        }else {
-            hashMap.put("status",false);
-            hashMap.put("msg","发布失败");
-        }
+        //设置模型下载地址，并创建模型
+    	modelBO.setModelDownUrl(modelDownUrl);
+    	modelService.insert(modelBO);
+    	//就模型下线
+        modelService.offline(modelBO.getServiceId(),modelBO.getId(),Model.RELEASE_STATUS.NONE.value);
+        hashMap.put("status",true);
         return hashMap;
     }
 

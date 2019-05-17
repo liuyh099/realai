@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * http请求工具
@@ -33,59 +31,6 @@ public class HttpUtil {
         	e.printStackTrace();
         	return null;
         }
-    }
-    
-    
-    /**
-     * post方式的http请求，返回T对象
-     *
-     * @param url
-     * @param map 参数集合 multipart/form-data 格式
-     * @param T
-     * @return
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <T> ReturnStructure<T> postRequestObj(String urlStr, Map<String, String> map, Class T) {
-        logger.info("HttpUtil getObject urlStr ==>  " + urlStr);
-        XUrl url = XUrl.base(urlStr);
-        XBody body = XBody.type(XBody.MULTIPART);
-        for (Entry e : map.entrySet()) {
-            body.param(e.getKey().toString(), e.getValue().toString());
-        }
-        String respStr = XHttpTools.request(new XHttpTools.XOption(ChannelAccessConstant.CHARACTER_ENCODING_UTF8, ChannelAccessConstant.WECHAT_CONNECTION_TIMEOUT, ChannelAccessConstant.WECHAT_READ_TIMEOUT), url, body).string();
-        logger.debug("HttpUtil getObject respStr ==>  " + respStr);
-        ReturnStructure<T> rs = JSON.parseObject(respStr, ReturnStructure.class);
-        if (rs.getCode() == 200 && rs.getData() != null && !"".equals(rs.getData())) {
-            rs.setDataT((T) JSON.parseObject(rs.getData(), T));
-            return rs;
-        }
-        return rs;
-    }
-
-    /**
-     * post方式的http请求，返回List<T>
-     *
-     * @param url
-     * @param map 参数集合 multipart/form-data 格式
-     * @param T
-     * @return
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <T> ReturnStructure<T> postRequestList(String urlStr, Map<String, String> map, Class T) {
-        logger.info("HttpUtil getObject urlStr ==>  " + urlStr);
-        XUrl url = XUrl.base(urlStr);
-        XBody body = XBody.type(XBody.MULTIPART);
-        for (Entry e : map.entrySet()) {
-            body.param(e.getKey().toString(), e.getValue().toString());
-        }
-        String respStr = XHttpTools.request(new XHttpTools.XOption(ChannelAccessConstant.CHARACTER_ENCODING_UTF8, ChannelAccessConstant.WECHAT_CONNECTION_TIMEOUT, ChannelAccessConstant.WECHAT_READ_TIMEOUT), url, body).string();
-        logger.debug("HttpUtil getObject respStr ==>  " + respStr);
-        ReturnStructure<T> rs = JSON.parseObject(respStr, ReturnStructure.class);
-        if (rs.getCode() == 200 && rs.getData() != null && !"".equals(rs.getData())) {
-            rs.setDataTList(JSON.parseArray(rs.getData(), T));
-            return rs;
-        }
-        return rs;
     }
 
     /**
@@ -109,7 +54,7 @@ public class HttpUtil {
         	if (rs.getData() != null) {
         		return rs.getData();
         	}
-        	return "OK";
+        	return "";
         }
         return null;
     }

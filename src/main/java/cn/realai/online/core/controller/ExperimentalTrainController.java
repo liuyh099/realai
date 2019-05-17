@@ -73,7 +73,6 @@ public class ExperimentalTrainController {
     @ApiOperation(value = "删除实验训练列表")
     @ResponseBody
     public Result delete(@RequestBody List<Long> ids) {
-
         try {
             if (CollectionUtils.isEmpty(ids)) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
@@ -225,7 +224,7 @@ public class ExperimentalTrainController {
             if (experimentalTrainSelectFileVo.getName().length() > 100) {
             	return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.PARAM_ERORR.getMsg("实验名称过长，最大长度不能超过100个字符"), null);
             }
-            //检查文件名
+            //检实验名
             boolean flag = experimentalTrainBussiness.checkTrainName(experimentalTrainSelectFileVo.getName(), experimentalTrainSelectFileVo.getId());
             if (!flag) {
                 return new Result(ResultCode.DATA_ERROR.getCode(), "实验名称不能重复", null);
@@ -250,32 +249,6 @@ public class ExperimentalTrainController {
         }
 
     }
-
-
-//    @RequiresPermissions("experimental:train")
-//    @GetMapping("/editDetail")
-//    @ApiOperation(value = "获得修改详情")
-//    @ResponseBody
-//    public Result editDetail(@RequestBody @Validated IdVO idVO) {
-//        try {
-//            //检查文件名
-//            boolean flag = experimentalTrainBussiness.checkTrainName(experimentalUpdateNameAndRemarkVo.getName(), experimentalUpdateNameAndRemarkVo.getId());
-//            if (!flag) {
-//                return new Result(ResultCode.DATA_ERROR.getCode(), "实验名称不能重复", null);
-//            }
-//            ExperimentBO experimentBO = new ExperimentBO();
-//            BeanUtils.copyProperties(experimentalUpdateNameAndRemarkVo, experimentBO);
-//            Integer count = experimentalTrainBussiness.updateNameAndRemark(experimentBO);
-//            if (count != null && count > 0) {
-//                return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), null);
-//            }
-//            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
-//        } catch (Exception e) {
-//            logger.error("更新实验名称和备注异常", e);
-//            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
-//        }
-//
-//    }
 
     @RequiresPermissions("experimental:train")
     @PutMapping("/updateNameAndRemark")
@@ -512,10 +485,10 @@ public class ExperimentalTrainController {
 
     @GetMapping("/testPreprocess")
     @ResponseBody
-    public Result testPreprocess(String test) {
+    public Result testPreprocess(Long eid) {
         try {
-        	System.out.println(test);
-            //experimentalTrainBussiness.testPreprocess(experimentId);
+        	//System.out.println(test);
+        		experimentalTrainBussiness.testPreprocess(eid);
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);
         } catch (Exception e) {
             return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), 1);

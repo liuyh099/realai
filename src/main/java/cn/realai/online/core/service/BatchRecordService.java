@@ -1,6 +1,5 @@
 package cn.realai.online.core.service;
 
-import cn.realai.online.core.bo.BatchDetailBO;
 import cn.realai.online.core.bo.BatchListBO;
 import cn.realai.online.core.bo.BatchRecordBO;
 import cn.realai.online.core.entity.BatchRecord;

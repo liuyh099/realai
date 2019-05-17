@@ -25,9 +25,9 @@ public class RedisConfig {
 		//支持单机，主从，哨兵，集群等模式
 		//此为哨兵模式
 		Config config = new Config();
-		config.useSentinelServers()
+		config.useSingleServer()
 			.setDatabase(database)
-			.addSentinelAddress(host + port);
+			.setAddress("redis://" + host + ":" + port);
 		return (Redisson)Redisson.create(config);
 	}
 

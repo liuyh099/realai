@@ -18,10 +18,6 @@ public class ReturnStructure<T> {
     //返回数据（JSON格式）
     private String data;
 
-    private T dataT;
-
-    private List<T> dataTList;
-
     public int getCode() {
         return code;
     }
@@ -44,22 +40,6 @@ public class ReturnStructure<T> {
 
     public void setData(String data) {
         this.data = data;
-    }
-
-    public T getDataT() {
-        return dataT;
-    }
-
-    public void setDataT(T dataT) {
-        this.dataT = dataT;
-    }
-
-    public List<T> getDataTList() {
-        return dataTList;
-    }
-
-    public void setDataTList(List<T> dataTList) {
-        this.dataTList = dataTList;
     }
 
 }

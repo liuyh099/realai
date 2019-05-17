@@ -87,7 +87,6 @@ public class ServiceLicenseCheck {
         licenseCheckHandler.updateServiceDetail(serviceId, null, serviceDetail);
     }
 
-
     /**
      * 服务使用(强制调优)  秘钥验证
      *

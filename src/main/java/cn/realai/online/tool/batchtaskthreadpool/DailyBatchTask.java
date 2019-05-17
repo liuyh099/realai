@@ -1,4 +1,4 @@
-package cn.realai.online.tool.dailybatchtaskthreadpool;
+package cn.realai.online.tool.batchtaskthreadpool;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSON;
 import cn.realai.online.calculation.TrainService;
 import cn.realai.online.core.entity.BatchRecord;
 import cn.realai.online.core.service.BatchRecordService;
-import cn.realai.online.tool.calculationthreadpool.CalculationTask;
+import cn.realai.online.tool.realtimethreadpool.CalculationTask;
 import cn.realai.online.util.SpringContextUtils;
 
 /**

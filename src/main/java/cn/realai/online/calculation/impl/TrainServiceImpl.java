@@ -59,7 +59,7 @@ public class TrainServiceImpl implements TrainService {
         if (experiment.getYtableDataSource() != null) {
         	prbo.setYtableDataSource("/" + experiment.getYtableDataSource());
         }
-        String url = config.getPythonUrl();
+        String url = config.getPythonOfflineUrl();
         String ret = HttpUtil.postRequest(url, JSON.toJSONString(prbo));
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(prbo));
@@ -102,7 +102,7 @@ public class TrainServiceImpl implements TrainService {
 			trbo.setColumnsHomo(getVariableDataName(homoList));
 			trbo.setColumnsHetero(getVariableDataName(hetroList));
 		}
-		String url = config.getPythonUrl();
+		String url = config.getPythonOfflineUrl();
 		String ret = HttpUtil.postRequest(url, JSON.toJSONString(trbo));
 		if (ret == null) {
 			throw new RuntimeException("TrainServiceImpl preprocess. 调用python预处理接口失败. prbo{}" + JSON.toJSONString(trbo));
@@ -122,7 +122,7 @@ public class TrainServiceImpl implements TrainService {
 	}
 
 	@Override
-	public int experimentDeploy(Long experimentId, Long originalId, String type) {
+	public String experimentDeploy(Long experimentId, Long originalId, String type, String secretKey, Long serviceId) {
 		DeployRequestBO drbo = new DeployRequestBO();
 		drbo.setModelId(experimentId);
 		//drbo.setOriginalId(originalId);
@@ -136,7 +136,7 @@ public class TrainServiceImpl implements TrainService {
         if (ret == null) {
             throw new RuntimeException("TrainServiceImpl preprocess. 调用python发布接口失败. drbo{}" + JSON.toJSONString(drbo));
         }
-        return 1;
+        return ret;
 	}
 
 	/*

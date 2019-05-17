@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -41,7 +40,7 @@ public class RealTimeController {
     @ResponseBody
     @PostMapping(value = "/forecast")
     public String getForecastResult(@RequestBody String realTimeJson) {
-    	logger.info("RealTimeController getForecastResult.线上预测请求开始, realTimeJson{}", realTimeJson);
+    	logger.info("RealTimeController getForecastResult.线上预测请求开始");
     	try {
     		RealTimeData realTimeData = JSON.parseObject(realTimeJson, RealTimeData.class);
             if (realTimeData.getServiceId() == null) {
@@ -49,15 +48,19 @@ public class RealTimeController {
                 return ResultUtils.generateResultStr(ResultCode.DATA_ERROR, ResultMessage.PARAM_ERORR.getMsg(), null);
             }
             String ret = realTimeBussiness.getForecastResult(realTimeData);
-            if ("EXPIRED".equals(ret)) {
+            if ("-1".equals(ret)) {
+            	logger.error("RealTimeController getForecastResult.参数错误,部署方式不存在");
+            	return ResultUtils.generateResultStr(ResultCode.REAL_TIME_EXPIRED, ResultMessage.OPT_FAILURE.getMsg("参数错误,部署方式不存在"), null);
+            }
+            if ("-2".equals(ret)) {
             	logger.error("RealTimeController getForecastResult.服务已过期.");
             	return ResultUtils.generateResultStr(ResultCode.REAL_TIME_EXPIRED, ResultMessage.OPT_FAILURE.getMsg("服务已过期"), null);
             }
-            if ("NO_RELEASE".equals(ret)) {
+            if ("-3".equals(ret)) {
             	logger.error("RealTimeController getForecastResult.服务没有进行线上部署.");
             	return ResultUtils.generateResultStr(ResultCode.REAL_TIME_NO_RELEASE, ResultMessage.OPT_FAILURE.getMsg("服务没有进行线上部署"), null);
             }
-            if ("TIME_OUT".equals(ret)) {
+            if ("-4".equals(ret)) {
             	logger.error("RealTimeController getForecastResult.线上预测失败,服务请求python计算超时，请稍后重试.");
             	return ResultUtils.generateResultStr(ResultCode.REAL_TIME_TIME_OUT, ResultMessage.OPT_FAILURE.getMsg("服务请求python计算超时，请稍后重试"), null);
             }

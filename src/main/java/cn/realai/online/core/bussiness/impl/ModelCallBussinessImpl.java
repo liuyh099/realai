@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSON;
 
 import cn.realai.online.common.Constant;
@@ -16,23 +15,25 @@ import cn.realai.online.core.bo.model.BatchRequestBase;
 import cn.realai.online.core.bo.model.DailyBatchRequest;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
 import cn.realai.online.core.entity.BatchRecord;
+import cn.realai.online.core.entity.DeployInfo;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.VariableData;
-import cn.realai.online.core.service.BatchRecordService; 
+import cn.realai.online.core.service.BatchRecordService;
+import cn.realai.online.core.service.DeployInfoService;
 import cn.realai.online.core.service.ExperimentService;
 import cn.realai.online.core.service.MLockService;
 import cn.realai.online.core.service.VariableDataService;
-import cn.realai.online.tool.dailybatchtaskthreadpool.DailyBatchTask;
-import cn.realai.online.tool.dailybatchtaskthreadpool.DailyBatchTaskQueue;
-import cn.realai.online.tool.modelcallthreadpool.BaseBatchTask;
-import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfDone;
-import cn.realai.online.tool.modelcallthreadpool.BatchTaskOfPSI;
-import cn.realai.online.tool.modelcallthreadpool.BatckTaskOfThousandPeople;
-import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
-import cn.realai.online.tool.modelcallthreadpool.TrainTaskStageOne;
-import cn.realai.online.tool.modelcallthreadpool.TrainTaskStageTwo;
+import cn.realai.online.tool.batchtaskthreadpool.DailyBatchTask;
+import cn.realai.online.tool.batchtaskthreadpool.DailyBatchTaskQueue;
 import cn.realai.online.tool.redis.RedisClientTemplate;
+import cn.realai.online.tool.traincallbackthreadpool.BaseBatchTask;
+import cn.realai.online.tool.traincallbackthreadpool.BatchTaskOfDone;
+import cn.realai.online.tool.traincallbackthreadpool.BatchTaskOfPSI;
+import cn.realai.online.tool.traincallbackthreadpool.BatckTaskOfThousandPeople;
+import cn.realai.online.tool.traincallbackthreadpool.ModelCallPool;
+import cn.realai.online.tool.traincallbackthreadpool.TrainTaskStageOne;
+import cn.realai.online.tool.traincallbackthreadpool.TrainTaskStageTwo;
 
 /**
  * @author lyh
@@ -56,6 +57,9 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
 
     @Autowired
     private MLockService mLockService;
+    
+    @Autowired
+    private DeployInfoService deployInfoService;
     
     /*
      * 处理每日跑批任务
@@ -193,5 +197,19 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
 		}
 	}
 
-}
+	/**
+	 * 部署服务模型
+	 */
+	@Override
+	public int deployServiceModel(DeployInfo deployInfo) {
+		DeployInfo oldDeployInfo = deployInfoService.selectDeployInfoById(deployInfo.getServiceId());
+		int ret;
+		if (oldDeployInfo == null) {
+			ret = deployInfoService.insertDeployInfo(deployInfo);
+		} else {
+			ret = deployInfoService.updateDeployInfo(deployInfo);
+		}
+		return ret;
+	}
 
+}
