@@ -23,7 +23,7 @@ public class DailyBatchTask implements Runnable {
 	
 	private Long experimentId;
 	
-	private String batchDate;
+	private String batchDate; 
 	
 	private String xtableHeterogeneousDataSource;
 	
