@@ -26,7 +26,14 @@ public class RealTimeData {
 	
 	//同质和异质数据
 	private XData data;
-
+	
+	//部署方案类型
+	private int type;
+	
+	public static final int DEPLOY_TYPE_ONLINE = 1;  //联机部署方案
+	
+	public static final int DEPLOY_TYPE_ALONE = 2;  //线上和训练分开部署方案
+	
 	public Long getServiceId() {
 		return serviceId;
 	}
@@ -81,6 +88,14 @@ public class RealTimeData {
 
 	public void setModelId(Long modelId) {
 		this.modelId = modelId;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 }

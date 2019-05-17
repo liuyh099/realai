@@ -1,4 +1,4 @@
-package cn.realai.online.tool.calculationthreadpool;
+package cn.realai.online.tool.realtimethreadpool;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;

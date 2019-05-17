@@ -6,7 +6,6 @@ public abstract class LicenseConstants {
 
     public static final long CHECK_INTERVAL = 30 * 1000;
 
-
     /**
      * license文件名
      */
@@ -14,8 +13,5 @@ public abstract class LicenseConstants {
 
 
     public final static String DATE_FORMART = DateUtil.ymd;
-
-
-
 
 }

@@ -24,9 +24,14 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
-    @Value("${spring.redis.cache.clusterNodes}")
+    @Value("${spring.redis.host}")
     private String host;
 
+    @Value("${spring.redis.database}")
+    private int database;
+    
+    @Value("${spring.redis.port}")
+    private String port;
 
     @Value("${session.timeout}")
     private Long sessionTimeout;
@@ -95,7 +100,6 @@ public class ShiroConfig {
         return mySessionManager;
     }
 
-
     public RedisClusterManager clusterRedisManager() {
         RedisClusterManager redisClusterManager = new RedisClusterManager();
         redisClusterManager.setHost(host);
@@ -104,7 +108,8 @@ public class ShiroConfig {
 
     public RedisManager aloneRedisManager() {
         RedisManager redisManager = new RedisManager();
-        redisManager.setHost(host);
+        redisManager.setHost(host + ":" + port);
+        redisManager.setDatabase(database);
         return redisManager;
     }
 

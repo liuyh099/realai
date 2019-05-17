@@ -10,7 +10,6 @@ import cn.realai.online.core.bo.ServiceBO;
 import cn.realai.online.core.bussiness.ExperimentalTrainBussiness;
 import cn.realai.online.core.bussiness.ModelBussiness;
 import cn.realai.online.core.entity.Model;
-import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.*;
 import com.alibaba.fastjson.JSON;
@@ -63,7 +62,6 @@ public class DataOverviewController {
         }
     }
 
-
     @RequiresPermissions("data:over")
     @GetMapping("/getModelSelect")
     @ApiModelProperty("获得模型下拉列表")
@@ -77,20 +75,6 @@ public class DataOverviewController {
             return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
         }
     }
-
-
-    /*@GetMapping("/getLastServerId")
-    @ApiModelProperty("获得最近发布模型的服务ID")
-    public Result<Long> getLastServerId() {
-        try {
-            Long id = experimentalTrainBussiness.getLastServerId();
-            return new Result(ResultCode.SUCCESS.getCode(), ResultMessage.OPT_SUCCESS.getMsg(), id);
-        } catch (Exception e) {
-            logger.error("数据概览Api - 获得最近发布模型的服务ID异常");
-            return new Result(ResultCode.DATA_ERROR.getCode(), ResultMessage.OPT_FAILURE.getMsg(), null);
-        }
-
-    }*/
 
     @RequiresPermissions("data:over")
     @GetMapping("/images")
@@ -157,6 +141,5 @@ public class DataOverviewController {
         }
 
     }
-
 
 }

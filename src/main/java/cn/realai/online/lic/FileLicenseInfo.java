@@ -2,10 +2,6 @@ package cn.realai.online.lic;
 
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * 
  * <p>Title: 文件授权信息类        </p>

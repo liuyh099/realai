@@ -50,8 +50,6 @@ public class ExperimentalResultController {
     @ApiOperation(value = "实验结果-下拉实验列表")
     public Result<List<TrainNameSelectVO>> trainNameSelect() {
         try {
-           // ExperimentalTrainQuery query = new ExperimentalTrainQuery();
-          //  query.setStatus(Experiment.STATUS_TRAINING_OVER);
             List<Integer> status = new ArrayList<>();
             status.add(Experiment.STATUS_TRAINING_OVER);
             status.add(Experiment.STATUS_TRAINING_STAGE_ONE);

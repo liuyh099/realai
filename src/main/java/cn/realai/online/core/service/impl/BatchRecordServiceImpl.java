@@ -1,7 +1,6 @@
 package cn.realai.online.core.service.impl;
 
 import org.redisson.Redisson;
-import org.redisson.RedissonLock;
 import org.redisson.api.RLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +20,7 @@ import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.service.BatchRecordService;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class BatchRecordServiceImpl implements BatchRecordService {
@@ -34,9 +34,9 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 	private Redisson redisson;
 	
 	@Override
-	public Integer insert(BatchRecord batchRecord) {
-		batchRecord.setCreateTime(System.currentTimeMillis());
-		return batchRecordDao.insert(batchRecord);
+	public Integer insert(BatchRecord record) {
+		record.setCreateTime(System.currentTimeMillis());
+		return batchRecordDao.insert(record);
 	}
 
     @Autowired
@@ -71,7 +71,7 @@ public class BatchRecordServiceImpl implements BatchRecordService {
 		BatchRecord batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, batchDate, batchTypeDaily);
         if (batchRecord == null) {
         	RLock lock =  redisson.getLock(Constant.BATCH_DAILY_LOCK_PREFIX + eid);
-        	lock.lock();
+        	lock.lock(10, TimeUnit.SECONDS);   //锁的超时时间10秒
         	try {
         		batchRecord = batchRecordDao.getBatchRecordByEidAndDate(eid, batchDate, batchTypeDaily);
         		if (batchRecord == null) {

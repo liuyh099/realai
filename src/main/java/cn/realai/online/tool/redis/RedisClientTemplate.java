@@ -18,9 +18,9 @@ public class RedisClientTemplate {
 
     /*@Autowired
     private JedisClusterClient jedisClusterClient;*/
-    
+	
 	@Autowired
-    private RedisTemplate<Object, Object> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     /*
      * 设置key-value
@@ -57,14 +57,17 @@ public class RedisClientTemplate {
      * 通过key获取value
      */
     public String get(String key) {
-        String str = null;
+        Object obj = null;
         try {
-        	ValueOperations<Object, Object> value = redisTemplate.opsForValue();
-        	str = value.get(key).toString();
+        	ValueOperations<String, String> value = redisTemplate.opsForValue();
+        	obj = value.get(key);
+        	if (obj != null ) {
+        		return obj.toString();
+        	}
         } catch (Exception ex) {
             logger.error("getRedis:{Key:" + key + "}", ex);
         }
-        return str;
+        return null;
     }
 
     /*

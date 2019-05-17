@@ -11,7 +11,6 @@ import cn.realai.online.core.query.ExperimentalTrainQuery;
 import cn.realai.online.core.query.FaceListDataQuery;
 import cn.realai.online.core.query.IdQuery;
 import cn.realai.online.core.service.*;
-import cn.realai.online.tool.redis.RedisClientTemplate;
 import cn.realai.online.util.UserUtils;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
@@ -31,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 实验训练的业务实现
@@ -582,8 +582,7 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         if (!CollectionUtils.isEmpty(bo.getVariableIdList())) {
             List<VariableData> list = variableDataService.findDoubleCreateVariableDataList(bo.getVariableIdList());
             if (!CollectionUtils.isEmpty(list)) {
-                for (VariableData v :
-                        list) {
+                for (VariableData v : list) {
                     v.setId(null);
                     v.setExperimentId(experiment.getId());
                 }
@@ -635,7 +634,6 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         List<ExperimentBO> result = JSON.parseArray(JSON.toJSONString(list), ExperimentBO.class);
         return result;
     }
-
 
     @Override
     public Long getLastServerId() {
@@ -703,10 +701,61 @@ public class ExperimentalTrainBussinessImpl implements ExperimentalTrainBussines
         return result;
     }
 
+    /*@Autowired
+    private SetOperations<String, Object> setOperations;
+    
+    @Autowired
+    private ListOperations<String, Object> listOperations;
+    
+    @Autowired
+    private ValueOperations<String, Object> valueOperations;
+    
+    @Autowired
+    private RedisService redisService;
+    
+	@Autowired
+	private Redisson redisson;*/
+	
     @Override
     public void testPreprocess(long experimentId) {
-        ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
-        trainService.preprocess(experimentBO);
+    	//valueOperations.get("exp:486:topsort:201904261810");
+    	
+    	/*String key = Constant.BATCH_DAILY_LOCK_PREFIX + experimentId;
+    	
+		RLock lock =  redisson.getLock(key);
+    	lock.lock(30, TimeUnit.SECONDS);
+    	System.out.println("asdfasdf");
+    	lock.unlock();
+    	System.out.println("asdfasdf1234");*/
+    	
+    	
+    	
+    	
+    	
+    	/*valueOperations.set("string", "string");
+    	valueOperations.set("string", "string1");
+    	valueOperations.set("string", "string2");
+    	valueOperations.set("string", "string3");
+    	
+    	System.out.println(valueOperations.get("string"));
+    	System.out.println(valueOperations.get("string", 1, 4));
+    	System.out.println(valueOperations.get("string", 0, 4));
+    	
+    	listOperations.rightPush("list", "1");
+    	listOperations.rightPush("list", "2");
+    	listOperations.rightPush("list", "3");
+    	
+    	List<Object> l = listOperations.range("list", 1, 6);
+    	for (int i = 0; i < l.size(); i++) {
+    		System.out.println(l.get(i));
+    	}
+    	listOperations.remove("list", 1, "1");
+    	listOperations.remove("list", -1, "1");
+    	listOperations.remove("list", 0, "1");
+    	redisService.deleteKey("list");
+    	redisService.deleteKey("string");*/
+    	/*ExperimentBO experimentBO = experimentService.selectExperimentById(experimentId);
+        trainService.preprocess(experimentBO);*/
     }
 
 }

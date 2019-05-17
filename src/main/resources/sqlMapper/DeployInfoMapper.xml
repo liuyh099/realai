@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.core.dao.DeployInfoDao">
+    <resultMap type="cn.realai.online.core.entity.DeployInfo" id="DeployInfoMap">
+        <id column="service_id" property="serviceId" jdbcType="BIGINT"/>
+        <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+        <result column="secret_key" property="secretKey" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="BIGINT"/>
+        <result column="update_time" property="updateTime" jdbcType="BIGINT"/>
+    </resultMap>
+    
+    <select id="selectDeployInfoById" resultMap="DeployInfoMap">
+    	select * 
+    	from deploy_info
+    	where service_id = #{serviceId}
+    </select>
+
+	<insert id="insertDeployInfo">
+		insert deploy_info(service_id, experiment_id, secret_key, create_time, history_info) 
+		values(#{di.serviceId}, #{di.experimentId}, #{di.secretKey}, #{di.createTime}, #{di.historyInfo})  
+	</insert>
+
+	<update id="updateDeployInfo">
+		update deploy_info
+		set experiment_id = #{di.experimentId},
+			secret_key = #{di.secretKey},
+			history_info = concat(history_info, ',,,,,,,', #{di.secret_key}),
+			create_time = #{di.createTime}
+		where service_id = #{di.serviceId}
+	</update>	
+	
+</mapper>

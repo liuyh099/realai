@@ -5,20 +5,21 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="psi" property="psi" jdbcType="DECIMAL"/>
         <result column="variable_id" property="variableId" jdbcType="BIGINT"/>
+        <result column="model_id" property="modelId" jdbcType="BIGINT"/>
         <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
         <result column="aler" property="aler" jdbcType="TINYINT"/>
     </resultMap>
 
     <insert id="insert" parameterType="cn.realai.online.core.entity.PSICheckResult">
-        INSERT INTO psi_check_result (psi,variable_id,experiment_id,aler)
-        VALUE (#{psi},#{variableId},#{experimentId},#{aler})
+        INSERT INTO psi_check_result (psi,variable_id,experiment_id,aler,model_id)
+        VALUE (#{psi},#{variableId},#{experimentId},#{aler},#{modelId})
     </insert>
 
 	<insert id="insertList">
-		INSERT INTO psi_check_result (psi,variable_id,experiment_id,aler)
+		INSERT INTO psi_check_result (psi,variable_id,experiment_id,aler,model_id)
 		values
 		<foreach collection="list" separator="," item="psi">
-			(#{psi.psi}, #{psi.variableId}, #{psi.experimentId}, #{psi.aler})
+			(#{psi.psi}, #{psi.variableId}, #{psi.experimentId}, #{psi.aler},#{psi.modelId})
 		</foreach>
 	</insert>
 
@@ -90,11 +91,9 @@
         join variable_data as vd on psi.variable_id = vd.id
         join sample_weight as sw on vd.id = sw.variable_id
         join sample_grouping as sg on sw.group_id = sg.id
-        join model as m on psi.experiment_id = m.experiment_id
         <where>
             sg.group_name = '全局'
-            and m.release_status != 'none'
-            and m.id = #{modelId}
+            and psi.model_id = #{modelId}
             and vd.variable_type = #{variableType}
         </where>
         order by abs(sw.variable_weight) desc, psi.id asc

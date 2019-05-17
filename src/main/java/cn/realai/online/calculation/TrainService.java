@@ -31,7 +31,7 @@ public interface TrainService {
 	/**
 	 * 部署
 	 */
-	int experimentDeploy(Long experimentId, Long originalId, String type);
+	String experimentDeploy(Long experimentId, Long originalId, String type, String secretKey, Long serviceId);
 	
 	/**
 	 * 离线跑批

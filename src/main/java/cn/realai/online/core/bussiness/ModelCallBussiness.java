@@ -4,7 +4,7 @@ import java.util.List;
 
 import cn.realai.online.core.bo.TrainResultRedisKey;
 import cn.realai.online.core.bo.model.DailyBatchRequest;
-import cn.realai.online.core.bo.model.PeoplelInformetion;
+import cn.realai.online.core.entity.DeployInfo;
 
 public interface ModelCallBussiness {
 
@@ -40,5 +40,10 @@ public interface ModelCallBussiness {
      * 批次错误处理
      */
 	void batchErrorDealWith(Long experimentId, String msg);
+
+	/*
+	 * 部署模型
+	 */
+	int deployServiceModel(DeployInfo deployInfo);
 
 }

@@ -9,29 +9,23 @@ import cn.realai.online.core.bussiness.ModelBussiness;
 import cn.realai.online.core.bussiness.PsiCheckResultBussiness;
 import cn.realai.online.core.bussiness.TuningRecordBussiness;
 import cn.realai.online.core.entity.Model;
-import cn.realai.online.core.entity.TuningRecord;
 import cn.realai.online.core.query.ModelListQuery;
 import cn.realai.online.core.query.TuningKeyCheckVO;
 import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.vo.*;
 import cn.realai.online.lic.ServiceLicenseCheck;
-import cn.realai.online.util.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.List;
 
 /**

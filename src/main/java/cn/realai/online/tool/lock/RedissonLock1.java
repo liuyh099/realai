@@ -8,14 +8,12 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class RedissonLock1 implements DistributedLocker {
 
     //@Autowired
     //private RedissonClient redissonClient;  //RedissonClient已经由配置类生成，这里自动装配即可
 
-	@Autowired
-    RedissonLock redissonLock;
 	
     //lock(), 拿不到lock就不罢休，不然线程就一直block
     /*public RLock lock(String lockKey) {

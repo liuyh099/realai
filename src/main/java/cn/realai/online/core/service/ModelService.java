@@ -4,7 +4,6 @@ package cn.realai.online.core.service;
 import cn.realai.online.core.bo.ModelDetailBO;
 import cn.realai.online.core.bo.ModelListBO;
 import cn.realai.online.core.entity.Model;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -86,5 +85,5 @@ public interface ModelService {
      * @param serviceId
      * @return
      */
-	Model selectOnlineModelByServiceId(Long serviceId);
+	Model selectOnlineModel(Long serviceId, Long experimentId);
 }

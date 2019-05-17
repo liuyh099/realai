@@ -1,4 +1,4 @@
-package cn.realai.online.tool.dailybatchtaskthreadpool;
+package cn.realai.online.tool.batchtaskthreadpool;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;

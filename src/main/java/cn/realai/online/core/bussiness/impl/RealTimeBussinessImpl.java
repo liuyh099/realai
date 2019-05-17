@@ -10,13 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.realai.online.core.bussiness.RealTimeBussiness;
+import cn.realai.online.core.entity.DeployInfo;
 import cn.realai.online.core.entity.Model;
 import cn.realai.online.core.query.realtime.RealTimeData;
+import cn.realai.online.core.service.DeployInfoService;
 import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.service.ServiceService;
+import cn.realai.online.tool.realtimethreadpool.CalculationQueue;
+import cn.realai.online.tool.realtimethreadpool.CalculationTask;
 import cn.realai.online.common.Constant;
-import cn.realai.online.tool.calculationthreadpool.CalculationQueue;
-import cn.realai.online.tool.calculationthreadpool.CalculationTask;
 
 @Service
 public class RealTimeBussinessImpl implements RealTimeBussiness {
@@ -28,21 +30,21 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
     
     @Autowired
     private ModelService modelService;
+    
+    @Autowired
+    private DeployInfoService deployInfoService;
 
     @Override
     public String getForecastResult(RealTimeData realTimeData) throws Exception {
 
-    	if (!serviceService.checkService(realTimeData.getServiceId())) {
-        	return "EXPIRED";
-        }
+    	Long experimentId = getexperimentId(realTimeData.getServiceId(), realTimeData.getType());
     	
-        Model model = modelService.selectOnlineModelByServiceId(realTimeData.getServiceId());
-        if (model == null) {
-        	return "NO_RELEASE";
-        }
-        
-        realTimeData.setModelId(model.getExperimentId());
-        realTimeData.setServiceId(model.getExperimentId());//只是测试，要去掉
+    	if (experimentId < 0) {
+    		return experimentId + "";
+    	}
+    	
+        realTimeData.setModelId(experimentId);
+        realTimeData.setServiceId(experimentId);//只是测试，要去掉
         
         //放到队列里去python计算
         CalculationTask ct = new CalculationTask(realTimeData);
@@ -54,11 +56,32 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
 		} catch (TimeoutException e1) {
 			ft.cancel(true);
             logger.error("RealTimeBussinessImpl getForecastResult timeoutException");
-            return "TIME_OUT";
+            return "-4";
 		} catch (Exception e) {
             throw e;
         }
         return ret;
     }
 
+    private Long getexperimentId(Long serviceId, int type) {
+    	if (type == RealTimeData.DEPLOY_TYPE_ONLINE) {
+    		if (!serviceService.checkService(serviceId)) {
+            	return -2L;
+            }
+            Model model = modelService.selectOnlineModel(serviceId, null);
+            if (model == null) {
+            	return -3L;
+            }
+            return model.getExperimentId();
+    	} else if (type == RealTimeData.DEPLOY_TYPE_ALONE) {
+    		DeployInfo deployInfo = deployInfoService.selectDeployInfoById(serviceId);
+    		if (deployInfoService.checkgetSecretKey(deployInfo.getSecretKey())) {
+    			return -2L;
+    		}
+    		return deployInfo.getExperimentId();
+    	}
+    	
+    	return -1L;
+    }
+    
 }

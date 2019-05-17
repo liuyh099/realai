@@ -17,13 +17,12 @@ import cn.realai.online.core.service.ModelService;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.core.vo.OfflineBatchCreateVO;
 import cn.realai.online.core.vo.OfflineBatchListVO;
-import cn.realai.online.tool.lock.RedissonLock1;
-import cn.realai.online.tool.modelcallthreadpool.ModelCallPool;
 import cn.realai.online.util.DateUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.redisson.RedissonLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -35,7 +34,6 @@ import org.springframework.util.Assert;
 
 import java.text.ParseException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 功能描述：TODO
@@ -50,13 +48,9 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
     @Autowired
     private BatchRecordService batchRecordService;
     @Autowired
-    private ExperimentService experimentService;
-    @Autowired
     private ServiceService serviceService;
     @Autowired
     private TrainService trainService;
-    @Autowired
-    private RedissonLock1 redissonLock;
     @Autowired
     private ModelService modelService;
     @Autowired
@@ -124,7 +118,6 @@ public class BatchRecordBussinessImpl implements BatchRecordBussiness {
         record.setYtableDataSource(createVO.getyDataSource());
         record.setBatchType(BatchRecord.BATCH_TYPE_OFFLINE);
         record.setOfflineTimes(batchTimes);
-        //record.setCreateTime(new Date().getTime());
         record.setModelId(model.getId());
         record.setServiceId(createVO.getServiceId());
         record.setExperimentId(model.getExperimentId());

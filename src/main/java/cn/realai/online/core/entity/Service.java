@@ -1,7 +1,5 @@
 package cn.realai.online.core.entity;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * 服务（我的服务）
  * @author lyh

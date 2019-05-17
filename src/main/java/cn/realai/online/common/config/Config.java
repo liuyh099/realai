@@ -1,27 +1,27 @@
 package cn.realai.online.common.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-
-import cn.realai.online.util.HttpUtil;
 
 @Configuration
 @PropertySource({"classpath:config.properties"})
 public class Config {
 	
-	private Logger logger = LoggerFactory.getLogger(Config.class);
-	
 	private static final String http = "http://"; 
 	
-    @Value("${python.host}")
-    private String PYTHON_HOST;
+    @Value("${python.offline.host}")
+    private String PYTHON_OFFLINE_HOST;
 
-    @Value("${python.port}")
-    private String PYTHON_PORT;
+    @Value("${python.offline.port}")
+    private String PYTHON_OFFLINE_PORT;
+    
+    @Value("${python.online.host}")
+    private String PYTHON_ONLINE_HOST;
 
+    @Value("${python.online.port}")
+    private String PYTHON_ONLINE_PORT;
+    
     @Value("${train.url}")
     private String TRAIN_URL;
     
@@ -52,12 +52,12 @@ public class Config {
     @Value("${model.daily.batch}")
     private String MODEL_DAILY_BATCH;
     
-    public String getPythonUrl() {
-        return http + PYTHON_HOST + ":" + PYTHON_PORT + TRAIN_URL;
+    public String getPythonOfflineUrl() {
+        return http + PYTHON_OFFLINE_HOST + ":" + PYTHON_OFFLINE_PORT + TRAIN_URL;
     }
     
     public String getExperimentDrop() {
-    	return http + PYTHON_HOST + ":" + PYTHON_PORT + EXPERIMENT_DROP;
+    	return http + PYTHON_OFFLINE_HOST + ":" + PYTHON_OFFLINE_PORT + EXPERIMENT_DROP;
     }
     
     public String getNginxUrl() {
@@ -65,27 +65,27 @@ public class Config {
     }
 
     public String getModelOfflinePublish() {
-    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_OFFLINE_PUBLISH;
+    	return http + PYTHON_OFFLINE_HOST + ":" + PYTHON_OFFLINE_PORT + MODEL_OFFLINE_PUBLISH;
     }
     
     public String getModelOnlinePublish() {
-    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_ONLINE_PUBLISH;
+    	return http + PYTHON_OFFLINE_HOST + ":" + PYTHON_OFFLINE_PORT + MODEL_ONLINE_PUBLISH;
     }
     
     public String getModelDrop() {
-    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_DROP;
+    	return http + PYTHON_OFFLINE_HOST + ":" + PYTHON_OFFLINE_PORT + MODEL_DROP;
     }
     
     public String getModelOfflineBatch() {
-    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_OFFLINE_BATCH;
+    	return http + PYTHON_OFFLINE_HOST + ":" + PYTHON_OFFLINE_PORT + MODEL_OFFLINE_BATCH;
     }
     
     public String getRealtimeUrl() {
-    	return http + PYTHON_HOST + ":" + PYTHON_PORT + REALTIME_URL;
+    	return http + PYTHON_ONLINE_HOST + ":" + PYTHON_ONLINE_PORT + REALTIME_URL;
     } 
     
     public String getModelDailyBatch() {
-    	return http + PYTHON_HOST + ":" + PYTHON_PORT + MODEL_DAILY_BATCH;
+    	return http + PYTHON_ONLINE_HOST + ":" + PYTHON_ONLINE_PORT + MODEL_DAILY_BATCH;
     }
     
 }
