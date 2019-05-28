@@ -75,5 +75,4 @@ public class BatchTaskOfPSI extends BaseBatchTask {
 	    	batchExecutionTaskService.taskErrorHandling(bet.getId(), redisValue);
 		}
 	}
-
 }

@@ -62,5 +62,4 @@ public class BatchTaskOfDone extends BaseBatchTask {
 			batchExecutionTaskService.updateStatusById(bet.getId(), BatchExecutionTask.STATUS_FAIL);
 		}
 	}
-
 }
