@@ -1,4 +1,4 @@
-package cn.realai.online.core.bo.model;
+package cn.realai.online.tool.traincallbackthreadpool.copy;
 
 public class PeoplelInformetion {
 

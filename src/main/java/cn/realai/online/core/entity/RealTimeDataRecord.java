@@ -1,18 +1,9 @@
-package cn.realai.online.core.query.realtime;
+package cn.realai.online.core.entity;
 
-/**
- * 线上实时接口请求数据封装类
- * @author lyh
- */
-public class RealTimeData {
+public class RealTimeDataRecord {
 
-	private String reqId;
-	
 	//服务id
 	private Long serviceId;
-	
-	//实验id,请求方不用送,服务器自动赋值
-	private Long modelId;
 	
 	//银行用户id
 	private String personalId;  
@@ -26,15 +17,20 @@ public class RealTimeData {
 	//用户身份证号
 	private String cardNo;
 	
-	//同质和异质数据
-	private XData data;
+	//得分
+	private String score;
 	
-	//部署方案类型
-	private int type;
+	//请求信息
+	private String requestContent;
 	
-	public static final int DEPLOY_TYPE_ONLINE = 1;  //联机部署方案
+	//创建时间
+	private Long createTime;
 	
-	public static final int DEPLOY_TYPE_ALONE = 2;  //线上和训练分开部署方案
+	//请求用时
+	private Long  spendTime;
+	
+	//请求唯一标识
+	private String reqId;
 	
 	public Long getServiceId() {
 		return serviceId;
@@ -76,28 +72,36 @@ public class RealTimeData {
 		this.cardNo = cardNo;
 	}
 
-	public XData getData() {
-		return data;
+	public String getRequestContent() {
+		return requestContent;
 	}
 
-	public void setData(XData data) {
-		this.data = data;
+	public void setRequestContent(String requestContent) {
+		this.requestContent = requestContent;
 	}
 
-	public Long getModelId() {
-		return modelId;
+	public Long getCreateTime() {
+		return createTime;
 	}
 
-	public void setModelId(Long modelId) {
-		this.modelId = modelId;
+	public void setCreateTime(Long createTime) {
+		this.createTime = createTime;
 	}
 
-	public int getType() {
-		return type;
+	public Long getSpendTime() {
+		return spendTime;
 	}
 
-	public void setType(int type) {
-		this.type = type;
+	public void setSpendTime(Long spendTime) {
+		this.spendTime = spendTime;
+	}
+
+	public String getScore() {
+		return score;
+	}
+
+	public void setScore(String score) {
+		this.score = score;
 	}
 
 	public String getReqId() {
@@ -107,5 +111,5 @@ public class RealTimeData {
 	public void setReqId(String reqId) {
 		this.reqId = reqId;
 	}
-
+	
 }

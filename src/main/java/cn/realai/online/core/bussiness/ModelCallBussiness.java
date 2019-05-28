@@ -3,7 +3,8 @@ package cn.realai.online.core.bussiness;
 import java.util.List;
 
 import cn.realai.online.core.bo.TrainResultRedisKey;
-import cn.realai.online.core.bo.model.DailyBatchRequest;
+import cn.realai.online.core.entity.BatchExecutionTask;
+import cn.realai.online.core.entity.DailyBatchRequest;
 import cn.realai.online.core.entity.DeployInfo;
 
 public interface ModelCallBussiness {
@@ -18,8 +19,7 @@ public interface ModelCallBussiness {
      * 离线跑批
      * @param brs 
      */
-    void runBatchOffline(Long experimentId, String redisKey, String type, 
-    		String downUrl, Long batchId, Boolean done);
+    void runBatchOffline(BatchExecutionTask bet);
 
     /*
      * 预处理回调处理

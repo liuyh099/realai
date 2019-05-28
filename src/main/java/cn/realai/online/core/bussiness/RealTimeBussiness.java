@@ -6,4 +6,6 @@ public interface RealTimeBussiness {
 
     String getForecastResult(RealTimeData realTimeData)  throws Exception;
 
+	int recordRequestInformation(String score, String realTimeJson, Long startTime);
+
 }

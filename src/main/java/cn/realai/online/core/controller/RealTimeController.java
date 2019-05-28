@@ -42,12 +42,14 @@ public class RealTimeController {
     public String getForecastResult(@RequestBody String realTimeJson) {
     	logger.info("RealTimeController getForecastResult.线上预测请求开始");
     	try {
+    		Long startTime = System.currentTimeMillis();
     		RealTimeData realTimeData = JSON.parseObject(realTimeJson, RealTimeData.class);
             if (realTimeData.getServiceId() == null) {
                 logger.warn("线上预测传入参数错误, serviceId不能为空");
                 return ResultUtils.generateResultStr(ResultCode.DATA_ERROR, ResultMessage.PARAM_ERORR.getMsg(), null);
             }
             String ret = realTimeBussiness.getForecastResult(realTimeData);
+            realTimeBussiness.recordRequestInformation(ret, realTimeJson, startTime);
             if ("-1".equals(ret)) {
             	logger.error("RealTimeController getForecastResult.参数错误,部署方式不存在");
             	return ResultUtils.generateResultStr(ResultCode.REAL_TIME_EXPIRED, ResultMessage.OPT_FAILURE.getMsg("参数错误,部署方式不存在"), null);

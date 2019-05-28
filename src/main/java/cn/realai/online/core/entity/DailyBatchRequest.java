@@ -1,8 +1,8 @@
-package cn.realai.online.core.bo.model;
+package cn.realai.online.core.entity;
 
 public class DailyBatchRequest {
 
-	private Long modelId;
+	private Long modelId;  //实验id,在python中一个实验对应一个模型
 	
 	private String xtableHetro;
 	
@@ -51,5 +51,5 @@ public class DailyBatchRequest {
 	public void setYtable(String ytable) {
 		this.ytable = ytable;
 	}
-	
+
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.realai.online.core.dao.BatchExecutionTaskDao">
+
+    <insert id="insertBatchExecutionTask" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO batch_execution_task (experiment_id , batch_id, type, redis_key, count, done,
+        	status, down_url, create_time)
+        VALUE (#{experimentId},#{batchId},#{type},
+        	#{redisKey},#{count},#{done},#{status},#{downUrl},#{createTime})
+    </insert>
+
+	<update id="updateStatusAndRedidValueById">
+		update batch_execution_task
+		set status = #{status}
+		<if test="redisValue != null">
+			set redis_value = #{redisValue}
+		</if>
+		where id = #{id}
+	</update>
+
+</mapper>

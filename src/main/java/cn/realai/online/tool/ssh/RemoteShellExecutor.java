@@ -132,7 +132,7 @@ public class RemoteShellExecutor {
     }
 
     public static void main(String args[]) throws Exception {
-    	RemoteShellExecutor executor = new RemoteShellExecutor("47.105.113.171", "root", "Realai2018", 2822);
+    	RemoteShellExecutor executor = new RemoteShellExecutor("47.105.102.15", "root", "realai2019asdf", 2822);
         // 执行myTest.sh 参数为java Know dummy
         String filePath = executor.exec("sh /home/shell/testDir.sh /home/file/");
 

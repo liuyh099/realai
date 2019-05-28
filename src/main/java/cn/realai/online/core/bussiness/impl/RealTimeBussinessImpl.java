@@ -9,12 +9,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
+
 import cn.realai.online.core.bussiness.RealTimeBussiness;
 import cn.realai.online.core.entity.DeployInfo;
 import cn.realai.online.core.entity.Model;
+import cn.realai.online.core.entity.RealTimeDataRecord;
 import cn.realai.online.core.query.realtime.RealTimeData;
 import cn.realai.online.core.service.DeployInfoService;
 import cn.realai.online.core.service.ModelService;
+import cn.realai.online.core.service.RealTimeDataRecordService;
 import cn.realai.online.core.service.ServiceService;
 import cn.realai.online.tool.realtimethreadpool.CalculationQueue;
 import cn.realai.online.tool.realtimethreadpool.CalculationTask;
@@ -33,6 +37,9 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
     
     @Autowired
     private DeployInfoService deployInfoService;
+    
+    @Autowired
+    private RealTimeDataRecordService realTimeDataRecordService;
 
     @Override
     public String getForecastResult(RealTimeData realTimeData) throws Exception {
@@ -83,5 +90,22 @@ public class RealTimeBussinessImpl implements RealTimeBussiness {
     	
     	return -1L;
     }
+
+	@Override
+	public int recordRequestInformation(String score, String realTimeJson, Long startTime) {
+		JSONObject jsonObj = JSONObject.parseObject(realTimeJson);
+		RealTimeDataRecord rtdr = new RealTimeDataRecord();
+		rtdr.setPersonalId(jsonObj.getString("personalId"));
+		rtdr.setCardNo(jsonObj.getString("cardNo"));
+		rtdr.setName(jsonObj.getString("name"));
+		rtdr.setPhone(jsonObj.getString("phone"));
+		rtdr.setRequestContent(realTimeJson);
+		rtdr.setSpendTime(System.currentTimeMillis() - startTime);
+		rtdr.setCreateTime(System.currentTimeMillis());
+		rtdr.setServiceId(jsonObj.getLong("serviceId"));
+		rtdr.setScore(score);
+		rtdr.setReqId(jsonObj.getString("reqId"));
+		return realTimeDataRecordService.insertRealTimeDataRecord(rtdr);
+	}
     
 }

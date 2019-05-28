@@ -1,7 +1,6 @@
 package cn.realai.online.core.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import cn.realai.online.core.bo.TrainResultRedisKey;
-import cn.realai.online.core.bo.model.OfflineBatchRequest;
-import cn.realai.online.core.bo.model.DailyBatchRequest;  
-import cn.realai.online.core.bo.model.ModelRequest;
 import cn.realai.online.core.bussiness.ModelCallBussiness;
+import cn.realai.online.core.entity.BatchExecutionTask;
+import cn.realai.online.core.entity.DailyBatchRequest;
 import cn.realai.online.core.entity.DeployInfo;
 import cn.realai.online.util.FileUtil;
 import cn.realai.online.common.Constant;
@@ -78,18 +77,17 @@ public class ModelCallController extends BaseController{
     @RequestMapping(value = "/batchTask", method = RequestMethod.POST)
     public String runBatchTask(@RequestBody String param) {
     	logger.info("ModelCallController runBatchOffline. 离线跑批. param{}", JSON.toJSONString(param));
-    	OfflineBatchRequest obrs = JSON.parseObject(param, OfflineBatchRequest.class);
-    	if (obrs.getCode() != 200) {
-    		modelCallBussiness.batchErrorDealWith(obrs.getBatchId(), obrs.getMsg());
+    	JSONObject obr = JSON.parseObject(param);
+    	if (!"200".equals(obr.getString("code"))) {
+    		modelCallBussiness.batchErrorDealWith(Long.parseLong((String) (obr.get("batchId"))), (String) obr.get("msg"));
     		return ResultUtils.generateResultStr(ResultCode.PYTHON_SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
     	}
     	
-    	Long experimentId = obrs.getModelId();
-        String type = obrs.getType();
-        String redisKey = obrs.getRedisKey();
-        String downUrl = obrs.getDownUrl();
-        Long batchId = obrs.getBatchId();
-        modelCallBussiness.runBatchOffline(experimentId, redisKey, type, downUrl, batchId, obrs.getDone());
+    	BatchExecutionTask bet = new BatchExecutionTask(obr.getLong("modelId"), obr.getLong("batchId"), 
+    			obr.getString("type"), obr.getString("redisKey"), obr.getString("downUrl"), 
+    			obr.getBoolean("done"),  BatchExecutionTask.STATUS_NEW, obr.getInteger("count"));
+    	
+        modelCallBussiness.runBatchOffline(bet);
         return ResultUtils.generateResultStr(ResultCode.PYTHON_SUCCESS, ResultMessage.OPT_SUCCESS.getMsg(), null);
     }
     
@@ -134,13 +132,13 @@ public class ModelCallController extends BaseController{
     	logger.info("ModelCallController callback. param{}, time{}", JSON.toJSONString(param), System.currentTimeMillis() + "");
     	System.out.println(getRequestIp());
     	try {
-    		ModelRequest request = JSON.parseObject(param, ModelRequest.class);
-            Integer code = request.getCode();
-            Long experimentId = request.getExperimentId();
-            String task = request.getTask();
-            String msg = request.getMsg();
-            String data = request.getData();
-            Map<String, String> map = JSON.parseObject(data, Map.class);
+    		JSONObject request = JSON.parseObject(param);
+            Integer code = request.getInteger("code");
+            Long experimentId = request.getLong("experimentId");
+            String task = request.getString("task");
+            String msg = request.getString("msg");
+            String data = request.getString("data");
+            
             //参数验证
             if (code == null) {
                 return new Result(ResultCode.PARAM_ERROR.getCode(), ResultMessage.PARAM_ERORR.getMsg("code不能为null"), null);
@@ -159,10 +157,11 @@ public class ModelCallController extends BaseController{
                 modelCallBussiness.trainErrorDealWith(experimentId, msg, task);
             } else { //处理成功，根据task判断处理方式
                 if (Constant.COMMAND_PREPROCESS.equals(task)) { //预处理
-                    String redisKey = map.get("variableData");
+                	JSONObject jsonObj = JSON.parseObject(data);
+                    String redisKey = jsonObj.getString("variableData");
                     modelCallBussiness.preprocessCallback(experimentId, redisKey);
                 } else if (Constant.COMMAND_TRAIN.equals(task) || Constant.COMMAND_SECOND_TRAIN.equals(task)) { //训练
-                    int stage = request.getStage();
+                    int stage = request.getInteger("stage");
                 	TrainResultRedisKey redisKey = JSON.parseObject(data, TrainResultRedisKey.class);
                     modelCallBussiness.trainCallback(experimentId, redisKey, stage);
                 } else {

@@ -59,7 +59,8 @@ public class FileClassifyBO {
 
         FileClassifyBO fileClassify = (FileClassifyBO) o;
         if (StringUtils.equals(fileClassify.getSelf(), this.getSelf()) &&
-                StringUtils.equals(fileClassify.getChild(), this.getChild())) {
+                StringUtils.equals(fileClassify.getChild(), this.getChild()) &&
+                StringUtils.equals(fileClassify.getPrefix(), this.getPrefix())) {
 
             return true;
         }
@@ -69,8 +70,8 @@ public class FileClassifyBO {
 
     @Override
     public int hashCode() {
-        int result = self != null ? self.hashCode() : 0;
-        result = 31 * result + self != null ? self.hashCode() : 0;
+        int result =  (self + child + prefix).hashCode();
         return result;
     }
+
 }

@@ -11,14 +11,15 @@ import com.alibaba.fastjson.JSON;
 import cn.realai.online.common.Constant;
 import cn.realai.online.core.bo.ExperimentBO;
 import cn.realai.online.core.bo.TrainResultRedisKey;
-import cn.realai.online.core.bo.model.BatchRequestBase;
-import cn.realai.online.core.bo.model.DailyBatchRequest;
-import cn.realai.online.core.bussiness.ModelCallBussiness;  
+import cn.realai.online.core.bussiness.ModelCallBussiness;
+import cn.realai.online.core.entity.BatchExecutionTask;
 import cn.realai.online.core.entity.BatchRecord;
+import cn.realai.online.core.entity.DailyBatchRequest;
 import cn.realai.online.core.entity.DeployInfo;
 import cn.realai.online.core.entity.Experiment;
 import cn.realai.online.core.entity.MLock;
 import cn.realai.online.core.entity.VariableData;
+import cn.realai.online.core.service.BatchExecutionTaskService;
 import cn.realai.online.core.service.BatchRecordService;
 import cn.realai.online.core.service.DeployInfoService;
 import cn.realai.online.core.service.ExperimentService;
@@ -61,6 +62,9 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
     @Autowired
     private DeployInfoService deployInfoService;
     
+    @Autowired
+    private BatchExecutionTaskService batchExecutionTaskService;
+    
     /*
      * 处理每日跑批任务
      */
@@ -77,27 +81,30 @@ public class ModelCallBussinessImpl implements ModelCallBussiness {
      * 批次处理结果信息处理
      */
     @Override
-	public void runBatchOffline(Long experimentId, String redisKey, String type, String downUrl, 
-			Long batchId, Boolean done) {
+	public void runBatchOffline(BatchExecutionTask bet) {
+    	
+    	//记录处理的小批次任务
+    	batchExecutionTaskService.insertBatchExecutionTask(bet);
+    	
     	BaseBatchTask bbt;
-    	if (BatchRequestBase.TYPE_DONE.equals(type)) {
-        	bbt = new BatchTaskOfDone(experimentId, batchId, done);
-        } else if (BatchRequestBase.TYPE_PSICHECKRESULT.equals(type)) {
-        	bbt = new BatchTaskOfPSI(experimentId,batchId, redisKey);
-        } else if (BatchRequestBase.TYPE_THOUSANDPEOPLE_INFORMATION.equals(type)) {
-        	bbt = new BatckTaskOfThousandPeople(experimentId, batchId, redisKey);
-        } else if (BatchRequestBase.TYPE_DOENURL.equals(type)) {
-        	if (downUrl != null && !"".equals(downUrl)) {
-        		batchRecordService.maintainDownUrl(batchId, downUrl);
+    	if (BatchExecutionTask.TYPE_DONE.equals(bet.getType())) {
+        	bbt = new BatchTaskOfDone(bet);
+        } else if (BatchExecutionTask.TYPE_PSICHECKRESULT.equals(bet.getType())) {
+        	bbt = new BatchTaskOfPSI(bet);
+        } else if (BatchExecutionTask.TYPE_THOUSANDPEOPLE_INFORMATION.equals(bet.getType())) {
+        	bbt = new BatckTaskOfThousandPeople(bet);
+        } else if (BatchExecutionTask.TYPE_DOENURL.equals(bet.getType())) {
+        	if (bet.getDownUrl() != null && !"".equals(bet.getDownUrl())) {
+        		batchRecordService.maintainDownUrl(bet.getBatchId(), bet.getDownUrl());
         	}
         	return ;
         } else {
-        	logger.error("BatchTask run. 跑批数据类型不能识别. type{}, experimentId{}", type, experimentId);
+        	logger.error("BatchTask run. 跑批数据类型不能识别. bet{}", JSON.toJSONString(bet));
         	return ;
         }
+    	logger.info("ModelCallBussinessImpl runBatchOffline bet{}", JSON.toJSONString(bet));
     	
     	ModelCallPool.modelCallPool.execute(bbt);
-    	
     }
 
     /*
