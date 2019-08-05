@@ -24,7 +24,9 @@ public class CollectionUtil {
 		count = remainder > 0 ? count + 1 : count;
 		for (int i = 0; i < count; i++) {
 			int end = (i + 1) * size;
-			if (end > originalSize) end = originalSize;
+			if (end > originalSize) {
+				end = originalSize;
+			}
 			returnList.add(originalList.subList(i * size, end));
 		}
 		return returnList;
